@@ -47,7 +47,18 @@ const Home: NextPage = () => {
             Connect UP Extension
           </button>
         ) : (
-          <p>You must install the lukso extension before using this dapp</p>
+          <p className="text-xl">
+            You must install Luksos{" "}
+            <a
+              className="link link-accent"
+              href="https://chromewebstore.google.com/detail/universal-profiles/abpickdkkbnbcoepogfhkhennhfhehfn"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Universal Profile extension
+            </a>{" "}
+            before using this dapp
+          </p>
         )}
       </div>
     </>
