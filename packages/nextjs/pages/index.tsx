@@ -4,7 +4,6 @@ import { MetaHeader } from "~~/components/MetaHeader";
 
 const Home: NextPage = () => {
   const [luksoAvailable, setLuksoAvailable] = useState(false);
-
   const [builders, setBuilders] = useState(null);
   const [isLoading, setLoading] = useState(true);
 
