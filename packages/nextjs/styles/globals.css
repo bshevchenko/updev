@@ -1,14 +1,17 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lobster&display=swap");
+
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
 :root,
 [data-theme] {
-  background: hsl(var(--b2));
+  background: hsl(var(--b3));
 }
 
 body {
   min-height: 100vh;
+  font-family: "Inter", sans-serif;
 }
 
 h1,
@@ -24,9 +27,6 @@ p {
 }
 
 .btn {
-  @apply shadow-md;
-}
-
-.btn.btn-ghost {
-  @apply shadow-none;
+  text-transform: capitalize;
+  font-size: 16px;
 }
