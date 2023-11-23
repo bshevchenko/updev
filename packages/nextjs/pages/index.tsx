@@ -108,6 +108,9 @@ function LandingDisplay() {
 
   return (
     <div className="flex flex-col items-center justify-center gap-14 grow">
+      <div className="flex justify-start w-full">
+        <Image alt="upDev logo" width={700} height={700} src="/horizontal.svg" />
+      </div>
       <div className="flex flex-col items-center justify-center">
         <div className="w-56 mb-5">
           <Image alt="upDev logo" width={400} height={200} src="/logo.svg" />
@@ -121,6 +124,9 @@ function LandingDisplay() {
         <button className="btn btn-accent px-6" onClick={openConnectModal} type="button">
           Connect Wallet
         </button>
+      </div>
+      <div className="flex justify-end w-full">
+        <Image alt="upDev logo" width={700} height={700} src="/horizontal.svg" />
       </div>
     </div>
   );
