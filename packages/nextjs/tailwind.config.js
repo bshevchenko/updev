@@ -17,9 +17,11 @@ module.exports = {
           "accent-content": "#ffffff",
           neutral: "#212638",
           "neutral-content": "#ffffff",
-          // "base-100": THIS CRAZY CSS DOES NOT WORK WITH DAISYUI
+          // COMPLEX COLORS DONT WORK WITH DAISYUI THEME
+          // "base-100":
           //   "background: linear-gradient(0deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.06)),linear-gradient(0deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.04))",
-          // "base-200": "#040407",
+          // HEX COLORS WITH OPACITY DONT WORK WITH DAISYUI THEME
+          // "base-200": "#FFFFFF0F",
           "base-300": "#040407", // this sets bg color for whole app
           "base-content": "#ffffff",
           info: "#93BBFB",

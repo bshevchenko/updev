@@ -8,29 +8,27 @@ import { RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 const Home: NextPage = () => {
   const account = useAccount();
 
-  const [luksoAvailable, setLuksoAvailable] = useState(false);
-  const [builders, setBuilders] = useState(null);
-  const [isLoading, setLoading] = useState(true);
+  const [upExtensionAvailable, setUpExtensionAvailable] = useState(false);
+  // const [builders, setBuilders] = useState(null);
+  // const [isLoading, setLoading] = useState(true);
+
+  // useEffect(() => {
+  //   fetch("https://buidlguidl-v3.ew.r.appspot.com/builders")
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       setBuilders(data);
+  //       setLoading(false);
+  //     });
+  // }, []);
+
+  // if (isLoading) return <p>Loading...</p>;
+  // if (!builders) return <p>No profile data</p>;
 
   useEffect(() => {
-    setLuksoAvailable(!!window.lukso);
+    setUpExtensionAvailable(!!window.lukso);
   }, []);
 
-  useEffect(() => {
-    fetch("https://buidlguidl-v3.ew.r.appspot.com/builders")
-      .then(res => res.json())
-      .then(data => {
-        setBuilders(data);
-        setLoading(false);
-      });
-  }, []);
-
-  if (isLoading) return <p>Loading...</p>;
-  if (!builders) return <p>No profile data</p>;
-
-  console.log(builders);
-
-  async function connect() {
+  async function connectUP() {
     if (window.lukso) {
       try {
         const accounts = await window.lukso.request({ method: "eth_requestAccounts" });
@@ -39,9 +37,6 @@ const Home: NextPage = () => {
         console.error("Error connectinng to LUKSO", error);
       }
     }
-  }
-
-  if (!account.isConnected) {
   }
 
   return (
@@ -72,8 +67,8 @@ const Home: NextPage = () => {
               <p className="text-sm">Connect to view and send assets from your Universal Profile</p>
             </div>
             <div className="mb-24">
-              {luksoAvailable ? (
-                <button onClick={() => connect()} className="btn btn-primary py-0 text-md w-full">
+              {upExtensionAvailable ? (
+                <button onClick={() => connectUP()} className="btn btn-primary py-0 text-md w-full">
                   Connect with Universal Profile
                 </button>
               ) : (
