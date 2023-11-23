@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Image from "next/image";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { QRCodeSVG } from "qrcode.react";
 import CopyToClipboard from "react-copy-to-clipboard";
@@ -12,7 +13,7 @@ import {
   DocumentDuplicateIcon,
   QrCodeIcon,
 } from "@heroicons/react/24/outline";
-import { Address, Balance, BlockieAvatar } from "~~/components/scaffold-eth";
+import { Address } from "~~/components/scaffold-eth";
 import { useAutoConnect, useNetworkColor } from "~~/hooks/scaffold-eth";
 import { getBlockExplorerAddressLink, getTargetNetwork } from "~~/utils/scaffold-eth";
 
@@ -85,24 +86,25 @@ export const RainbowKitCustomConnectButton = () => {
 
               return (
                 <div className="px-2 flex justify-end items-center">
-                  <div className="flex flex-col items-center mr-1">
-                    <Balance address={account.address} className="min-h-0 h-auto" />
-                    <span className="text-xs" style={{ color: networkColor }}>
-                      {chain.name}
-                    </span>
+                  <div className="flex gap-1 items-center mr-1">
+                    {/* <Balance address={account.address} className="min-h-0 h-auto" /> */}
+                    <Image alt="upDev logo" width={24} height={24} src={chain.iconUrl || "/up.png"} />
+                    <div>{chain.hasIcon}</div>
+                    <span className="text-sm font-bold mr-2">{chain.name}</span>
                   </div>
                   <div className="dropdown dropdown-end leading-3">
                     <label
                       tabIndex={0}
-                      className="btn btn-secondary btn-sm pl-0 pr-2 shadow-md dropdown-toggle gap-0 !h-auto"
+                      className="btn btn-secondary border-base-200 bg-base-100 btn-sm pl-0 pr-2 dropdown-toggle gap-0 !h-auto"
                     >
-                      <BlockieAvatar address={account.address} size={30} ensImage={account.ensAvatar} />
+                      {/* <BlockieAvatar address={account.address} size={30} ensImage={account.ensAvatar} /> */}
                       <span className="ml-2 mr-1">{account.displayName}</span>
                       <ChevronDownIcon className="h-6 w-4 ml-2 sm:ml-0" />
                     </label>
                     <ul
                       tabIndex={0}
-                      className="dropdown-content menu z-[2] p-2 mt-2 shadow-center shadow-accent bg-base-200 rounded-box gap-1"
+                      style={{ backdropFilter: "blur(3px)" }}
+                      className="dropdown-content menu z-[2] p-2 mt-2 shadow-center bg-base-200 opacity-0 rounded-box gap-1"
                     >
                       <li>
                         {addressCopied ? (
