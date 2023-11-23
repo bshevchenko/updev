@@ -125,7 +125,10 @@ function LandingDisplay() {
           Connect Wallet
         </button>
       </div>
-      <div className="flex justify-end w-full">
+      <div className="flex justify-end w-full relative">
+        {/* <div className="absolute inset-0 flex justify-center items-center">
+          <Image alt="upDev logo" className="z-10" width={150} height={150} src="/vertical.svg" />
+        </div> */}
         <Image alt="upDev logo" width={700} height={700} src="/horizontal.svg" />
       </div>
     </div>
