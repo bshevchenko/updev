@@ -27,6 +27,6 @@ p {
 }
 
 .btn {
-  text-transform: capitalize;
+  text-transform: none;
   font-size: 16px;
 }
