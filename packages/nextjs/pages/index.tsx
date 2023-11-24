@@ -2,33 +2,16 @@ import { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { MetaHeader } from "~~/components/MetaHeader";
-import ConnectUniversalProfileDisplay from "~~/components/steps/ConnectUniversalProfileDisplay";
-import ConnectWalletDisplay from "~~/components/steps/ConnectWalletDisplay";
+import { LandingDisplay } from "~~/components/updev/";
 // import ConnectAccountsDisplay from "~~/components/steps/ConnectAccountsDisplay"; TODO
-import DeployUPDisplay from "~~/components/steps/DeployUPDisplay";
+import { DeployUniversalProfilePage } from "~~/components/updev/onboarding/";
+import { ConnectUniversalProfilePage } from "~~/components/updev/onboarding/";
 
 const Home: NextPage = () => {
   const account = useAccount();
 
   const [upExtensionAvailable, setUpExtensionAvailable] = useState(false);
   const [upConnected, setUpConnected] = useState(false);
-
-  console.log("upConnected", upConnected);
-
-  // const [builders, setBuilders] = useState(null);
-  // const [isLoading, setLoading] = useState(true);
-
-  // useEffect(() => {
-  //   fetch("https://buidlguidl-v3.ew.r.appspot.com/builders")
-  //     .then(res => res.json())
-  //     .then(data => {
-  //       setBuilders(data);
-  //       setLoading(false);
-  //     });
-  // }, []);
-
-  // if (isLoading) return <p>Loading...</p>;
-  // if (!builders) return <p>No profile data</p>;
 
   useEffect(() => {
     setUpExtensionAvailable(!!window.lukso);
@@ -39,7 +22,7 @@ const Home: NextPage = () => {
       <MetaHeader />
 
       {!account.isConnected ? (
-        <ConnectWalletDisplay />
+        <LandingDisplay />
       ) : (
         <div className="flex items-center flex-col flex-grow py-14">
           <div className="text-center mb-8">
@@ -48,13 +31,10 @@ const Home: NextPage = () => {
           </div>
 
           {!upConnected ? (
-            <ConnectUniversalProfileDisplay
-              upExtensionAvailable={upExtensionAvailable}
-              setUpConnected={setUpConnected}
-            />
+            <ConnectUniversalProfilePage upExtensionAvailable={upExtensionAvailable} setUpConnected={setUpConnected} />
           ) : (
             // TODO <ConnectAccountsDisplay />
-            <DeployUPDisplay />
+            <DeployUniversalProfilePage />
           )}
         </div>
       )}

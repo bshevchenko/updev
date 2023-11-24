@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 
-export default function ConnectWalletDisplay() {
+export function LandingDisplay() {
   const { openConnectModal } = useConnectModal();
 
   return (

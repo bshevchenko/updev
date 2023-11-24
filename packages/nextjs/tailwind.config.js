@@ -83,7 +83,7 @@ module.exports = {
         secondary: "#FFFFFF3D",
         "base-100": "#FFFFFF0A",
         "base-200": "#FFFFFF0F",
-        "base-300": "#FFFFFF0A",
+        "base-300": "#040407",
         "base-content": "#FFFFFFCC",
       },
       fontFamily: {
