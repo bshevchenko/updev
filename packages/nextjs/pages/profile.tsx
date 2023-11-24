@@ -3,9 +3,10 @@ import type { NextPage } from "next";
 import { ConnectSocialAccounts } from "~~/components/updev/";
 
 const Profile: NextPage = () => {
+  const tags = ["profile", "updev", "supaxero"];
   return (
-    <div className="flex flex-col items-center gap-8 py-10">
-      <div className="max-w-3xl">
+    <div className="flex flex-col items-center py-10">
+      <div className="max-w-3xl flex flex-col">
         <div className="relative mb-5">
           <div className="w-full h-40 bg-base-200 rounded-xl"></div>
           <div className="absolute -bottom-16 start-5 h-32 w-32 bg-accent rounded-full"></div>
@@ -21,6 +22,9 @@ const Profile: NextPage = () => {
                 @starlord <span className="text-[#FFFFFF5C]">#E593</span>
               </div>
               <div className="text-[#FFFFFF5C]">·</div>
+              <div className="] bg-base-100 px-1.5 py-0.5 rounded-md border border-base-200">
+                🆙 <span className="text-[#FFFFFF5C]">0xE593...4a444</span>
+              </div>
               <div className="flex items-center gap-1">
                 <div>
                   <Image width={12} height={12} alt="link icon" src="/link.svg" />
@@ -36,17 +40,20 @@ const Profile: NextPage = () => {
               </div>
             </div>
             <div className="flex gap-1">
-              <div>profile</div>
-              <div>updev</div>
-              <div>supaxero</div>
+              {tags.map(tag => (
+                <div key={tag} className="text-accent font-semibold bg-base-100 px-1 rounded-md border border-base-200">
+                  {tag}
+                </div>
+              ))}
             </div>
           </div>
         </div>
-        <div>
-          <h3 className="text-2xl font-bold">Your achievements</h3>
+        <div className="mb-5">
+          <h3 className="text-2xl font-bold mb-3">Your achievements</h3>
+          <Image width={100} height={100} alt="achievement icon" src="/achievement.svg" />
         </div>
-        <div className="flex flex-col gap-5">
-          <h3 className="text-2xl font-bold">Connect your upDev to earn achievements</h3>
+        <div>
+          <h3 className="text-2xl font-bold mb-3">Connect your upDev to earn achievements</h3>
           <ConnectSocialAccounts />
         </div>
       </div>

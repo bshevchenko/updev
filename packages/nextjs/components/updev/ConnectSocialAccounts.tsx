@@ -9,7 +9,7 @@ export const ConnectSocialAccounts = () => {
   ];
   return (
     <div className="w-full">
-      <div className="flex flex-col gap-4 w-full gap-6">
+      <div className="flex flex-col gap-4 w-full gap-5">
         {socialItems.map(item => (
           <div
             key={item.title}
