@@ -84,6 +84,7 @@ module.exports = {
         "base-100": "#FFFFFF0A",
         "base-200": "#FFFFFF0F",
         "base-300": "#FFFFFF0A",
+        "base-content": "#FFFFFFCC",
       },
       fontFamily: {
         sans: ["Inter", "sans-serif"],
