@@ -20,6 +20,9 @@ export default function DeployUPDisplay() {
           <br />
           <br />
           TODO LSP24 references
+          <br />
+          <br />
+          TODO Link to Mumbai Faucet
         </div>
       </div>
     </>
