@@ -22,6 +22,10 @@ export default function ConnectWalletDisplay() {
           do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
           exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
         </h4>
+        TODO Move here supported browsers and Powered by LUKSO ?<br />
+        TODO upDev Logo in Favicon
+        <br />
+        TODO vertical green lines
       </div>
       <div>
         <button className="btn btn-accent px-6 capitalize" onClick={openConnectModal} type="button">
