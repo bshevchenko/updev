@@ -17,7 +17,12 @@ enum StepState {
 }
 
 export const Steps: React.FC<StepsProps> = ({ currentStep }) => {
-  const steps = ["Connect with Universal Profile", "Connect your social accounts", "Set up your profile"];
+  const steps = [
+    "Connect Universal Profile",
+    "Deploy UP",
+    "Connect your social accounts",
+    "Set up your profile (TODO)",
+  ];
 
   const getStepState = (index: number) => {
     if (index < currentStep) return StepState.Completed;

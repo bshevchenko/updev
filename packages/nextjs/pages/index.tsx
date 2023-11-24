@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import Image from "next/image";
-import { useConnectModal } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { MetaHeader } from "~~/components/MetaHeader";
-import { Steps } from "~~/components/updev/";
+import ConnectUniversalProfileDisplay from "~~/components/steps/ConnectUniversalProfileDisplay";
+import ConnectWalletDisplay from "~~/components/steps/ConnectWalletDisplay";
+// import ConnectAccountsDisplay from "~~/components/steps/ConnectAccountsDisplay"; TODO
+import DeployUPDisplay from "~~/components/steps/DeployUPDisplay";
 
 const Home: NextPage = () => {
   const account = useAccount();
@@ -52,7 +53,8 @@ const Home: NextPage = () => {
               setUpConnected={setUpConnected}
             />
           ) : (
-            <ConnectAccountsDisplay />
+            // TODO <ConnectAccountsDisplay />
+            <DeployUPDisplay />
           )}
         </div>
       )}
@@ -61,139 +63,3 @@ const Home: NextPage = () => {
 };
 
 export default Home;
-
-function ConnectWalletDisplay() {
-  const { openConnectModal } = useConnectModal();
-
-  return (
-    <div className="flex flex-col items-center justify-center gap-14 grow">
-      <div className="flex justify-start w-full">
-        <Image alt="upDev logo" width={700} height={700} src="/horizontal.svg" />
-      </div>
-      <div className="flex flex-col items-center justify-center">
-        <div className="w-56 mb-5">
-          <Image alt="upDev logo" width={400} height={200} src="/logo.svg" />
-        </div>
-        <div className="badge badge-outline badge-accent rounded-sm px-0.5 border-2 font-bold">BETA V1.0</div>
-      </div>
-      <div>
-        <h3 className="text-white text-5xl">Your universal dev profile on LUKSO</h3>
-      </div>
-      <div>
-        <button className="btn btn-accent px-6" onClick={openConnectModal} type="button">
-          Connect Wallet
-        </button>
-      </div>
-      <div className="flex justify-end w-full relative">
-        {/* <div className="absolute inset-0 flex justify-center items-center">
-          <Image alt="upDev logo" className="z-10" width={150} height={150} src="/vertical.svg" />
-        </div> */}
-        <Image alt="upDev logo" width={700} height={700} src="/horizontal.svg" />
-      </div>
-    </div>
-  );
-}
-
-function ConnectUniversalProfileDisplay({
-  upExtensionAvailable,
-  setUpConnected,
-}: {
-  upExtensionAvailable: boolean;
-  setUpConnected: any;
-}) {
-  async function connectUniversalProfile() {
-    if (window.lukso) {
-      try {
-        const accounts = await window.lukso.request({ method: "eth_requestAccounts" });
-        setUpConnected(true);
-        console.log("accounts", accounts);
-      } catch (error) {
-        console.error("Error connectinng to LUKSO", error);
-      }
-    }
-  }
-  return (
-    <>
-      <Steps currentStep={0} />
-
-      <div className="bg-base-100 border border-base-200 p-8 rounded-lg w-[336px]">
-        <div className="text-center mb-10">
-          <div className="flex justify-center mb-5">
-            <Image alt="upDev logo" width={56} height={56} src="/up.png" />
-          </div>
-          <h5 className="text-xl font-bold">Universal Profiles</h5>
-          <p className="text-sm">Connect to view and send assets from your Universal Profile</p>
-        </div>
-        <div className="mb-28">
-          {upExtensionAvailable ? (
-            <button onClick={() => connectUniversalProfile()} className="btn btn-primary py-0 text-md w-full">
-              Connect with Universal Profile
-            </button>
-          ) : (
-            <a
-              className="btn btn-primary w-full"
-              href="https://chromewebstore.google.com/detail/universal-profiles/abpickdkkbnbcoepogfhkhennhfhehfn"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Add Universal Profile Extension
-            </a>
-          )}
-        </div>
-        <div className="flex justify-center gap-4 mb-5">
-          <div>
-            <p className="m-0">Supported browsers</p>
-          </div>
-          <div className="flex gap-1">
-            <Image alt="chrome logo" width={20} height={20} src="/chrome.svg" />
-            <Image alt="brave logo" width={24} height={24} src="/brave.svg" />
-          </div>
-        </div>
-        <div className="flex justify-center">
-          <div>
-            <div className="text-[8px]">Powered by</div>
-            <Image alt="upDev logo" width={66} height={14} src="/lukso.svg" />
-          </div>
-        </div>
-      </div>
-    </>
-  );
-}
-
-function ConnectAccountsDisplay() {
-  const socialItems = [
-    { title: "Github", logo: "/github.svg" },
-    { title: "LinkedIn", logo: "/linkedin.svg" },
-    { title: "buildbox", logo: "/link.svg" },
-    { title: "BuidlGuidl", logo: "/link.svg" },
-  ];
-
-  return (
-    <>
-      <Steps currentStep={1} />
-
-      <div className="w-[850px]">
-        <div className="flex flex-col gap-4 w-full gap-6">
-          {socialItems.map(item => (
-            <div
-              key={item.title}
-              className="flex bg-base-100 w-full p-5 justify-between items-center rounded-xl border border-base-200 gap-24"
-            >
-              <div>
-                <div className="flex gap-3 items-center mb-3">
-                  <Image alt="brand logo" width={24} height={24} src={item.logo} />
-                  <h5 className="text-xl font-bold">{item.title}</h5>
-                </div>
-                <p className="text-base-content my-0">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium dolorem, eveniet aspernatur ullam
-                  praesentium perspiciatis ducimus.
-                </p>
-              </div>
-              <button className="btn btn-primary">Connect</button>
-            </div>
-          ))}
-        </div>
-      </div>
-    </>
-  );
-}
