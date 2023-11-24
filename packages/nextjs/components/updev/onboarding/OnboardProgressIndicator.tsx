@@ -17,7 +17,7 @@ enum StepState {
 }
 
 export const OnboardProgressIndicator: React.FC<StepsProps> = ({ currentStep }) => {
-  const steps = ["Connect Universal Profile", "Deploy UP", "Connect your social accounts"];
+  const steps = ["Connect Universal Profile", "Deploy Universal Profile", "Connect your social accounts"];
 
   const getStepState = (index: number) => {
     if (index < currentStep) return StepState.Completed;
