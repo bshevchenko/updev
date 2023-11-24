@@ -3,9 +3,9 @@ import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { MetaHeader } from "~~/components/MetaHeader";
 import { LandingDisplay } from "~~/components/updev/";
-// import ConnectAccountsDisplay from "~~/components/steps/ConnectAccountsDisplay"; TODO
-import { DeployUniversalProfilePage } from "~~/components/updev/onboarding/";
-import { ConnectUniversalProfilePage } from "~~/components/updev/onboarding/";
+import { ConnectUniversalProfilePage, DeployUniversalProfilePage } from "~~/components/updev/onboarding/";
+
+// import { ConnectSocialAccounts } from "~~/components/updev/onboarding/"; TODO
 
 const Home: NextPage = () => {
   const account = useAccount();
@@ -33,7 +33,7 @@ const Home: NextPage = () => {
           {!upConnected ? (
             <ConnectUniversalProfilePage upExtensionAvailable={upExtensionAvailable} setUpConnected={setUpConnected} />
           ) : (
-            // TODO <ConnectAccountsDisplay />
+            // TODO <ConnectSocialAccounts />
             <DeployUniversalProfilePage />
           )}
         </div>

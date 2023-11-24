@@ -1,9 +1,9 @@
-import { StepsProgress } from "./StepsProgress";
+import { OnboardProgressIndicator } from "./OnboardProgressIndicator";
 
 export function DeployUniversalProfilePage() {
   return (
     <>
-      <StepsProgress currentStep={1} />
+      <OnboardProgressIndicator currentStep={1} />
       <div className="bg-base-100 border border-base-200 p-8 rounded-lg w-[850px]">
         <div className="text-center">
           TODO Display Selected Profile

@@ -1,11 +1,13 @@
 import { ConnectSocialAccounts } from "../ConnectSocialAccounts";
-import { StepsProgress } from "./StepsProgress";
+import { OnboardProgressIndicator } from "./OnboardProgressIndicator";
 
 export function ConnectSocialAccountsPage() {
   return (
     <>
-      <StepsProgress currentStep={2} />
-      <ConnectSocialAccounts />
+      <OnboardProgressIndicator currentStep={2} />
+      <div className="max-w-4xl">
+        <ConnectSocialAccounts />
+      </div>
     </>
   );
 }

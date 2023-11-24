@@ -16,7 +16,7 @@ const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT
 export const MetaHeader = ({
   title = "upDev – Universal Dev Profiles",
   description = "Built with 🏗 Scaffold-ETH 2",
-  image = "thumbnail.jpg",
+  image = "favicon.svg",
   twitterCard = "summary_large_image",
   children,
 }: MetaHeaderProps) => {
@@ -45,7 +45,7 @@ export const MetaHeader = ({
         </>
       )}
       {twitterCard && <meta name="twitter:card" content={twitterCard} />}
-      <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+      <link rel="icon" type="image/png" sizes="32x32" href="/favicon.svg" />
       {children}
     </Head>
   );
