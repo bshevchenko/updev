@@ -140,7 +140,7 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
         return s_lastRequestId;
     }
 
-    // TODO mint NFTS on fulfill
+    // TODO mint NFTs on fulfill
 
     /**
      * @notice Callback function for fulfilling a request
