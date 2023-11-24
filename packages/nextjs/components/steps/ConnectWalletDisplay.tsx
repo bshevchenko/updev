@@ -18,10 +18,14 @@ export default function ConnectWalletDisplay() {
       <div className="text-center w-2/3">
         <h3 className="text-white text-5xl">Your universal dev profile on LUKSO</h3>
         <h4 className="text-white mt-5">
-          <b>TODO Short description of features.</b>&nbsp; Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-          do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-          exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+          <b>TODO Short description of features. multi-chain dapp</b>&nbsp; Lorem ipsum dolor sit amet, consectetur
+          adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
         </h4>
+        TODO Move here supported browsers and Powered by LUKSO ?<br />
+        TODO upDev Logo in Favicon
+        <br />
+        TODO vertical green lines
       </div>
       <div>
         <button className="btn btn-accent px-6 capitalize" onClick={openConnectModal} type="button">

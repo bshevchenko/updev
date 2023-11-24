@@ -11,7 +11,7 @@ export default function ConnectAccountsDisplay() {
 
   return (
     <>
-      <Steps currentStep={1} />
+      <Steps currentStep={2} />
 
       <div className="w-[850px]">
         <div className="flex flex-col gap-4 w-full gap-6">
