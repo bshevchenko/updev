@@ -52,6 +52,9 @@ export const HeaderMenuLinks = () => {
  */
 export const Header = () => {
   const account = useAccount();
+  const { pathname } = useRouter();
+  console.log(pathname);
+
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const burgerMenuRef = useRef<HTMLDivElement>(null);
   useOutsideClick(
@@ -60,7 +63,7 @@ export const Header = () => {
   );
 
   // Only render the header if the wallet is connected
-  if (!account.isConnected) {
+  if (!account.isConnected && pathname === "/") {
     return null;
   }
 
