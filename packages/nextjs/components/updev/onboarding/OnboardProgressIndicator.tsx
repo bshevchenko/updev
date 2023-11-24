@@ -16,7 +16,7 @@ enum StepState {
   Inactive = "inactive",
 }
 
-export const StepsProgress: React.FC<StepsProps> = ({ currentStep }) => {
+export const OnboardProgressIndicator: React.FC<StepsProps> = ({ currentStep }) => {
   const steps = ["Connect Universal Profile", "Deploy UP", "Connect your social accounts"];
 
   const getStepState = (index: number) => {

@@ -1,5 +1,5 @@
 import { ConnectUniversalProfile } from "../ConnectUniversalProfile";
-import { StepsProgress } from "./StepsProgress";
+import { OnboardProgressIndicator } from "./OnboardProgressIndicator";
 
 export function ConnectUniversalProfilePage({
   upExtensionAvailable,
@@ -10,7 +10,7 @@ export function ConnectUniversalProfilePage({
 }) {
   return (
     <>
-      <StepsProgress currentStep={0} />
+      <OnboardProgressIndicator currentStep={0} />
       <ConnectUniversalProfile upExtensionAvailable={upExtensionAvailable} setUpConnected={setUpConnected} />
     </>
   );
