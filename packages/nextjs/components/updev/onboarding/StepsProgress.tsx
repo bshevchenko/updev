@@ -16,7 +16,7 @@ enum StepState {
   Inactive = "inactive",
 }
 
-export const Steps: React.FC<StepsProps> = ({ currentStep }) => {
+export const StepsProgress: React.FC<StepsProps> = ({ currentStep }) => {
   const steps = ["Connect Universal Profile", "Deploy UP", "Connect your social accounts"];
 
   const getStepState = (index: number) => {
@@ -56,26 +56,3 @@ export const Steps: React.FC<StepsProps> = ({ currentStep }) => {
     </div>
   );
 };
-
-// return (
-//   <div className="flex w-[450px] justify-around items-center gap-5 mb-24">
-//     <div className="relative flex flex-col items-center">
-//       <Image alt="upDev logo" width={25} height={25} src="/completed-step.svg" />
-//       <div className="text-accent absolute top-full mt-2 text-sm w-32 text-center">
-//         Connect with Universal Profile
-//       </div>
-//     </div>
-//     <div className="bg-secondary flex-grow h-0.5"></div>
-//     <div className="relative flex flex-col items-center">
-//       <Image alt="upDev logo" width={25} height={25} src="/active-step.svg" />
-//       <div className="absolute top-full mt-2 text-sm w-32 text-center font-bold">Connect your social accounts</div>
-//     </div>
-//     <div className="bg-secondary grow h-0.5"></div>
-//     <div className="relative flex flex-col items-center">
-//       <Image alt="upDev logo" width={25} height={25} src="/inactive-step.svg" />
-//       <div className="text-secondary absolute top-full mt-2 text-sm w-[147px] text-center">
-//         <div>Set up your</div>profile
-//       </div>
-//     </div>
-//   </div>
-// );

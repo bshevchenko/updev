@@ -1,10 +1,9 @@
-import { Steps } from "~~/components/updev/";
+import { StepsProgress } from "./StepsProgress";
 
-export default function DeployUPDisplay() {
+export function DeployUniversalProfilePage() {
   return (
     <>
-      <Steps currentStep={1} />
-
+      <StepsProgress currentStep={1} />
       <div className="bg-base-100 border border-base-200 p-8 rounded-lg w-[850px]">
         <div className="text-center">
           TODO Display Selected Profile
