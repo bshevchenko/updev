@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ConnectSocialAccounts } from "../ConnectSocialAccounts";
 import { OnboardProgressIndicator } from "./OnboardProgressIndicator";
 
-export function ConnectSocialAccountsPage({ setCurrentStep }: { setCurrentStep: any }) {
+export function ConnectSocialAccountsStep({ setCurrentStep }: { setCurrentStep: any }) {
   return (
     <>
       <OnboardProgressIndicator completedSteps={2} />

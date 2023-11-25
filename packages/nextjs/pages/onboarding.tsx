@@ -4,9 +4,9 @@ import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { MetaHeader } from "~~/components/MetaHeader";
 import {
-  ConnectSocialAccountsPage, // TODO
-  ConnectUniversalProfilePage,
-  DeployUniversalProfilePage,
+  ConnectSocialAccountsStep, // TODO
+  ConnectUniversalProfileStep,
+  DeployUniversalProfileStep,
 } from "~~/components/updev/onboarding/";
 
 const Onboarding: NextPage = () => {
@@ -18,27 +18,20 @@ const Onboarding: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    // console.log("hello from onboarding useEffect");
-    // // if (!account.isConnected) {
-    // //   router.push("/");
-    // // }
+    setUpExtensionAvailable(!!window.lukso);
+  }, []);
+
+  useEffect(() => {
+    if (!account.isConnected) {
+      router.push("/");
+    }
     if (account.isConnected && !upConnected) {
       setCurrentStep(1);
     }
     if (account.isConnected && upConnected) {
       setCurrentStep(2);
     }
-    // setCurrentStep(3);
   }, [account.isConnected, router, upConnected]);
-
-  useEffect(() => {
-    setUpExtensionAvailable(!!window.lukso);
-  }, []);
-
-  console.log("onboarding component");
-  console.log("upConnected", upConnected);
-  console.log("currentStep", currentStep);
-  console.log(account.isConnected && upConnected);
 
   return (
     <>
@@ -51,14 +44,14 @@ const Onboarding: NextPage = () => {
         </div>
 
         {currentStep === 1 && (
-          <ConnectUniversalProfilePage upExtensionAvailable={upExtensionAvailable} setUpConnected={setUpConnected} />
+          <ConnectUniversalProfileStep upExtensionAvailable={upExtensionAvailable} setUpConnected={setUpConnected} />
         )}
 
         {currentStep === 2 && (
-          <DeployUniversalProfilePage setCurrentStep={setCurrentStep} setUpConnected={setUpConnected} />
+          <DeployUniversalProfileStep setCurrentStep={setCurrentStep} setUpConnected={setUpConnected} />
         )}
 
-        {currentStep === 3 && <ConnectSocialAccountsPage setCurrentStep={setCurrentStep} />}
+        {currentStep === 3 && <ConnectSocialAccountsStep setCurrentStep={setCurrentStep} />}
       </div>
     </>
   );
