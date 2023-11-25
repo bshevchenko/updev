@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
+import ReactTyped from "react-typed";
 
 export function LandingDisplay() {
   const { openConnectModal } = useConnectModal();
@@ -28,16 +29,20 @@ export function LandingDisplay() {
 
         <div className="w-1/2 remove-me-later text-center">
           <div>
-            <b>TODO Short description of features. multi-chain dapp</b>
+            <b>
+              {""}
+              <ReactTyped
+                strings={["A web3 resume   ", "Multi-Chain First    ", "Powered by : LUKSO, POLYGON, CHAINLINK and   "]}
+                typeSpeed={100}
+                loop
+                backSpeed={20}
+                cursorChar="🆙"
+                showCursor={true}
+              />
+            </b>
           </div>
-          <h4 className="text-white mt-5">
-            &nbsp; Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-            et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-            ex ea commodo consequat.
-          </h4>
-          <div>
-            <b>TODO Move here supported browsers and Powered by LUKSO ?</b>
-          </div>
+          <h4 className="text-white mt-5"></h4>
+          <div>{/* <b>TODO Move here supported browsers and Powered by LUKSO ?</b> */}</div>
         </div>
         <div className="absolute right-10 -bottom-60">
           <Image alt="pattern right" width={700} height={700} src="/pattern-right.svg" />
