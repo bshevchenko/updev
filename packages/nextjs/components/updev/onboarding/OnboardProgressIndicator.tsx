@@ -7,7 +7,7 @@ import Image from "next/image";
  */
 
 type StepsProps = {
-  currentStep: number;
+  completedSteps: number;
 };
 
 enum StepState {
@@ -16,12 +16,12 @@ enum StepState {
   Inactive = "inactive",
 }
 
-export const OnboardProgressIndicator: React.FC<StepsProps> = ({ currentStep }) => {
+export const OnboardProgressIndicator: React.FC<StepsProps> = ({ completedSteps }) => {
   const steps = ["Connect Universal Profile", "Deploy Universal Profile", "Connect your social accounts"];
 
   const getStepState = (index: number) => {
-    if (index < currentStep) return StepState.Completed;
-    return index === currentStep ? StepState.Active : StepState.Inactive;
+    if (index < completedSteps) return StepState.Completed;
+    return index === completedSteps ? StepState.Active : StepState.Inactive;
   };
 
   const getIconSrc = (state: StepState) => {

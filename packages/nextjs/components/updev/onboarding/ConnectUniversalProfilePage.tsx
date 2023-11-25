@@ -10,7 +10,7 @@ export function ConnectUniversalProfilePage({
 }) {
   return (
     <>
-      <OnboardProgressIndicator currentStep={0} />
+      <OnboardProgressIndicator completedSteps={0} />
       <ConnectUniversalProfile upExtensionAvailable={upExtensionAvailable} setUpConnected={setUpConnected} />
     </>
   );
