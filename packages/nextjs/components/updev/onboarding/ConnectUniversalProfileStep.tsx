@@ -1,7 +1,7 @@
 import { ConnectUniversalProfile } from "../ConnectUniversalProfile";
 import { OnboardProgressIndicator } from "./OnboardProgressIndicator";
 
-export function ConnectUniversalProfilePage({
+export function ConnectUniversalProfileStep({
   upExtensionAvailable,
   setUpConnected,
 }: {

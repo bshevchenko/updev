@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { OnboardProgressIndicator } from "./OnboardProgressIndicator";
 
-export function DeployUniversalProfilePage({
+export function DeployUniversalProfileStep({
   setCurrentStep,
   setUpConnected,
 }: {
@@ -11,12 +11,9 @@ export function DeployUniversalProfilePage({
   return (
     <>
       <OnboardProgressIndicator completedSteps={1} />
-      <div className="bg-base-100 border border-base-200 p-8 rounded-lg w-[850px]">
+      <div className="bg-base-100 border border-base-200 p-8 rounded-lg w-[336px]">
         <div className="text-center">
           TODO Display Selected Profile
-          <br />
-          <br />
-          TODO Back button to reselect UP
           <br />
           <br />
           TODO hints: we need UP on Mumbai Testnet to access Chainlink Functions, LSP23 same address, LSP24 references
@@ -26,9 +23,11 @@ export function DeployUniversalProfilePage({
           <br />
           <br />
           TODO LSP24 references
-          <br />
-          <br />
-          TODO Link to Mumbai Faucet
+        </div>
+        <div className="flex flex-col items-center mt-5">
+          <a href="https://mumbaifaucet.com/" target="_blank" rel="noopener noreferrer" className="btn btn-accent">
+            Mumbai Faucet
+          </a>
         </div>
       </div>
       <button
