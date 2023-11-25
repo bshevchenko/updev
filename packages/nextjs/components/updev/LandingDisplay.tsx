@@ -32,7 +32,7 @@ export function LandingDisplay() {
             <b>
               {""}
               <ReactTyped
-                strings={["A web3 resume   ", "Multi-Chain First    ", "Powered by : LUKSO, POLYGON, CHAINLINK and   "]}
+                strings={["A Web3 Resume   ", "Multi-Chain First    ", "Powered by : LUKSO, POLYGON, CHAINLINK and   "]}
                 typeSpeed={100}
                 loop
                 backSpeed={20}
