@@ -27,21 +27,15 @@ export function LandingDisplay() {
           </button>
         </div>
 
-        <div className="w-1/2 remove-me-later text-center">
-          <div>
-            <b>
-              {""}
-              <ReactTyped
-                strings={["A Web3 Resume   ", "Multi-Chain First    ", "Powered by : LUKSO, POLYGON, CHAINLINK and   "]}
-                typeSpeed={100}
-                loop
-                backSpeed={20}
-                cursorChar="🆙"
-                showCursor={true}
-              />
-            </b>
-          </div>
-          <h4 className="text-white mt-5"></h4>
+        <div className="absolute -bottom-20 text-3xl">
+          <ReactTyped
+            strings={["A Web3 Resume   ", "A Multi-Chain First    ", "Powered by : LUKSO, Polygon, and Chainlink"]}
+            typeSpeed={100}
+            loop
+            backSpeed={20}
+            cursorChar="🆙"
+            showCursor={true}
+          />
           <div>{/* <b>TODO Move here supported browsers and Powered by LUKSO ?</b> */}</div>
         </div>
         <div className="absolute right-10 -bottom-60">
