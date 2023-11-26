@@ -18,20 +18,29 @@ const Profile: NextPage = () => {
 
   useEffect(() => {
     async function fetchData() {
-      // Dynamically import the JSON schema to satisfy nextjs
-      const lsp3ProfileSchemaModule = await import("@erc725/erc725.js/schemas/LSP3ProfileMetadata.json");
-      const lsp3ProfileSchema = lsp3ProfileSchemaModule.default;
-      const erc725js = new ERC725(lsp3ProfileSchema as ERC725JSONSchema[], address, "https://rpc.lukso.gateway.fm", {
-        ipfsGateway: "https://api.universalprofile.cloud/ipfs",
-      });
-      const profileMetaData = await erc725js.fetchData("LSP3Profile");
-
-      setMetadata(profileMetaData.value);
+      if (address) {
+        const lsp3ProfileSchemaModule = await import("@erc725/erc725.js/schemas/LSP3ProfileMetadata.json");
+        const lsp3ProfileSchema = lsp3ProfileSchemaModule.default;
+        const erc725js = new ERC725(lsp3ProfileSchema as ERC725JSONSchema[], address, "https://rpc.lukso.gateway.fm", {
+          ipfsGateway: "https://api.universalprofile.cloud/ipfs",
+        });
+        try {
+          const profileMetaData = await erc725js.fetchData("LSP3Profile");
+          setMetadata(profileMetaData.value);
+        } catch (error) {
+          console.error("Error fetching ERC725 data:", error);
+        }
+      }
     }
     fetchData();
   }, [address]);
 
-  if (!metadata) return <span className="loading loading-spinner loading-lg"></span>;
+  if (!metadata)
+    return (
+      <div className="flex justify-center grow">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
 
   console.log("metadata", metadata);
 
