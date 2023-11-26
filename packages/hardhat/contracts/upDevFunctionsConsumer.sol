@@ -190,7 +190,7 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
             source[requests[requestId].source].isAddressId ?
                 generateTokenId(source[requests[requestId].source].id, stringToAddress(requests[requestId].id)) :
                 generateTokenId(source[requests[requestId].source].id, requests[requestId].id),
-			false,
+			true,
 			"0x"
 		);
 
