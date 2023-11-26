@@ -120,6 +120,14 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		availableSources.push(name);
 	}
 
+	function getAvailableSources() public view returns (Source[] memory) {
+        Source[] memory sources = new Source[](availableSources.length);
+        for (uint256 i = 0; i < availableSources.length; i++) {
+            sources[i] = source[availableSources[i]];
+        }
+        return sources;
+    }
+
 	/**
 	 * @notice Sends an HTTP request
 	 * @return requestId The ID of the request
@@ -185,13 +193,12 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		requests[requestId].isOwned = isOwned;
 		requests[requestId].isFinished = true;
 
-		collection.mint(
+		collection.mintTmp(
 			requests[requestId].up,
-            source[requests[requestId].source].isAddressId ?
-                generateTokenId(source[requests[requestId].source].id, stringToAddress(requests[requestId].id)) :
-                generateTokenId(source[requests[requestId].source].id, requests[requestId].id),
-			false,
-			"0x"
+			keccak256(abi.encodePacked(requests[requestId].source, requests[requestId].id)),
+			true,
+			requests[requestId].source, // TODO Chainlink fails on abi.encode for some reason, so just pass strings for now
+			requests[requestId].id
 		);
 
 		// Emit an event to log the response
@@ -216,61 +223,6 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		);
 
 		return _parsedAddress;
-	}
-
-	function generateTokenId(
-		uint16 sourceId,
-		string memory id
-	) public pure returns (bytes32) {
-		// TODO bytes32 is not enough for id + address
-		// Convert uint16 to bytes
-		bytes memory sourceIdBytes = abi.encodePacked(sourceId);
-
-		// Convert string to bytes
-		bytes memory idBytes = bytes(id);
-
-		// Concatenate sourceIdBytes and idBytes
-		bytes memory concatenatedBytes = new bytes(
-			sourceIdBytes.length + idBytes.length
-		);
-		for (uint i = 0; i < sourceIdBytes.length; i++) {
-			concatenatedBytes[i] = sourceIdBytes[i];
-		}
-		for (uint i = 0; i < idBytes.length; i++) {
-			concatenatedBytes[sourceIdBytes.length + i] = idBytes[i];
-		}
-
-		// Hash the concatenated bytes
-		bytes32 tokenId = keccak256(concatenatedBytes);
-
-		return tokenId;
-	}
-
-	function generateTokenId(
-		uint16 sourceId,
-		address id
-	) public pure returns (bytes32) {
-		// Convert uint16 to bytes
-		bytes memory sourceIdBytes = abi.encodePacked(sourceId);
-
-		// Convert address to bytes
-		bytes memory idBytes = abi.encodePacked(id);
-
-		// Concatenate sourceIdBytes and idBytes
-		bytes memory concatenatedBytes = new bytes(
-			sourceIdBytes.length + idBytes.length
-		);
-		for (uint i = 0; i < sourceIdBytes.length; i++) {
-			concatenatedBytes[i] = sourceIdBytes[i];
-		}
-		for (uint i = 0; i < idBytes.length; i++) {
-			concatenatedBytes[sourceIdBytes.length + i] = idBytes[i];
-		}
-
-		// Hash the concatenated bytes
-		bytes32 tokenId = keccak256(concatenatedBytes);
-
-		return tokenId;
 	}
 
 	function toAsciiString(address x) public pure returns (string memory) {

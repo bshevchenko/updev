@@ -38,20 +38,44 @@ contract upDevAccountOwnership is LSP8Mintable {
 
     error Soulbound();
 
-    function mint(
+    struct TokenData { // TODO tmp
+        string source;
+        string id;
+    }
+
+    mapping (bytes32 => TokenData) public tokenData;
+
+    function getTokenDataForAddress(address _address) external view returns (TokenData[] memory) {
+        bytes32[] memory tokenIds = tokenIdsOf(_address);
+        TokenData[] memory result = new TokenData[](tokenIds.length);
+
+        for (uint256 i = 0; i < tokenIds.length; i++) {
+            result[i] = tokenData[tokenIds[i]];
+        }
+
+        return result;
+    }
+
+    function mintTmp(
         address to,
         bytes32 tokenId,
         bool force,
-        bytes memory data
-    ) public override onlyOwner {
+        string memory source,
+        string memory id
+    ) public onlyOwner {
         if (_tokenOwners[tokenId] != address(0)) {
             if (_tokenOwners[tokenId] == to) {
                 return;
             }
-            _transfer(_tokenOwners[tokenId], to, tokenId, force, data);
+            _transfer(_tokenOwners[tokenId], to, tokenId, force, "0x");
             return;
         }
-        _mint(to, tokenId, force, data);
+        _mint(to, tokenId, force, "0x");
+        tokenData[tokenId] = TokenData({
+            source: source,
+            id: id
+        });
+        // _setData(tokenId, data); TODO
     }
 
     function transfer(
