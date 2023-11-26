@@ -1,16 +1,17 @@
 import Image from "next/image";
 
+const socialAccounts = [
+  { title: "Buildbox", logo: "/link.svg", comingSoon: false },
+  { title: "Github", logo: "/github.svg", comingSoon: false },
+  { title: "BuidlGuidl", logo: "/link.svg", comingSoon: false },
+  { title: "LinkedIn", logo: "/linkedin.svg", comingSoon: true },
+];
+
 export const ConnectSocialAccounts = () => {
-  const socialItems = [
-    { title: "Github", logo: "/github.svg", comingSoon: false },
-    { title: "BuidlGuidl", logo: "/link.svg", comingSoon: false },
-    { title: "LinkedIn", logo: "/linkedin.svg", comingSoon: true },
-    { title: "Buildbox", logo: "/link.svg", comingSoon: true },
-  ];
   return (
     <div className="w-full">
       <div className="flex flex-col gap-4 w-full gap-5">
-        {socialItems.map(item => (
+        {socialAccounts.map(item => (
           <div
             key={item.title}
             className="flex bg-base-100 w-full p-5 justify-between items-center rounded-xl border border-base-200 gap-24"
