@@ -94,9 +94,22 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 			"return Functions.encodeUint256(urlFound ? 1 : 0);",
             false
 		);
+		addSource(
+			"buidlguidl",
+			"const upAddress = args[0].toLowerCase();"
+			"const id = args[1];"
+			"const apiResponse = await Functions.makeHttpRequest({"
+			"  url: `https://buidlguidl-v3.appspot.com/builders/${id}`,"
+			"});"
+			"if (apiResponse.error) {"
+			"  throw Error('Request failed');"
+			"}"
+			"const { data } = apiResponse;"
+			"return Functions.encodeUint256(data['status'] && data.status.text.toLowerCase().includes(upAddress) ? 1 : 0);",
+			true
+		);
 		// TODO addSource buidlbox
 		// TODO addSource twitter
-		// TODO addSoure buidlguidl, isAddressId = true
 	}
 
 	function setCollection(address payable _collection) public onlyOwner {
