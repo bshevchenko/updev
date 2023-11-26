@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { OnboardProgressIndicator } from "./OnboardProgressIndicator";
 import { ERC725, ERC725JSONSchema } from "@erc725/erc725.js";
