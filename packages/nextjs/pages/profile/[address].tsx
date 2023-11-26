@@ -56,8 +56,8 @@ const Profile: NextPage = () => {
               className="object-cover object-center"
             />
           </div>
-          <div className="absolute -bottom-16 start-5  w-32 h-32">
-            <div className="rounded-full overflow-hidden w-full h-full">
+          <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2 w-32 h-32">
+            <div className="rounded-full overflow-hidden w-full h-full border-[5px] border-base-300">
               <Image
                 alt="profile picture"
                 width={128}
@@ -67,18 +67,19 @@ const Profile: NextPage = () => {
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-1 mt-16 md:mt-0 md:grid-cols-5 mb-10">
+        <div className="flex mb-10">
           <div className="col-span-1"></div>
           <div className="flex flex-col gap-5 col-span-4">
             <div className="flex gap-3">
               <h3 className="text-2xl mb-0 font-bold">@{metadata.LSP3Profile.name}</h3>
-              <div className="] bg-base-100 px-1.5 py-0.5 rounded-md border border-base-200">
-                🆙 <span className="text-[#FFFFFF5C]">{address?.slice(0, 5) + "..." + address?.slice(-4)}</span>
+              <div className="px-1.5 py-0.5 rounded-md text-xl text-secondary">
+                {address}
+                {/* 🆙 <span className="text-[#FFFFFF5C]">{address?.slice(0, 5) + "..." + address?.slice(-4)}</span> */}
               </div>
             </div>
             <div className="flex gap-3 items-center">
               <div className="flex items-center gap-4">
-                {metadata.LSP3Profile.links.map((link: { title: string; url: string }) => (
+                {metadata.LSP3Profile.links.map((link: { title: string; url: string }, index: number) => (
                   <a
                     href={link.url}
                     target="_blank"
@@ -86,21 +87,27 @@ const Profile: NextPage = () => {
                     key={link.title}
                     className="flex items-center gap-1"
                   >
-                    <div>
+                    {/* <div>
                       <Image width={12} height={12} alt="link icon" src="/link.svg" />
-                    </div>
-                    <div className="text-[#FFFFFFA3] underline">{link.title}</div>
+                    </div> */}
+                    <div className="text-[#FFFFFFA3] underline mr-2">{link.title}</div>
+                    {index < metadata.LSP3Profile.links.length - 1 && (
+                      <div className="text-[#FFFFFFA3]">{"\u2022"}</div>
+                    )}
                   </a>
                 ))}
               </div>
             </div>
             <div>
-              <div className="text-base-content">Bio</div>
+              {/* <div className="text-base-content">Bio</div> */}
               <div>{metadata.LSP3Profile.description}</div>
             </div>
-            <div className="flex gap-1">
+            <div className="flex gap-2">
               {metadata.LSP3Profile.tags.map((tag: string) => (
-                <div key={tag} className="text-accent font-semibold bg-base-100 px-1 rounded-md border border-base-200">
+                <div
+                  key={tag}
+                  className="text-accent font-semibold bg-base-100 px-2 py-0.5 rounded-md border border-base-200"
+                >
                   {tag}
                 </div>
               ))}
