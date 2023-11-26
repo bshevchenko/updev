@@ -4,34 +4,52 @@ import Modal from "./Modal";
 
 const socialAccounts = [
   {
-    title: "Buildbox",
-    logo: "/link.svg",
-    comingSoon: false,
-    text: "Connect your buildbox.io account to verify your proof-of-account-ownership and earn achievements related to hackathons and bounties.",
-  },
-  {
     title: "Github",
     logo: "/github.svg",
     comingSoon: false,
     text: "Connect your github account to verify your proof-of-account-ownership and earn achievements related to your code commits and activity.",
+    modaltext: "",
+    modalimage: "/public/connectgithub.png",
   },
   {
     title: "BuidlGuidl",
     logo: "/link.svg",
     comingSoon: false,
     text: "Connect your buidlguidl account to verify your proof-of-account-ownership and earn achievements related to your scaffold-eth-2 builds, your role and your stream.",
+    modaltext: "",
+    modalimage: "/public/connectbuidlguidl.png",
+  },
+  {
+    title: "Buildbox",
+    logo: "/link.svg",
+    comingSoon: true,
+    text: "Connect your buildbox.io account to verify your proof-of-account-ownership and earn achievements related to hackathons and bounties.",
+    modaltext: "",
+    modalimage: "",
+  },
+  {
+    title: "GitCoin Passport",
+    logo: "/passport.svg",
+    comingSoon: true,
+    text: "Connect your gitcoin passport to verify your proof-of-account-ownership and earn achievements related to your number of points.",
+    modaltext: "",
+    modalimage: "",
+  },
+  {
+    title: "<X />Twitter",
+    logo: "/link.svg",
+    comingSoon: true,
+    text: "Connect your twitter/X account to verify your proof-of-account-ownership and earn achievements related to your level of activity and connections on crypto twitter.",
+    modaltext: "",
+    modalimage: "",
   },
   {
     title: "LinkedIn",
     logo: "/linkedin.svg",
     comingSoon: true,
     text: "Connect your linkedin account to verify your proof-of-account-ownership and earn achievements related to your number of connections and your Web3 employment.",
-  },
-  {
-    title: "GitCoin Passport",
-    logo: "/passport.svg",
-    comingSoon: true,
-    text: "Connect your gitcoin passport to verofy your proof-of-account-ownership and earn achievements related to your number of points.",
+    modaltext: "",
+    modalimage: "",
   },
 ];
 
@@ -43,7 +61,12 @@ export const ConnectSocialAccounts = () => {
     return (
       <div>
         <h2 className="text-2xl font-bold">How to Connect {account?.title}</h2>
-        <p className="text-lg">{account?.text}</p>
+        <p className="text-lg">{account?.modaltext}</p>
+        <Image alt="brand logo" width={24} height={24} src={account?.modalimage!} />
+        <span>Add this link to your {account?.title} account here</span>
+        <div>https://updev-nextjs.vercel.app/profile/address</div>
+        <button>Copy link</button>
+        <button>Deploy UP</button>
         {/* Additional content or forms specific to the social account can go here */}
       </div>
     );
