@@ -43,29 +43,34 @@ contract upDevAccountOwnership is LSP8Mintable {
         bytes32 tokenId,
         bool force,
         bytes memory data
-    ) public override onlyOwner { // TODO just transfer ownership of this contract to the Consumer after deploy?
+    ) public override onlyOwner {
+        if (_tokenOwners[tokenId] != address(0)) {
+            if (_tokenOwners[tokenId] == to) {
+                return;
+            }
+            _transfer(_tokenOwners[tokenId], to, tokenId, force, data);
+            return;
+        }
         _mint(to, tokenId, force, data);
     }
 
-    function transfer( // TODO test
+    function transfer(
         address from,
         address to,
         bytes32 tokenId,
         bool force,
         bytes memory data
-    ) public override(ILSP8IdentifiableDigitalAsset, LSP8IdentifiableDigitalAssetCore) {
+    ) public pure override(ILSP8IdentifiableDigitalAsset, LSP8IdentifiableDigitalAssetCore) {
         revert Soulbound();
     }
 
-    function transferBatch( // TODO test
+    function transferBatch(
         address[] memory from,
         address[] memory to,
         bytes32[] memory tokenId,
         bool[] memory force,
         bytes[] memory data
-    ) public override(ILSP8IdentifiableDigitalAsset, LSP8IdentifiableDigitalAssetCore) {
+    ) public pure override(ILSP8IdentifiableDigitalAsset, LSP8IdentifiableDigitalAssetCore) {
         revert Soulbound();
     }
-
-    // TODO transfer ownership of NFT if account owner address has changed
 }
