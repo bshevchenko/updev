@@ -21,31 +21,32 @@ export function LandingDisplay() {
           <h3 className="text-white text-5xl">
             <ReactTyped
               strings={[
-                "Your universal dev profile on LUKSO",
-                "Your universal Web3 Resume   ",
-                "A Multi-Chain First DApp   ",
-                "Powered by : LUKSO, Polygon, Chainlink and... ",
+                "Your universal dev profile on LUKSO&nbsp;",
+                "Your universal Web3 Resume&nbsp;",
+                "A Multi-Chain First dApp&nbsp;", // TODO like mobile-first? or The First Multi-Chain dApp? i'm not sure that we can claim we are first on this one :D
+                "Powered by LUKSO, Polygon, Chainlink and...&nbsp;",
               ]}
-              typeSpeed={160}
-              backSpeed={80}
+              typeSpeed={40}
+              backSpeed={30}
               cursorChar="🆙"
               showCursor={true}
               smartBackspace
+              loop
             />
           </h3>
         </div>
 
-        <div>
+        <div className="z-1 absolute -bottom-20 text-3xl">
+          <div>{/* <b>TODO Move here supported browsers and Powered by LUKSO ?</b> */}</div>
+        </div>
+        <div className="z-1 absolute right-10 -bottom-60">
+          <Image alt="pattern right" width={700} height={700} src="/pattern-right.svg" />
+        </div>
+
+        <div className="z-0">
           <button className="btn btn-accent px-6 capitalize" onClick={openConnectModal} type="button">
             Connect Wallet
           </button>
-        </div>
-
-        <div className="absolute -bottom-20 text-3xl">
-          <div>{/* <b>TODO Move here supported browsers and Powered by LUKSO ?</b> */}</div>
-        </div>
-        <div className="absolute right-10 -bottom-60">
-          <Image alt="pattern right" width={700} height={700} src="/pattern-right.svg" />
         </div>
       </div>
     </div>

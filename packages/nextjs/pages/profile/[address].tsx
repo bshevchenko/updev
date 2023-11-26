@@ -71,7 +71,7 @@ const Profile: NextPage = () => {
           <div className="w-40"></div>
           <div className="flex grow flex-col gap-5">
             <div>
-              <h3 className="text-2xl mb-0 font-bold">{metadata.LSP3Profile.name}</h3>
+              <h3 className="text-2xl mb-0 font-bold ml-16">@{metadata.LSP3Profile.name}</h3>
             </div>
             <div className="flex gap-3 items-center">
               <div className="text-[#FFFFFFA3]">

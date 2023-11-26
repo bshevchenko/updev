@@ -51,20 +51,21 @@ export function DeployUniversalProfileStep({ setCurrentStep }: { setCurrentStep:
             <div className="text-xl">{metadata.LSP3Profile.name}</div>
           </div>
         )}
-
-        <div className="text-center">
-          <br />
-          <br />
-          TODO hints: we need UP on Mumbai Testnet to access Chainlink Functions, LSP23 same address, LSP24 references
-          <br />
-          <br />
-          TODO Deploy Universal Profile (LSP23) to Mumbai Testnet if not already deployed
-          <br />
-          <br />
-          TODO LSP24 references
+        <div className="text-center mt-10">
+          TODO hints: we need UP on Mumbai for Chainlink Functions. LSP23 same address, LSP24 references.
+        </div>
+        <div className="mt-10 text-center">
+          <button onClick={() => setCurrentStep(3)} className="btn btn-primary py-0 text-md">
+            Deploy Universal Profile
+          </button>
         </div>
         <div className="flex flex-col items-center mt-5">
-          <a href="https://mumbaifaucet.com/" target="_blank" rel="noopener noreferrer" className="btn btn-accent">
+          <a
+            href="https://mumbaifaucet.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-accent underline"
+          >
             Mumbai Faucet
           </a>
         </div>
@@ -73,16 +74,17 @@ export function DeployUniversalProfileStep({ setCurrentStep }: { setCurrentStep:
         className="btn border-white hover:border-accent fixed bottom-10 right-44 w-[128px]"
         onClick={() => {
           setCurrentStep(1);
+          // TODO UPE logout
         }}
       >
         <Image alt="arrow" width={12} height={10} src="/left-arrow.svg" />
         Back
       </button>
 
-      <button className="btn btn-primary fixed bottom-10 right-9 w-[128px]" onClick={() => setCurrentStep(3)}>
+      {/* <button className="btn btn-primary fixed bottom-10 right-9 w-[128px]" onClick={() => setCurrentStep(3)}>
         Next
         <Image alt="arrow" width={12} height={10} src="/right-arrow.svg" />
-      </button>
+      </button> */}
     </>
   );
 }
