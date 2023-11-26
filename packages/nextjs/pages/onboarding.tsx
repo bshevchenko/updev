@@ -14,7 +14,7 @@ const Onboarding: NextPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const { universalProfileData } = useContext(UniversalProfileContext);
 
-  const account = useAccount();
+  const account = useAccount(); // EOA connected to rainbow kit
   const router = useRouter();
 
   useEffect(() => {

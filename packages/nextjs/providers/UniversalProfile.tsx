@@ -10,29 +10,24 @@ interface UniversalProfileContextType {
   setUniversalProfileData: Dispatch<SetStateAction<UniversalProfileData>>;
 }
 
-// Provide a default context value that matches the type
 const defaultContextValue: UniversalProfileContextType = {
-  universalProfileData: { address: "" }, // Provide default values for all fields
-  setUniversalProfileData: () => console.warn("setData called without a context provider"), // Provide a no-op function
+  universalProfileData: { address: "" },
+  setUniversalProfileData: () => console.warn("setData called without a context provider"),
 };
 
 export const UniversalProfileContext = createContext<UniversalProfileContextType>(defaultContextValue);
+
+/**
+ * Universal Profile address available to any component that consumes the context
+ */
 
 export const UniversalProfileProvider = ({ children }: { children: React.ReactNode }) => {
   const [universalProfileData, setUniversalProfileData] = useState<UniversalProfileData>(
     defaultContextValue.universalProfileData,
   );
 
+  // useEffect forces code to run on the client-side
   useEffect(() => {
-    // This code will only run on the client-side
-    const savedData = localStorage.getItem("universalProfileData");
-    if (savedData) {
-      setUniversalProfileData(JSON.parse(savedData));
-    }
-  }, []);
-
-  useEffect(() => {
-    // This code will only run on the client-side
     const savedData = localStorage.getItem("universalProfileData");
     if (savedData) {
       setUniversalProfileData(JSON.parse(savedData));

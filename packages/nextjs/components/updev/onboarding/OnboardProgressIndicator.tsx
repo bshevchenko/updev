@@ -3,7 +3,7 @@ import Image from "next/image";
 
 /** Steps component
  *
- * @param {number} currentStep - Current step number
+ * @param {number} completedSteps how many steps user has completed
  */
 
 type StepsProps = {

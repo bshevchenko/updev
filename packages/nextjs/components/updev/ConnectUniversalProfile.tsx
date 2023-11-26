@@ -2,6 +2,11 @@ import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { UniversalProfileContext } from "~~/providers/UniversalProfile";
 
+/** The disconnect button doesnt actually disconnect the UP, it just clears the address from the provider context
+ *
+ * I think only the UP extension GUI can disconnect the UP from our site
+ */
+
 export function ConnectUniversalProfile() {
   const [upExtensionAvailable, setUpExtensionAvailable] = useState(false);
   const { universalProfileData, setUniversalProfileData } = useContext(UniversalProfileContext);
@@ -14,19 +19,19 @@ export function ConnectUniversalProfile() {
     if (window.lukso) {
       try {
         const accounts = await window.lukso.request({ method: "eth_requestAccounts" });
-
         setUniversalProfileData({
           ...universalProfileData,
           address: accounts[0],
         });
-        console.log("accounts", accounts);
       } catch (error) {
         console.error("Error connectinng to LUKSO", error);
       }
     }
   }
 
-  if (!universalProfileData) <span className="loading loading-spinner loading-lg"></span>;
+  if (!universalProfileData) {
+    return <span className="loading loading-spinner loading-lg"></span>;
+  }
 
   return (
     <div className="bg-base-100 border border-base-200 p-8 rounded-lg w-[336px]">

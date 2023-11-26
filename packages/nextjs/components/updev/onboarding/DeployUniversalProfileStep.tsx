@@ -25,34 +25,33 @@ export function DeployUniversalProfileStep({ setCurrentStep }: { setCurrentStep:
         },
       );
       const profileMetaData = await erc725js.fetchData("LSP3Profile");
-      if (profileMetaData.value) {
-        setMetadata(profileMetaData.value);
-      }
+
+      setMetadata(profileMetaData.value);
     }
     fetchData();
   }, [universalProfileData.address]);
 
-  if (!metadata) {
-    return (
-      <div className="grow flex flex-col justify-center items-center">
-        <span className="loading loading-spinner loading-lg"></span>
-      </div>
-    );
-  }
-
-  const { LSP3Profile } = metadata;
-  const profileImageUrl = convertIpfsUrl(LSP3Profile.profileImage[0].url);
-
   return (
     <>
       <OnboardProgressIndicator completedSteps={1} />
-      <div className="bg-base-100 border border-base-200 p-8 rounded-lg w-[336px]">
-        <div className="flex justify-center items-center gap-4">
-          <div className="rounded-full overflow-hidden">
-            <Image alt="upDev logo" width={100} height={100} src={profileImageUrl} />
+      <div className="bg-base-100 border border-base-200 p-8 rounded-lg w-96">
+        {!metadata ? (
+          <div className="grow flex flex-col justify-center items-center">
+            <span className="loading loading-spinner loading-lg"></span>
           </div>
-          <div className="text-xl">{LSP3Profile.name}</div>
-        </div>
+        ) : (
+          <div className="flex justify-center items-center gap-4">
+            <div className="rounded-full overflow-hidden">
+              <Image
+                alt="upDev logo"
+                width={88}
+                height={88}
+                src={convertIpfsUrl(metadata.LSP3Profile.profileImage[0].url)}
+              />
+            </div>
+            <div className="text-xl">{metadata.LSP3Profile.name}</div>
+          </div>
+        )}
 
         <div className="text-center">
           <br />
