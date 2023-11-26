@@ -6,19 +6,14 @@ import { ERC725, ERC725JSONSchema } from "@erc725/erc725.js";
 import { UniversalProfileContext } from "~~/providers/UniversalProfile";
 import { convertIpfsUrl } from "~~/utils/helpers";
 
-export function DeployUniversalProfileStep({
-  setCurrentStep,
-  setUpConnected,
-}: {
-  setCurrentStep: any;
-  setUpConnected: any;
-}) {
+export function DeployUniversalProfileStep({ setCurrentStep }: { setCurrentStep: any }) {
   const { universalProfileData } = useContext(UniversalProfileContext);
   const [metadata, setMetadata] = useState<any>(null);
 
   useEffect(() => {
+    if (!universalProfileData.address || universalProfileData.address === "") return;
     async function fetchData() {
-      // Dynamically import the JSON schema
+      // Dynamically import the JSON schema to satisfy nextjs
       const lsp3ProfileSchemaModule = await import("@erc725/erc725.js/schemas/LSP3ProfileMetadata.json");
       const lsp3ProfileSchema = lsp3ProfileSchemaModule.default;
       const erc725js = new ERC725(
@@ -37,12 +32,16 @@ export function DeployUniversalProfileStep({
     fetchData();
   }, [universalProfileData.address]);
 
-  if (!metadata) return <span className="loading loading-spinner loading-lg"></span>;
+  if (!metadata) {
+    return (
+      <div className="grow flex flex-col justify-center items-center">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
 
   const { LSP3Profile } = metadata;
   const profileImageUrl = convertIpfsUrl(LSP3Profile.profileImage[0].url);
-
-  console.log("profileImageUrl", profileImageUrl);
 
   return (
     <>
@@ -75,7 +74,6 @@ export function DeployUniversalProfileStep({
       <button
         className="btn border-white hover:border-accent fixed bottom-10 right-44 w-[128px]"
         onClick={() => {
-          setUpConnected(false);
           setCurrentStep(1);
         }}
       >

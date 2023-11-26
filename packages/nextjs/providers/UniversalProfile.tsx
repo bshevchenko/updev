@@ -19,21 +19,29 @@ const defaultContextValue: UniversalProfileContextType = {
 export const UniversalProfileContext = createContext<UniversalProfileContextType>(defaultContextValue);
 
 export const UniversalProfileProvider = ({ children }: { children: React.ReactNode }) => {
-  const [universalProfileData, setUniversalProfileData] = useState<UniversalProfileData>(() => {
-    // Check if window is defined (i.e., if we're running in the browser)
-    if (typeof window !== "undefined") {
-      // Read the stored data from local storage on initial load
-      const savedData = localStorage.getItem("universalProfileData");
-      return savedData ? JSON.parse(savedData) : {}; // Replace {} with your default value
-    }
-  });
+  const [universalProfileData, setUniversalProfileData] = useState<UniversalProfileData>(
+    defaultContextValue.universalProfileData,
+  );
 
   useEffect(() => {
-    // Check if window is defined before trying to access localStorage
-    if (typeof window !== "undefined") {
-      // Write data to local storage whenever it changes
-      localStorage.setItem("universalProfileData", JSON.stringify(universalProfileData));
+    // This code will only run on the client-side
+    const savedData = localStorage.getItem("universalProfileData");
+    if (savedData) {
+      setUniversalProfileData(JSON.parse(savedData));
     }
+  }, []);
+
+  useEffect(() => {
+    // This code will only run on the client-side
+    const savedData = localStorage.getItem("universalProfileData");
+    if (savedData) {
+      setUniversalProfileData(JSON.parse(savedData));
+    }
+  }, []);
+
+  useEffect(() => {
+    // Write data to local storage whenever it changes
+    localStorage.setItem("universalProfileData", JSON.stringify(universalProfileData));
   }, [universalProfileData]);
 
   return (

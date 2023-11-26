@@ -1,21 +1,19 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { UniversalProfileContext } from "~~/providers/UniversalProfile";
 
-export function ConnectUniversalProfile({
-  setUpConnected,
-  upExtensionAvailable,
-}: {
-  upExtensionAvailable: boolean;
-  setUpConnected: any;
-}) {
+export function ConnectUniversalProfile() {
+  const [upExtensionAvailable, setUpExtensionAvailable] = useState(false);
   const { universalProfileData, setUniversalProfileData } = useContext(UniversalProfileContext);
+
+  useEffect(() => {
+    setUpExtensionAvailable(!!window.lukso);
+  }, []);
 
   async function connectUniversalProfile() {
     if (window.lukso) {
       try {
         const accounts = await window.lukso.request({ method: "eth_requestAccounts" });
-        setUpConnected(true);
 
         setUniversalProfileData({
           ...universalProfileData,
