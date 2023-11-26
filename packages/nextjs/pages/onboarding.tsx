@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
@@ -8,30 +8,26 @@ import {
   ConnectUniversalProfileStep,
   DeployUniversalProfileStep,
 } from "~~/components/updev/onboarding/";
+import { UniversalProfileContext } from "~~/providers/UniversalProfile";
 
 const Onboarding: NextPage = () => {
-  const [upExtensionAvailable, setUpExtensionAvailable] = useState(false);
-  const [upConnected, setUpConnected] = useState(false);
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(1);
+  const { universalProfileData } = useContext(UniversalProfileContext);
 
   const account = useAccount();
   const router = useRouter();
 
   useEffect(() => {
-    setUpExtensionAvailable(!!window.lukso);
-  }, []);
-
-  useEffect(() => {
     if (!account.isConnected) {
       router.push("/");
     }
-    if (account.isConnected && !window.lukso.state.isConnected) {
+    if (account.isConnected && universalProfileData.address === "") {
       setCurrentStep(1);
     }
-    if (account.isConnected && window.lukso.state.isConnected) {
+    if (account.isConnected && universalProfileData.address.length > 0) {
       setCurrentStep(2);
     }
-  }, [account.isConnected, router, upConnected]);
+  }, [account.isConnected, router, universalProfileData]);
 
   return (
     <>
@@ -43,13 +39,9 @@ const Onboarding: NextPage = () => {
           <p className="my-0 text-lg">Complete 3 steps to onboard to the dApp</p>
         </div>
 
-        {currentStep === 1 && (
-          <ConnectUniversalProfileStep upExtensionAvailable={upExtensionAvailable} setUpConnected={setUpConnected} />
-        )}
+        {currentStep === 1 && <ConnectUniversalProfileStep />}
 
-        {currentStep === 2 && (
-          <DeployUniversalProfileStep setCurrentStep={setCurrentStep} setUpConnected={setUpConnected} />
-        )}
+        {currentStep === 2 && <DeployUniversalProfileStep setCurrentStep={setCurrentStep} />}
 
         {currentStep === 3 && <ConnectSocialAccountsStep setCurrentStep={setCurrentStep} />}
       </div>
