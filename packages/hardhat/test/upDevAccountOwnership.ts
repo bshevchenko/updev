@@ -40,8 +40,6 @@ describe("upDevAccountOwnership", () => {
     expect(tokensIdsOfDude[0]).to.equal(tokenId);
   });
 
-  // TODO on mint –it should transfer already minted tokens
-
   it("Should not transfer (soulbound)", async () => {
     try {
       await collection.transfer(owner.address, owner.address, tokenId, false, "0x");
