@@ -1,10 +1,36 @@
 import Image from "next/image";
 
 const socialAccounts = [
-  { title: "Buildbox", logo: "/link.svg", comingSoon: false },
-  { title: "Github", logo: "/github.svg", comingSoon: false },
-  { title: "BuidlGuidl", logo: "/link.svg", comingSoon: false },
-  { title: "LinkedIn", logo: "/linkedin.svg", comingSoon: true },
+  {
+    title: "Buildbox",
+    logo: "/link.svg",
+    comingSoon: false,
+    text: "Connect your buildbox.io account to verify your proof-of-account-ownership and earn achievements related to hackathons and bounties.",
+  },
+  {
+    title: "Github",
+    logo: "/github.svg",
+    comingSoon: false,
+    text: "Connect your github account to verify your proof-of-account-ownership and earn achievements related to your code commits and activity.",
+  },
+  {
+    title: "BuidlGuidl",
+    logo: "/link.svg",
+    comingSoon: false,
+    text: "Connect your buidlguidl account to verify your proof-of-account-ownership and earn achievements related to your scaffold-eth-2 builds, your role and your stream.",
+  },
+  {
+    title: "LinkedIn",
+    logo: "/linkedin.svg",
+    comingSoon: true,
+    text: "Connect your linkedin account to verify your proof-of-account-ownership and earn achievements related to your number of connections and your Web3 employment.",
+  },
+  {
+    title: "GitCoin Passport",
+    logo: "/passport.svg",
+    comingSoon: true,
+    text: "Connect your gitcoin passport to verofy your proof-of-account-ownership and earn achievements related to your number of points.",
+  },
 ];
 
 export const ConnectSocialAccounts = () => {
@@ -24,10 +50,7 @@ export const ConnectSocialAccounts = () => {
                   <div className="text-accent font-semibold border-2 border-accent rounded-md px-1">Coming soon</div>
                 )}
               </div>
-              <p className="text-base-content my-0">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium dolorem, eveniet aspernatur ullam
-                praesentium perspiciatis ducimus.
-              </p>
+              <p className="text-base-content my-0">{item.text}</p>
             </div>
             <button className="btn btn-primary" disabled={item.comingSoon}>
               Connect
