@@ -21,15 +21,37 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
-  await deploy("LSP23LinkedContractsFactory", {
+  await deploy("upDevAccountOwnership", {
     from: deployer,
     // Contract constructor arguments
-    args: [],
+    args: ["Account Ownership", "UPDEV", deployer],
     log: true,
     // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
     // automatically mining the contract deployment transaction. There is no effect on live networks.
     autoMine: true,
   });
+  const collection = await hre.ethers.getContract("upDevAccountOwnership", deployer);
+
+  await deploy("upDevFunctionsConsumer", {
+    from: deployer,
+    // Contract constructor arguments
+    args: [collection.address],
+    log: true,
+    autoMine: true,
+  });
+  const consumer = await hre.ethers.getContract("upDevFunctionsConsumer", deployer);
+
+  // await collection.transferOwnership(consumer.address);
+
+  await consumer.sendRequest(877, "0x", 0, 0, "github", "0x240588cebbd7c2f7e146a9fc1f357c82a9c052dc", "bshevchenko");
+
+  // await deploy("LSP23LinkedContractsFactory", {
+  //   from: deployer,
+  //   // Contract constructor arguments
+  //   args: [],
+  //   log: true,
+  //   autoMine: true,
+  // });
 
   // Get the deployed contract
   // const lsp23 = await hre.ethers.getContract("LSP23LinkedContractsFactory", deployer);
