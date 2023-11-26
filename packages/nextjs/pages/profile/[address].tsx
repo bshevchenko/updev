@@ -67,26 +67,31 @@ const Profile: NextPage = () => {
             </div>
           </div>
         </div>
-        <div className="flex mb-10">
-          <div className="w-40"></div>
-          <div className="flex grow flex-col gap-5">
-            <div>
-              <h3 className="text-2xl mb-0 font-bold ml-16">@{metadata.LSP3Profile.name}</h3>
-            </div>
-            <div className="flex gap-3 items-center">
-              <div className="text-[#FFFFFFA3]">
-                @starlord <span className="text-[#FFFFFF5C]">#E593</span>
-              </div>
-              <div className="text-[#FFFFFF5C]">·</div>
+        <div className="grid grid-cols-1 mt-16 md:mt-0 md:grid-cols-5 mb-10">
+          <div className="col-span-1"></div>
+          <div className="flex flex-col gap-5 col-span-4">
+            <div className="flex gap-3">
+              <h3 className="text-2xl mb-0 font-bold">@{metadata.LSP3Profile.name}</h3>
               <div className="] bg-base-100 px-1.5 py-0.5 rounded-md border border-base-200">
                 🆙 <span className="text-[#FFFFFF5C]">{address?.slice(0, 5) + "..." + address?.slice(-4)}</span>
               </div>
-              <div className="text-[#FFFFFF5C]">·</div>
-              <div className="flex items-center gap-1">
-                <div>
-                  <Image width={12} height={12} alt="link icon" src="/link.svg" />
-                </div>
-                <div className="text-[#FFFFFFA3] underline">starlord.xyz</div>
+            </div>
+            <div className="flex gap-3 items-center">
+              <div className="flex items-center gap-4">
+                {metadata.LSP3Profile.links.map((link: { title: string; url: string }) => (
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    key={link.title}
+                    className="flex items-center gap-1"
+                  >
+                    <div>
+                      <Image width={12} height={12} alt="link icon" src="/link.svg" />
+                    </div>
+                    <div className="text-[#FFFFFFA3] underline">{link.title}</div>
+                  </a>
+                ))}
               </div>
             </div>
             <div>
