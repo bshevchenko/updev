@@ -104,8 +104,8 @@ export const Header = () => {
         </Link>
         <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">
           {/* <HeaderMenuLinks /> */}
-          <Link href="updevsonly" className="items-center">
-            UPdevs ONLY
+          <Link href="/profiles" className="items-center">
+            Discover Profiles
           </Link>
         </ul>
       </div>
