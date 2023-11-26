@@ -1,4 +1,6 @@
+import { useState } from "react";
 import Image from "next/image";
+import Modal from "./Modal";
 
 const socialAccounts = [
   {
@@ -34,6 +36,19 @@ const socialAccounts = [
 ];
 
 export const ConnectSocialAccounts = () => {
+  const [activeModal, setActiveModal] = useState<string | null>(null);
+
+  const renderModalContent = (title: string) => {
+    const account = socialAccounts.find(account => account.title === title);
+    return (
+      <div>
+        <h2 className="text-2xl font-bold">How to Connect {account?.title}</h2>
+        <p className="text-lg">{account?.text}</p>
+        {/* Additional content or forms specific to the social account can go here */}
+      </div>
+    );
+  };
+
   return (
     <div className="w-full">
       <div className="flex flex-col gap-4 w-full gap-5">
@@ -52,12 +67,17 @@ export const ConnectSocialAccounts = () => {
               </div>
               <p className="text-base-content my-0">{item.text}</p>
             </div>
-            <button className="btn btn-primary" disabled={item.comingSoon}>
+            <button onClick={() => setActiveModal(item.title)} className="btn btn-primary" disabled={item.comingSoon}>
               Connect
             </button>
           </div>
         ))}
       </div>
+      {activeModal && (
+        <Modal isOpen={activeModal !== null} onClose={() => setActiveModal(null)}>
+          {renderModalContent(activeModal)}
+        </Modal>
+      )}
     </div>
   );
 };
