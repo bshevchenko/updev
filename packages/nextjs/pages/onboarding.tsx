@@ -12,7 +12,7 @@ import {
 const Onboarding: NextPage = () => {
   const [upExtensionAvailable, setUpExtensionAvailable] = useState(false);
   const [upConnected, setUpConnected] = useState(false);
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(0);
 
   const account = useAccount();
   const router = useRouter();
@@ -25,10 +25,10 @@ const Onboarding: NextPage = () => {
     if (!account.isConnected) {
       router.push("/");
     }
-    if (account.isConnected && !upConnected) {
+    if (account.isConnected && !window.lukso.state.isConnected) {
       setCurrentStep(1);
     }
-    if (account.isConnected && upConnected) {
+    if (account.isConnected && window.lukso.state.isConnected) {
       setCurrentStep(2);
     }
   }, [account.isConnected, router, upConnected]);

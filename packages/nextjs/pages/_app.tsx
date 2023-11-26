@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { AppProps } from "next/app";
+import { UniversalProfileProvider } from "../providers/UniversalProfile";
 import { RainbowKitProvider, darkTheme, lightTheme } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
 import NextNProgress from "nextjs-progressbar";
@@ -41,14 +42,16 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
         coolMode={true}
         theme={isDarkTheme ? darkTheme() : lightTheme()}
       >
-        <div className="flex flex-col min-h-screen">
-          <Header />
-          <main className="relative flex flex-col flex-1">
-            <Component {...pageProps} />
-          </main>
-          {/* <Footer /> */}
-        </div>
-        <Toaster />
+        <UniversalProfileProvider>
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            <main className="relative flex flex-col flex-1">
+              <Component {...pageProps} />
+            </main>
+            {/* <Footer /> */}
+          </div>
+          <Toaster />
+        </UniversalProfileProvider>
       </RainbowKitProvider>
     </WagmiConfig>
   );
