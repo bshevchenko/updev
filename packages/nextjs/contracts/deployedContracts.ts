@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   80001: {
     upDevAccountOwnership: {
-      address: "0xEFcE50945e532d08832819CD07a88Ee39da81555",
+      address: "0x37Dbb96ef6A78897Ce58d41f8c7f4D6dBCA500c3",
       abi: [
         {
           inputs: [
@@ -888,7 +888,7 @@ const deployedContracts = {
       },
     },
     upDevFunctionsConsumer: {
-      address: "0xbC4040aeB11CD897EDe6f45333D5C8E84D626c76",
+      address: "0xe5BEb1420CE60FCcF2cd4Cc3b33286B75Aa863F8",
       abi: [
         {
           inputs: [
@@ -1410,6 +1410,123 @@ const deployedContracts = {
         owner: "@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol",
         transferOwnership: "@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol",
       },
+    },
+    upRegistry: {
+      address: "0x161ba7785f4034A7f1fee75312aAb215CDE4a771",
+      abi: [
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "_ups",
+          outputs: [
+            {
+              internalType: "address",
+              name: "up",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "keyManager",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "upLukso",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_up",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "_km",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "_upLukso",
+              type: "address",
+            },
+          ],
+          name: "setUp",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "up",
+          outputs: [
+            {
+              internalType: "address",
+              name: "up",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "keyManager",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "upLukso",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "ups",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "address",
+                  name: "up",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "keyManager",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "upLukso",
+                  type: "address",
+                },
+              ],
+              internalType: "struct upRegistry.Profile[]",
+              name: "",
+              type: "tuple[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+      ],
+      inheritedFunctions: {},
     },
   },
 } as const;

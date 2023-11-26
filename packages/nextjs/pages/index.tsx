@@ -1,27 +1,32 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { MetaHeader } from "~~/components/MetaHeader";
 import { LandingDisplay } from "~~/components/updev/";
 import { ConnectUniversalProfile } from "~~/components/updev/";
-import { UniversalProfileContext } from "~~/providers/UniversalProfile";
+import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
 const Home: NextPage = () => {
-  const [hasDeployedUP] = useState(false);
-
-  const { universalProfileData } = useContext(UniversalProfileContext);
   const account = useAccount();
   const router = useRouter();
 
+  const { data: profile } = useScaffoldContractRead({
+    contractName: "upRegistry",
+    functionName: "up",
+    args: [account.address],
+  });
+
   useEffect(() => {
-    if (account.isConnected && !hasDeployedUP) {
-      router.push("/onboarding");
+    if (account.isConnected) {
+      const hasDeployedUP = profile && profile[0] != "0x0000000000000000000000000000000000000000";
+      if (!hasDeployedUP) {
+        router.push("/onboarding");
+      } else {
+        router.push("/profile/" + profile[2]);
+      }
     }
-    if (account.isConnected && universalProfileData.address.length > 0 && hasDeployedUP) {
-      router.push("/profile");
-    }
-  }, [account.isConnected, universalProfileData.address.length, router, hasDeployedUP]);
+  }, [account.isConnected, router, profile]);
 
   return (
     <>

@@ -8,6 +8,7 @@ import {
   ConnectUniversalProfileStep,
   DeployUniversalProfileStep,
 } from "~~/components/updev/onboarding/";
+import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 import { UniversalProfileContext } from "~~/providers/UniversalProfile";
 
 const Onboarding: NextPage = () => {
@@ -17,17 +18,30 @@ const Onboarding: NextPage = () => {
   const account = useAccount(); // EOA connected to rainbow kit
   const router = useRouter();
 
+  const { data: profile } = useScaffoldContractRead({
+    contractName: "upRegistry",
+    functionName: "up",
+    args: [account.address],
+  });
+
   useEffect(() => {
     if (!account.isConnected) {
       router.push("/");
+      return;
     }
-    if (account.isConnected && universalProfileData.address === "") {
+    if (profile && profile[0] != "0x0000000000000000000000000000000000000000") {
+      setCurrentStep(3);
+      return;
+    }
+    if (universalProfileData.address === "") {
       setCurrentStep(1);
+      return;
     }
-    if (account.isConnected && universalProfileData.address.length > 0) {
+    if (universalProfileData.address.length > 0) {
       setCurrentStep(2);
+      return;
     }
-  }, [account.isConnected, router, universalProfileData]);
+  }, [account.isConnected, router, universalProfileData, profile]);
 
   return (
     <>
@@ -43,7 +57,7 @@ const Onboarding: NextPage = () => {
 
         {currentStep === 2 && <DeployUniversalProfileStep setCurrentStep={setCurrentStep} />}
 
-        {currentStep === 3 && <ConnectSocialAccountsStep setCurrentStep={setCurrentStep} />}
+        {currentStep === 3 && <ConnectSocialAccountsStep luksoUP={profile && profile[2]} />}
       </div>
     </>
   );
