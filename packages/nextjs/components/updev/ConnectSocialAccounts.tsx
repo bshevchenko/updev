@@ -7,49 +7,57 @@ const socialAccounts = [
     title: "Github",
     logo: "/github.svg",
     comingSoon: false,
-    text: "Connect your github account to verify your proof-of-account-ownership and earn achievements related to your code commits and activity.",
-    modaltext: "",
-    modalimage: "/public/connectgithub.png",
+    description:
+      "Connect your github account to verify your proof-of-account-ownership and earn achievements related to your code commits and activity.",
+    step1: "Edit your Github profile to include the following link",
+    step2: "Do the next thing",
+    modalImage: "/connectgithub.png",
   },
   {
     title: "BuidlGuidl",
     logo: "/link.svg",
     comingSoon: false,
-    text: "Connect your buidlguidl account to verify your proof-of-account-ownership and earn achievements related to your scaffold-eth-2 builds, your role and your stream.",
-    modaltext: "",
-    modalimage: "/public/connectbuidlguidl.png",
+    description:
+      "Connect your buidlguidl account to verify your proof-of-account-ownership and earn achievements related to your scaffold-eth-2 builds, your role and your stream.",
+    step1: "On your buidlguidl profile page, update your status to the following link",
+    step2: "Do the next thing",
+    modalImage: "/connectbuidlguidl.png",
   },
   {
     title: "Buildbox",
     logo: "/link.svg",
     comingSoon: true,
-    text: "Connect your buildbox.io account to verify your proof-of-account-ownership and earn achievements related to hackathons and bounties.",
-    modaltext: "",
-    modalimage: "",
+    description:
+      "Connect your buildbox.io account to verify your proof-of-account-ownership and earn achievements related to hackathons and bounties.",
+    step1: "",
+    modalImage: "",
   },
   {
     title: "GitCoin Passport",
     logo: "/passport.svg",
     comingSoon: true,
-    text: "Connect your gitcoin passport to verify your proof-of-account-ownership and earn achievements related to your number of points.",
-    modaltext: "",
-    modalimage: "",
+    description:
+      "Connect your gitcoin passport to verify your proof-of-account-ownership and earn achievements related to your number of points.",
+    step1: "",
+    modalImage: "",
   },
   {
     title: "<X />Twitter",
     logo: "/link.svg",
     comingSoon: true,
-    text: "Connect your twitter/X account to verify your proof-of-account-ownership and earn achievements related to your level of activity and connections on crypto twitter.",
-    modaltext: "",
-    modalimage: "",
+    description:
+      "Connect your twitter/X account to verify your proof-of-account-ownership and earn achievements related to your level of activity and connections on crypto twitter.",
+    step1: "",
+    modalImage: "",
   },
   {
     title: "LinkedIn",
     logo: "/linkedin.svg",
     comingSoon: true,
-    text: "Connect your linkedin account to verify your proof-of-account-ownership and earn achievements related to your number of connections and your Web3 employment.",
-    modaltext: "",
-    modalimage: "",
+    description:
+      "Connect your linkedin account to verify your proof-of-account-ownership and earn achievements related to your number of connections and your Web3 employment.",
+    step1: "",
+    modalImage: "",
   },
 ];
 
@@ -59,15 +67,20 @@ export const ConnectSocialAccounts = () => {
   const renderModalContent = (title: string) => {
     const account = socialAccounts.find(account => account.title === title);
     return (
-      <div>
-        <h2 className="text-2xl font-bold">How to Connect {account?.title}</h2>
-        <p className="text-lg">{account?.modaltext}</p>
-        <Image alt="brand logo" width={24} height={24} src={account?.modalimage!} />
-        <span>Add this link to your {account?.title} account here</span>
-        <div>https://updev-nextjs.vercel.app/profile/address</div>
-        <button>Copy link</button>
-        <button>Deploy UP</button>
-        {/* Additional content or forms specific to the social account can go here */}
+      <div className="flex gap-5 items-center">
+        <div className="rounded-lg overflow-hidden">
+          {account?.modalImage && <Image alt="brand logo" width={300} height={300} src={account?.modalImage} />}
+        </div>
+        <div>
+          <h2 className="text-2xl font-bold">How to Connect {account?.title}</h2>
+          <ol className="list-decimal list-inside">
+            <li className="text-xl">{account?.step1}</li>
+            <div className="border border-white p-5 rounded-xl my-3">
+              https://updev-nextjs.vercel.app/profile/UPaddress
+            </div>
+            <li className="text-xl">{account?.step2}</li>
+          </ol>
+        </div>
       </div>
     );
   };
@@ -88,7 +101,7 @@ export const ConnectSocialAccounts = () => {
                   <div className="text-accent font-semibold border-2 border-accent rounded-md px-1">Coming soon</div>
                 )}
               </div>
-              <p className="text-base-content my-0">{item.text}</p>
+              <p className="text-base-content my-0">{item.description}</p>
             </div>
             <button onClick={() => setActiveModal(item.title)} className="btn btn-primary" disabled={item.comingSoon}>
               Connect
