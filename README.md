@@ -33,10 +33,11 @@ upDev is a multi-chain dApp that allows users to connect and verify there develo
 
 ## Integrations
 
-Live:<br />
+LIVE<br />
 – [Github](https://github.com/) <br />
 – [Buidlguidl](https://buidlguidl.com/) <br /><br />
-Coming Soon:<br />
+
+Coming Soon<br />
 – [Gitcoin Passport](https://passport.gitcoin.co/) <br />
 – [LinkedIn](https://www.linkedin.com/) <br />
 – [X / Twitter](https://twitter.com/) <br />
