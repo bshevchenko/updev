@@ -38,7 +38,7 @@ contract upDevAccountOwnership is LSP8Mintable {
 
     error Soulbound();
 
-    struct TokenData { // TODO tmp?
+    struct TokenData { // TODO tmp
         string source;
         string id;
     }

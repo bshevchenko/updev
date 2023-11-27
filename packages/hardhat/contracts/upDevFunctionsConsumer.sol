@@ -156,7 +156,7 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		string calldata sourceName,
 		address up,
 		string calldata id
-	) external onlyOwner returns (bytes32 requestId) {
+	) external returns (bytes32 requestId) {
 		FunctionsRequest.Request memory req;
 		req.initializeRequestForInlineJavaScript(source[sourceName].code);
 		if (encryptedSecretsUrls.length > 0)
