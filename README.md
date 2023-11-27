@@ -27,7 +27,7 @@ upDev is a multi-chain dApp that allows users to connect and verify there develo
 
 ✅ Profiles page that lists a directory of all [updevs](https://updev-nextjs.vercel.app/profiles)
 
-[TODO] deploy UP on Polygon Mumbai AT THE SAME ADDRESS using LSP23/24
+[TODO] deploy UP on Polygon Mumbai AT THE SAME ADDRESS using LSP23
 
 ## Integrations
 
