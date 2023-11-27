@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { ERC725, ERC725JSONSchema } from "@erc725/erc725.js";
 import { convertIpfsUrl } from "~~/utils/helpers";
 
@@ -50,15 +49,17 @@ export function ProfileCard({ upAddress }: { upAddress: string }) {
   };
 
   return (
-    <Link
-      href={`/profile/${upAddress}`}
+    <div
       style={backgroundStyle}
       className="relative bg-base-200 w-full h-80 rounded-3xl flex flex-col justify-end transition duration-300 ease-in-out hover:scale-105 border-base-200 "
     >
-      <div className="absolute top-1/2 z-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full overflow-hidden border-[10px] w-32 h-32 border-neutral-900">
+      <div className="absolute top-1/2 z-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full overflow-hidden w-32 h-32 border-[10px] border-base-300"></div>
+      <div className="absolute top-1/2 z-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full overflow-hidden w-32 h-32 border-[10px] border-base-100">
         <Image alt="profile picture" width={1000} height={1000} src={convertIpfsUrl(profileImage)} />
       </div>
-      <div className="h-1/2 z-0 flex flex-col bg-neutral-900 justify-end items-center rounded-3xl gap-4 pb-6">
+      <div className="absolute bottom-0 h-1/2 w-full z-0 bg-base-300 rounded-3xl"></div>
+
+      <div className="h-1/2 z-0 flex flex-col bg-base-100 border border-base-200 justify-end items-center rounded-3xl gap-4 pb-6">
         <div className="font-bold">
           @{metadata.LSP3Profile.name}
           <span className="ml-1 text-accent">#{upAddress.slice(2, 6)}</span>
@@ -74,6 +75,6 @@ export function ProfileCard({ upAddress }: { upAddress: string }) {
           ))}
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
