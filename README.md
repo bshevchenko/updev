@@ -1,10 +1,11 @@
 <div align="center">
   <h1>upDev</h1>
+  <h3>Your universal dev profile on Lukso</h3>
   <img src="updev-black-logo.png" />
 </div>
 
 <div align="center">
-  <a href="https://youtu.be/87MVo4h5Tww">youtube video</a> | <a href="[https://updev-nextjs.vercel.app/](https://updev-bshevchenko-boris-shevchenkos-projects.vercel.app/)">live site</a>
+  <a href="https://www.youtube.com/watch?v=fHk1DrFlUV0">youtube video</a> | <a href="https://updev-bshevchenko-boris-shevchenkos-projects.vercel.app/">live site</a>
 </div>
 
 <div align="center">
@@ -25,19 +26,19 @@ upDev is a multi-chain dApp that allows users to connect and verify there develo
 
 ✅ Profile page where users can connect their account integrations and see all their information associated with their Universal Profile Metadata
 
-✅ Profiles page that lists a directory of all [updevs](https://updev-nextjs.vercel.app/profiles)
+✅ Profiles page that lists a directory of all upDevs
 
 [TODO] deploy UP on Polygon Mumbai AT THE SAME ADDRESS using LSP23
 
 ## Integrations
 
-Live |
--[Github](https://github.com/) |
--[Buidlguidl](https://buidlguidl.com/) |
-Coming Soon |
--[Gitcoin Passport](https://passport.gitcoin.co/) |
--[Linkedin](https://www.linkedin.com/) |
--[X/Twitter](https://twitter.com/) |
+Live:<br />
+– [Github](https://github.com/) <br />
+– [Buidlguidl](https://buidlguidl.com/) <br /><br />
+Coming Soon:<br />
+– [Gitcoin Passport](https://passport.gitcoin.co/) <br />
+– [Linkedin](https://www.linkedin.com/) <br />
+– [X/Twitter](https://twitter.com/) <br />
 
 ## Run Front-end
 
@@ -65,11 +66,3 @@ run the app
 - [nextjs](https://nextjs.org/)
 - [vercel](vercel.com)
 - [Lukso LSPs](https://github.com/lukso-network/lsp-smart-contracts)
-
-### Project Board
-
-https://app.shortcut.com/deez-stealth/stories/space/66/current-iteration?team_scope_id=v2%3At%3A653e887f-753f-4e41-ab54-bcf87ba5a7e0%3A653fac62-552e-4ec7-85a8-b483171a467f
-
-### Figma
-
-https://www.figma.com/file/LVYEWZriiuiIdxoSq9mJ5g/upDev-v1.0?type=design&node-id=2102-385&mode=design&t=6vEnAz4xBEj2OAFm-0
