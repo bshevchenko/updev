@@ -15,7 +15,7 @@ const scaffoldConfig = {
 
   // The interval at which your front-end polls the RPC servers for new data
   // it has no effect on the local network
-  pollingInterval: 30000,
+  pollingInterval: 3000,
 
   // This is ours Alchemy's default API key.
   // You can get your own at https://dashboard.alchemyapi.io

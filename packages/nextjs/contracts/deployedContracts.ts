@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   80001: {
     upDevAccountOwnership: {
-      address: "0x6ed59A55da43d9dea938683B84bA21Dc5557ebE0",
+      address: "0xB7bCfbf56b8aF51706E402Df0aD5b4b8f4855F49",
       abi: [
         {
           inputs: [
@@ -888,7 +888,7 @@ const deployedContracts = {
       },
     },
     upDevFunctionsConsumer: {
-      address: "0x59482337a3a142F5e8EB2Ccf18cFd32102E9fA16",
+      address: "0xF43ae488f6B85ABc753B1cA1946bA9A148310C82",
       abi: [
         {
           inputs: [
