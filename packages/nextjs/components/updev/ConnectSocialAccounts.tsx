@@ -4,7 +4,7 @@ import Modal from "./Modal";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useAccount, useWalletClient } from "wagmi";
 import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
-import { useScaffoldContractRead, useScaffoldContract } from "~~/hooks/scaffold-eth";
+import { useScaffoldContract, useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
 const socialAccounts = [
   {
@@ -76,7 +76,7 @@ export const ConnectSocialAccounts = () => {
   const account = useAccount(); // EOA connected to rainbow kit
 
   const [copied, setCopied] = useState(false);
-  const [id, setId] = useState('');
+  const [id, setId] = useState("");
 
   const { data: profile } = useScaffoldContractRead({
     contractName: "upRegistry",
@@ -94,20 +94,13 @@ export const ConnectSocialAccounts = () => {
     if (!consumer || !profile) {
       return;
     }
-    console.log('handleVerify', sourceName, id, profile[0]);
+    console.log("handleVerify", sourceName, id, profile[0]);
     try {
-      await consumer.write.sendRequest([
-        877n,
-        "0x",
-        0,
-        0n,
-        sourceName,
-        profile[0],
-        id
-      ])
-      setActiveModal(null)
+      await consumer.write.sendRequest([877n, "0x", 0, 0n, sourceName, profile[0], id]);
+      setActiveModal(null);
+      alert("Your account will appear on your page once it is verified.");
     } catch (e) {
-      console.error('handleVerify error', e)
+      console.error("handleVerify error", e);
     }
   }
 
@@ -142,9 +135,19 @@ export const ConnectSocialAccounts = () => {
               </a>
             </div>
             <li className="text-xl mt-5">
-              {account?.step2}<br />
-              <input type="text" value={id} className="w-[490px] border border-white p-2 rounded-xl my-3" style={{backgroundColor: "#262626"}} onChange={e => setId(e.target.value)} />&nbsp;
-              <button className="btn" onClick={() => handleVerify(title.toLowerCase(), id)}>Submit</button>
+              {account?.step2}
+              <br />
+              <input
+                type="text"
+                value={id}
+                className="w-[490px] border border-white p-2 rounded-xl my-3"
+                style={{ backgroundColor: "#262626" }}
+                onChange={e => setId(e.target.value)}
+              />
+              &nbsp;
+              <button className="btn" onClick={() => handleVerify(title.toLowerCase(), id)}>
+                Submit
+              </button>
             </li>
           </ol>
         </div>

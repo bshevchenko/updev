@@ -8,7 +8,7 @@ import { useAccount } from "wagmi";
 // import useSWR from "swr";
 import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import { ConnectSocialAccounts } from "~~/components/updev/";
-import { useScaffoldContractRead, useScaffoldEventHistory } from "~~/hooks/scaffold-eth";
+import { useScaffoldContractRead, useScaffoldEventHistory, useScaffoldEventSubscriber } from "~~/hooks/scaffold-eth";
 import { convertIpfsUrl } from "~~/utils/helpers";
 
 // const fetcher = (...args: [RequestInfo, RequestInit?]) => fetch(...args).then(res => res.json());
@@ -38,7 +38,8 @@ const Profile: NextPage = () => {
     // Specify the starting block number from which to read events, this is a bigint.
     fromBlock: 42903925n,
     // If set to true, the events will be updated every pollingInterval milliseconds set at scaffoldConfig (default: false)
-    // watch: true, // TODO wtf
+    // @ts-ignore
+    watch: true,
     // Apply filters to the event based on parameter names and values { [parameterName]: value },
     filters: { up: profile && profile[0] },
     // If set to true it will return the block data for each event (default: false)
@@ -47,6 +48,21 @@ const Profile: NextPage = () => {
     transactionData: false,
     // If set to true it will return the receipt data for each event (default: false),
     receiptData: false,
+  });
+
+  useScaffoldEventSubscriber({
+    contractName: "upDevFunctionsConsumer",
+    eventName: "Response",
+    listener: logs => {
+      logs.map(log => {
+        const { isOwned, source } = log.args;
+        if (isOwned) {
+          alert(`Your ${source} account has been successfully added.`); // TODO push nice toast message
+        } else {
+          alert(`Your ${source} account verification failed. Please try again.`);
+        }
+      });
+    },
   });
 
   const [isLoading, setIsLoading] = useState(true);
