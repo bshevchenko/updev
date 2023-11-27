@@ -14,7 +14,7 @@
 
 ![updev-landingpage](screenshot-landing.png)
 
-This repo contains the code for a project submission for BuildUP#2 Hackathon on [buidlbox.io](https://app.buidlbox.io/buidlbox/buidlhacks) which ended Nov. 27th 2023
+This repo contains the code for a project submission for BuildUP #2 Hackathon on [buidlbox.io](https://app.buidlbox.io/buidlbox/buidlhacks) which ended November 27th 2023.
 
 upDev is a multi-chain dApp that allows users to connect and verify there developer related accounts from other web2 and web3 services and create a verifiable ownership-proof on-chain. It leverages [Lukso Network](https://lukso.network/), [UniveralProfiles Extension](https://chromewebstore.google.com/detail/universal-profiles/abpickdkkbnbcoepogfhkhennhfhehfn), [Polygon Mumbai](https://mumbai.polygonscan.com/) and [Chainlink Functions](https://docs.chain.link/chainlink-functions).
 
@@ -26,7 +26,7 @@ upDev is a multi-chain dApp that allows users to connect and verify there develo
 
 ✅ Profile page where users can connect their account integrations and see all their information associated with their original Lukso Mainnet Universal Profile Metadata
 
-✅ Profiles page that lists a directory of all upDevs
+✅ Discover Profiles page that lists a directory of all upDevs
 
 [TODO] deploy UP on Polygon Mumbai AT THE SAME ADDRESS using LSP23<br />
 [TODO] implement LSP24 to link UPs on different chains
