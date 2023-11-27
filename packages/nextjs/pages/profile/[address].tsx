@@ -32,15 +32,13 @@ const Profile: NextPage = () => {
     args: [account.address],
   });
 
-  const {
-    data: events
-  } = useScaffoldEventHistory({
+  const { data: events } = useScaffoldEventHistory({
     contractName: "upDevFunctionsConsumer",
     eventName: "Response",
     // Specify the starting block number from which to read events, this is a bigint.
     fromBlock: 42903925n,
     // If set to true, the events will be updated every pollingInterval milliseconds set at scaffoldConfig (default: false)
-    watch: true,
+    // watch: true, // TODO wtf
     // Apply filters to the event based on parameter names and values { [parameterName]: value },
     filters: { up: profile && profile[0] },
     // If set to true it will return the block data for each event (default: false)
@@ -62,7 +60,7 @@ const Profile: NextPage = () => {
   }, [profile]);
 
   useEffect(() => {
-    console.log(events)
+    console.log(events);
   }, [events]);
 
   // const {
@@ -182,11 +180,11 @@ const Profile: NextPage = () => {
           <div className="flex gap-3">
             <Image width={117} height={117} alt="achievement icon" src="/achievements/up.svg" />
             <Image width={117} height={117} alt="achievement icon" src="/achievements/og-updev.svg" />
-            {events && events.some(obj => obj.args && obj.args.source === 'github' && obj.args.isOwned == true) && (
+            {events && events.some(obj => obj.args && obj.args.source === "github" && obj.args.isOwned == true) && (
               <Image width={117} height={117} alt="achievement icon" src="/achievements/github.svg" />
             )}
             {/* <Image width={117} height={117} alt="achievement icon" src="/achievements/buildbox.svg" /> */}
-            {events && events.some(obj => obj.args && obj.args.source === 'buidlguidl' && obj.args.isOwned == true) && (
+            {events && events.some(obj => obj.args && obj.args.source === "buidlguidl" && obj.args.isOwned == true) && (
               <Image width={117} height={117} alt="achievement icon" src="/achievements/buidlguidl.svg" />
             )}
           </div>
