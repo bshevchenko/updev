@@ -42,7 +42,7 @@ const socialAccounts = [
     modalImage: "",
   },
   {
-    title: "<X />Twitter",
+    title: "X / Twitter",
     logo: "/link.svg",
     comingSoon: true,
     description:
