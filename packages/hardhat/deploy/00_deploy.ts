@@ -29,27 +29,28 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   });
   // const upRegistry = await hre.ethers.getContract("upRegistry", deployer);
 
-  // await deploy("upDevAccountOwnership", {
-  //   from: deployer,
-  //   args: ["Account Ownership", "UPDEV", deployer],
-  //   log: true,
-  //   autoMine: true,
-  // });
-  // const collection = await hre.ethers.getContract("upDevAccountOwnership", deployer);
+  await deploy("upDevAccountOwnership", {
+    from: deployer,
+    args: ["Account Ownership", "UPDEV", deployer],
+    log: true,
+    autoMine: true,
+  });
+  const collection = await hre.ethers.getContract("upDevAccountOwnership", deployer);
 
-  // await deploy("upDevFunctionsConsumer", {
-  //   from: deployer,
-  //   args: [collection.address],
-  //   log: true,
-  //   autoMine: true,
-  // });
-  // const consumer = await hre.ethers.getContract("upDevFunctionsConsumer", deployer);
+  await deploy("upDevFunctionsConsumer", {
+    from: deployer,
+    args: [collection.address],
+    log: true,
+    autoMine: true,
+  });
+  const consumer = await hre.ethers.getContract("upDevFunctionsConsumer", deployer);
 
-  // try {
-  //   await collection.transferOwnership(consumer.address);
-  // } catch (e) {
-  //   console.log("Collection ownership already transferred");
-  // }
+  try {
+    await collection.transferOwnership(consumer.address);
+    console.log('Collection ownership transferred to', consumer.address);
+  } catch (e) {
+    console.log("Collection ownership already transferred");
+  }
 
   // await consumer.sendRequest(877, "0x", 0, 0, "github", "0x240588cebbd7c2f7e146a9fc1f357c82a9c052dc", "bshevchenko");
 

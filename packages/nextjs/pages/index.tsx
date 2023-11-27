@@ -21,7 +21,6 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     if (profile) {
-      console.log("upRegistry Profile", profile);
       setIsLoading(false);
     }
   }, [profile]);

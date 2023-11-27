@@ -46,7 +46,10 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 
 	// Event to log responses
 	event Response(
+		address indexed up,
 		bytes32 indexed requestId,
+		string source,
+		string id,
 		bool isOwned,
 		bytes response,
 		bytes err
@@ -206,16 +209,28 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		requests[requestId].isOwned = isOwned;
 		requests[requestId].isFinished = true;
 
-		collection.mintTmp(
+		// Emit an event to log the response
+		emit Response(
 			requests[requestId].up,
-			keccak256(abi.encodePacked(requests[requestId].source, requests[requestId].id)),
-			true,
-			requests[requestId].source, // TODO Chainlink fails on abi.encode for some reason, so just pass strings for now
-			requests[requestId].id
+			requestId,
+			requests[requestId].source,
+			requests[requestId].id,
+			isOwned,
+			s_lastResponse,
+			s_lastError
 		);
 
-		// Emit an event to log the response
-		emit Response(requestId, isOwned, s_lastResponse, s_lastError);
+		// if (!isOwned) {
+		// 	return;
+		// }
+
+		// collection.mintTmp( // TODO doesn't work for all UP addresses for some reason
+		// 	requests[requestId].up,
+		// 	keccak256(abi.encodePacked(requests[requestId].source, requests[requestId].id)),
+		// 	true,
+		// 	requests[requestId].source, // TODO Chainlink fails on abi.encode for some reason, so just pass strings for now
+		// 	requests[requestId].id
+		// );
 	}
 
 	/**

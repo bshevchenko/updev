@@ -18,7 +18,7 @@ describe("upDevAccountOwnership", () => {
     await collection.deployed();
   });
 
-  it("Should mint", async () => {
+  it("Should mint tmp", async () => {
     await collection.mintTmp(
       owner.address,
       tokenId,

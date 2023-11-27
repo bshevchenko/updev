@@ -19,6 +19,7 @@ contract upRegistry {
 		address up;
 		address keyManager;
 		address upLukso;
+		address eoa;
 	}
 
 	mapping (address => Profile) public upByEOA; // TODO no duplicate
@@ -48,7 +49,8 @@ contract upRegistry {
 		Profile memory p = Profile({
 			up: _up,
 			keyManager: _km,
-			upLukso: _upLukso
+			upLukso: _upLukso,
+			eoa: msg.sender
 		});
 		upByEOA[msg.sender] = p;
 		up[_up] = p;
