@@ -10,8 +10,6 @@ const Profiles: NextPage = () => {
     functionName: "ups",
   });
 
-  console.log("profiles", profiles);
-
   return (
     <div className="px-5 md:px-10 lg:px-20">
       <div className="flex justify-center items-center my-20 gap-4">

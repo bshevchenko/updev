@@ -83,8 +83,6 @@ const Profile: NextPage = () => {
         });
         try {
           const profileMetaData = await erc725js.fetchData("LSP3Profile");
-
-          console.log("profileMetaData", profileMetaData);
           setMetadata(profileMetaData.value);
         } catch (error) {
           console.error("Error fetching ERC725 data:", error);
@@ -102,8 +100,6 @@ const Profile: NextPage = () => {
         <span className="loading loading-spinner loading-lg"></span>
       </div>
     );
-
-  console.log("metadata", metadata);
 
   return (
     <div className="flex flex-col items-center py-10">

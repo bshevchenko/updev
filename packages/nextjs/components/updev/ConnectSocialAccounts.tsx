@@ -84,8 +84,6 @@ export const ConnectSocialAccounts = () => {
     args: [account.address],
   });
 
-  console.log("profile", profile);
-
   const { data: walletClient } = useWalletClient();
   const { data: consumer } = useScaffoldContract({
     contractName: "upDevFunctionsConsumer",
