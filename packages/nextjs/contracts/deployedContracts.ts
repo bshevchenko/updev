@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   80001: {
     upDevAccountOwnership: {
-      address: "0x09373D0D73B6b55EBc919A7Fa5a6911feF55e819",
+      address: "0x6ed59A55da43d9dea938683B84bA21Dc5557ebE0",
       abi: [
         {
           inputs: [
@@ -869,39 +869,26 @@ const deployedContracts = {
       inheritedFunctions: {
         authorizeOperator:
           "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        balanceOf:
-          "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        getData:
-          "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        getDataBatch:
-          "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        getOperatorsOf:
-          "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        isOperatorFor:
-          "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
+        balanceOf: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
+        getData: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
+        getDataBatch: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
+        getOperatorsOf: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
+        isOperatorFor: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
         mint: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        revokeOperator:
-          "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        setData:
-          "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        setDataBatch:
-          "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
+        revokeOperator: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
+        setData: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
+        setDataBatch: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
         supportsInterface:
           "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        tokenIdsOf:
-          "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        tokenOwnerOf:
-          "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        totalSupply:
-          "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        transfer:
-          "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        transferBatch:
-          "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
+        tokenIdsOf: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
+        tokenOwnerOf: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
+        totalSupply: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
+        transfer: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
+        transferBatch: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
       },
     },
     upDevFunctionsConsumer: {
-      address: "0x74F6C1523a45133aDA70201d53b552fAEE39c385",
+      address: "0x59482337a3a142F5e8EB2Ccf18cFd32102E9fA16",
       abi: [
         {
           inputs: [
@@ -1436,17 +1423,14 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {
-        handleOracleFulfillment:
-          "@chainlink/contracts/src/v0.8/functions/dev/v1_0_0/FunctionsClient.sol",
-        acceptOwnership:
-          "@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol",
+        handleOracleFulfillment: "@chainlink/contracts/src/v0.8/functions/dev/v1_0_0/FunctionsClient.sol",
+        acceptOwnership: "@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol",
         owner: "@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol",
-        transferOwnership:
-          "@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol",
+        transferOwnership: "@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol",
       },
     },
     upRegistry: {
-      address: "0x2F0e82716FB9c2aD7F3683eb22A45aAaF9B7f27c",
+      address: "0x4A99ABC656a6d50bfc6471a3da48c7F564020ed5",
       abi: [
         {
           inputs: [],
