@@ -33,6 +33,7 @@ export function DeployUniversalProfileStep({ setCurrentStep }: { setCurrentStep:
   const signer = useEthersSigner();
   const account = useAccount();
   const [isDeploying, setIsDeploying] = useState(false);
+  const [txCounter, setTxCounter] = useState(0);
 
   const { data: walletClient } = useWalletClient();
   const { data: upRegistry } = useScaffoldContract({
@@ -69,6 +70,8 @@ export function DeployUniversalProfileStep({ setCurrentStep }: { setCurrentStep:
     try {
       const lspFactory = new LSPFactory(signer.provider, signer);
 
+      let _txCounter = 0;
+
       const response = await lspFactory.UniversalProfile.deploy(
         {
           controllerAddresses: [account.address || ""],
@@ -85,6 +88,22 @@ export function DeployUniversalProfileStep({ setCurrentStep }: { setCurrentStep:
           LSP0ERC725Account: {
             version: "0x8F28d9b46862FC5F5BC5726D2DE4ab5342405Dd8",
             deployProxy: false,
+          },
+          onDeployEvents: {
+            next: deploymentEvent => {
+              if (deploymentEvent.status == "COMPLETE") {
+                setTxCounter(_txCounter + 1);
+                _txCounter++;
+              }
+              console.log(deploymentEvent);
+            },
+            error: error => {
+              console.error(error);
+            },
+            complete: contracts => {
+              console.log("Universal Profile deployment completed");
+              console.log(contracts);
+            },
           },
         },
       );
@@ -132,13 +151,23 @@ export function DeployUniversalProfileStep({ setCurrentStep }: { setCurrentStep:
                 src={convertIpfsUrl(metadata.LSP3Profile.profileImage[0].url)}
               />
             </div>
-            <div className="text-xl">Welcome {metadata.LSP3Profile.name}</div>
+            <div className="text-xl">
+              Hey, <b>@{metadata.LSP3Profile.name}</b>
+            </div>
           </div>
         )}
+
         <div className="text-center mt-10">Click to deploy your UP on Polygon Mumbai in order to create account.</div>
         <div className="mt-10 text-center">
           <button onClick={() => handleDeploy()} className="btn btn-primary py-0 text-md" disabled={isDeploying}>
-            {isDeploying ? "Deploying Universal Profile..." : "Deploy Universal Profile"}
+            {isDeploying ? (
+              <>
+                <span className="loading loading-spinner loading-md"></span> Deploying{" "}
+                {Math.floor((txCounter / 9) * 100)}%, {txCounter} of 9...
+              </>
+            ) : (
+              "Deploy Universal Profile"
+            )}
           </button>
         </div>
         <div className="flex flex-col items-center mt-5">
@@ -153,7 +182,7 @@ export function DeployUniversalProfileStep({ setCurrentStep }: { setCurrentStep:
         </div>
       </div>
       <button
-        className="btn border-white hover:border-accent fixed bottom-10 right-44 w-[128px]"
+        className="btn border-white hover:border-accent fixed bottom-10 right-9 w-[128px]"
         onClick={() => {
           setCurrentStep(1);
         }}
