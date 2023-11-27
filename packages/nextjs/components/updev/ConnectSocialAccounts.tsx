@@ -1,6 +1,10 @@
 import { useState } from "react";
 import Image from "next/image";
 import Modal from "./Modal";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { useAccount } from "wagmi";
+import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
+import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
 const socialAccounts = [
   {
@@ -63,20 +67,42 @@ const socialAccounts = [
 
 export const ConnectSocialAccounts = () => {
   const [activeModal, setActiveModal] = useState<string | null>(null);
+  const account = useAccount(); // EOA connected to rainbow kit
+
+  const [copied, setCopied] = useState(false);
+
+  const { data: profile } = useScaffoldContractRead({
+    contractName: "upRegistry",
+    functionName: "up",
+    args: [account.address],
+  });
 
   const renderModalContent = (title: string) => {
     const account = socialAccounts.find(account => account.title === title);
+
+    const link = `https://updev-nextjs.vercel.app/profile/${profile && profile[2]}`;
     return (
       <div className="flex gap-5 items-center">
         <div className="rounded-lg overflow-hidden">
-          {account?.modalImage && <Image alt="brand logo" width={300} height={300} src={account?.modalImage} />}
+          {account?.modalImage && <Image alt="brand logo" width={300} height={400} src={account?.modalImage} />}
         </div>
         <div>
           <h2 className="text-2xl font-bold">How to Connect {account?.title}</h2>
           <ol className="list-decimal list-inside">
             <li className="text-xl">{account?.step1}</li>
-            <div className="border border-white p-5 rounded-xl my-3">
-              https://updev-nextjs.vercel.app/profile/UPaddress
+            <div className="flex items-center gap-4">
+              <div className="w-[600px] border border-white p-3 rounded-xl my-3 overflow-x-auto whitespace-nowrap hide-scrollbar">
+                {link}
+              </div>
+              <CopyToClipboard text={link} onCopy={() => setCopied(true)}>
+                <button className="">
+                  {copied ? (
+                    <CheckCircleIcon className="w-6 cursor-pointer" />
+                  ) : (
+                    <DocumentDuplicateIcon className="w-6 cursor-pointer" />
+                  )}
+                </button>
+              </CopyToClipboard>
             </div>
             <li className="text-xl">{account?.step2}</li>
           </ol>
