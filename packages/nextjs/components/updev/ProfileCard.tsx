@@ -58,10 +58,7 @@ export function ProfileCard({ upAddress }: { upAddress: string }) {
       <div className="absolute top-1/2 z-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full overflow-hidden border-[10px] w-32 h-32 border-neutral-900">
         <Image alt="profile picture" width={1000} height={1000} src={convertIpfsUrl(profileImage)} />
       </div>
-      <div
-        // style={{ backdropFilter: "blur(50px)" }}
-        className="h-1/2 z-0 flex flex-col bg-neutral-900 justify-end items-center rounded-3xl gap-3 pb-5"
-      >
+      <div className="h-1/2 z-0 flex flex-col bg-neutral-900 justify-end items-center rounded-3xl gap-4 pb-6">
         <div className="font-bold">
           @{metadata.LSP3Profile.name}
           <span className="ml-1 text-accent">#{upAddress.slice(2, 6)}</span>
