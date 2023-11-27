@@ -15,13 +15,13 @@
 
 This repo contains the code for a project submission for BuildUP#2 Hackathon on [buidlbox.io](https://app.buidlbox.io/buidlbox/buidlhacks) which ended Nov. 27th 2023
 
-upDev is a multi-chain dApp that allows users to connect and verify there developer related accounts form other web2 and web3 services and create a verifiable ownership-proof on-chain. It leverages [Lukso Network](https://lukso.network/), [UniveralProfiles Extension](https://chromewebstore.google.com/detail/universal-profiles/abpickdkkbnbcoepogfhkhennhfhehfn), [Polygon Mumbai](https://mumbai.polygonscan.com/) and [Chainlink Functions](https://docs.chain.link/chainlink-functions).
+upDev is a multi-chain dApp that allows users to connect and verify there developer related accounts from other web2 and web3 services and create a verifiable ownership-proof on-chain. It leverages [Lukso Network](https://lukso.network/), [UniveralProfiles Extension](https://chromewebstore.google.com/detail/universal-profiles/abpickdkkbnbcoepogfhkhennhfhehfn), [Polygon Mumbai](https://mumbai.polygonscan.com/) and [Chainlink Functions](https://docs.chain.link/chainlink-functions).
 
 ## Features
 
-✅ Users can connect with both their polygon mumbai wallet and their UPwallet extension and once connected they can deploy their UPwallet onto polygon mumbai🔥
+✅ Users can connect with both their Polygon Mumbai wallet and their Universal Profile browser extension and once connected they can deploy their UP onto Polygon Mumbai 🔥
 
-✅ Users can connect various web2/web3 accounts related to their developer activities to generate ownership-proofs which exist on-chain to verify they own their accounts using this [chainlink function]()
+✅ Users can connect various web2/web3 accounts related to their developer activities to generate ownership-proofs which exist on-chain to verify they own their accounts using this [Chainlink Functions]()
 
 ✅ Profile page where users can connect their account integrations and see all their information associated with their Universal Profile Metadata
 
