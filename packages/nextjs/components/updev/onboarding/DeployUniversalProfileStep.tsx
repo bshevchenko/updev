@@ -132,12 +132,10 @@ export function DeployUniversalProfileStep({ setCurrentStep }: { setCurrentStep:
                 src={convertIpfsUrl(metadata.LSP3Profile.profileImage[0].url)}
               />
             </div>
-            <div className="text-xl">{metadata.LSP3Profile.name}</div>
+            <div className="text-xl">Welcome {metadata.LSP3Profile.name}</div>
           </div>
         )}
-        <div className="text-center mt-10">
-          TODO hints: we need UP on Mumbai for Chainlink Functions. LSP23 same address, LSP24 references.
-        </div>
+        <div className="text-center mt-10">Click to deploy your UP on Polygon Mumbai in order to create account.</div>
         <div className="mt-10 text-center">
           <button onClick={() => handleDeploy()} className="btn btn-primary py-0 text-md" disabled={isDeploying}>
             {isDeploying ? "Deploying Universal Profile..." : "Deploy Universal Profile"}
