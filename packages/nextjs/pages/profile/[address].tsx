@@ -43,7 +43,7 @@ const Profile: NextPage = () => {
   return (
     <div className="flex flex-col items-center py-10">
       <div className="max-w-3xl flex flex-col">
-        <div className="relative mb-5">
+        <div className="relative mb-3">
           <div className="w-full h-[200px] bg-base-200 rounded-xl overflow-hidden relative">
             <Image
               alt="cover picture"
@@ -66,8 +66,7 @@ const Profile: NextPage = () => {
         <div className="flex mb-10">
           <div className="col-span-1"></div>
           <div className="flex flex-col gap-5 col-span-4">
-            <div className="flex gap-3">
-              <h3 className="text-2xl mb-0 font-bold">@{metadata.LSP3Profile.name}</h3>
+            <div className="flex gap-3 justify-center">
               <div className="px-1.5 py-0.5 rounded-md text-xl text-secondary flex items-center gap-2">
                 <div>{address}</div>
                 <CopyToClipboard text={address} onCopy={() => setCopied(true)}>
@@ -80,6 +79,9 @@ const Profile: NextPage = () => {
                   </button>
                 </CopyToClipboard>
               </div>
+            </div>
+            <div>
+              <h3 className="text-2xl mb-0 font-bold text-center">@{metadata.LSP3Profile.name}</h3>
             </div>
             <div className="flex gap-3 items-center">
               <div className="flex items-center gap-4">
@@ -117,9 +119,11 @@ const Profile: NextPage = () => {
         <div className="mb-10">
           <h3 className="text-2xl font-bold mb-3">Your achievements</h3>
           <div className="flex gap-3">
-            <Image width={117} height={117} alt="achievement icon" src="/achievements/universal-profile.svg" />
+            <Image width={117} height={117} alt="achievement icon" src="/achievements/up.svg" />
+            <Image width={117} height={117} alt="achievement icon" src="/achievements/og-updev.svg" />
             <Image width={117} height={117} alt="achievement icon" src="/achievements/github.svg" />
-            <Image width={117} height={117} alt="achievement icon" src="/achievements/linkedin.svg" />
+            <Image width={117} height={117} alt="achievement icon" src="/achievements/buildbox.svg" />
+            <Image width={117} height={117} alt="achievement icon" src="/achievements/buidlguidl.svg" />
           </div>
         </div>
         <div>
