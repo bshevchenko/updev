@@ -124,6 +124,15 @@ export function DeployUniversalProfileStep({ setCurrentStep }: { setCurrentStep:
       console.log("LSPFactoryResponse", response);
       console.log("setUp tx", tx);
 
+      try {
+        if (!tx) { // TODO tmp lint fix
+          return;
+        }
+        await tx.wait();
+      } catch (e) {
+        console.error("No tx.wait")
+      }
+
       setIsDeploying(false);
       setCurrentStep(3);
     } catch (e) {

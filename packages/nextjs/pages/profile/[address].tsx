@@ -8,7 +8,7 @@ import { useAccount } from "wagmi";
 // import useSWR from "swr";
 import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import { ConnectSocialAccounts } from "~~/components/updev/";
-import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
+import { useScaffoldContractRead, useScaffoldEventHistory } from "~~/hooks/scaffold-eth";
 import { convertIpfsUrl } from "~~/utils/helpers";
 
 // const fetcher = (...args: [RequestInfo, RequestInit?]) => fetch(...args).then(res => res.json());
@@ -32,13 +32,38 @@ const Profile: NextPage = () => {
     args: [account.address],
   });
 
+  const {
+    data: events
+  } = useScaffoldEventHistory({
+    contractName: "upDevFunctionsConsumer",
+    eventName: "Response",
+    // Specify the starting block number from which to read events, this is a bigint.
+    fromBlock: 42903925n,
+    // If set to true, the events will be updated every pollingInterval milliseconds set at scaffoldConfig (default: false)
+    watch: true,
+    // Apply filters to the event based on parameter names and values { [parameterName]: value },
+    filters: { up: profile && profile[0] },
+    // If set to true it will return the block data for each event (default: false)
+    blockData: false,
+    // If set to true it will return the transaction data for each event (default: false),
+    transactionData: false,
+    // If set to true it will return the receipt data for each event (default: false),
+    receiptData: false,
+  });
+
   const [isLoading, setIsLoading] = useState(true);
+
+  // TODO check LSP24 ref on Lukso Mainnet UP and return 404 if refs are not consistent
 
   useEffect(() => {
     if (profile) {
       setIsLoading(false);
     }
   }, [profile]);
+
+  useEffect(() => {
+    console.log(events)
+  }, [events]);
 
   // const {
   //   data: bgData,
@@ -69,7 +94,6 @@ const Profile: NextPage = () => {
       }
     }
     if (!isLoading && profile) {
-      console.log("upRegistry profile", profile);
       fetchData(profile[2]);
     }
   }, [isLoading, profile]);
@@ -158,9 +182,13 @@ const Profile: NextPage = () => {
           <div className="flex gap-3">
             <Image width={117} height={117} alt="achievement icon" src="/achievements/up.svg" />
             <Image width={117} height={117} alt="achievement icon" src="/achievements/og-updev.svg" />
-            <Image width={117} height={117} alt="achievement icon" src="/achievements/github.svg" />
-            <Image width={117} height={117} alt="achievement icon" src="/achievements/buildbox.svg" />
-            <Image width={117} height={117} alt="achievement icon" src="/achievements/buidlguidl.svg" />
+            {events && events.some(obj => obj.args && obj.args.source === 'github' && obj.args.isOwned == true) && (
+              <Image width={117} height={117} alt="achievement icon" src="/achievements/github.svg" />
+            )}
+            {/* <Image width={117} height={117} alt="achievement icon" src="/achievements/buildbox.svg" /> */}
+            {events && events.some(obj => obj.args && obj.args.source === 'buidlguidl' && obj.args.isOwned == true) && (
+              <Image width={117} height={117} alt="achievement icon" src="/achievements/buidlguidl.svg" />
+            )}
           </div>
         </div>
 

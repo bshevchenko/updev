@@ -2,9 +2,9 @@ import { useState } from "react";
 import Image from "next/image";
 import Modal from "./Modal";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { useAccount } from "wagmi";
+import { useAccount, useWalletClient } from "wagmi";
 import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
-import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
+import { useScaffoldContractRead, useScaffoldContract } from "~~/hooks/scaffold-eth";
 
 const socialAccounts = [
   {
@@ -13,8 +13,8 @@ const socialAccounts = [
     comingSoon: false,
     description:
       "Connect your GitHub account to verify your proof-of-account-ownership and earn achievements related to your code commits and activity.",
-    step1: "Edit your Github profile to include the following link",
-    step2: "Do the next thing",
+    step1: "Edit your GitHub profile to include the following link",
+    step2: "Submit your GitHub username:",
     modalImage: "/connectgithub.png",
     url: "https://github.com",
   },
@@ -25,7 +25,7 @@ const socialAccounts = [
     description:
       "Connect your buidlguidl account to verify your proof-of-account-ownership and earn achievements related to your scaffold-eth-2 builds, your role and your stream.",
     step1: "On your buidlguidl profile page, update your status to the following link",
-    step2: "Do the next thing",
+    step2: "Submit your BuidlGuidl address",
     modalImage: "/connectbuidlguidl.png",
     url: "https://app.buidlguidl.com/",
   },
@@ -76,17 +76,45 @@ export const ConnectSocialAccounts = () => {
   const account = useAccount(); // EOA connected to rainbow kit
 
   const [copied, setCopied] = useState(false);
+  const [id, setId] = useState('');
 
   const { data: profile } = useScaffoldContractRead({
     contractName: "upRegistry",
-    functionName: "up",
+    functionName: "upByEOA",
     args: [account.address],
   });
+
+  const { data: walletClient } = useWalletClient();
+  const { data: consumer } = useScaffoldContract({
+    contractName: "upDevFunctionsConsumer",
+    walletClient,
+  });
+
+  async function handleVerify(sourceName: string, id: string) {
+    if (!consumer || !profile) {
+      return;
+    }
+    console.log('handleVerify', sourceName, id, profile[0]);
+    try {
+      await consumer.write.sendRequest([
+        877n,
+        "0x",
+        0,
+        0n,
+        sourceName,
+        profile[0],
+        id
+      ])
+      setActiveModal(null)
+    } catch (e) {
+      console.error('handleVerify error', e)
+    }
+  }
 
   const renderModalContent = (title: string) => {
     const account = socialAccounts.find(account => account.title === title);
 
-    const link = `https://updev-nextjs.vercel.app/profile/${profile && profile[2]}`;
+    const link = `https://updev-nextjs.vercel.app/profile/${profile && profile[0]}`;
     return (
       <div className="flex gap-5 items-center">
         <div className="rounded-lg overflow-hidden">
@@ -113,7 +141,11 @@ export const ConnectSocialAccounts = () => {
                 <Image alt="brand logo" width={24} height={24} src={account?.logo || ""} />
               </a>
             </div>
-            <li className="text-xl">{account?.step2}</li>
+            <li className="text-xl mt-5">
+              {account?.step2}<br />
+              <input type="text" value={id} className="w-[490px] border border-white p-2 rounded-xl my-3" style={{backgroundColor: "#262626"}} onChange={e => setId(e.target.value)} />&nbsp;
+              <button className="btn" onClick={() => handleVerify(title.toLowerCase(), id)}>Submit</button>
+            </li>
           </ol>
         </div>
       </div>

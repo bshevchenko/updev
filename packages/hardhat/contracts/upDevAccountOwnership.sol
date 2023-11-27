@@ -38,14 +38,14 @@ contract upDevAccountOwnership is LSP8Mintable {
 
     error Soulbound();
 
-    struct TokenData { // TODO tmp
+    struct TokenData { // TODO tmp?
         string source;
         string id;
     }
 
     mapping (bytes32 => TokenData) public tokenData;
 
-    function getTokenDataForAddress(address _address) external view returns (TokenData[] memory) {
+    function getTokenDataForAddress(address _address) external view returns (TokenData[] memory) { // TODO
         bytes32[] memory tokenIds = tokenIdsOf(_address);
         TokenData[] memory result = new TokenData[](tokenIds.length);
 
@@ -56,7 +56,7 @@ contract upDevAccountOwnership is LSP8Mintable {
         return result;
     }
 
-    function mintTmp(
+    function mintTmp( // TODO tmp solution for the ChainLink/Lukso bug
         address to,
         bytes32 tokenId,
         bool force,
