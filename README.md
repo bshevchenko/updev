@@ -20,11 +20,11 @@ upDev is a multi-chain dApp that allows users to connect and verify there develo
 
 ## Features
 
-✅ Users can connect with both their Polygon Mumbai wallet and their Universal Profile browser extension and once connected they can deploy their UP onto Polygon Mumbai 🔥
+✅ Users can connect various web2/web3 accounts related to their developer activities to generate ownership-proofs which exist on-chain to verify they own their accounts using [Chainlink Functions]() and earn achievements related to their activity.
 
-✅ Users can connect various web2/web3 accounts related to their developer activities to generate ownership-proofs which exist on-chain to verify they own their accounts using this [Chainlink Functions]()
+✅ Chainlink Functions are currently not supported on Lukso networks, so users can connect with both their Polygon Mumbai wallet and their Universal Profile browser extension and once connected they can deploy their UP onto Polygon Mumbai where Chainlink Functions are supported 🔥
 
-✅ Profile page where users can connect their account integrations and see all their information associated with their Universal Profile Metadata
+✅ Profile page where users can connect their account integrations and see all their information associated with their original Lukso Mainnet Universal Profile Metadata
 
 ✅ Profiles page that lists a directory of all upDevs
 
@@ -38,8 +38,8 @@ Live:<br />
 – [Buidlguidl](https://buidlguidl.com/) <br /><br />
 Coming Soon:<br />
 – [Gitcoin Passport](https://passport.gitcoin.co/) <br />
-– [Linkedin](https://www.linkedin.com/) <br />
-– [X/Twitter](https://twitter.com/) <br />
+– [LinkedIn](https://www.linkedin.com/) <br />
+– [X / Twitter](https://twitter.com/) <br />
 
 ## Run Front-end
 
