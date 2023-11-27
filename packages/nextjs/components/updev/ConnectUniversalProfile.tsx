@@ -40,7 +40,7 @@ export function ConnectUniversalProfile() {
           <Image alt="upDev logo" width={56} height={56} src="/up.png" />
         </div>
         <h5 className="text-xl font-bold">Universal Profiles</h5>
-        <p className="text-sm">TODO hints: why connect with UPE too, following UP Mumbai deployment</p>
+        <div className="text-center mt-5">Select your profile that you want to use for your upDev.</div>
       </div>
       <div className="mb-10 text-center">
         {upExtensionAvailable ? (
