@@ -16,6 +16,7 @@ const socialAccounts = [
     step1: "Edit your Github profile to include the following link",
     step2: "Do the next thing",
     modalImage: "/connectgithub.png",
+    url: "https://github.com",
   },
   {
     title: "BuidlGuidl",
@@ -26,6 +27,7 @@ const socialAccounts = [
     step1: "On your buidlguidl profile page, update your status to the following link",
     step2: "Do the next thing",
     modalImage: "/connectbuidlguidl.png",
+    url: "https://app.buidlguidl.com/",
   },
   {
     title: "Buildbox",
@@ -35,6 +37,7 @@ const socialAccounts = [
       "Connect your buildbox.io account to verify your proof-of-account-ownership and earn achievements related to hackathons and bounties.",
     step1: "",
     modalImage: "",
+    url: " ",
   },
   {
     title: "GitCoin Passport",
@@ -44,6 +47,7 @@ const socialAccounts = [
       "Connect your gitcoin passport to verify your proof-of-account-ownership and earn achievements related to your number of points.",
     step1: "",
     modalImage: "",
+    url: "",
   },
   {
     title: "X / Twitter",
@@ -53,6 +57,7 @@ const socialAccounts = [
       "Connect your twitter/X account to verify your proof-of-account-ownership and earn achievements related to your level of activity and connections on crypto twitter.",
     step1: "",
     modalImage: "",
+    url: "",
   },
   {
     title: "LinkedIn",
@@ -62,6 +67,7 @@ const socialAccounts = [
       "Connect your linkedin account to verify your proof-of-account-ownership and earn achievements related to your number of connections and your Web3 employment.",
     step1: "",
     modalImage: "",
+    url: "",
   },
 ];
 
@@ -103,6 +109,9 @@ export const ConnectSocialAccounts = () => {
                   )}
                 </button>
               </CopyToClipboard>
+              <a href={account?.url}>
+                <Image alt="brand logo" width={24} height={24} src={account?.logo || ""} />
+              </a>
             </div>
             <li className="text-xl">{account?.step2}</li>
           </ol>
