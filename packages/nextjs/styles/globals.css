@@ -30,3 +30,7 @@ p {
   text-transform: none;
   font-size: 16px;
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}

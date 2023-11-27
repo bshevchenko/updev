@@ -1,20 +1,18 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { ERC725, ERC725JSONSchema } from "@erc725/erc725.js";
 import type { NextPage } from "next";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import { ConnectSocialAccounts } from "~~/components/updev/";
-import { UniversalProfileContext } from "~~/providers/UniversalProfile";
 import { convertIpfsUrl } from "~~/utils/helpers";
 
 const Profile: NextPage = () => {
   const router = useRouter();
-  const { address } = router.query;
-  const { universalProfileData } = useContext(UniversalProfileContext);
+  const address = Array.isArray(router.query.address) ? router.query.address[0] : router.query.address || "";
   const [metadata, setMetadata] = useState<any>(null);
-
-  console.log("address", address);
-  console.log("universalProfileData", universalProfileData);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -41,8 +39,6 @@ const Profile: NextPage = () => {
         <span className="loading loading-spinner loading-lg"></span>
       </div>
     );
-
-  console.log("metadata", metadata);
 
   return (
     <div className="flex flex-col items-center py-10">
@@ -72,9 +68,17 @@ const Profile: NextPage = () => {
           <div className="flex flex-col gap-5 col-span-4">
             <div className="flex gap-3">
               <h3 className="text-2xl mb-0 font-bold">@{metadata.LSP3Profile.name}</h3>
-              <div className="px-1.5 py-0.5 rounded-md text-xl text-secondary">
-                {address}
-                {/* 🆙 <span className="text-[#FFFFFF5C]">{address?.slice(0, 5) + "..." + address?.slice(-4)}</span> */}
+              <div className="px-1.5 py-0.5 rounded-md text-xl text-secondary flex items-center gap-2">
+                <div>{address}</div>
+                <CopyToClipboard text={address} onCopy={() => setCopied(true)}>
+                  <button className="">
+                    {copied ? (
+                      <CheckCircleIcon className="w-6 cursor-pointer" />
+                    ) : (
+                      <DocumentDuplicateIcon className="w-6 cursor-pointer" />
+                    )}
+                  </button>
+                </CopyToClipboard>
               </div>
             </div>
             <div className="flex gap-3 items-center">
@@ -87,9 +91,6 @@ const Profile: NextPage = () => {
                     key={link.title}
                     className="flex items-center gap-1"
                   >
-                    {/* <div>
-                      <Image width={12} height={12} alt="link icon" src="/link.svg" />
-                    </div> */}
                     <div className="text-[#FFFFFFA3] underline mr-2">{link.title}</div>
                     {index < metadata.LSP3Profile.links.length - 1 && (
                       <div className="text-[#FFFFFFA3]">{"\u2022"}</div>
@@ -99,7 +100,6 @@ const Profile: NextPage = () => {
               </div>
             </div>
             <div>
-              {/* <div className="text-base-content">Bio</div> */}
               <div>{metadata.LSP3Profile.description}</div>
             </div>
             <div className="flex gap-2">
