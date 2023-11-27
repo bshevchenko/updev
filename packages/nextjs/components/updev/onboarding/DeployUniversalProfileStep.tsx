@@ -109,8 +109,8 @@ export function DeployUniversalProfileStep({ setCurrentStep }: { setCurrentStep:
       );
 
       // const response = { // TODO
-      //   LSP0ERC725Account: { address: '0x7369A0c52480982Bd1DE668B873cA14aD87610Fd' },
-      //   LSP6KeyManager: { address: '0x467D8f4B135f8075c8Ad19B4AA02333C7eEcCEfb' }
+      //   LSP0ERC725Account: { address: '0x85DC0aD8Ce3209Fe46a36266245947e167ADD855' },
+      //   LSP6KeyManager: { address: '0xa657003e2A969c538d16427B7bB512a3426F77e4' }
       // }
 
       const tx = await upRegistry?.write.setUp([
@@ -119,7 +119,6 @@ export function DeployUniversalProfileStep({ setCurrentStep }: { setCurrentStep:
         universalProfileData.address,
       ]);
 
-      // TODO add LSP24 reference
       // TODO add LSP24 reference via UPE
 
       console.log("LSPFactoryResponse", response);

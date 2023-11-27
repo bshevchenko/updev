@@ -20,7 +20,7 @@ const Onboarding: NextPage = () => {
 
   const { data: profile } = useScaffoldContractRead({
     contractName: "upRegistry",
-    functionName: "up",
+    functionName: "upByEOA",
     args: [account.address],
   });
 
@@ -57,7 +57,7 @@ const Onboarding: NextPage = () => {
 
         {currentStep === 2 && <DeployUniversalProfileStep setCurrentStep={setCurrentStep} />}
 
-        {currentStep === 3 && <ConnectSocialAccountsStep luksoUP={profile && profile[2]} />}
+        {currentStep === 3 && <ConnectSocialAccountsStep luksoUP={profile && profile[0]} />}
       </div>
     </>
   );

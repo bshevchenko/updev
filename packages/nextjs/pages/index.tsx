@@ -13,7 +13,7 @@ const Home: NextPage = () => {
 
   const { data: profile } = useScaffoldContractRead({
     contractName: "upRegistry",
-    functionName: "up",
+    functionName: "upByEOA",
     args: [account.address],
   });
 
@@ -21,6 +21,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     if (profile) {
+      console.log("upRegistry Profile", profile);
       setIsLoading(false);
     }
   }, [profile]);
@@ -31,7 +32,7 @@ const Home: NextPage = () => {
       if (!hasDeployedUP) {
         router.push("/onboarding");
       } else {
-        router.push("/profile/" + profile[2]);
+        router.push("/profile/" + profile[0]);
       }
     }
   }, [account.isConnected, router, profile, isLoading]);
