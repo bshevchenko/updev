@@ -8,11 +8,11 @@ import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
 const socialAccounts = [
   {
-    title: "Github",
+    title: "GitHub",
     logo: "/github.svg",
     comingSoon: false,
     description:
-      "Connect your github account to verify your proof-of-account-ownership and earn achievements related to your code commits and activity.",
+      "Connect your GitHub account to verify your proof-of-account-ownership and earn achievements related to your code commits and activity.",
     step1: "Edit your Github profile to include the following link",
     step2: "Do the next thing",
     modalImage: "/connectgithub.png",
@@ -30,7 +30,7 @@ const socialAccounts = [
     url: "https://app.buidlguidl.com/",
   },
   {
-    title: "Buildbox",
+    title: "buidlbox",
     logo: "/link.svg",
     comingSoon: true,
     description:
@@ -109,7 +109,7 @@ export const ConnectSocialAccounts = () => {
                   )}
                 </button>
               </CopyToClipboard>
-              <a href={account?.url}>
+              <a href={account?.url} target="_blank" rel="noreferrer">
                 <Image alt="brand logo" width={24} height={24} src={account?.logo || ""} />
               </a>
             </div>

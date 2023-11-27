@@ -4,9 +4,11 @@ import { useRouter } from "next/router";
 import { ERC725, ERC725JSONSchema } from "@erc725/erc725.js";
 import type { NextPage } from "next";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { useAccount } from "wagmi";
 // import useSWR from "swr";
 import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import { ConnectSocialAccounts } from "~~/components/updev/";
+import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 import { convertIpfsUrl } from "~~/utils/helpers";
 
 // const fetcher = (...args: [RequestInfo, RequestInit?]) => fetch(...args).then(res => res.json());
@@ -16,6 +18,27 @@ const Profile: NextPage = () => {
   const address = Array.isArray(router.query.address) ? router.query.address[0] : router.query.address || "";
   const [metadata, setMetadata] = useState<any>(null);
   const [copied, setCopied] = useState(false);
+  const account = useAccount();
+
+  const { data: profile } = useScaffoldContractRead({
+    contractName: "upRegistry",
+    functionName: "up",
+    args: [address],
+  });
+
+  const { data: myProfile } = useScaffoldContractRead({
+    contractName: "upRegistry",
+    functionName: "upByEOA",
+    args: [account.address],
+  });
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (profile) {
+      setIsLoading(false);
+    }
+  }, [profile]);
 
   // const {
   //   data: bgData,
@@ -30,11 +53,11 @@ const Profile: NextPage = () => {
   // console.log("isLoading", isLoading);
 
   useEffect(() => {
-    async function fetchData() {
-      if (address) {
+    async function fetchData(_address: string) {
+      if (_address) {
         const lsp3ProfileSchemaModule = await import("@erc725/erc725.js/schemas/LSP3ProfileMetadata.json");
         const lsp3ProfileSchema = lsp3ProfileSchemaModule.default;
-        const erc725js = new ERC725(lsp3ProfileSchema as ERC725JSONSchema[], address, "https://rpc.lukso.gateway.fm", {
+        const erc725js = new ERC725(lsp3ProfileSchema as ERC725JSONSchema[], _address, "https://rpc.lukso.gateway.fm", {
           ipfsGateway: "https://api.universalprofile.cloud/ipfs",
         });
         try {
@@ -45,8 +68,11 @@ const Profile: NextPage = () => {
         }
       }
     }
-    fetchData();
-  }, [address]);
+    if (!isLoading && profile) {
+      console.log("upRegistry profile", profile);
+      fetchData(profile[2]);
+    }
+  }, [isLoading, profile]);
 
   if (!metadata)
     return (
@@ -128,7 +154,7 @@ const Profile: NextPage = () => {
           </div>
         </div>
         <div className="mb-10">
-          <h3 className="text-2xl font-bold mb-3">Your achievements</h3>
+          <h3 className="text-2xl font-bold mb-3">Achievements</h3>
           <div className="flex gap-3">
             <Image width={117} height={117} alt="achievement icon" src="/achievements/up.svg" />
             <Image width={117} height={117} alt="achievement icon" src="/achievements/og-updev.svg" />
@@ -137,10 +163,13 @@ const Profile: NextPage = () => {
             <Image width={117} height={117} alt="achievement icon" src="/achievements/buidlguidl.svg" />
           </div>
         </div>
-        <div>
-          <h3 className="text-2xl font-bold mb-3">Connect your upDev to earn achievements</h3>
-          <ConnectSocialAccounts />
-        </div>
+
+        {myProfile && address == myProfile[0] && (
+          <div>
+            <h3 className="text-2xl font-bold mb-3">Connect your upDev to earn achievements</h3>
+            <ConnectSocialAccounts />
+          </div>
+        )}
       </div>
     </div>
   );
