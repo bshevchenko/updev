@@ -114,11 +114,11 @@ export const ConnectSocialAccounts = () => {
           {account?.modalImage && <Image alt="brand logo" width={300} height={400} src={account?.modalImage} />}
         </div>
         <div>
-          <h2 className="text-2xl font-bold">How to Connect {account?.title}</h2>
+          <h2 className="text-2xl font-bold mb-14">How to Connect {account?.title}</h2>
           <ol className="list-decimal list-inside">
             <li className="text-xl">{account?.step1}</li>
             <div className="flex items-center gap-4">
-              <div className="w-[600px] border border-white p-3 rounded-xl my-3 overflow-x-auto whitespace-nowrap hide-scrollbar">
+              <div className="w-[550px] bg-white text-black border border-white p-3 rounded-xl my-3 overflow-x-auto whitespace-nowrap hide-scrollbar">
                 {link}
               </div>
               <CopyToClipboard text={link} onCopy={() => setCopied(true)}>
@@ -136,18 +136,18 @@ export const ConnectSocialAccounts = () => {
             </div>
             <li className="text-xl mt-5">
               {account?.step2}
-              <br />
-              <input
-                type="text"
-                value={id}
-                className="w-[490px] border border-white p-2 rounded-xl my-3"
-                style={{ backgroundColor: "#262626" }}
-                onChange={e => setId(e.target.value)}
-              />
-              &nbsp;
-              <button className="btn" onClick={() => handleVerify(title.toLowerCase(), id)}>
-                Submit
-              </button>
+              <div className="flex items-center gap-4">
+                <input
+                  type="text"
+                  value={id}
+                  className="w-[550px] border border-base-200 p-2 rounded-xl my-3 bg-base-200"
+                  // style={{ backgroundColor: "#262626" }}
+                  onChange={e => setId(e.target.value)}
+                />
+                <button className="btn btn-primary" onClick={() => handleVerify(title.toLowerCase(), id)}>
+                  Submit
+                </button>
+              </div>
             </li>
           </ol>
         </div>
