@@ -29,6 +29,7 @@ upDev is a multi-chain dApp that allows users to connect and verify there develo
 ✅ Profiles page that lists a directory of all upDevs
 
 [TODO] deploy UP on Polygon Mumbai AT THE SAME ADDRESS using LSP23
+[TODO] implement LSP24 to link UPs on different chains
 
 ## Integrations
 
@@ -53,11 +54,6 @@ install dependencies:
 run the app
 
 ```yarn start```
-
-## Backend Solidity Code
-
-
-
 
 
 ### Technologies Used
