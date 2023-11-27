@@ -1,6 +1,75 @@
-# ![upDev](./packages/nextjs/public/logo.svg)
+<div align="center">
+  <h1>upDev</h1>
+  <img src="updev-black-logo.png" />
+</div>
 
-deployment
+<div align="center">
+  <a href="">youtube video</a> | <a href="https://updev-nextjs.vercel.app/">live site</a>
+</div>
+
+<div align="center">
+  <a href="https://updev-nextjs.vercel.app/profiles">upDevs only</a>
+</div>
+
+![updev-landingpage](screenshot-landing.png)
+
+This repo contains the code for a project submission for BuildUP#2 Hackathon on [buidlbox.io](https://app.buidlbox.io/buidlbox/buidlhacks) which ended Nov. 27th 2023
+
+upDev is a multi-chain dApp that allows users to connect and verify there developer related accounts form other web2 and web3 services and create a verifiable ownership-proof on-chain. It leverages [Lukso Network](https://lukso.network/), [UniveralProfiles Extension](https://chromewebstore.google.com/detail/universal-profiles/abpickdkkbnbcoepogfhkhennhfhehfn), [Polygon Mumbai](https://mumbai.polygonscan.com/) and [Chainlink Functions](https://docs.chain.link/chainlink-functions).
+
+## Features
+
+✅ Users can connect with both their polygon mumbai wallet and their UPwallet extension and once connected they can deploy their UPwallet onto polygon mumbai AT THE SAME ADDRESS using LSP23/24🔥
+
+✅ Users can connect various web2/web3 accounts related to their developer activities to generate ownership-proofs which exist on-chain to verify they own their accounts using this [chainlink function]()
+
+✅ Profile page where users can connect their account integrations and see all their information associated with their Universal Profile Metadata
+
+✅ Profiles page that lists a directory of all [updevs](https://updev-nextjs.vercel.app/profiles)
+
+[]
+
+## Integrations
+
+Live |
+-[Github](https://github.com/) |
+-[Buidlguidl](https://buidlguidl.com/) |
+Coming Soon |
+-[Gitcoin Passport](https://passport.gitcoin.co/) |
+-[Linkedin](https://www.linkedin.com/) |
+-[X/Twitter](https://twitter.com/) |
+
+## Run Front-end
+
+first git clone this repo:
+
+```git clone https://github.com/tantodefi/updev.git```
+
+install dependencies:
+
+```yarn install```
+
+run the app
+
+```yarn start```
+
+## Backend Solidity Code
+
+
+
+### Technologies Used
+
+- [scaffold-eth-2](https://scaffoldeth.io/)
+- [nextjs](https://nextjs.org/)
+- [vercel](vercel.com)
+- []()
+- []()
+- []()
+- []()
+- []()
+- []()
+- []()
+
 
 ### Project Board
 
