@@ -19,7 +19,7 @@ upDev is a multi-chain dApp that allows users to connect and verify there develo
 
 ## Features
 
-✅ Users can connect with both their polygon mumbai wallet and their UPwallet extension and once connected they can deploy their UPwallet onto polygon mumbai AT THE SAME ADDRESS using LSP23/24🔥
+✅ Users can connect with both their polygon mumbai wallet and their UPwallet extension and once connected they can deploy their UPwallet onto polygon mumbai🔥
 
 ✅ Users can connect various web2/web3 accounts related to their developer activities to generate ownership-proofs which exist on-chain to verify they own their accounts using this [chainlink function]()
 
@@ -27,7 +27,7 @@ upDev is a multi-chain dApp that allows users to connect and verify there develo
 
 ✅ Profiles page that lists a directory of all [updevs](https://updev-nextjs.vercel.app/profiles)
 
-[]
+[TODO] deploy UP on Polygon Mumbai AT THE SAME ADDRESS using LSP23/24
 
 ## Integrations
 
@@ -57,19 +57,14 @@ run the app
 
 
 
+
+
 ### Technologies Used
 
 - [scaffold-eth-2](https://scaffoldeth.io/)
 - [nextjs](https://nextjs.org/)
 - [vercel](vercel.com)
-- []()
-- []()
-- []()
-- []()
-- []()
-- []()
-- []()
-
+- [Lukso LSPs](https://github.com/lukso-network/lsp-smart-contracts)
 
 ### Project Board
 
