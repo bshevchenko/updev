@@ -53,7 +53,7 @@ export function ProfileCard({ upAddress }: { upAddress: string }) {
     <Link
       href={`/profile/${upAddress}`}
       style={backgroundStyle}
-      className="relative bg-base-200 w-full h-80 rounded-3xl flex flex-col justify-end shadow-2xl shadow-[#FFFFFF30] transition duration-300 ease-in-out hover:scale-105"
+      className="relative bg-base-200 w-full h-80 rounded-3xl flex flex-col justify-end transition duration-300 ease-in-out hover:scale-105 border-base-200 "
     >
       <div className="absolute top-1/2 z-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full overflow-hidden border-[10px] w-32 h-32 border-neutral-900">
         <Image alt="profile picture" width={1000} height={1000} src={convertIpfsUrl(profileImage)} />
