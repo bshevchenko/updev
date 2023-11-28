@@ -7,13 +7,18 @@
   <a href="https://www.youtube.com/watch?v=fHk1DrFlUV0">YouTube Video</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://updev-nextjs.vercel.app/">Live Site</a>
 </div>
 
-![updev-landingpage](screenshot-landing.png)
+<br />
 
 This repo contains the code for a project submission for BuildUP #2 Hackathon on [buidlbox.io](https://app.buidlbox.io/lukso/build-up-2) which ended November 27th 2023.
 
 upDev is a multi-chain dApp that allows you to mint your web2/web3 accounts like GitHub, Twitter or Buidlbox (thanks to Chainlink Functions) as NFT 2.0 (Lukso's LSP8) to create Universal Dev Profile, that will contain all your merits on-chain – somewhere where they can never be lost.
 
 It leverages [Lukso Network](https://lukso.network/), [Univeral Profiles browser extension](https://chromewebstore.google.com/detail/universal-profiles/abpickdkkbnbcoepogfhkhennhfhehfn), [Polygon Mumbai](https://mumbai.polygonscan.com/) and [Chainlink Functions](https://docs.chain.link/chainlink-functions).
+<br />
+
+<div><img src="profile.png" width="100%" /></div>
+<div><img src="providers.png" width="40%" /><img src="connect.png" width="60%" /></div>
+<br />
 
 ## Features
 
@@ -30,11 +35,11 @@ It leverages [Lukso Network](https://lukso.network/), [Univeral Profiles browser
 
 ## Integrations
 
-LIVE<br />
+<b>LIVE</b><br />
 ✅ [GitHub](https://github.com/) <br />
 ✅ [Buidlguidl](https://buidlguidl.com/) <br />
 
-Coming Soon<br />
+<b>Coming Soon</b><br />
 🌀 [buidlbox](https://app.buidlbox.io/) <br />
 🌀 [Gitcoin Passport](https://passport.gitcoin.co/) <br />
 🌀 [LinkedIn](https://www.linkedin.com/) <br />
