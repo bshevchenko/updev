@@ -1,6 +1,6 @@
 <div align="center">
   <img src="packages/nextjs/public/logo.svg" />
-  <h3>upDev – your universal dev profile on Lukso</h3><br />
+  <h3>Your universal dev profile – mint all your merits on-chain.</h3><h4>powered by Lukso & Chainlink</h4>
 </div>
 
 <div align="center">
