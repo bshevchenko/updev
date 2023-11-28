@@ -47,7 +47,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 
   try {
     await collection.transferOwnership(consumer.address);
-    console.log('Collection ownership transferred to', consumer.address);
+    console.log("Collection ownership transferred to", consumer.address);
   } catch (e) {
     console.log("Collection ownership already transferred");
   }
