@@ -18,6 +18,8 @@ This repo contains the code for a project submission for BuildUP #2 Hackathon on
 
 upDev is a multi-chain dApp that allows users to connect and verify there developer related accounts from other web2 and web3 services and create a verifiable ownership-proof on-chain. It leverages [Lukso Network](https://lukso.network/), [UniveralProfiles Extension](https://chromewebstore.google.com/detail/universal-profiles/abpickdkkbnbcoepogfhkhennhfhehfn), [Polygon Mumbai](https://mumbai.polygonscan.com/) and [Chainlink Functions](https://docs.chain.link/chainlink-functions).
 
+We want to store developers merits on-chain – somewhere where it can never be lost. upDev helps to accomplish this.
+
 ## Features
 
 ✅ Users can connect various web2/web3 accounts related to their developer activities to generate ownership-proofs which exist on-chain to verify they own their accounts using [Chainlink Functions]() and earn achievements related to their activity.
