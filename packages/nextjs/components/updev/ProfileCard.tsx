@@ -32,12 +32,7 @@ export function ProfileCard({ upAddress }: { upAddress: string }) {
     fetchData();
   }, [upAddress]);
 
-  if (!metadata)
-    return (
-      <div className="flex justify-center grow">
-        <span className="loading loading-spinner loading-lg"></span>
-      </div>
-    );
+  if (!metadata) return <div className="skeleton w-32 h-32 bg-base-200 w-full h-80 rounded-3xl animate-pulse"></div>;
 
   const backgroundImage = metadata.LSP3Profile.backgroundImage[1].url;
   const profileImage = metadata.LSP3Profile.profileImage[0].url;
