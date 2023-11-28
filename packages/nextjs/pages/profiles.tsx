@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { NextPage } from "next";
 import { ProfileCard } from "~~/components/updev";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
@@ -19,7 +20,12 @@ const Profiles: NextPage = () => {
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-10">
-        {profiles && profiles.map((profile: any) => <ProfileCard key={profile.upLukso} upAddress={profile.upLukso} />)}
+        {profiles &&
+          profiles.map((profile: any) => (
+            <Link href={`/profile/${profile.up}`} key={profile.upLukso}>
+              <ProfileCard upAddress={profile.upLukso} />
+            </Link>
+          ))}
       </div>
     </div>
   );

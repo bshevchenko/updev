@@ -3,7 +3,7 @@ import Image from "next/image";
 import Modal from "./Modal";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useAccount, useWalletClient } from "wagmi";
-import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
+import { ArrowTopRightOnSquareIcon, CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import { useScaffoldContract, useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
 const socialAccounts = [
@@ -24,8 +24,8 @@ const socialAccounts = [
     comingSoon: false,
     description:
       "Connect your buidlguidl account to verify your proof-of-account-ownership and earn achievements related to your scaffold-eth-2 builds, your role and your stream.",
-    step1: "On your buidlguidl profile page, update your status to the following link",
-    step2: "Submit your BuidlGuidl address",
+    step1: <>On your buidlguidl profile page, update your status to be</>,
+    step2: "Provide address of EOA associated with your BuidlGuidl profile",
     modalImage: "/connectbuidlguidl.png",
     url: "https://app.buidlguidl.com/",
   },
@@ -114,11 +114,11 @@ export const ConnectSocialAccounts = () => {
           {account?.modalImage && <Image alt="brand logo" width={300} height={400} src={account?.modalImage} />}
         </div>
         <div>
-          <h2 className="text-2xl font-bold">How to Connect {account?.title}</h2>
+          <h2 className="text-2xl font-bold mb-14">How to Connect {account?.title}</h2>
           <ol className="list-decimal list-inside">
             <li className="text-xl">{account?.step1}</li>
-            <div className="flex items-center gap-4">
-              <div className="w-[600px] border border-white p-3 rounded-xl my-3 overflow-x-auto whitespace-nowrap hide-scrollbar">
+            <div className="flex items-center gap-5 mt-2 mb-5">
+              <div className="w-[550px] bg-white text-black border border-white p-3 rounded-xl my-3 overflow-x-auto whitespace-nowrap hide-scrollbar">
                 {link}
               </div>
               <CopyToClipboard text={link} onCopy={() => setCopied(true)}>
@@ -131,23 +131,23 @@ export const ConnectSocialAccounts = () => {
                 </button>
               </CopyToClipboard>
               <a href={account?.url} target="_blank" rel="noreferrer">
-                <Image alt="brand logo" width={24} height={24} src={account?.logo || ""} />
+                <ArrowTopRightOnSquareIcon className="w-6 h-6 cursor-pointer" />
               </a>
             </div>
-            <li className="text-xl mt-5">
+            <li className="text-xl mt-8">
               {account?.step2}
-              <br />
-              <input
-                type="text"
-                value={id}
-                className="w-[490px] border border-white p-2 rounded-xl my-3"
-                style={{ backgroundColor: "#262626" }}
-                onChange={e => setId(e.target.value)}
-              />
-              &nbsp;
-              <button className="btn" onClick={() => handleVerify(title.toLowerCase(), id)}>
-                Submit
-              </button>
+              <div className="flex items-center gap-4 mt-2">
+                <input
+                  type="text"
+                  value={id}
+                  className="w-[550px] border border-base-200 p-2 rounded-xl my-3 bg-base-200"
+                  // style={{ backgroundColor: "#262626" }}
+                  onChange={e => setId(e.target.value)}
+                />
+                <button className="btn btn-primary" onClick={() => handleVerify(title.toLowerCase(), id)}>
+                  Submit
+                </button>
+              </div>
             </li>
           </ol>
         </div>
