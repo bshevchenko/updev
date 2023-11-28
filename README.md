@@ -18,17 +18,17 @@ This repo contains the code for a project submission for BuildUP #2 Hackathon on
 
 upDev is a multi-chain dApp that allows you to mint your web2/web3 accounts like GitHub, Twitter or Buidlbox (thanks to Chainlink Functions) as NFT 2.0 (Lukso's LSP8) to create Universal Dev Profile, that will contain all your merits on-chain – somewhere where they can never be lost.
 
-It leverages [Lukso Network](https://lukso.network/), [UniveralProfiles Extension](https://chromewebstore.google.com/detail/universal-profiles/abpickdkkbnbcoepogfhkhennhfhehfn), [Polygon Mumbai](https://mumbai.polygonscan.com/) and [Chainlink Functions](https://docs.chain.link/chainlink-functions).
+It leverages [Lukso Network](https://lukso.network/), [Univeral Profiles browser extension](https://chromewebstore.google.com/detail/universal-profiles/abpickdkkbnbcoepogfhkhennhfhehfn), [Polygon Mumbai](https://mumbai.polygonscan.com/) and [Chainlink Functions](https://docs.chain.link/chainlink-functions).
 
 ## Features
 
 ✅ Users can connect various web2/web3 accounts related to their developer activities to generate ownership-proofs which exist on-chain to verify they own their accounts using [Chainlink Functions]() and earn achievements related to their activity.
 
-✅ Chainlink Functions are currently not supported on Lukso networks, so users can connect with both their Polygon Mumbai wallet and their Universal Profile browser extension and once connected they can deploy their UP onto Polygon Mumbai where Chainlink Functions are supported 🔥
+✅ Chainlink Functions are currently not supported on Lukso networks, so users can connect with both their Polygon Mumbai wallet and their Universal Profile browser extension to deploy their Universal Profile onto Polygon Mumbai where Chainlink Functions are supported.
 
-✅ Profile page where users can connect their account integrations and see all their information associated with their original Lukso Mainnet Universal Profile Metadata
+✅ Profile page where users can connect their web2/web3 accounts and see all information associated with them, as well as users original Lukso Mainnet Universal Profiles metadata.
 
-✅ Discover Profiles page that lists a directory of all upDevs
+✅ Discover Profiles page that lists a directory of all upDev developers.
 
 [TODO] deploy UP on Polygon Mumbai AT THE SAME ADDRESS using LSP23<br />
 [TODO] implement LSP24 to link UPs on different chains
@@ -58,7 +58,6 @@ install dependencies:
 run the app
 
 ```yarn start```
-
 
 ### Technologies Used
 
