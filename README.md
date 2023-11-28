@@ -4,7 +4,7 @@
 </div>
 
 <div align="center">
-  <a href="https://www.youtube.com/watch?v=fHk1DrFlUV0">YouTube Video</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://updev-nextjs.vercel.app/">Live Site</a>
+  <a href="https://www.youtube.com/watch?v=whP8iiYZW6Y">YouTube Video</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://updev-nextjs.vercel.app/">Live Site</a>
 </div>
 
 <br />
