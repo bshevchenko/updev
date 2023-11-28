@@ -8,10 +8,6 @@
   <a href="https://www.youtube.com/watch?v=fHk1DrFlUV0">youtube video</a> | <a href="https://updev-bshevchenko-boris-shevchenkos-projects.vercel.app/">live site</a>
 </div>
 
-<div align="center">
-  <a href="https://updev-nextjs.vercel.app/profiles">upDevs only</a>
-</div>
-
 ![updev-landingpage](screenshot-landing.png)
 
 This repo contains the code for a project submission for BuildUP #2 Hackathon on [buidlbox.io](https://app.buidlbox.io/lukso/build-up-2) which ended November 27th 2023.
