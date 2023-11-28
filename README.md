@@ -1,6 +1,6 @@
 <div align="center">
   <img src="packages/nextjs/public/logo.svg" />
-  <h3>upDev – your universal dev profile on Lukso</h3>
+  <h3>upDev – your universal dev profile on Lukso</h3><br />
 </div>
 
 <div align="center">
