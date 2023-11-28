@@ -1,11 +1,10 @@
 <div align="center">
-  <h1>upDev</h1>
-  <h3>Your universal dev profile on Lukso</h3>
-  <img src="updev-black-logo.png" />
+  <img src="packages/nextjs/public/logo.svg" />
+  <h3>upDev – your universal dev profile on Lukso</h3>
 </div>
 
 <div align="center">
-  <a href="https://www.youtube.com/watch?v=fHk1DrFlUV0">youtube video</a> | <a href="https://updev-bshevchenko-boris-shevchenkos-projects.vercel.app/">live site</a>
+  <a href="https://www.youtube.com/watch?v=fHk1DrFlUV0">YouTube Video</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://updev-nextjs.vercel.app/">Live Site</a>
 </div>
 
 ![updev-landingpage](screenshot-landing.png)
