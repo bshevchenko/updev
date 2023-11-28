@@ -32,16 +32,16 @@ It leverages [Lukso Network](https://lukso.network/), [Univeral Profiles browser
 ## Integrations
 
 LIVE<br />
-– [Github](https://github.com/) <br />
-– [Buidlguidl](https://buidlguidl.com/) <br />
+✅ [GitHub](https://github.com/) <br />
+✅ [Buidlguidl](https://buidlguidl.com/) <br />
 
 Coming Soon<br />
-– [buidlbox](https://app.buidlbox.io/) <br />
-– [Gitcoin Passport](https://passport.gitcoin.co/) <br />
-– [LinkedIn](https://www.linkedin.com/) <br />
-– [X / Twitter](https://twitter.com/) <br />
+🌀 [buidlbox](https://app.buidlbox.io/) <br />
+🌀 [Gitcoin Passport](https://passport.gitcoin.co/) <br />
+🌀 [LinkedIn](https://www.linkedin.com/) <br />
+🌀 [X / Twitter](https://twitter.com/) <br />
 
-## Run Front-end
+## Run Frontend
 
 first git clone this repo:
 
