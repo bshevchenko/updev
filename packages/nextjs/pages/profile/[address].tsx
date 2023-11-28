@@ -3,8 +3,6 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { ERC725, ERC725JSONSchema } from "@erc725/erc725.js";
 import type { NextPage } from "next";
-import { Tooltip } from "react-tooltip";
-import "react-tooltip/dist/react-tooltip.css";
 import { useAccount } from "wagmi";
 import { ConnectSocialAccounts } from "~~/components/updev/";
 import { useScaffoldContractRead, useScaffoldEventHistory, useScaffoldEventSubscriber } from "~~/hooks/scaffold-eth";
@@ -218,44 +216,23 @@ const Profile: NextPage = () => {
         <div className="mb-10">
           <h3 className="text-2xl font-bold mb-3">Achievements</h3>
           <div className="flex gap-3">
-            <Tooltip id="tooltip-up" />
-            <Image
-              width={117}
-              height={117}
-              alt="achievement icon"
-              src="/achievements/up.svg"
-              data-tooltip-id="tooltip-up"
-              data-tooltip-content="Universal Profile Owner"
-            />
-            <Image
-              width={117}
-              height={117}
-              alt="achievement icon"
-              src="/achievements/og-updev.svg"
-              data-tooltip-id="tooltip-up"
-              data-tooltip-content="upDev Early Adopter"
-            />
+            <div className="tooltip tooltip-primary" data-tip="Universal Profile Owner">
+              <Image width={117} height={117} alt="achievement icon" src="/achievements/up.svg" />
+            </div>
+            <div className="tooltip tooltip-primary" data-tip="upDev Early Adopter">
+              <Image width={117} height={117} alt="achievement icon" src="/achievements/og-updev.svg" />
+            </div>
             {isOwned("github") && (
-              <Image
-                width={117}
-                height={117}
-                alt="achievement icon"
-                src="/achievements/github.svg"
-                data-tooltip-id="tooltip-up"
-                data-tooltip-content="Verified GitHub Account"
-              />
+              <div className="tooltip tooltip-primary" data-tip="Verified GitHub Account">
+                <Image width={117} height={117} alt="achievement icon" src="/achievements/github.svg" />
+              </div>
+            )}
+            {isOwned("buidlguidl") && (
+              <div className="tooltip tooltip-primary" data-tip="Verified BuidlGuidl Account">
+                <Image width={117} height={117} alt="achievement icon" src="/achievements/buidlguidl.svg" />
+              </div>
             )}
             {/* <Image width={117} height={117} alt="achievement icon" src="/achievements/buildbox.svg" /> */}
-            {isOwned("buidlguidl") && (
-              <Image
-                width={117}
-                height={117}
-                alt="achievement icon"
-                src="/achievements/buidlguidl.svg"
-                data-tooltip-id="tooltip-up"
-                data-tooltip-content="Verified BuidlGuidl Account"
-              />
-            )}
           </div>
         </div>
 
