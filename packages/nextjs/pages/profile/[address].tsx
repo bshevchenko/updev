@@ -35,7 +35,7 @@ const Profile: NextPage = () => {
     // @ts-ignore
     watch: true,
     // Apply filters to the event based on parameter names and values { [parameterName]: value },
-    filters: { up: profile && profile[0] },
+    filters: { up: address },
     // If set to true it will return the block data for each event (default: false)
     blockData: false,
     // If set to true it will return the transaction data for each event (default: false),
@@ -94,12 +94,23 @@ const Profile: NextPage = () => {
     }
   }, [isLoading, profile]);
 
-  if (!metadata)
+  if (!metadata) {
     return (
       <div className="flex justify-center grow">
         <span className="loading loading-spinner loading-lg"></span>
       </div>
     );
+  }
+
+  const isOwned = (
+    source: string, // TODO refactor
+  ) => events && events.some(obj => obj.args && obj.args.source === source && obj.args.isOwned == true);
+
+  const getId = (source: string): string | undefined => {
+    const e = events && events.find(obj => obj.args && obj.args.source === source && obj.args.id);
+
+    return e ? e.args.id : undefined;
+  };
 
   return (
     <div className="flex flex-col items-center py-10">
@@ -138,8 +149,39 @@ const Profile: NextPage = () => {
               <div className="bg-base-100 border border-base-200 rounded-sm px-2 p-0.5">
                 🆙 <span className="text-[#FFFFFFA3]">{address.slice(0, 6) + "..." + address.slice(-4)}</span>
               </div>
-              <div className="text-[#FFFFFFA3]">{"\u2022"}</div>
-              {metadata.LSP3Profile.links.map((link: { title: string; url: string }, index: number) => (
+              {isOwned("github") && (
+                <>
+                  <div className="text-[#FFFFFFA3]">{"\u2022"}</div>
+                  <a
+                    href={"https://github.com/" + getId("github")}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1"
+                  >
+                    <div>
+                      <Image width={14} height={14} alt="achievement icon" src="/link.svg" />
+                    </div>
+                    <div className="text-[#FFFFFFA3] underline mr-2">GitHub</div>
+                  </a>
+                </>
+              )}
+              {isOwned("buidlguidl") && (
+                <>
+                  <div className="text-[#FFFFFFA3]">{"\u2022"}</div>
+                  <a
+                    href={"https://app.buidlguidl.com/builders/" + getId("buidlguidl")}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1"
+                  >
+                    <div>
+                      <Image width={14} height={14} alt="achievement icon" src="/link.svg" />
+                    </div>
+                    <div className="text-[#FFFFFFA3] underline mr-2">BuidlGuidl</div>
+                  </a>
+                </>
+              )}
+              {/* {metadata.LSP3Profile.links.map((link: { title: string; url: string }, index: number) => (
                 <a
                   href={link.url}
                   target="_blank"
@@ -153,7 +195,7 @@ const Profile: NextPage = () => {
                   <div className="text-[#FFFFFFA3] underline mr-2">{link.title}</div>
                   {index < metadata.LSP3Profile.links.length - 1 && <div className="text-[#FFFFFFA3]">{"\u2022"}</div>}
                 </a>
-              ))}
+              ))} */}
             </div>
           </div>
           <div>
@@ -176,11 +218,11 @@ const Profile: NextPage = () => {
           <div className="flex gap-3">
             <Image width={117} height={117} alt="achievement icon" src="/achievements/up.svg" />
             <Image width={117} height={117} alt="achievement icon" src="/achievements/og-updev.svg" />
-            {events && events.some(obj => obj.args && obj.args.source === "github" && obj.args.isOwned == true) && (
+            {isOwned("github") && (
               <Image width={117} height={117} alt="achievement icon" src="/achievements/github.svg" />
             )}
             {/* <Image width={117} height={117} alt="achievement icon" src="/achievements/buildbox.svg" /> */}
-            {events && events.some(obj => obj.args && obj.args.source === "buidlguidl" && obj.args.isOwned == true) && (
+            {isOwned("buidlguidl") && (
               <Image width={117} height={117} alt="achievement icon" src="/achievements/buidlguidl.svg" />
             )}
           </div>
