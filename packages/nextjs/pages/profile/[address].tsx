@@ -9,7 +9,7 @@ import { ConnectSocialAccounts } from "~~/components/updev/";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 import { convertIpfsUrl } from "~~/utils/helpers";
 
-// TODO change to viem?
+// TODO change from ethers to viem?
 
 interface Accounts {
   [key: string]: string;
@@ -158,7 +158,7 @@ const Profile: NextPage = () => {
                 <>
                   <div className="text-[#FFFFFFA3]">{"\u2022"}</div>
                   <a
-                    href={"https://app.buidlguidl.com/builders/" + accounts["github"]}
+                    href={"https://app.buidlguidl.com/builders/" + accounts["buidlguidl"]}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-1"
