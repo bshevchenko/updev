@@ -164,7 +164,7 @@ export const ConnectSocialAccounts = () => {
   const renderModalContent = (title: string) => {
     const account = socialAccounts.find(account => account.title === title);
 
-    const link = `https://updev-nextjs.vercel.app/profile/${profile && profile[0]}`;
+    const link = `https://updev-v1.vercel.app/${profile && profile[0]}`;
     return (
       <div className="flex gap-5 items-center">
         <div className="rounded-lg overflow-hidden">
