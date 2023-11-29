@@ -1,4 +1,9 @@
 <div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="logo.svg">
+    <source media="(prefers-color-scheme: light)" srcset="logo-black.svg">
+    <img alt="upDev" src="logo.svg">
+  </picture>
   <img src="packages/nextjs/public/logo.svg" />
   <h3>Your universal dev profile – mint all your merits on-chain.</h3><h4>powered by Lukso & Chainlink</h4>
 </div>
