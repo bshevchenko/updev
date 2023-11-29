@@ -103,7 +103,7 @@ const Profile: NextPage = () => {
 
   return (
     <div className="flex flex-col items-center py-10">
-      <div className="max-w-3xl flex flex-col">
+      <div className="max-w-3xl flex flex-col" style={{ minWidth: "48rem" }}>
         <div className="relative mb-3">
           <div className="w-full h-[200px] bg-base-200 rounded-xl overflow-hidden relative">
             <Image
@@ -113,7 +113,7 @@ const Profile: NextPage = () => {
               className="object-cover object-center"
             />
           </div>
-          <div className="absolute -bottom-16 left-5 w-32 h-32">
+          <div className="absolute -bottom-16 left-5 w-32">
             <div className="rounded-full overflow-hidden w-full h-full border-[4px] border-base-300">
               <Image
                 alt="profile picture"

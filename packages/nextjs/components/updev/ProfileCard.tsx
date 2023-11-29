@@ -48,8 +48,8 @@ export function ProfileCard({ upAddress }: { upAddress: string }) {
       style={backgroundStyle}
       className="relative bg-base-200 w-full h-80 rounded-3xl flex flex-col justify-end transition duration-300 ease-in-out hover:scale-105 border-base-200 "
     >
-      <div className="absolute top-1/2 z-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full overflow-hidden w-32 h-32 border-[10px] border-base-300"></div>
-      <div className="absolute top-1/2 z-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full overflow-hidden w-32 h-32 border-[10px] border-base-100">
+      <div className="absolute top-1/2 z-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full overflow-hidden w-32 border-[10px] border-base-300"></div>
+      <div className="absolute top-1/2 z-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full overflow-hidden w-32 border-[10px] border-base-100">
         <Image alt="profile picture" width={1000} height={1000} src={convertIpfsUrl(profileImage)} />
       </div>
       <div className="absolute bottom-0 h-1/2 w-full z-0 bg-base-300 rounded-3xl"></div>
