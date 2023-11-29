@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Modal from "./Modal";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useAccount, useWalletClient } from "wagmi";
 import { ArrowTopRightOnSquareIcon, CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
-import { useScaffoldContract, useScaffoldContractRead } from "~~/hooks/scaffold-eth";
+import { useScaffoldContract, useScaffoldContractRead, useScaffoldEventSubscriber } from "~~/hooks/scaffold-eth";
 
 const socialAccounts = [
   {
+    name: "github",
     title: "GitHub",
     logo: "/github.svg",
     comingSoon: false,
@@ -19,6 +20,7 @@ const socialAccounts = [
     url: "https://github.com",
   },
   {
+    name: "buidlguidl",
     title: "BuidlGuidl",
     logo: "/link.svg",
     comingSoon: false,
@@ -30,6 +32,7 @@ const socialAccounts = [
     url: "https://app.buidlguidl.com/",
   },
   {
+    name: "buidlbox",
     title: "buidlbox",
     logo: "/link.svg",
     comingSoon: true,
@@ -40,6 +43,7 @@ const socialAccounts = [
     url: " ",
   },
   {
+    name: "gitcoin",
     title: "GitCoin Passport",
     logo: "/passport.svg",
     comingSoon: true,
@@ -50,6 +54,7 @@ const socialAccounts = [
     url: "",
   },
   {
+    name: "twitter",
     title: "X / Twitter",
     logo: "/link.svg",
     comingSoon: true,
@@ -60,6 +65,7 @@ const socialAccounts = [
     url: "",
   },
   {
+    name: "linkedin",
     title: "LinkedIn",
     logo: "/linkedin.svg",
     comingSoon: true,
@@ -89,6 +95,57 @@ export const ConnectSocialAccounts = () => {
     contractName: "upDevFunctionsConsumer",
     walletClient,
   });
+
+  const { data: requests } = useScaffoldContractRead({
+    contractName: "upDevFunctionsConsumer",
+    functionName: "getUPRequests",
+    args: [profile && profile[0]],
+  });
+
+  useScaffoldEventSubscriber({
+    contractName: "upDevFunctionsConsumer",
+    eventName: "Response",
+    listener: logs => {
+      logs.map(log => {
+        const { source, up, isOwned } = log.args;
+        if (!profile) {
+          return;
+        }
+        if (up != profile[0]) {
+          return; // TODO how to subscribe only to up's events?
+        }
+        if (isOwned) {
+          alert(`Your ${source} account has been successfully verified. You can now claim your NFT.`); // TODO push nice toast message
+        } else {
+          alert(`Your ${source} account verification failed. Please try again.`);
+        }
+      });
+    },
+  });
+
+  useEffect(() => {
+    console.log("Requests", requests);
+  }, [requests]);
+
+  const isNotClaimed = (source: string) => {
+    return requests && requests.some(r => r.source === source && r.isFinished && !r.isClaimed);
+  };
+
+  async function handleClaim(source: string) {
+    // TODO isClaiming
+    if (!requests) {
+      return;
+    }
+    const request = requests.find(r => r.source === source && r.isFinished && !r.isClaimed);
+    if (!request) {
+      return;
+    }
+    try {
+      await consumer?.write.claimToken([request.tokenId]);
+    } catch (e) {
+      console.error("Claim error:", e);
+    }
+  }
 
   async function handleVerify(sourceName: string, id: string) {
     if (!consumer || !profile) {
@@ -173,9 +230,20 @@ export const ConnectSocialAccounts = () => {
               </div>
               <p className="text-base-content my-0">{item.description}</p>
             </div>
-            <button onClick={() => setActiveModal(item.title)} className="btn btn-primary" disabled={item.comingSoon}>
-              Connect
-            </button>
+            {isNotClaimed(item.name) ? (
+              <div>
+                <button onClick={() => setActiveModal(item.title)} className="btn" disabled={item.comingSoon}>
+                  Reconnect
+                </button>
+                <button onClick={() => handleClaim(item.name)} className="btn btn-primary">
+                  Claim
+                </button>
+              </div>
+            ) : (
+              <button onClick={() => setActiveModal(item.title)} className="btn btn-primary" disabled={item.comingSoon}>
+                Connect
+              </button>
+            )}
           </div>
         ))}
       </div>

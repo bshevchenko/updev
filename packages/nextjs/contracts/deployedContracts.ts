@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   80001: {
     upDevAccountOwnership: {
-      address: "0xB7bCfbf56b8aF51706E402Df0aD5b4b8f4855F49",
+      address: "0x9fc4937f337A7f20F290a4f532b7b2A8CB5BeDBf",
       abi: [
         {
           inputs: [
@@ -492,37 +492,6 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "address",
-              name: "_address",
-              type: "address",
-            },
-          ],
-          name: "getTokenDataForAddress",
-          outputs: [
-            {
-              components: [
-                {
-                  internalType: "string",
-                  name: "source",
-                  type: "string",
-                },
-                {
-                  internalType: "string",
-                  name: "id",
-                  type: "string",
-                },
-              ],
-              internalType: "struct upDevAccountOwnership.TokenData[]",
-              name: "",
-              type: "tuple[]",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
               name: "operator",
               type: "address",
             },
@@ -567,39 +536,6 @@ const deployedContracts = {
             },
           ],
           name: "mint",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "to",
-              type: "address",
-            },
-            {
-              internalType: "bytes32",
-              name: "tokenId",
-              type: "bytes32",
-            },
-            {
-              internalType: "bool",
-              name: "force",
-              type: "bool",
-            },
-            {
-              internalType: "string",
-              name: "source",
-              type: "string",
-            },
-            {
-              internalType: "string",
-              name: "id",
-              type: "string",
-            },
-          ],
-          name: "mintTmp",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",
@@ -702,30 +638,6 @@ const deployedContracts = {
               internalType: "bool",
               name: "",
               type: "bool",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "bytes32",
-              name: "",
-              type: "bytes32",
-            },
-          ],
-          name: "tokenData",
-          outputs: [
-            {
-              internalType: "string",
-              name: "source",
-              type: "string",
-            },
-            {
-              internalType: "string",
-              name: "id",
-              type: "string",
             },
           ],
           stateMutability: "view",
@@ -888,7 +800,7 @@ const deployedContracts = {
       },
     },
     upDevFunctionsConsumer: {
-      address: "0xF43ae488f6B85ABc753B1cA1946bA9A148310C82",
+      address: "0xaBc51E822d1F590615145B02B8a67Cca56CD612D",
       abi: [
         {
           inputs: [
@@ -900,6 +812,11 @@ const deployedContracts = {
           ],
           stateMutability: "nonpayable",
           type: "constructor",
+        },
+        {
+          inputs: [],
+          name: "AlreadyClaimed",
+          type: "error",
         },
         {
           inputs: [],
@@ -1000,15 +917,21 @@ const deployedContracts = {
           inputs: [
             {
               indexed: true,
+              internalType: "bytes32",
+              name: "requestId",
+              type: "bytes32",
+            },
+            {
+              indexed: true,
               internalType: "address",
               name: "up",
               type: "address",
             },
             {
               indexed: true,
-              internalType: "bytes32",
-              name: "requestId",
-              type: "bytes32",
+              internalType: "bool",
+              name: "isOwned",
+              type: "bool",
             },
             {
               indexed: false,
@@ -1021,24 +944,6 @@ const deployedContracts = {
               internalType: "string",
               name: "id",
               type: "string",
-            },
-            {
-              indexed: false,
-              internalType: "bool",
-              name: "isOwned",
-              type: "bool",
-            },
-            {
-              indexed: false,
-              internalType: "bytes",
-              name: "response",
-              type: "bytes",
-            },
-            {
-              indexed: false,
-              internalType: "bytes",
-              name: "err",
-              type: "bytes",
             },
           ],
           name: "Response",
@@ -1094,6 +999,19 @@ const deployedContracts = {
           type: "function",
         },
         {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "tokenId",
+              type: "bytes32",
+            },
+          ],
+          name: "claimToken",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
           inputs: [],
           name: "collection",
           outputs: [
@@ -1144,6 +1062,67 @@ const deployedContracts = {
         {
           inputs: [
             {
+              internalType: "address",
+              name: "up",
+              type: "address",
+            },
+          ],
+          name: "getUPRequests",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "address",
+                  name: "up",
+                  type: "address",
+                },
+                {
+                  internalType: "string",
+                  name: "source",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "id",
+                  type: "string",
+                },
+                {
+                  internalType: "bytes32",
+                  name: "tokenId",
+                  type: "bytes32",
+                },
+                {
+                  internalType: "bytes",
+                  name: "tokenData",
+                  type: "bytes",
+                },
+                {
+                  internalType: "bool",
+                  name: "isFinished",
+                  type: "bool",
+                },
+                {
+                  internalType: "bool",
+                  name: "isOwned",
+                  type: "bool",
+                },
+                {
+                  internalType: "bool",
+                  name: "isClaimed",
+                  type: "bool",
+                },
+              ],
+              internalType: "struct upDevFunctionsConsumer.Request[]",
+              name: "",
+              type: "tuple[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
               internalType: "bytes32",
               name: "requestId",
               type: "bytes32",
@@ -1162,25 +1141,6 @@ const deployedContracts = {
           name: "handleOracleFulfillment",
           outputs: [],
           stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "bytes",
-              name: "input",
-              type: "bytes",
-            },
-          ],
-          name: "isTrue",
-          outputs: [
-            {
-              internalType: "bool",
-              name: "",
-              type: "bool",
-            },
-          ],
-          stateMutability: "pure",
           type: "function",
         },
         {
@@ -1204,7 +1164,7 @@ const deployedContracts = {
               type: "bytes32",
             },
           ],
-          name: "requests",
+          name: "request",
           outputs: [
             {
               internalType: "address",
@@ -1222,53 +1182,29 @@ const deployedContracts = {
               type: "string",
             },
             {
-              internalType: "bool",
-              name: "isOwned",
-              type: "bool",
+              internalType: "bytes32",
+              name: "tokenId",
+              type: "bytes32",
+            },
+            {
+              internalType: "bytes",
+              name: "tokenData",
+              type: "bytes",
             },
             {
               internalType: "bool",
               name: "isFinished",
               type: "bool",
             },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "s_lastError",
-          outputs: [
             {
-              internalType: "bytes",
-              name: "",
-              type: "bytes",
+              internalType: "bool",
+              name: "isOwned",
+              type: "bool",
             },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "s_lastRequestId",
-          outputs: [
             {
-              internalType: "bytes32",
-              name: "",
-              type: "bytes32",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "s_lastResponse",
-          outputs: [
-            {
-              internalType: "bytes",
-              name: "",
-              type: "bytes",
+              internalType: "bool",
+              name: "isClaimed",
+              type: "bool",
             },
           ],
           stateMutability: "view",
@@ -1373,39 +1309,20 @@ const deployedContracts = {
         {
           inputs: [
             {
-              internalType: "string",
-              name: "_addressString",
-              type: "string",
+              internalType: "bytes32",
+              name: "tokenId",
+              type: "bytes32",
             },
           ],
-          name: "stringToAddress",
+          name: "token",
           outputs: [
             {
-              internalType: "address",
-              name: "",
-              type: "address",
+              internalType: "bytes32",
+              name: "requestId",
+              type: "bytes32",
             },
           ],
-          stateMutability: "pure",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "x",
-              type: "address",
-            },
-          ],
-          name: "toAsciiString",
-          outputs: [
-            {
-              internalType: "string",
-              name: "",
-              type: "string",
-            },
-          ],
-          stateMutability: "pure",
+          stateMutability: "view",
           type: "function",
         },
         {
@@ -1419,6 +1336,30 @@ const deployedContracts = {
           name: "transferOwnership",
           outputs: [],
           stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "up",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "upRequests",
+          outputs: [
+            {
+              internalType: "bytes32",
+              name: "requests",
+              type: "bytes32",
+            },
+          ],
+          stateMutability: "view",
           type: "function",
         },
       ],

@@ -30,35 +30,30 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		address up;
 		string source;
 		string id;
-		bool isOwned;
+		bytes32 tokenId;
+		bytes tokenData;
 		bool isFinished;
+		bool isOwned;
+		bool isClaimed;
 	}
 
-	upDevAccountOwnership public collection;
-
-	mapping(string => Source) public source;
-	mapping(bytes32 requiestId => Request) public requests;
-
-	string[] public availableSources;
-
-	// Custom error type
-	error SourceNameBusy();
-
-	// Event to log responses
 	event Response(
-		address indexed up,
 		bytes32 indexed requestId,
+		address indexed up,
+		bool indexed isOwned,
 		string source,
-		string id,
-		bool isOwned,
-		bytes response,
-		bytes err
+		string id
 	);
 
-	// State variables to store the last request ID, response, and error TODO remove?
-	bytes32 public s_lastRequestId;
-	bytes public s_lastResponse;
-	bytes public s_lastError;
+	mapping(string => Source) public source;
+	mapping(bytes32 requiestId => Request) public request;
+	mapping(address up => bytes32[] requests) public upRequests;
+	mapping(bytes32 tokenId => bytes32 requestId) public token;
+
+	// TODO array or mapping to get not claimed tokens
+
+	string[] public availableSources;
+	upDevAccountOwnership public collection;
 
 	// Router address - Hardcoded for Mumbai
 	// Check to get the router address for your supported network https://docs.chain.link/chainlink-functions/supported-networks
@@ -71,6 +66,10 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 	// Check to get the donID for your supported network https://docs.chain.link/chainlink-functions/supported-networks
 	bytes32 donID =
 		0x66756e2d706f6c79676f6e2d6d756d6261692d31000000000000000000000000;
+
+	// Custom error type
+	error SourceNameBusy();
+	error AlreadyClaimed();
 
 	/**
 	 * @notice Initializes the contract with the Chainlink router address and sets the contract owner
@@ -95,7 +94,7 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 			"const { data } = apiResponse;"
 			"const urlFound = data.some(row => row.url.toLowerCase().includes(upAddress));"
 			"return Functions.encodeUint256(urlFound ? 1 : 0);",
-            false
+			false
 		);
 		addSource(
 			"buidlguidl",
@@ -136,12 +135,21 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		availableSources.push(name);
 	}
 
-	function getAvailableSources() public view returns (Source[] memory) {
-        Source[] memory sources = new Source[](availableSources.length);
-        for (uint256 i = 0; i < availableSources.length; i++) {
-            sources[i] = source[availableSources[i]];
+	function getAvailableSources() external view returns (Source[] memory) {
+		Source[] memory sources = new Source[](availableSources.length);
+		for (uint256 i = 0; i < availableSources.length; i++) {
+			sources[i] = source[availableSources[i]];
+		}
+		return sources;
+	}
+
+	function getUPRequests(address up) external view returns (Request[] memory) {
+        uint256 numRequests = upRequests[up].length;
+        Request[] memory result = new Request[](numRequests);
+        for (uint256 i = 0; i < numRequests; i++) {
+            result[i] = request[upRequests[up][i]];
         }
-        return sources;
+        return result;
     }
 
 	/**
@@ -172,21 +180,23 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		args[1] = id;
 		req.setArgs(args);
 
-		// Send the request and store the request ID
-		s_lastRequestId = _sendRequest(
+		requestId = _sendRequest(
 			req.encodeCBOR(),
 			subscriptionId,
 			gasLimit,
 			donID
 		);
-		requests[s_lastRequestId] = Request({
+		request[requestId] = Request({
 			up: up,
-			id: id,
 			source: sourceName,
+			id: id,
+			tokenId: keccak256(abi.encodePacked(sourceName, id)), // TODO encode on claim?
+			tokenData: abi.encode(sourceName, id),
+			isFinished: false,
 			isOwned: false,
-			isFinished: false
+			isClaimed: false
 		});
-		return s_lastRequestId;
+		upRequests[up].push(requestId);
 	}
 
 	/**
@@ -200,60 +210,48 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		bytes memory response,
 		bytes memory err
 	) internal override {
-		// Update the contract's state variables with the response and any errors
-		s_lastResponse = response;
-		s_lastError = err;
-
-		bool isOwned = isTrue(response);
-
-		requests[requestId].isOwned = isOwned;
-		requests[requestId].isFinished = true;
-
-		// Emit an event to log the response
+		request[requestId].isFinished = true;
+		if (isTrue(response)) {
+			request[requestId].isOwned = true;
+			token[request[requestId].tokenId] = requestId;
+		}
 		emit Response(
-			requests[requestId].up,
 			requestId,
-			requests[requestId].source,
-			requests[requestId].id,
-			isOwned,
-			s_lastResponse,
-			s_lastError
+			request[requestId].up,
+			request[requestId].isOwned,
+			request[requestId].source,
+			request[requestId].id
 		);
+	}
 
-		// if (!isOwned) {
-		// 	return;
-		// }
-
-		// collection.mintTmp( // TODO doesn't work for all UP addresses for some reason
-		// 	requests[requestId].up,
-		// 	keccak256(abi.encodePacked(requests[requestId].source, requests[requestId].id)),
-		// 	true,
-		// 	requests[requestId].source, // TODO Chainlink fails on abi.encode for some reason, so just pass strings for now
-		// 	requests[requestId].id
-		// );
+	function claimToken(bytes32 tokenId) external {
+		bytes32 id = token[tokenId];
+		if (request[id].isClaimed) {
+			revert AlreadyClaimed();
+		}
+		collection.mint(
+			request[id].up,
+			request[id].tokenId,
+			false,
+			request[id].tokenData
+		);
+		request[id].isClaimed = true;
 	}
 
 	/**
 	 * HELPERS
 	 */
-	function stringToAddress(
-		string memory _addressString
-	) public pure returns (address) {
-		// Parse the string as bytes
-		bytes memory _addressBytes = bytes(_addressString);
+	bytes32 targetPattern =
+		0x0000000000000000000000000000000000000000000000000000000000000001;
+	bytes targetBytes = abi.encodePacked(targetPattern);
 
-		// Check that the length is 40 (hexadecimal representation of an Ethereum address)
-		require(_addressBytes.length == 40, "Invalid address string length");
-
-		// Parse the bytes into a 20-byte address
-		address _parsedAddress = address(
-			uint160(uint256(keccak256(_addressBytes)))
-		);
-
-		return _parsedAddress;
+	function isTrue(bytes memory input) internal view returns (bool) {
+		return
+			input.length == targetBytes.length &&
+			keccak256(input) == keccak256(targetBytes);
 	}
 
-	function toAsciiString(address x) public pure returns (string memory) {
+	function toAsciiString(address x) internal pure returns (string memory) {
 		bytes memory s = new bytes(40);
 		for (uint i = 0; i < 20; i++) {
 			bytes1 b = bytes1(uint8(uint(uint160(x)) / (2 ** (8 * (19 - i)))));
@@ -268,18 +266,5 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 	function char(bytes1 b) internal pure returns (bytes1 c) {
 		if (uint8(b) < 10) return bytes1(uint8(b) + 0x30);
 		else return bytes1(uint8(b) + 0x57);
-	}
-
-	function isTrue(bytes memory input) public pure returns (bool) {
-		// Define the target byte pattern
-		bytes32 targetPattern = 0x0000000000000000000000000000000000000000000000000000000000000001;
-
-		// Convert the target pattern to bytes
-		bytes memory targetBytes = abi.encodePacked(targetPattern);
-
-		// Check if the input bytes are equal to the target pattern
-		return
-			input.length == targetBytes.length &&
-			keccak256(input) == keccak256(targetBytes);
 	}
 }

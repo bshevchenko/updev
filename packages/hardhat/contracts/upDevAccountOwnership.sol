@@ -32,37 +32,17 @@ contract upDevAccountOwnership is LSP8Mintable {
             _LSP8_TOKENID_TYPE_NUMBER // type of NFT/ tokenIds
         )
     {
-        // set token type
         _setData(_LSP4_TOKEN_TYPE_DATA_KEY, abi.encode(TokenType.COLLECTION));
     }
 
     error Soulbound();
 
-    struct TokenData { // TODO tmp
-        string source;
-        string id;
-    }
-
-    mapping (bytes32 => TokenData) public tokenData;
-
-    function getTokenDataForAddress(address _address) external view returns (TokenData[] memory) { // TODO
-        bytes32[] memory tokenIds = tokenIdsOf(_address);
-        TokenData[] memory result = new TokenData[](tokenIds.length);
-
-        for (uint256 i = 0; i < tokenIds.length; i++) {
-            result[i] = tokenData[tokenIds[i]];
-        }
-
-        return result;
-    }
-
-    function mintTmp( // TODO tmp solution for the ChainLink/Lukso bug
+    function mint(
         address to,
         bytes32 tokenId,
         bool force,
-        string memory source,
-        string memory id
-    ) public onlyOwner {
+        bytes memory data
+    ) public override onlyOwner {
         if (_tokenOwners[tokenId] != address(0)) {
             if (_tokenOwners[tokenId] == to) {
                 return;
@@ -71,11 +51,7 @@ contract upDevAccountOwnership is LSP8Mintable {
             return;
         }
         _mint(to, tokenId, force, "0x");
-        tokenData[tokenId] = TokenData({
-            source: source,
-            id: id
-        });
-        // _setData(tokenId, data); TODO
+        _setData(tokenId, data);
     }
 
     function transfer(

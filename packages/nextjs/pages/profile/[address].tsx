@@ -2,11 +2,18 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { ERC725, ERC725JSONSchema } from "@erc725/erc725.js";
+import { ethers } from "ethers";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { ConnectSocialAccounts } from "~~/components/updev/";
-import { useScaffoldContractRead, useScaffoldEventHistory, useScaffoldEventSubscriber } from "~~/hooks/scaffold-eth";
+import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 import { convertIpfsUrl } from "~~/utils/helpers";
+
+// TODO change to viem?
+
+interface Accounts {
+  [key: string]: string;
+}
 
 const Profile: NextPage = () => {
   const router = useRouter();
@@ -26,52 +33,44 @@ const Profile: NextPage = () => {
     args: [account.address],
   });
 
-  const { data: events } = useScaffoldEventHistory({
-    contractName: "upDevFunctionsConsumer",
-    eventName: "Response",
-    // Specify the starting block number from which to read events, this is a bigint.
-    fromBlock: 42903925n,
-    // If set to true, the events will be updated every pollingInterval milliseconds set at scaffoldConfig (default: false)
-    // @ts-ignore
-    watch: true,
-    // Apply filters to the event based on parameter names and values { [parameterName]: value },
-    filters: { up: address },
-    // If set to true it will return the block data for each event (default: false)
-    blockData: false,
-    // If set to true it will return the transaction data for each event (default: false),
-    transactionData: false,
-    // If set to true it will return the receipt data for each event (default: false),
-    receiptData: false,
+  const { data: tokenIdsOf } = useScaffoldContractRead({
+    contractName: "upDevAccountOwnership",
+    functionName: "tokenIdsOf",
+    args: [address],
   });
 
-  useScaffoldEventSubscriber({
-    contractName: "upDevFunctionsConsumer",
-    eventName: "Response",
-    listener: logs => {
-      logs.map(log => {
-        const { isOwned, source } = log.args;
-        if (isOwned) {
-          alert(`Your ${source} account has been successfully added.`); // TODO push nice toast message
-        } else {
-          alert(`Your ${source} account verification failed. Please try again.`);
-        }
-      });
-    },
+  const { data: tokensData } = useScaffoldContractRead({
+    contractName: "upDevAccountOwnership",
+    functionName: "getDataBatch",
+    args: [tokenIdsOf],
   });
 
   const [isLoading, setIsLoading] = useState(true);
+  const [accounts, setAccounts] = useState<Accounts>({});
 
   // TODO check LSP24 ref on Lukso Mainnet UP and return 404 if refs are not consistent
+
+  useEffect(() => {
+    if (!tokensData) {
+      return;
+    }
+    console.log("tokensData", tokensData);
+    tokensData.forEach(d => {
+      const [source, id] = ethers.utils.defaultAbiCoder.decode(["string", "string"], d);
+      accounts[source] = id;
+      setAccounts(accounts);
+    });
+  }, [tokensData, accounts]);
+
+  useEffect(() => {
+    console.log("accounts", accounts);
+  }, [accounts]);
 
   useEffect(() => {
     if (profile) {
       setIsLoading(false);
     }
   }, [profile]);
-
-  useEffect(() => {
-    console.log(events);
-  }, [events]);
 
   useEffect(() => {
     async function fetchData(_address: string) {
@@ -101,16 +100,6 @@ const Profile: NextPage = () => {
       </div>
     );
   }
-
-  const isOwned = (
-    source: string, // TODO refactor
-  ) => events && events.some(obj => obj.args && obj.args.source === source && obj.args.isOwned == true);
-
-  const getId = (source: string): string | undefined => {
-    const e = events && events.find(obj => obj.args && obj.args.source === source && obj.args.id);
-
-    return e ? e.args.id : undefined;
-  };
 
   return (
     <div className="flex flex-col items-center py-10">
@@ -149,11 +138,11 @@ const Profile: NextPage = () => {
               <div className="bg-base-100 border border-base-200 rounded-sm px-2 p-0.5">
                 🆙 <span className="text-[#FFFFFFA3]">{address.slice(0, 6) + "..." + address.slice(-4)}</span>
               </div>
-              {isOwned("github") && (
+              {accounts["github"] && (
                 <>
                   <div className="text-[#FFFFFFA3]">{"\u2022"}</div>
                   <a
-                    href={"https://github.com/" + getId("github")}
+                    href={"https://github.com/" + accounts["github"]}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-1"
@@ -165,11 +154,11 @@ const Profile: NextPage = () => {
                   </a>
                 </>
               )}
-              {isOwned("buidlguidl") && (
+              {accounts["buidlguidl"] && (
                 <>
                   <div className="text-[#FFFFFFA3]">{"\u2022"}</div>
                   <a
-                    href={"https://app.buidlguidl.com/builders/" + getId("buidlguidl")}
+                    href={"https://app.buidlguidl.com/builders/" + accounts["github"]}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-1"
@@ -222,12 +211,12 @@ const Profile: NextPage = () => {
             <div className="tooltip tooltip-primary" data-tip="upDev Early Adopter">
               <Image width={117} height={117} alt="achievement icon" src="/achievements/og-updev.svg" />
             </div>
-            {isOwned("github") && (
+            {accounts["github"] && (
               <div className="tooltip tooltip-primary" data-tip="Verified GitHub Account">
                 <Image width={117} height={117} alt="achievement icon" src="/achievements/github.svg" />
               </div>
             )}
-            {isOwned("buidlguidl") && (
+            {accounts["buidlguidl"] && (
               <div className="tooltip tooltip-primary" data-tip="Verified BuidlGuidl Account">
                 <Image width={117} height={117} alt="achievement icon" src="/achievements/buidlguidl.svg" />
               </div>
@@ -238,7 +227,7 @@ const Profile: NextPage = () => {
 
         {myProfile && address == myProfile[0] && (
           <div>
-            <h3 className="text-2xl font-bold mb-3">Connect your upDev to earn achievements</h3>
+            <h3 className="text-2xl font-bold mb-3">Connect accounts</h3>
             <ConnectSocialAccounts />
           </div>
         )}
