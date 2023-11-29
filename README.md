@@ -8,7 +8,7 @@
 </div>
 
 <div align="center">
-  <a href="https://www.youtube.com/watch?v=whP8iiYZW6Y">YouTube Video</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://updev-bshevchenko-boris-shevchenkos-projects.vercel.app">Live Site</a>
+  <a href="https://www.youtube.com/watch?v=whP8iiYZW6Y">YouTube Video</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://updev-v1.vercel.app/">Live Site</a>
 </div>
 
 <br />
@@ -53,15 +53,15 @@ It leverages [Lukso Network](https://lukso.network/), [Univeral Profiles browser
 
 first git clone this repo:
 
-```git clone https://github.com/tantodefi/updev.git```
+`git clone https://github.com/tantodefi/updev.git`
 
 install dependencies:
 
-```yarn install```
+`yarn install`
 
 run the app
 
-```yarn start```
+`yarn start`
 
 ### Technologies Used
 
