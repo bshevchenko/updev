@@ -105,10 +105,8 @@ const Profile: NextPage = () => {
     if (!isLoading && upLukso) {
       console.log("Fetching Lukso profile...");
       fetchData();
-    } else {
-      console.log("Profile", profile);
     }
-  }, [isLoading, profile, address]);
+  }, [isLoading, upLukso, address, erc725js]);
 
   const handleVerify = async () => {
     if (!window.lukso) {
