@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { ERC725, ERC725JSONSchema } from "@erc725/erc725.js";
+import UniversalProfileContract from "@lukso/lsp-smart-contracts/artifacts/UniversalProfile.json";
 import { ethers } from "ethers";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
+import lspSchemas from "~~/LSP3ProfileMetadata.json";
 import { ConnectSocialAccounts } from "~~/components/updev/";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
+import upRegistryProfile from "~~/types/Profile";
 import { convertIpfsUrl } from "~~/utils/helpers";
-import lspSchemas from "~~/LSP3ProfileMetadata.json"
-import UniversalProfileContract from '@lukso/lsp-smart-contracts/artifacts/UniversalProfile.json'
-import Profile from "~~/types/Profile";
 
 // TODO change from ethers to viem?
 
@@ -42,7 +42,7 @@ const Profile: NextPage = () => {
     functionName: "upByEOA",
     args: [account.address],
   }); // @ts-ignore
-  const myProfile: Profile | undefined = _myProfile;
+  const myProfile: upRegistryProfile | undefined = _myProfile;
   const isMyProfile = myProfile && address == myProfile.up;
 
   const { data: tokenIdsOf } = useScaffoldContractRead({
@@ -70,7 +70,7 @@ const Profile: NextPage = () => {
   }, [tokensData, accounts]);
 
   useEffect(() => {
-    console.log('upLukso', upLukso);
+    console.log("upLukso", upLukso);
     if (upLukso) {
       setIsLoading(false);
     }
@@ -79,15 +79,9 @@ const Profile: NextPage = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const erc725js = new ERC725(
-          lspSchemas as ERC725JSONSchema[],
-          upLukso,
-          "https://rpc.lukso.gateway.fm",
-          {
-            ipfsGateway: "https://api.universalprofile.cloud/ipfs",
-          }
-        );
-        
+        const erc725js = new ERC725(lspSchemas as ERC725JSONSchema[], upLukso, "https://rpc.lukso.gateway.fm", {
+          ipfsGateway: "https://api.universalprofile.cloud/ipfs",
+        });
         const profileMetaData = await erc725js.fetchData("LSP3Profile");
 
         // Get LSP24 reference from Lukso Mainnet UP to Mumbai (chain id = 0x13881 = 80001) UP
@@ -110,7 +104,7 @@ const Profile: NextPage = () => {
 
   const handleVerify = async () => {
     if (!window.lukso) {
-      alert('Enable Universal Profile browser extension.');
+      alert("Enable Universal Profile browser extension.");
     } else {
       if (!upLukso) {
         return;
@@ -118,7 +112,7 @@ const Profile: NextPage = () => {
       setIsVerifying(true);
       const accounts = await window.lukso.request({ method: "eth_requestAccounts" });
       if (accounts[0] !== upLukso) {
-        alert('Invalid profile. Please select profile that you used for your sign-up on upDev.');
+        alert("Invalid profile. Please select profile that you used for your sign-up on upDev.");
         setIsVerifying(false);
         return;
       } else {
@@ -127,7 +121,7 @@ const Profile: NextPage = () => {
         try {
           const schema = lspSchemas.find(s => s.name === LSP24_SCHEMA_NAME);
           if (!schema) {
-            console.error('Verification error: LSP24 schema not found');
+            console.error("Verification error: LSP24 schema not found");
             return;
           }
           const tx = await contract.setData(schema.key, address);
@@ -139,7 +133,7 @@ const Profile: NextPage = () => {
         setIsVerifying(false);
       }
     }
-  }
+  };
 
   if (!metadata) {
     return (
@@ -180,8 +174,13 @@ const Profile: NextPage = () => {
             <div className="flex items-center gap-3 flex-wrap">
               <div className="flex gap-1">
                 <div className="text-[#FFFFFFA3]">
-                  {(!isNotVerified && upLukso) ? (
-                    <a href={`https://wallet.universalprofile.cloud/` + upLukso} className="underline" target="_blank" rel="noreferrer">
+                  {!isNotVerified && upLukso ? (
+                    <a
+                      href={`https://wallet.universalprofile.cloud/` + upLukso}
+                      className="underline"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       @{metadata.LSP3Profile.name}
                     </a>
                   ) : (
@@ -247,13 +246,14 @@ const Profile: NextPage = () => {
             <div>
               <div className="text-[#e36969]">
                 ❗️This account is not yet verified on Lukso Mainnet.&nbsp;
-                {isMyProfile && (
-                  isVerifying ? (
+                {isMyProfile &&
+                  (isVerifying ? (
                     <>Veryfying...</>
                   ) : (
-                    <a href="#" onClick={() => handleVerify()} className="underline">Verify</a>
-                  )
-                )}
+                    <a href="#" onClick={() => handleVerify()} className="underline">
+                      Verify
+                    </a>
+                  ))}
               </div>
             </div>
           )}
