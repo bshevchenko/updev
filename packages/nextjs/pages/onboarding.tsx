@@ -10,6 +10,7 @@ import {
 } from "~~/components/updev/onboarding/";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 import { UniversalProfileContext } from "~~/providers/UniversalProfile";
+import Profile from "~~/types/Profile";
 
 const Onboarding: NextPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -18,18 +19,19 @@ const Onboarding: NextPage = () => {
   const account = useAccount(); // EOA connected to rainbow kit
   const router = useRouter();
 
-  const { data: profile } = useScaffoldContractRead({
-    contractName: "upRegistry",
+  const { data: _profile } = useScaffoldContractRead({
+    contractName: "upRegistry", // @ts-ignore
     functionName: "upByEOA",
     args: [account.address],
-  });
+  }); // @ts-ignore
+  const profile: Profile | undefined = _profile;
 
   useEffect(() => {
     if (!account.isConnected) {
       router.push("/");
       return;
     }
-    if (profile && profile[0] != "0x0000000000000000000000000000000000000000") {
+    if (profile && profile.up != "0x0000000000000000000000000000000000000000") {
       setCurrentStep(3);
       return;
     }
@@ -57,7 +59,7 @@ const Onboarding: NextPage = () => {
 
         {currentStep === 2 && <DeployUniversalProfileStep setCurrentStep={setCurrentStep} />}
 
-        {currentStep === 3 && <ConnectSocialAccountsStep luksoUP={profile && profile[0]} />}
+        {currentStep === 3 && <ConnectSocialAccountsStep luksoUP={profile && profile.up} />}
       </div>
     </>
   );

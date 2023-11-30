@@ -30,12 +30,13 @@ It leverages [Lukso Network](https://lukso.network/), [Univeral Profiles browser
 
 ✅ Chainlink Functions are currently not supported on Lukso networks, so users can connect with both their Polygon Mumbai wallet and their Universal Profile browser extension to deploy their Universal Profile onto Polygon Mumbai where Chainlink Functions are supported.
 
+✅ LSP24 (experimental) verification of user's Universal Profiles.
+
 ✅ Profile page where users can connect their web2/web3 accounts and see all information associated with them, as well as users original Lukso Mainnet Universal Profiles metadata.
 
 ✅ Discover Profiles page that lists a directory of all upDev developers.
 
-[TODO] deploy UP on Polygon Mumbai AT THE SAME ADDRESS using LSP23<br />
-[TODO] implement LSP24 to link UPs on different chains
+[TODO] deploy UP on Polygon Mumbai AT THE SAME ADDRESS using LSP23
 
 ## Integrations
 
@@ -62,6 +63,17 @@ install dependencies:
 run the app
 
 `yarn start`
+
+## Verified Smart Contracts
+
+upDevAccountOwnership (LSP8 – NFT 2.0 Soulbound Collection)
+https://mumbai.polygonscan.com/address/0x9fc4937f337A7f20F290a4f532b7b2A8CB5BeDBf
+
+upDevFunctionsConsumer (Chainlink Functions Consumer & Minter)
+https://mumbai.polygonscan.com/address/0xaBc51E822d1F590615145B02B8a67Cca56CD612D
+
+upRegistry (upDev Profiles Registry)
+https://mumbai.polygonscan.com/address/0xB665840C5929d140494708A619dA834d944d8CBC
 
 ### Technologies Used
 
