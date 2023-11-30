@@ -9,7 +9,7 @@ import { ConnectSocialAccounts } from "~~/components/updev/";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 import { convertIpfsUrl } from "~~/utils/helpers";
 import lspSchemas from "~~/LSP3ProfileMetadata.json"
-import UniversalProfileContract from '@lukso/lsp-smart-contracts/artifacts/UniversalProfile.json' assert { type: 'json' }
+import UniversalProfileContract from '@lukso/lsp-smart-contracts/artifacts/UniversalProfile.json'
 import Profile from "~~/types/Profile";
 
 // TODO change from ethers to viem?
@@ -36,15 +36,6 @@ const Profile: NextPage = () => {
     args: [address],
   });
   const upLukso: string | undefined = profile && profile[2];
-
-  const erc725js = new ERC725(
-    lspSchemas as ERC725JSONSchema[],
-    upLukso,
-    "https://rpc.lukso.gateway.fm",
-    {
-      ipfsGateway: "https://api.universalprofile.cloud/ipfs",
-    }
-  );
 
   const { data: _myProfile } = useScaffoldContractRead({
     contractName: "upRegistry", // @ts-ignore
@@ -88,6 +79,15 @@ const Profile: NextPage = () => {
   useEffect(() => {
     async function fetchData() {
       try {
+        const erc725js = new ERC725(
+          lspSchemas as ERC725JSONSchema[],
+          upLukso,
+          "https://rpc.lukso.gateway.fm",
+          {
+            ipfsGateway: "https://api.universalprofile.cloud/ipfs",
+          }
+        );
+        
         const profileMetaData = await erc725js.fetchData("LSP3Profile");
 
         // Get LSP24 reference from Lukso Mainnet UP to Mumbai (chain id = 0x13881 = 80001) UP
@@ -106,7 +106,7 @@ const Profile: NextPage = () => {
       console.log("Fetching Lukso profile...");
       fetchData();
     }
-  }, [isLoading, upLukso, address, erc725js]);
+  }, [isLoading, upLukso, address]);
 
   const handleVerify = async () => {
     if (!window.lukso) {
