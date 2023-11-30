@@ -6,16 +6,18 @@ import { MetaHeader } from "~~/components/MetaHeader";
 import { LandingDisplay } from "~~/components/updev/";
 import { ConnectUniversalProfile } from "~~/components/updev/";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
+import Profile from "~~/types/Profile";
 
 const Home: NextPage = () => {
   const account = useAccount();
   const router = useRouter();
 
-  const { data: profile } = useScaffoldContractRead({
-    contractName: "upRegistry",
+  const { data: _profile } = useScaffoldContractRead({
+    contractName: "upRegistry", // @ts-ignore
     functionName: "upByEOA",
     args: [account.address],
-  });
+  }); // @ts-ignore
+  const profile: Profile | undefined = _profile;
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -27,11 +29,13 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     if (account.isConnected && !isLoading) {
-      const hasDeployedUP = profile && profile[0] != "0x0000000000000000000000000000000000000000";
+      const hasDeployedUP = profile && profile.up != "0x0000000000000000000000000000000000000000";
+      console.log("profile", profile);
+      console.log("hasDeployedUP", hasDeployedUP);
       if (!hasDeployedUP) {
         router.push("/onboarding");
       } else {
-        router.push("/profile/" + profile[0]);
+        router.push("/profile/" + profile.up);
       }
     }
   }, [account.isConnected, router, profile, isLoading]);

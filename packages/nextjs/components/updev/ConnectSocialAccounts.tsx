@@ -5,6 +5,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useAccount, useWalletClient } from "wagmi";
 import { ArrowTopRightOnSquareIcon, CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import { useScaffoldContract, useScaffoldContractRead, useScaffoldEventSubscriber } from "~~/hooks/scaffold-eth";
+import Profile from "~~/types/Profile";
 
 const socialAccounts = [
   {
@@ -84,11 +85,12 @@ export const ConnectSocialAccounts = () => {
   const [copied, setCopied] = useState(false);
   const [id, setId] = useState("");
 
-  const { data: profile } = useScaffoldContractRead({
-    contractName: "upRegistry",
+  const { data: _profile } = useScaffoldContractRead({
+    contractName: "upRegistry", // @ts-ignore
     functionName: "upByEOA",
     args: [account.address],
-  });
+  }); // @ts-ignore
+  const profile: Profile | undefined = _profile;
 
   const { data: walletClient } = useWalletClient();
   const { data: consumer } = useScaffoldContract({
@@ -99,7 +101,7 @@ export const ConnectSocialAccounts = () => {
   const { data: requests } = useScaffoldContractRead({
     contractName: "upDevFunctionsConsumer",
     functionName: "getUPRequests",
-    args: [profile && profile[0]],
+    args: [profile && profile.up],
   });
 
   useScaffoldEventSubscriber({
@@ -111,7 +113,7 @@ export const ConnectSocialAccounts = () => {
         if (!profile) {
           return;
         }
-        if (up != profile[0]) {
+        if (up != profile.up) {
           return; // TODO how to subscribe only to up's events?
         }
         if (isOwned) {
@@ -151,9 +153,9 @@ export const ConnectSocialAccounts = () => {
     if (!consumer || !profile) {
       return;
     }
-    console.log("handleVerify", sourceName, id, profile[0]);
+    console.log("handleVerify", sourceName, id, profile.up);
     try {
-      await consumer.write.sendRequest([877n, "0x", 0, 0n, sourceName, profile[0], id]);
+      await consumer.write.sendRequest([877n, "0x", 0, 0n, sourceName, profile.up, id]);
       setActiveModal(null);
       alert("Your account will appear on your page once it is verified.");
     } catch (e) {
@@ -164,7 +166,7 @@ export const ConnectSocialAccounts = () => {
   const renderModalContent = (title: string) => {
     const account = socialAccounts.find(account => account.title === title);
 
-    const link = `https://updev-v1.vercel.app/profile/${profile && profile[0]}`;
+    const link = `https://updev-v1.vercel.app/profile/${profile && profile.up}`;
     return (
       <div className="flex gap-5 items-center">
         <div className="rounded-lg overflow-hidden">

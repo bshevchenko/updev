@@ -8,6 +8,9 @@ import { useAccount } from "wagmi";
 import { ConnectSocialAccounts } from "~~/components/updev/";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 import { convertIpfsUrl } from "~~/utils/helpers";
+import lspSchemas from "~~/LSP3ProfileMetadata.json"
+import UniversalProfileContract from '@lukso/lsp-smart-contracts/artifacts/UniversalProfile.json' assert { type: 'json' }
+import Profile from "~~/types/Profile";
 
 // TODO change from ethers to viem?
 
@@ -15,23 +18,41 @@ interface Accounts {
   [key: string]: string;
 }
 
+const LSP24_SCHEMA_NAME = "LSP24MultichainAddressResolutionPolygon";
+
 const Profile: NextPage = () => {
   const router = useRouter();
   const address = Array.isArray(router.query.address) ? router.query.address[0] : router.query.address || "";
   const [metadata, setMetadata] = useState<any>(null);
+  const [isNotVerified, setIsNotVerified] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
   const account = useAccount();
+  const [isLoading, setIsLoading] = useState(true);
+  const [accounts, setAccounts] = useState<Accounts>({});
 
   const { data: profile } = useScaffoldContractRead({
     contractName: "upRegistry",
     functionName: "up",
     args: [address],
   });
+  const upLukso: string | undefined = profile && profile[2];
 
-  const { data: myProfile } = useScaffoldContractRead({
-    contractName: "upRegistry",
+  const erc725js = new ERC725(
+    lspSchemas as ERC725JSONSchema[],
+    upLukso,
+    "https://rpc.lukso.gateway.fm",
+    {
+      ipfsGateway: "https://api.universalprofile.cloud/ipfs",
+    }
+  );
+
+  const { data: _myProfile } = useScaffoldContractRead({
+    contractName: "upRegistry", // @ts-ignore
     functionName: "upByEOA",
     args: [account.address],
-  });
+  }); // @ts-ignore
+  const myProfile: Profile | undefined = _myProfile;
+  const isMyProfile = myProfile && address == myProfile.up;
 
   const { data: tokenIdsOf } = useScaffoldContractRead({
     contractName: "upDevAccountOwnership",
@@ -44,11 +65,6 @@ const Profile: NextPage = () => {
     functionName: "getDataBatch",
     args: [tokenIdsOf],
   });
-
-  const [isLoading, setIsLoading] = useState(true);
-  const [accounts, setAccounts] = useState<Accounts>({});
-
-  // TODO check LSP24 ref on Lukso Mainnet UP and return 404 if refs are not consistent
 
   useEffect(() => {
     if (!tokensData) {
@@ -63,35 +79,69 @@ const Profile: NextPage = () => {
   }, [tokensData, accounts]);
 
   useEffect(() => {
-    console.log("accounts", accounts);
-  }, [accounts]);
-
-  useEffect(() => {
-    if (profile) {
+    console.log('upLukso', upLukso);
+    if (upLukso) {
       setIsLoading(false);
     }
-  }, [profile]);
+  }, [upLukso]);
 
   useEffect(() => {
-    async function fetchData(_address: string) {
-      if (_address) {
-        const lsp3ProfileSchemaModule = await import("@erc725/erc725.js/schemas/LSP3ProfileMetadata.json");
-        const lsp3ProfileSchema = lsp3ProfileSchemaModule.default;
-        const erc725js = new ERC725(lsp3ProfileSchema as ERC725JSONSchema[], _address, "https://rpc.lukso.gateway.fm", {
-          ipfsGateway: "https://api.universalprofile.cloud/ipfs",
-        });
-        try {
-          const profileMetaData = await erc725js.fetchData("LSP3Profile");
-          setMetadata(profileMetaData.value);
-        } catch (error) {
-          console.error("Error fetching ERC725 data:", error);
+    async function fetchData() {
+      try {
+        const profileMetaData = await erc725js.fetchData("LSP3Profile");
+
+        // Get LSP24 reference from Lukso Mainnet UP to Mumbai (chain id = 0x13881 = 80001) UP
+        // TODO use proper LSP24 name once it is officialy released (once schema is available on erc725.js)
+        const lsp24 = await erc725js.fetchData(LSP24_SCHEMA_NAME);
+        if (lsp24.value !== address) {
+          setIsNotVerified(true);
         }
+
+        setMetadata(profileMetaData.value);
+      } catch (error) {
+        console.error("Error fetching ERC725 data:", error);
       }
     }
-    if (!isLoading && profile) {
-      fetchData(profile[2]);
+    if (!isLoading && upLukso) {
+      console.log("Fetching Lukso profile...");
+      fetchData();
+    } else {
+      console.log("Profile", profile);
     }
-  }, [isLoading, profile]);
+  }, [isLoading, profile, address]);
+
+  const handleVerify = async () => {
+    if (!window.lukso) {
+      alert('Enable Universal Profile browser extension.');
+    } else {
+      if (!upLukso) {
+        return;
+      }
+      setIsVerifying(true);
+      const accounts = await window.lukso.request({ method: "eth_requestAccounts" });
+      if (accounts[0] !== upLukso) {
+        alert('Invalid profile. Please select profile that you used for your sign-up on upDev.');
+        setIsVerifying(false);
+        return;
+      } else {
+        const web3Provider = new ethers.providers.Web3Provider(window.lukso);
+        const contract = new ethers.Contract(upLukso, UniversalProfileContract.abi, web3Provider.getSigner());
+        try {
+          const schema = lspSchemas.find(s => s.name === LSP24_SCHEMA_NAME);
+          if (!schema) {
+            console.error('Verification error: LSP24 schema not found');
+            return;
+          }
+          const tx = await contract.setData(schema.key, address);
+          await tx.wait();
+          setIsNotVerified(false);
+        } catch (e) {
+          console.error(e);
+        }
+        setIsVerifying(false);
+      }
+    }
+  }
 
   if (!metadata) {
     return (
@@ -131,7 +181,15 @@ const Profile: NextPage = () => {
           <div className="flex gap-3 items-center justify-between">
             <div className="flex items-center gap-3 flex-wrap">
               <div className="flex gap-1">
-                <div className="text-[#FFFFFFA3]">@{metadata.LSP3Profile.name}</div>
+                <div className="text-[#FFFFFFA3]">
+                  {(!isNotVerified && upLukso) ? (
+                    <a href={`https://wallet.universalprofile.cloud/` + upLukso} className="underline" target="_blank" rel="noreferrer">
+                      @{metadata.LSP3Profile.name}
+                    </a>
+                  ) : (
+                    <>@{metadata.LSP3Profile.name}</>
+                  )}
+                </div>
                 <div className="text-[#FFFFFF5C]">#{address.slice(2, 6)}</div>
               </div>
               <div className="text-[#FFFFFFA3]">{"\u2022"}</div>
@@ -187,6 +245,20 @@ const Profile: NextPage = () => {
               ))} */}
             </div>
           </div>
+          {isNotVerified && (
+            <div>
+              <div className="text-[#e36969]">
+                ❗️This account is not yet verified on Lukso Mainnet.&nbsp;
+                {isMyProfile && (
+                  isVerifying ? (
+                    <>Veryfying...</>
+                  ) : (
+                    <a href="#" onClick={() => handleVerify()} className="underline">Verify</a>
+                  )
+                )}
+              </div>
+            </div>
+          )}
           <div>
             <div className="text-[#FFFFFFA3]">Bio</div>
             <div>{metadata.LSP3Profile.description}</div>
@@ -224,8 +296,7 @@ const Profile: NextPage = () => {
             {/* <Image width={117} height={117} alt="achievement icon" src="/achievements/buildbox.svg" /> */}
           </div>
         </div>
-
-        {myProfile && address == myProfile[0] && (
+        {isMyProfile && (
           <div>
             <h3 className="text-2xl font-bold mb-3">Connect accounts</h3>
             <ConnectSocialAccounts />

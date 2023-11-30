@@ -1371,7 +1371,7 @@ const deployedContracts = {
       },
     },
     upRegistry: {
-      address: "0x4A99ABC656a6d50bfc6471a3da48c7F564020ed5",
+      address: "0xB665840C5929d140494708A619dA834d944d8CBC",
       abi: [
         {
           inputs: [],
@@ -1380,8 +1380,27 @@ const deployedContracts = {
         },
         {
           inputs: [],
-          name: "NoPermissionsSet",
+          name: "NoPermissions",
           type: "error",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "_upByEOA",
+          outputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
         },
         {
           inputs: [
@@ -1395,42 +1414,8 @@ const deployedContracts = {
           outputs: [
             {
               internalType: "address",
-              name: "up",
-              type: "address",
-            },
-            {
-              internalType: "address",
-              name: "keyManager",
-              type: "address",
-            },
-            {
-              internalType: "address",
-              name: "upLukso",
-              type: "address",
-            },
-            {
-              internalType: "address",
-              name: "eoa",
-              type: "address",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "_up",
-              type: "address",
-            },
-          ],
-          name: "permissions",
-          outputs: [
-            {
-              internalType: "bytes32",
               name: "",
-              type: "bytes32",
+              type: "address",
             },
           ],
           stateMutability: "view",
@@ -1457,25 +1442,6 @@ const deployedContracts = {
           name: "setUp",
           outputs: [],
           stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "km",
-              type: "address",
-            },
-          ],
-          name: "target",
-          outputs: [
-            {
-              internalType: "address",
-              name: "",
-              type: "address",
-            },
-          ],
-          stateMutability: "view",
           type: "function",
         },
         {
@@ -1516,34 +1482,41 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "address",
-              name: "",
+              name: "eoa",
               type: "address",
             },
           ],
           name: "upByEOA",
           outputs: [
             {
-              internalType: "address",
-              name: "up",
-              type: "address",
-            },
-            {
-              internalType: "address",
-              name: "keyManager",
-              type: "address",
-            },
-            {
-              internalType: "address",
-              name: "upLukso",
-              type: "address",
-            },
-            {
-              internalType: "address",
-              name: "eoa",
-              type: "address",
+              components: [
+                {
+                  internalType: "address",
+                  name: "up",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "keyManager",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "upLukso",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "eoa",
+                  type: "address",
+                },
+              ],
+              internalType: "struct upRegistry.Profile",
+              name: "",
+              type: "tuple",
             },
           ],
-          stateMutability: "view",
+          stateMutability: "nonpayable",
           type: "function",
         },
         {
