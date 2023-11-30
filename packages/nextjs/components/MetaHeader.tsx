@@ -14,9 +14,9 @@ type MetaHeaderProps = {
 const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/` : "/";
 
 export const MetaHeader = ({
-  title = "upDev – Universal Dev Profiles",
-  description = "Built with 🏗 Scaffold-ETH 2",
-  image = "favicon.svg",
+  title = "upDev",
+  description = "Universal Developer Profiles built with LUKSO deployable to any EVM compatible chain.",
+  image = "thumbnail.jpg",
   twitterCard = "summary_large_image",
   children,
 }: MetaHeaderProps) => {
