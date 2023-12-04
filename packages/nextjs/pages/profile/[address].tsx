@@ -176,6 +176,7 @@ const Profile: NextPage = () => {
           upLukso={upLukso}
           upMumbai={myProfile?.up}
           address={address}
+          isMyProfile={isMyProfile}
           isNotVerified={isNotVerified}
           accounts={accounts}
         />
@@ -221,11 +222,13 @@ function AccountDetails({
   upMumbai,
   upLukso,
   address,
+  isMyProfile,
   isNotVerified,
   accounts,
 }: {
   metadata: any;
   upDevUsername: any;
+  isMyProfile: boolean | undefined;
   upMumbai: string | undefined;
   upLukso: string | undefined;
   address: string;
@@ -317,9 +320,9 @@ function AccountDetails({
                 cancel
               </button>
             </>
-          ) : (
+          ) : isMyProfile ? (
             <PencilSquareIcon className="w-6 h-6 text-secondary cursor-pointer" onClick={() => setIsEditing(true)} />
-          )}
+          ) : null}
         </div>
         <div className="flex gap-3 items-center justify-between">
           <div className="flex items-center gap-3 flex-wrap">
