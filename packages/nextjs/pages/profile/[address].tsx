@@ -137,8 +137,14 @@ const Profile: NextPage = () => {
 
   if (!metadata) {
     return (
-      <div className="flex justify-center grow">
-        <span className="loading loading-spinner loading-lg"></span>
+      <div className="flex justify-center py-10">
+        <div className="flex flex-col gap-5 w-[48rem]">
+          <div className="skeleton w-full h-[200px] bg-base-200 w-full rounded-3xl animate-pulse"></div>
+          <div className="skeleton w-full h-5 bg-base-200 w-1/2 rounded-3xl animate-pulse"></div>
+          <div className="skeleton w-full h-5 bg-base-200 w-1/2 rounded-3xl animate-pulse"></div>
+          <div className="skeleton w-full h-5 bg-base-200 w-full rounded-3xl animate-pulse"></div>
+          <div className="skeleton w-full h-5 bg-base-200 w-full rounded-3xl animate-pulse"></div>
+        </div>
       </div>
     );
   }

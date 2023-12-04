@@ -233,16 +233,24 @@ export const ConnectSocialAccounts = () => {
               <p className="text-base-content my-0">{item.description}</p>
             </div>
             {isNotClaimed(item.name) ? (
-              <div>
-                <button onClick={() => setActiveModal(item.title)} className="btn" disabled={item.comingSoon}>
+              <div className="flex flex-col gap-2">
+                <button
+                  onClick={() => setActiveModal(item.title)}
+                  className="btn bg-primary text-primary-content hover:bg-primary"
+                  disabled={item.comingSoon}
+                >
                   Reconnect
                 </button>
-                <button onClick={() => handleClaim(item.name)} className="btn btn-primary">
+                <button onClick={() => handleClaim(item.name)} className="btn bg-accent hover:bg-accent w-full">
                   Claim
                 </button>
               </div>
             ) : (
-              <button onClick={() => setActiveModal(item.title)} className="btn btn-primary" disabled={item.comingSoon}>
+              <button
+                onClick={() => setActiveModal(item.title)}
+                className="btn bg-primary text-primary-content hover:bg-primary w-[117px]"
+                disabled={item.comingSoon}
+              >
                 Connect
               </button>
             )}
