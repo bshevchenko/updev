@@ -44,6 +44,8 @@ const Profile: NextPage = () => {
     args: [account.address],
   }); // @ts-ignore
   const myProfile: upRegistryProfile | undefined = _myProfile;
+
+  console.log("myProfile", myProfile);
   const isMyProfile = myProfile && address == myProfile.up;
 
   const { data: tokenIdsOf } = useScaffoldContractRead({
@@ -136,15 +138,15 @@ const Profile: NextPage = () => {
     }
   };
 
-  if (!metadata) {
+  if (!metadata || !myProfile) {
     return (
       <div className="flex justify-center py-10">
         <div className="flex flex-col gap-5 w-[48rem]">
           <div className="skeleton w-full h-[200px] bg-base-200 w-full rounded-3xl animate-pulse"></div>
-          <div className="skeleton w-full h-5 bg-base-200 w-1/2 rounded-3xl animate-pulse"></div>
-          <div className="skeleton w-full h-5 bg-base-200 w-1/2 rounded-3xl animate-pulse"></div>
-          <div className="skeleton w-full h-5 bg-base-200 w-full rounded-3xl animate-pulse"></div>
-          <div className="skeleton w-full h-5 bg-base-200 w-full rounded-3xl animate-pulse"></div>
+          <div className="skeleton w-1/2 h-5 bg-base-200 rounded-3xl animate-pulse"></div>
+          <div className="skeleton w-1/2 h-5 bg-base-200 rounded-3xl animate-pulse"></div>
+          <div className="skeleton w-full h-5 bg-base-200 rounded-3xl animate-pulse"></div>
+          <div className="skeleton w-full h-5 bg-base-200 rounded-3xl animate-pulse"></div>
         </div>
       </div>
     );
@@ -173,9 +175,7 @@ const Profile: NextPage = () => {
         <AccountDetails
           metadata={metadata}
           upDevUsername={upDevUsername}
-          upLukso={upLukso}
-          upMumbai={myProfile?.up}
-          address={address}
+          myProfile={myProfile}
           isMyProfile={isMyProfile}
           isNotVerified={isNotVerified}
           accounts={accounts}
@@ -217,25 +217,20 @@ const Profile: NextPage = () => {
 export default Profile;
 
 function AccountDetails({
+  myProfile,
   metadata,
   upDevUsername,
-  upMumbai,
-  upLukso,
-  address,
   isMyProfile,
   isNotVerified,
   accounts,
 }: {
+  myProfile: upRegistryProfile;
   metadata: any;
   upDevUsername: any;
   isMyProfile: boolean | undefined;
-  upMumbai: string | undefined;
-  upLukso: string | undefined;
-  address: string;
   isNotVerified: boolean;
   accounts: Accounts;
 }) {
-  // const [upDevUsername, setUpDevUsername] = useState<any>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [usernameInput, setUsernameInput] = useState("");
 
@@ -247,20 +242,12 @@ function AccountDetails({
     }
   }, [upDevUsername, metadata.LSP3Profile.name]);
 
-  console.log("upDevUsername", upDevUsername);
-
-  console.log("userNameInput", usernameInput);
-
-  // const handleUsernameUpdate = async () => {};
-
   const { write: updateUpDevUsername, isLoading } = useContractWrite({
-    address: upMumbai,
+    address: myProfile?.up,
     abi: UniversalProfileContract.abi,
     functionName: "setData",
     args: [toHex("username", { size: 32 }), toHex(usernameInput)],
   });
-
-  console.log(metadata, "metadata");
 
   return (
     <section>
@@ -328,9 +315,9 @@ function AccountDetails({
           <div className="flex items-center gap-3 flex-wrap">
             <div className="flex gap-1">
               <div className="text-[#FFFFFFA3]">
-                {!isNotVerified && upLukso ? (
+                {!isNotVerified && myProfile.upLukso ? (
                   <a
-                    href={`https://wallet.universalprofile.cloud/` + upLukso}
+                    href={`https://wallet.universalprofile.cloud/` + myProfile.upLukso}
                     className="underline"
                     target="_blank"
                     rel="noreferrer"
@@ -341,11 +328,11 @@ function AccountDetails({
                   <>@{metadata.LSP3Profile.name}</>
                 )}
               </div>
-              <div className="text-[#FFFFFF5C]">#{address.slice(2, 6)}</div>
+              <div className="text-[#FFFFFF5C]">#{myProfile.up.slice(2, 6)}</div>
             </div>
             <div className="text-[#FFFFFFA3]">{"\u2022"}</div>
             <div className="bg-base-100 border border-base-200 rounded-sm px-2 p-0.5">
-              🆙 <span className="text-[#FFFFFFA3]">{address.slice(0, 6) + "..." + address.slice(-4)}</span>
+              🆙 <span className="text-[#FFFFFFA3]">{myProfile.up.slice(0, 6) + "..." + myProfile.up.slice(-4)}</span>
             </div>
             {accounts["github"] && (
               <>
