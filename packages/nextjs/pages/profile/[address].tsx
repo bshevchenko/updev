@@ -5,7 +5,9 @@ import { ERC725, ERC725JSONSchema } from "@erc725/erc725.js";
 import UniversalProfileContract from "@lukso/lsp-smart-contracts/artifacts/UniversalProfile.json";
 import { ethers } from "ethers";
 import type { NextPage } from "next";
-import { useAccount } from "wagmi";
+import { hexToString, toHex } from "viem";
+import { useAccount, useContractRead, useContractWrite } from "wagmi";
+import { ExclamationTriangleIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import lspSchemas from "~~/LSP3ProfileMetadata.json";
 import { ConnectSocialAccounts } from "~~/components/updev/";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
@@ -22,13 +24,12 @@ const LSP24_SCHEMA_NAME = "LSP24MultichainAddressResolutionPolygon";
 
 const Profile: NextPage = () => {
   const router = useRouter();
+  const account = useAccount();
   const address = Array.isArray(router.query.address) ? router.query.address[0] : router.query.address || "";
-  const [metadata, setMetadata] = useState<any>(null);
   const [isNotVerified, setIsNotVerified] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
-  const account = useAccount();
-  const [isLoading, setIsLoading] = useState(true);
   const [accounts, setAccounts] = useState<Accounts>({});
+  const [metadata, setMetadata] = useState<any>(null);
 
   const { data: profile } = useScaffoldContractRead({
     contractName: "upRegistry",
@@ -57,24 +58,12 @@ const Profile: NextPage = () => {
     args: [tokenIdsOf],
   });
 
-  useEffect(() => {
-    if (!tokensData) {
-      return;
-    }
-    console.log("tokensData", tokensData);
-    tokensData.forEach(d => {
-      const [source, id] = ethers.utils.defaultAbiCoder.decode(["string", "string"], d);
-      accounts[source] = id;
-      setAccounts(accounts);
-    });
-  }, [tokensData, accounts]);
-
-  useEffect(() => {
-    console.log("upLukso", upLukso);
-    if (upLukso) {
-      setIsLoading(false);
-    }
-  }, [upLukso]);
+  const { data: upDevUsername } = useContractRead({
+    address: myProfile?.up,
+    abi: UniversalProfileContract.abi,
+    functionName: "getData",
+    args: [toHex("username", { size: 32 })],
+  });
 
   useEffect(() => {
     async function fetchData() {
@@ -96,11 +85,23 @@ const Profile: NextPage = () => {
         console.error("Error fetching ERC725 data:", error);
       }
     }
-    if (!isLoading && upLukso) {
+    if (upLukso) {
       console.log("Fetching Lukso profile...");
       fetchData();
     }
-  }, [isLoading, upLukso, address]);
+  }, [upLukso, address, setIsNotVerified]);
+
+  useEffect(() => {
+    if (!tokensData) {
+      return;
+    }
+    console.log("tokensData", tokensData);
+    tokensData.forEach(d => {
+      const [source, id] = ethers.utils.defaultAbiCoder.decode(["string", "string"], d);
+      accounts[source] = id;
+      setAccounts(accounts);
+    });
+  }, [tokensData, accounts]);
 
   const handleVerify = async () => {
     if (!window.lukso) {
@@ -152,132 +153,33 @@ const Profile: NextPage = () => {
   return (
     <div className="flex flex-col items-center py-10">
       <div className="max-w-3xl flex flex-col" style={{ minWidth: "48rem" }}>
-        <div className="relative mb-3">
-          <div className="w-full h-[200px] bg-base-200 rounded-xl overflow-hidden relative">
-            <Image
-              alt="cover picture"
-              fill
-              src={convertIpfsUrl(metadata.LSP3Profile.backgroundImage[1].url)}
-              className="object-cover object-center"
-            />
-          </div>
-          <div className="absolute -bottom-16 left-5 w-32">
-            <div className="rounded-full overflow-hidden w-full h-full border-[4px] border-base-300">
-              <Image
-                alt="profile picture"
-                width={500}
-                height={500}
-                src={convertIpfsUrl(metadata.LSP3Profile.profileImage[0].url)}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-col gap-4 mb-10 w-full pl-40">
-          <div>
-            <h3 className="text-2xl mb-0 font-bold">{metadata.LSP3Profile.name}</h3>
-          </div>
-          <div className="flex gap-3 items-center justify-between">
-            <div className="flex items-center gap-3 flex-wrap">
-              <div className="flex gap-1">
-                <div className="text-[#FFFFFFA3]">
-                  {!isNotVerified && upLukso ? (
-                    <a
-                      href={`https://wallet.universalprofile.cloud/` + upLukso}
-                      className="underline"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      @{metadata.LSP3Profile.name}
-                    </a>
-                  ) : (
-                    <>@{metadata.LSP3Profile.name}</>
-                  )}
-                </div>
-                <div className="text-[#FFFFFF5C]">#{address.slice(2, 6)}</div>
-              </div>
-              <div className="text-[#FFFFFFA3]">{"\u2022"}</div>
-              <div className="bg-base-100 border border-base-200 rounded-sm px-2 p-0.5">
-                🆙 <span className="text-[#FFFFFFA3]">{address.slice(0, 6) + "..." + address.slice(-4)}</span>
-              </div>
-              {accounts["github"] && (
-                <>
-                  <div className="text-[#FFFFFFA3]">{"\u2022"}</div>
-                  <a
-                    href={"https://github.com/" + accounts["github"]}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1"
-                  >
-                    <div>
-                      <Image width={14} height={14} alt="achievement icon" src="/link.svg" />
-                    </div>
-                    <div className="text-[#FFFFFFA3] underline mr-2">GitHub</div>
+        {isNotVerified && (
+          <div className="border border-[#e36969] rounded-lg p-4 mb-3">
+            <div className="text-[#e36969] flex items-center gap-3">
+              <ExclamationTriangleIcon className="w-6 h-6" />
+              This account is not yet verified on Lukso Mainnet.&nbsp;
+              {isMyProfile &&
+                (isVerifying ? (
+                  <>Veryfying...</>
+                ) : (
+                  <a href="#" onClick={() => handleVerify()} className="underline">
+                    Verify
                   </a>
-                </>
-              )}
-              {accounts["buidlguidl"] && (
-                <>
-                  <div className="text-[#FFFFFFA3]">{"\u2022"}</div>
-                  <a
-                    href={"https://app.buidlguidl.com/builders/" + accounts["buidlguidl"]}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1"
-                  >
-                    <div>
-                      <Image width={14} height={14} alt="achievement icon" src="/link.svg" />
-                    </div>
-                    <div className="text-[#FFFFFFA3] underline mr-2">BuidlGuidl</div>
-                  </a>
-                </>
-              )}
-              {/* {metadata.LSP3Profile.links.map((link: { title: string; url: string }, index: number) => (
-                <a
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  key={link.title}
-                  className="flex items-center gap-1"
-                >
-                  <div>
-                    <Image width={14} height={14} alt="achievement icon" src="/link.svg" />
-                  </div>
-                  <div className="text-[#FFFFFFA3] underline mr-2">{link.title}</div>
-                  {index < metadata.LSP3Profile.links.length - 1 && <div className="text-[#FFFFFFA3]">{"\u2022"}</div>}
-                </a>
-              ))} */}
+                ))}
             </div>
           </div>
-          {isNotVerified && (
-            <div>
-              <div className="text-[#e36969]">
-                ❗️This account is not yet verified on Lukso Mainnet.&nbsp;
-                {isMyProfile &&
-                  (isVerifying ? (
-                    <>Veryfying...</>
-                  ) : (
-                    <a href="#" onClick={() => handleVerify()} className="underline">
-                      Verify
-                    </a>
-                  ))}
-              </div>
-            </div>
-          )}
-          <div>
-            <div className="text-[#FFFFFFA3]">Bio</div>
-            <div>{metadata.LSP3Profile.description}</div>
-          </div>
-          <div className="flex gap-2">
-            {metadata.LSP3Profile.tags.map((tag: string) => (
-              <div
-                key={tag}
-                className="text-accent font-semibold bg-base-100 px-2 py-0.5 rounded-md border border-base-200"
-              >
-                {tag}
-              </div>
-            ))}
-          </div>
-        </div>
+        )}
+
+        <AccountDetails
+          metadata={metadata}
+          upDevUsername={upDevUsername}
+          upLukso={upLukso}
+          upMumbai={myProfile?.up}
+          address={address}
+          isNotVerified={isNotVerified}
+          accounts={accounts}
+        />
+
         <div className="mb-10">
           <h3 className="text-2xl font-bold mb-3">Achievements</h3>
           <div className="flex gap-3">
@@ -312,3 +214,200 @@ const Profile: NextPage = () => {
 };
 
 export default Profile;
+
+function AccountDetails({
+  metadata,
+  upDevUsername,
+  upMumbai,
+  upLukso,
+  address,
+  isNotVerified,
+  accounts,
+}: {
+  metadata: any;
+  upDevUsername: any;
+  upMumbai: string | undefined;
+  upLukso: string | undefined;
+  address: string;
+  isNotVerified: boolean;
+  accounts: Accounts;
+}) {
+  // const [upDevUsername, setUpDevUsername] = useState<any>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [usernameInput, setUsernameInput] = useState("");
+
+  useEffect(() => {
+    if (upDevUsername && upDevUsername !== "0x") {
+      setUsernameInput(hexToString(upDevUsername as `0x${string}`));
+    } else {
+      setUsernameInput(metadata.LSP3Profile.name);
+    }
+  }, [upDevUsername, metadata.LSP3Profile.name]);
+
+  console.log("upDevUsername", upDevUsername);
+
+  console.log("userNameInput", usernameInput);
+
+  // const handleUsernameUpdate = async () => {};
+
+  const { write: updateUpDevUsername, isLoading } = useContractWrite({
+    address: upMumbai,
+    abi: UniversalProfileContract.abi,
+    functionName: "setData",
+    args: [toHex("username", { size: 32 }), toHex(usernameInput)],
+  });
+
+  console.log(metadata, "metadata");
+
+  return (
+    <section>
+      <div className="relative mb-3">
+        <div className="w-full h-[200px] bg-base-200 rounded-xl overflow-hidden relative">
+          <Image
+            alt="cover picture"
+            fill
+            src={convertIpfsUrl(metadata.LSP3Profile.backgroundImage[1].url)}
+            className="object-cover object-center"
+          />
+        </div>
+        <div className="absolute -bottom-16 left-5 w-32">
+          <div className="rounded-full overflow-hidden w-full h-full border-[4px] border-base-300">
+            <Image
+              alt="profile picture"
+              width={500}
+              height={500}
+              src={convertIpfsUrl(metadata.LSP3Profile.profileImage[0].url)}
+            />
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-col gap-4 mb-10 w-full pl-40">
+        <div className="flex items-center gap-2">
+          {isEditing ? (
+            <input
+              value={usernameInput}
+              onChange={e => setUsernameInput(e.target.value)}
+              className="text-primary-content py-1 px-2 rounded-md"
+            />
+          ) : isLoading ? (
+            <div>Updating username...</div>
+          ) : (
+            <h3 className="text-2xl mb-0 font-bold">
+              {upDevUsername === "0x" ? metadata.LSP3Profile.name : hexToString(upDevUsername as `0x${string}`)}
+            </h3>
+          )}
+
+          {isEditing ? (
+            <>
+              <button
+                className="bg-accent py-1 px-3 rounded-md w-20"
+                onClick={() => {
+                  updateUpDevUsername();
+                  setIsEditing(false);
+                }}
+              >
+                save
+              </button>
+              <button
+                className="bg-secondary py-1 px-3 rounded-md w-20"
+                onClick={() => {
+                  setIsEditing(false);
+                }}
+              >
+                cancel
+              </button>
+            </>
+          ) : (
+            <PencilSquareIcon className="w-6 h-6 text-secondary cursor-pointer" onClick={() => setIsEditing(true)} />
+          )}
+        </div>
+        <div className="flex gap-3 items-center justify-between">
+          <div className="flex items-center gap-3 flex-wrap">
+            <div className="flex gap-1">
+              <div className="text-[#FFFFFFA3]">
+                {!isNotVerified && upLukso ? (
+                  <a
+                    href={`https://wallet.universalprofile.cloud/` + upLukso}
+                    className="underline"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    @{metadata.LSP3Profile.name}
+                  </a>
+                ) : (
+                  <>@{metadata.LSP3Profile.name}</>
+                )}
+              </div>
+              <div className="text-[#FFFFFF5C]">#{address.slice(2, 6)}</div>
+            </div>
+            <div className="text-[#FFFFFFA3]">{"\u2022"}</div>
+            <div className="bg-base-100 border border-base-200 rounded-sm px-2 p-0.5">
+              🆙 <span className="text-[#FFFFFFA3]">{address.slice(0, 6) + "..." + address.slice(-4)}</span>
+            </div>
+            {accounts["github"] && (
+              <>
+                <div className="text-[#FFFFFFA3]">{"\u2022"}</div>
+                <a
+                  href={"https://github.com/" + accounts["github"]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1"
+                >
+                  <div>
+                    <Image width={14} height={14} alt="achievement icon" src="/link.svg" />
+                  </div>
+                  <div className="text-[#FFFFFFA3] underline mr-2">GitHub</div>
+                </a>
+              </>
+            )}
+            {accounts["buidlguidl"] && (
+              <>
+                <div className="text-[#FFFFFFA3]">{"\u2022"}</div>
+                <a
+                  href={"https://app.buidlguidl.com/builders/" + accounts["buidlguidl"]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1"
+                >
+                  <div>
+                    <Image width={14} height={14} alt="achievement icon" src="/link.svg" />
+                  </div>
+                  <div className="text-[#FFFFFFA3] underline mr-2">BuidlGuidl</div>
+                </a>
+              </>
+            )}
+            {/* {metadata.LSP3Profile.links.map((link: { title: string; url: string }, index: number) => (
+                <a
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  key={link.title}
+                  className="flex items-center gap-1"
+                >
+                  <div>
+                    <Image width={14} height={14} alt="achievement icon" src="/link.svg" />
+                  </div>
+                  <div className="text-[#FFFFFFA3] underline mr-2">{link.title}</div>
+                  {index < metadata.LSP3Profile.links.length - 1 && <div className="text-[#FFFFFFA3]">{"\u2022"}</div>}
+                </a>
+              ))} */}
+          </div>
+        </div>
+        <div>
+          <div className="text-[#FFFFFFA3]">Bio</div>
+          <div>{metadata.LSP3Profile.description}</div>
+        </div>
+        <div className="flex gap-2">
+          {metadata.LSP3Profile.tags.map((tag: string) => (
+            <div
+              key={tag}
+              className="text-accent font-semibold bg-base-100 px-2 py-0.5 rounded-md border border-base-200"
+            >
+              {tag}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

@@ -22,7 +22,7 @@ const Profiles: NextPage = () => {
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-10">
         {profiles &&
           profiles.map((profile: any) => (
-            <Link href={`/profile/${profile.up}`} key={profile.upLukso}>
+            <Link href={`/profile/${profile.up}`} key={profile.up}>
               <ProfileCard upAddress={profile.upLukso} />
             </Link>
           ))}
