@@ -7,7 +7,7 @@ import { ethers } from "ethers";
 import type { NextPage } from "next";
 import { hexToString, toHex } from "viem";
 import { useAccount, useContractRead, useContractWrite } from "wagmi";
-import { ExclamationTriangleIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
+import { CheckCircleIcon, ExclamationTriangleIcon, PencilSquareIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import lspSchemas from "~~/LSP3ProfileMetadata.json";
 import { ConnectSocialAccounts } from "~~/components/updev/";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
@@ -45,7 +45,6 @@ const Profile: NextPage = () => {
   }); // @ts-ignore
   const myProfile: upRegistryProfile | undefined = _myProfile;
 
-  console.log("myProfile", myProfile);
   const isMyProfile = myProfile && address == myProfile.up;
 
   const { data: tokenIdsOf } = useScaffoldContractRead({
@@ -60,7 +59,7 @@ const Profile: NextPage = () => {
     args: [tokenIdsOf],
   });
 
-  const { data: upDevUsername } = useContractRead({
+  const { data: upDevUsername, refetch: refetchUpDevUsername } = useContractRead({
     address: myProfile?.up,
     abi: UniversalProfileContract.abi,
     functionName: "getData",
@@ -175,6 +174,7 @@ const Profile: NextPage = () => {
         <AccountDetails
           metadata={metadata}
           upDevUsername={upDevUsername}
+          refetchUpDevUsername={refetchUpDevUsername}
           myProfile={myProfile}
           isMyProfile={isMyProfile}
           isNotVerified={isNotVerified}
@@ -223,6 +223,7 @@ function AccountDetails({
   isMyProfile,
   isNotVerified,
   accounts,
+  refetchUpDevUsername,
 }: {
   myProfile: upRegistryProfile;
   metadata: any;
@@ -230,6 +231,7 @@ function AccountDetails({
   isMyProfile: boolean | undefined;
   isNotVerified: boolean;
   accounts: Accounts;
+  refetchUpDevUsername: any;
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [usernameInput, setUsernameInput] = useState("");
@@ -242,7 +244,7 @@ function AccountDetails({
     }
   }, [upDevUsername, metadata.LSP3Profile.name]);
 
-  const { write: updateUpDevUsername, isLoading } = useContractWrite({
+  const { writeAsync: updateUpDevUsername, isLoading } = useContractWrite({
     address: myProfile?.up,
     abi: UniversalProfileContract.abi,
     functionName: "setData",
@@ -272,12 +274,12 @@ function AccountDetails({
         </div>
       </div>
       <div className="flex flex-col gap-4 mb-10 w-full pl-40">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {isEditing ? (
             <input
               value={usernameInput}
               onChange={e => setUsernameInput(e.target.value)}
-              className="text-primary-content py-1 px-2 rounded-md"
+              className="py-1 px-2 rounded-md bg-base-200 border border-white"
             />
           ) : isLoading ? (
             <div>Updating username...</div>
@@ -290,21 +292,22 @@ function AccountDetails({
           {isEditing ? (
             <>
               <button
-                className="bg-accent py-1 px-3 rounded-md w-20"
-                onClick={() => {
-                  updateUpDevUsername();
+                className="bg-accent p-1 rounded-full w-8"
+                onClick={async () => {
+                  await updateUpDevUsername();
+                  await refetchUpDevUsername();
                   setIsEditing(false);
                 }}
               >
-                save
+                <CheckCircleIcon className="w-6 h-6" />
               </button>
               <button
-                className="bg-secondary py-1 px-3 rounded-md w-20"
+                className="bg-red-600 p-1 rounded-full"
                 onClick={() => {
                   setIsEditing(false);
                 }}
               >
-                cancel
+                <XCircleIcon className="w-6 h-6" />
               </button>
             </>
           ) : isMyProfile ? (
