@@ -235,6 +235,7 @@ function AccountDetails({
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [usernameInput, setUsernameInput] = useState("");
+  const [displayedUsername, setDisplayedUsername] = useState(hexToString(upDevUsername));
 
   useEffect(() => {
     if (upDevUsername && upDevUsername !== "0x") {
@@ -250,6 +251,13 @@ function AccountDetails({
     functionName: "setData",
     args: [toHex("username", { size: 32 }), toHex(usernameInput)],
   });
+
+  const handleSubmit = async () => {
+    await updateUpDevUsername();
+    setDisplayedUsername(usernameInput);
+    await refetchUpDevUsername();
+    setIsEditing(false);
+  };
 
   return (
     <section>
@@ -285,20 +293,13 @@ function AccountDetails({
             <div>Updating username...</div>
           ) : (
             <h3 className="text-2xl mb-0 font-bold">
-              {upDevUsername === "0x" ? metadata.LSP3Profile.name : hexToString(upDevUsername as `0x${string}`)}
+              {upDevUsername === "0x" ? metadata.LSP3Profile.name : displayedUsername}
             </h3>
           )}
 
           {isEditing ? (
-            <>
-              <button
-                className="bg-accent p-1 rounded-full w-8"
-                onClick={async () => {
-                  await updateUpDevUsername();
-                  await refetchUpDevUsername();
-                  setIsEditing(false);
-                }}
-              >
+            <div className="flex items-center gap-2">
+              <button className="bg-accent p-1 rounded-full w-8" onClick={() => handleSubmit()}>
                 <CheckCircleIcon className="w-6 h-6" />
               </button>
               <button
@@ -309,7 +310,7 @@ function AccountDetails({
               >
                 <XCircleIcon className="w-6 h-6" />
               </button>
-            </>
+            </div>
           ) : isMyProfile ? (
             <PencilSquareIcon className="w-6 h-6 text-secondary cursor-pointer" onClick={() => setIsEditing(true)} />
           ) : null}
