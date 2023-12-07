@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { LSP24_SCHEMA_NAME } from "./profile/[address]";
 import { ERC725, ERC725JSONSchema } from "@erc725/erc725.js";
@@ -49,10 +48,7 @@ const Profiles: NextPage = () => {
   return (
     <div className="px-5 md:px-10 lg:px-20">
       <div className="flex justify-center items-center my-20 gap-4">
-        <div className="">
-          <Image alt="SE2 logo" className="cursor-pointer" width={250} height={250} src="/logo.svg" />
-        </div>
-        <h1 className="text-center text-5xl mb-0 mt-1 font-bold">Profiles</h1>
+        <h1 className="text-center text-5xl mb-0 mt-1 font-bold">Discover Profiles</h1>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-10">
