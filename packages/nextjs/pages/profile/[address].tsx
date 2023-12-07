@@ -18,7 +18,7 @@ interface Accounts {
   [key: string]: string;
 }
 
-const LSP24_SCHEMA_NAME = "LSP24MultichainAddressResolutionPolygon";
+export const LSP24_SCHEMA_NAME = "LSP24MultichainAddressResolutionPolygon";
 
 const Profile: NextPage = () => {
   const router = useRouter();
@@ -90,6 +90,8 @@ const Profile: NextPage = () => {
         if (lsp24.value !== address) {
           setIsNotVerified(true);
         }
+
+        console.log("lsp24", lsp24);
 
         setMetadata(profileMetaData.value);
       } catch (error) {
