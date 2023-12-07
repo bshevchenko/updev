@@ -7,16 +7,10 @@ import type { NextPage } from "next";
 import lspSchemas from "~~/LSP3ProfileMetadata.json";
 import { ProfileCard } from "~~/components/updev";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
-
-type Profile = {
-  up: string;
-  upLukso: string;
-  keyManager: string;
-  eoa: string;
-};
+import upRegistryProfile from "~~/types/Profile";
 
 const Profiles: NextPage = () => {
-  const [verifiedProfiles, setVerifiedProfiles] = useState<Profile[] | undefined>(undefined);
+  const [verifiedProfiles, setVerifiedProfiles] = useState<upRegistryProfile[] | undefined>(undefined);
 
   const { data: profiles } = useScaffoldContractRead({
     contractName: "upRegistry",
@@ -24,13 +18,12 @@ const Profiles: NextPage = () => {
   });
 
   useEffect(() => {
-    const checkIfVerified = async (profile: Profile): Promise<boolean> => {
+    const checkIfVerified = async (profile: upRegistryProfile): Promise<boolean> => {
       try {
         const erc725js = new ERC725(lspSchemas as ERC725JSONSchema[], profile.upLukso, "https://rpc.lukso.gateway.fm", {
           ipfsGateway: "https://api.universalprofile.cloud/ipfs",
         });
         const lsp24 = await erc725js.fetchData(LSP24_SCHEMA_NAME);
-        console.log(lsp24.value, profile.up);
         return lsp24.value === profile.up;
       } catch (error) {
         console.log(error);
@@ -53,8 +46,6 @@ const Profiles: NextPage = () => {
     verifyProfiles();
   }, [profiles]);
 
-  console.log(profiles);
-
   return (
     <div className="px-5 md:px-10 lg:px-20">
       <div className="flex justify-center items-center my-20 gap-4">
@@ -66,7 +57,7 @@ const Profiles: NextPage = () => {
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-10">
         {verifiedProfiles &&
-          verifiedProfiles.map((profile: Profile) => (
+          verifiedProfiles.map((profile: upRegistryProfile) => (
             <Link href={`/profile/${profile.up}`} key={profile.upLukso}>
               <ProfileCard upAddress={profile.upLukso} />
             </Link>

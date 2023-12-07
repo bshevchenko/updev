@@ -91,8 +91,6 @@ const Profile: NextPage = () => {
           setIsNotVerified(true);
         }
 
-        console.log("lsp24", lsp24);
-
         setMetadata(profileMetaData.value);
       } catch (error) {
         console.error("Error fetching ERC725 data:", error);
