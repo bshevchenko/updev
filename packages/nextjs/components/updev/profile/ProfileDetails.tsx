@@ -9,7 +9,7 @@ import upRegistryProfile from "~~/types/Profile";
 import { convertIpfsUrl } from "~~/utils/helpers";
 
 export function ProfileDetails({
-  myProfile,
+  profile,
   metadata,
   upDevUsername,
   isMyProfile,
@@ -17,7 +17,7 @@ export function ProfileDetails({
   accounts,
   refetchUpDevUsername,
 }: {
-  myProfile: upRegistryProfile;
+  profile: upRegistryProfile;
   metadata: any;
   upDevUsername: any;
   isMyProfile: boolean | undefined;
@@ -39,7 +39,7 @@ export function ProfileDetails({
   }, [upDevUsername, metadata.LSP3Profile.name]);
 
   const { writeAsync: updateUpDevUsername, isLoading } = useContractWrite({
-    address: myProfile?.up,
+    address: profile?.up,
     abi: UniversalProfileContract.abi,
     functionName: "setData",
     args: [toHex("username", { size: 32 }), toHex(usernameInput)],
@@ -86,7 +86,7 @@ export function ProfileDetails({
             <div>Updating username...</div>
           ) : (
             <h3 className="text-2xl mb-0 font-bold">
-              {upDevUsername === "0x" ? metadata.LSP3Profile.name : displayedUsername}
+              {upDevUsername !== "0x" ? displayedUsername : metadata.LSP3Profile.name}
             </h3>
           )}
 
@@ -112,9 +112,9 @@ export function ProfileDetails({
           <div className="flex items-center gap-3 flex-wrap">
             <div className="flex gap-1">
               <div className="text-[#FFFFFFA3]">
-                {!isNotVerified && myProfile.upLukso ? (
+                {!isNotVerified && profile.upLukso ? (
                   <a
-                    href={`https://wallet.universalprofile.cloud/` + myProfile.upLukso}
+                    href={`https://wallet.universalprofile.cloud/` + profile.upLukso}
                     className="underline"
                     target="_blank"
                     rel="noreferrer"
@@ -125,11 +125,11 @@ export function ProfileDetails({
                   <>@{metadata.LSP3Profile.name}</>
                 )}
               </div>
-              <div className="text-[#FFFFFF5C]">#{myProfile.up.slice(2, 6)}</div>
+              <div className="text-[#FFFFFF5C]">#{profile.up.slice(2, 6)}</div>
             </div>
             <div className="text-[#FFFFFFA3]">{"\u2022"}</div>
             <div className="bg-base-100 border border-base-200 rounded-sm px-2 p-0.5">
-              🆙 <span className="text-[#FFFFFFA3]">{myProfile.up.slice(0, 6) + "..." + myProfile.up.slice(-4)}</span>
+              🆙 <span className="text-[#FFFFFFA3]">{profile.up.slice(0, 6) + "..." + profile.up.slice(-4)}</span>
             </div>
             {accounts["github"] && (
               <>
