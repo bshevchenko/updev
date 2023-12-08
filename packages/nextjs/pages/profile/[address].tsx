@@ -31,12 +31,18 @@ const Profile: NextPage = () => {
   const [accounts, setAccounts] = useState<Accounts>({});
   const [metadata, setMetadata] = useState<any>(null);
 
-  const { data: profile } = useScaffoldContractRead({
+  const { data: _profile } = useScaffoldContractRead({
     contractName: "upRegistry",
     functionName: "up",
     args: [address],
-  });
-  const upLukso: string | undefined = profile && profile[2];
+  }); // @ts-ignore
+  const profile: upRegistryProfile | undefined = _profile && {
+    up: _profile[0],
+    keyManager: _profile[1],
+    upLukso: _profile[2],
+    eoa: _profile[3],
+  };
+  const upLukso: string | undefined = _profile && _profile[2];
 
   const { data: _myProfile } = useScaffoldContractRead({
     contractName: "upRegistry", // @ts-ignore
@@ -60,13 +66,11 @@ const Profile: NextPage = () => {
   });
 
   const { data: upDevUsername, refetch: refetchUpDevUsername } = useContractRead({
-    address: myProfile?.up,
+    address: address,
     abi: UniversalProfileContract.abi,
     functionName: "getData",
     args: [toHex("username", { size: 32 })],
   });
-
-  console.log("upDevUsername", upDevUsername);
 
   useEffect(() => {
     async function fetchData() {
@@ -139,7 +143,7 @@ const Profile: NextPage = () => {
     }
   };
 
-  if (!metadata || !myProfile) {
+  if (!metadata || !profile) {
     return <LoadingSkeleton />;
   }
 
@@ -167,7 +171,7 @@ const Profile: NextPage = () => {
           metadata={metadata}
           upDevUsername={upDevUsername}
           refetchUpDevUsername={refetchUpDevUsername}
-          myProfile={myProfile}
+          profile={isMyProfile ? myProfile : profile}
           isMyProfile={isMyProfile}
           isNotVerified={isNotVerified}
           accounts={accounts}
