@@ -20,7 +20,7 @@ export interface Accounts {
   [key: string]: string;
 }
 
-const LSP24_SCHEMA_NAME = "LSP24MultichainAddressResolutionPolygon";
+export const LSP24_SCHEMA_NAME = "LSP24MultichainAddressResolutionPolygon";
 
 const Profile: NextPage = () => {
   const router = useRouter();
