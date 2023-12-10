@@ -13,33 +13,40 @@
 
 <br />
 
-This repo contains the code for a project submission for BuildUP #2 Hackathon on [buidlbox.io](https://app.buidlbox.io/lukso/build-up-2) which ended November 27th 2023 and [Chainlink Constellations Hackathon](https://chain.link/hackathon) which ended December 10th 2023.
+###### This repo contains the code for a project submission for BuildUP #2 Hackathon on [buidlbox.io](https://app.buidlbox.io/lukso/build-up-2) which ended November 27th 2023 and [Chainlink Constellations Hackathon](https://chain.link/hackathon) which ended December 10th 2023.
 
-upDev is a multi-chain dApp that allows you to mint your web2/web3 accounts like GitHub, Twitter or Buidlbox (thanks to Chainlink Functions) as soulbound NFT 2.0 (Lukso's LSP8) to create Universal Dev Profile, that will contain all your merits on-chain – somewhere where they can never be lost.
+Imagine having a universal decentralized identity/profile that will connect all your web2/web3 accounts and keep any valuable public data from these accounts forever.
+
+upDev is a multi-chain dApp that allows you to mint your web2/web3 accounts like GitHub, Twitter or Buidlbox (thanks to Chainlink Functions) as soulbound NFT 2.0 ([Lukso's LSP8](https://docs.lukso.tech/standards/tokens/LSP8-Identifiable-Digital-Asset/)) to create Universal Dev Profile, that will contain all your merits on-chain – somewhere where they can never be lost.
 
 It leverages [Lukso Network](https://lukso.network/), [Univeral Profiles browser extension](https://chromewebstore.google.com/detail/universal-profiles/abpickdkkbnbcoepogfhkhennhfhehfn), [Polygon Mumbai](https://mumbai.polygonscan.com/) and [Chainlink Functions](https://docs.chain.link/chainlink-functions)
 <br />
 
-<div><img src="profile.png" width="100%" /></div>
+<div><img src="https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/002/696/289/datas/gallery.jpg" width="100%" /></div>
 <div><img src="providers.png" width="40%" /><img src="connect.png" width="60%" /></div>
 <br />
 
 ## Features
+✅ Users can connect various web2/web3 accounts related to their developer activities to generate ownership-proofs which exist on-chain to verify they own their accounts using Chainlink Functions and earn achievements related to their activity.
 
-✅ Users can connect various web2/web3 accounts related to their developer activities to generate ownership-proofs which exist on-chain to verify they own their accounts using [Chainlink Functions]() and earn achievements related to their activity.
+✅ Chainlink Functions are currently not supported on [Lukso Network](https://lukso.network), so users can connect with both their Polygon Mumbai wallet and their Universal Profile browser extension to deploy their [Universal Profile](https://https://universalprofile.cloud/) onto Polygon Mumbai where Chainlink Functions are available now!
 
-✅ Chainlink Functions are currently not supported on Lukso networks, so users can connect with both their Polygon Mumbai wallet and their Universal Profile browser extension to deploy their Universal Profile onto Polygon Mumbai where Chainlink Functions are supported.
-
-✅ LSP24 (experimental) verification of user's Universal Profiles.
+✅ [LSP24](https://github.com/lukso-network/LIPs/issues/212) (experimental) verification of user's Universal Profiles.
 
 ✅ Profile page where users can connect their web2/web3 accounts and see all information associated with them, as well as users original Lukso Mainnet Universal Profiles metadata.
 
 ✅ Discover Profiles page that lists a directory of all upDev developers.
 
-[TODO] deploy UP on Polygon Mumbai AT THE SAME ADDRESS using LSP23<br />
-[TODO] retrieve on-chain and display on the dApp following GitHub account stats: date created, number of followers, contributions in the last year (available on Figma) and following BuidlGuidl account stats: date created, role, functions, number of builds<br />
-[TODO] allow to mint a Repo NFT (with number of stars & other stats) shared by repository contributors proportionally to a number of their contributions<br />
-[TODO] allow bounty hunters to share their API tokens in order to access paid APIs like Twitter/X API<br />
+## TODOs
+🌀 Deploy UP on Polygon Mumbai AT THE SAME ADDRESS using [LSP23](https://docs.lukso.tech/standards/generic-standards/lsp23-linked-contracts-factory)
+
+🌀 Retrieve on-chain and display on the dApp following GitHub account stats: date created, number of followers, contributions in the last year (available on [our Figma](https://www.figma.com/file/LVYEWZriiuiIdxoSq9mJ5g/upDev-v1.0?type=design&node-id=2102-385&mode=design&t=GnSTXkxvO6Wid6e1-0)) and following BuidlGuidl account stats: date created, role, functions, number of builds
+
+🌀 Allow to mint a Repo NFT (with number of stars & other stats) shared by repository contributors proportionally to a number of their contributions
+
+🌀 Allow bounty hunters to share their API tokens in exchange for a fee in order to give access to paid APIs like Twitter/X API
+
+🌀 Support GitCoin Passport, Buidlbox, Twitter/X & other providers
 
 ## Verified Smart Contracts
 
@@ -49,24 +56,12 @@ https://mumbai.polygonscan.com/address/0x9fc4937f337A7f20F290a4f532b7b2A8CB5BeDB
 upDevFunctionsConsumer (Chainlink Functions Consumer & Minter)
 https://mumbai.polygonscan.com/address/0xaBc51E822d1F590615145B02B8a67Cca56CD612D
 
-upRegistry (upDev Profiles Registry)
+upRegistry (upDev Profiles Registry)<br />
 https://mumbai.polygonscan.com/address/0xB665840C5929d140494708A619dA834d944d8CBC
 
 ## Figma Designs
 
 https://www.figma.com/file/LVYEWZriiuiIdxoSq9mJ5g/upDev-v1.0?type=design&node-id=2102-385&mode=design&t=GnSTXkxvO6Wid6e1-0
-
-## Integrations
-
-<b>LIVE</b><br />
-✅ [GitHub](https://github.com/) <br />
-✅ [Buidlguidl](https://buidlguidl.com/) <br />
-
-<b>Coming Soon</b><br />
-🌀 [buidlbox](https://app.buidlbox.io/) <br />
-🌀 [Gitcoin Passport](https://passport.gitcoin.co/) <br />
-🌀 [LinkedIn](https://www.linkedin.com/) <br />
-🌀 [X / Twitter](https://twitter.com/) <br />
 
 ## Run Frontend
 
