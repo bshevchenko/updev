@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
+// redeploy 1
+
 // modules
 import { LSP8Mintable } from "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/LSP8Mintable.sol";
 import { LSP8IdentifiableDigitalAssetCore } from "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/LSP8IdentifiableDigitalAssetCore.sol";
@@ -43,15 +45,15 @@ contract upDevAccountOwnership is LSP8Mintable {
         bool force,
         bytes memory data
     ) public override onlyOwner {
+        _setData(tokenId, data);
         if (_tokenOwners[tokenId] != address(0)) {
             if (_tokenOwners[tokenId] == to) {
                 return;
             }
-            _transfer(_tokenOwners[tokenId], to, tokenId, force, "0x");
+            _transfer(_tokenOwners[tokenId], to, tokenId, force, data);
             return;
         }
-        _mint(to, tokenId, force, "0x");
-        _setData(tokenId, data);
+        _mint(to, tokenId, force, data);
     }
 
     function transfer(

@@ -31,7 +31,7 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		string source;
 		string id;
 		bytes32 tokenId;
-		bytes tokenData;
+		bytes data;
 		bool isFinished;
 		bool isOwned;
 		bool isClaimed;
@@ -42,7 +42,8 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		address indexed up,
 		bool indexed isOwned,
 		string source,
-		string id
+		string id,
+		bytes data
 	);
 
 	mapping(string => Source) public source;
@@ -83,17 +84,35 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 			"const upAddress = args[0].toLowerCase();"
 			"const username = args[1];"
 			"const apiResponse = await Functions.makeHttpRequest({"
-			"  url: `https://api.github.com/users/${username}/social_accounts`,"
-			"  headers: secrets.apiKey ? {"
-			"    'Authorization': `Bearer ${secrets.apiKey}`"
-			"  } : {},"
+			"    url: 'https://api.github.com/graphql',"
+			"    method: 'POST',"
+			"    headers: secrets.apiKey ? {"
+			"        Authorization': `Bearer ${secrets.apiKey}`"
+			"    } : {},"
+			"    data: {"
+			"        query: `{ user(login: '${username}') { createdAt socialAccounts(last: 5) { nodes { url } } followers { totalCount } contributionsCollection { contributionCalendar { totalContributions } } } }`"
+			"    },"
 			"});"
 			"if (apiResponse.error) {"
-			"  throw Error('Request failed');"
+			"    throw Error('Request failed');"
 			"}"
-			"const { data } = apiResponse;"
-			"const urlFound = data.some(row => row.url.toLowerCase().includes(upAddress));"
-			"return Functions.encodeUint256(urlFound ? 1 : 0);",
+			"if (apiResponse.data.errors) {"
+			"    throw Error(JSON.stringify(apiResponse.data.errors));"
+			"}"
+			"const { user } = apiResponse.data.data;"
+			"const urlFound = user.socialAccounts.nodes.some(r => r.url.toLowerCase().includes(upAddress));"
+			"if (!urlFound) {"
+			"    throw Error('URL Not Found');"
+			"}"
+			"const daysCreated = Math.floor(((new Date()) - (new Date(user.createdAt))) / (1000 * 60 * 60 * 24));"
+			"const buffer = new Buffer(new ArrayBuffer(12)); "
+			"const uint32View = new Uint32Array(buffer.buffer);"
+			"uint32View.set(["
+			"    daysCreated,"
+			"    user.followers.totalCount,"
+			"    user.contributionsCollection.contributionCalendar.totalContributions"
+			"]);"
+			"return buffer",
 			false
 		);
 		addSource(
@@ -101,13 +120,21 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 			"const upAddress = args[0].toLowerCase();"
 			"const id = args[1];"
 			"const apiResponse = await Functions.makeHttpRequest({"
-			"  url: `https://buidlguidl-v3.appspot.com/builders/${id}`,"
+			"    url: 'https://buidlguidl-v3.appspot.com/builders/' + id,"
 			"});"
 			"if (apiResponse.error) {"
-			"  throw Error('Request failed');"
+			"    throw Error('Request failed');"
 			"}"
 			"const { data } = apiResponse;"
-			"return Functions.encodeUint256(data['status'] && data.status.text.toLowerCase().includes(upAddress) ? 1 : 0);",
+			"if (!data['status'] || !data.status.text.toLowerCase().includes(upAddress)) {"
+			"    throw Error('Not Owned');"
+			"}"
+			"return Buffer.concat(["
+			"Functions.encodeUint256(Math.floor(((new Date()) - (new Date(data.creationTimestamp))) / (1000 * 60 * 60 * 24))),"
+			"Functions.encodeString(data.role),"
+			"Functions.encodeString(data.function)"
+			"Functions.encodeUint256(data.builds.length),"
+			"])",
 			true
 		);
 		// TODO addSource buidlbox
@@ -143,14 +170,16 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		return sources;
 	}
 
-	function getUPRequests(address up) external view returns (Request[] memory) {
-        uint256 numRequests = upRequests[up].length;
-        Request[] memory result = new Request[](numRequests);
-        for (uint256 i = 0; i < numRequests; i++) {
-            result[i] = request[upRequests[up][i]];
-        }
-        return result;
-    }
+	function getUPRequests(
+		address up
+	) external view returns (Request[] memory) {
+		uint256 numRequests = upRequests[up].length;
+		Request[] memory result = new Request[](numRequests);
+		for (uint256 i = 0; i < numRequests; i++) {
+			result[i] = request[upRequests[up][i]];
+		}
+		return result;
+	}
 
 	/**
 	 * @notice Sends an HTTP request
@@ -190,8 +219,8 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 			up: up,
 			source: sourceName,
 			id: id,
-			tokenId: keccak256(abi.encodePacked(sourceName, id)), // TODO encode on claim?
-			tokenData: abi.encode(sourceName, id),
+			tokenId: keccak256(abi.encodePacked(sourceName, id)),
+			data: "0x",
 			isFinished: false,
 			isOwned: false,
 			isClaimed: false
@@ -211,16 +240,20 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		bytes memory err
 	) internal override {
 		request[requestId].isFinished = true;
-		if (isTrue(response)) {
+		if (err.length == 0) {
 			request[requestId].isOwned = true;
+			request[requestId].data = response;
 			token[request[requestId].tokenId] = requestId;
+		} else {
+			request[requestId].data = err;
 		}
 		emit Response(
 			requestId,
 			request[requestId].up,
 			request[requestId].isOwned,
 			request[requestId].source,
-			request[requestId].id
+			request[requestId].id,
+			request[requestId].data
 		);
 	}
 
@@ -233,7 +266,7 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 			request[id].up,
 			request[id].tokenId,
 			false,
-			request[id].tokenData
+			request[id].data
 		);
 		request[id].isClaimed = true;
 	}
