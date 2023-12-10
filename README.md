@@ -36,7 +36,25 @@ It leverages [Lukso Network](https://lukso.network/), [Univeral Profiles browser
 
 ✅ Discover Profiles page that lists a directory of all upDev developers.
 
-[TODO] deploy UP on Polygon Mumbai AT THE SAME ADDRESS using LSP23
+[TODO] deploy UP on Polygon Mumbai AT THE SAME ADDRESS using LSP23<br />
+[TODO] retrieve on-chain and display on the dApp following GitHub account stats: date created, number of followers, contributions in the last year (available on Figma) and following BuidlGuidl account stats: date created, role, functions, number of builds<br />
+[TODO] allow to mint a Repo NFT (with number of stars & other stats) shared by repository contributors proportionally to a number of their contributions<br />
+[TODO] allow bounty hunters to share their API tokens in order to access paid APIs like Twitter/X API<br />
+
+## Verified Smart Contracts
+
+upDevAccountOwnership (LSP8 – NFT 2.0 Soulbound Collection)
+https://mumbai.polygonscan.com/address/0x9fc4937f337A7f20F290a4f532b7b2A8CB5BeDBf
+
+upDevFunctionsConsumer (Chainlink Functions Consumer & Minter)
+https://mumbai.polygonscan.com/address/0xaBc51E822d1F590615145B02B8a67Cca56CD612D
+
+upRegistry (upDev Profiles Registry)
+https://mumbai.polygonscan.com/address/0xB665840C5929d140494708A619dA834d944d8CBC
+
+## Figma Designs
+
+https://www.figma.com/file/LVYEWZriiuiIdxoSq9mJ5g/upDev-v1.0?type=design&node-id=2102-385&mode=design&t=GnSTXkxvO6Wid6e1-0
 
 ## Integrations
 
@@ -63,21 +81,6 @@ install dependencies:
 run the app
 
 `yarn start`
-
-## Verified Smart Contracts
-
-upDevAccountOwnership (LSP8 – NFT 2.0 Soulbound Collection)
-https://mumbai.polygonscan.com/address/0x9fc4937f337A7f20F290a4f532b7b2A8CB5BeDBf
-
-upDevFunctionsConsumer (Chainlink Functions Consumer & Minter)
-https://mumbai.polygonscan.com/address/0xaBc51E822d1F590615145B02B8a67Cca56CD612D
-
-upRegistry (upDev Profiles Registry)
-https://mumbai.polygonscan.com/address/0xB665840C5929d140494708A619dA834d944d8CBC
-
-## Figma Designs
-
-https://www.figma.com/file/LVYEWZriiuiIdxoSq9mJ5g/upDev-v1.0?type=design&node-id=2102-385&mode=design&t=GnSTXkxvO6Wid6e1-0
 
 ### Technologies Used
 
