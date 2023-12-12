@@ -22,7 +22,7 @@ upDev is a multi-chain dApp that allows you to mint your web2/web3 accounts like
 It leverages [Lukso Network](https://lukso.network/), [Univeral Profiles browser extension](https://chromewebstore.google.com/detail/universal-profiles/abpickdkkbnbcoepogfhkhennhfhehfn), [Polygon Mumbai](https://mumbai.polygonscan.com/) and [Chainlink Functions](https://docs.chain.link/chainlink-functions)
 <br />
 
-<div><img src="https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/002/700/251/datas/original.png" width="100%" /></div>
+<div><img src="https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/002/700/276/datas/original.png" width="100%" /></div>
 <div><img src="providers.png" width="40%" /><img src="connect.png" width="60%" /></div>
 <br />
 
