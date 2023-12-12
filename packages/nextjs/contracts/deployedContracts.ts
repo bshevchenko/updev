@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   80001: {
     upDevAccountOwnership: {
-      address: "0xDde7F860677a427F17826D8A5e89BbA33f702956",
+      address: "0x61920aD058A32bd2d4BBB09DA85F2F8F2105477A",
       abi: [
         {
           inputs: [
@@ -698,27 +698,27 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "address",
-              name: "from",
+              name: "",
               type: "address",
             },
             {
               internalType: "address",
-              name: "to",
+              name: "",
               type: "address",
             },
             {
               internalType: "bytes32",
-              name: "tokenId",
+              name: "",
               type: "bytes32",
             },
             {
               internalType: "bool",
-              name: "force",
+              name: "",
               type: "bool",
             },
             {
               internalType: "bytes",
-              name: "data",
+              name: "",
               type: "bytes",
             },
           ],
@@ -731,27 +731,27 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "address[]",
-              name: "from",
+              name: "",
               type: "address[]",
             },
             {
               internalType: "address[]",
-              name: "to",
+              name: "",
               type: "address[]",
             },
             {
               internalType: "bytes32[]",
-              name: "tokenId",
+              name: "",
               type: "bytes32[]",
             },
             {
               internalType: "bool[]",
-              name: "force",
+              name: "",
               type: "bool[]",
             },
             {
               internalType: "bytes[]",
-              name: "data",
+              name: "",
               type: "bytes[]",
             },
           ],
@@ -800,7 +800,7 @@ const deployedContracts = {
       },
     },
     upDevFunctionsConsumer: {
-      address: "0x1EBc76Cd32B139635dbC1A148cA09426Eb66452d",
+      address: "0x3A91FC8E89c4872274639f0d961F0d4D152a7763",
       abi: [
         {
           inputs: [

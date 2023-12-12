@@ -108,13 +108,10 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 			"if (!user.socialAccounts.nodes.some(r => r.url.toLowerCase().includes(args[0].toLowerCase()))) {"
 			"  throw Error('URL Not Found');"
 			"}"
-			"return Functions.encodeString(JSON.stringify({"
-			"  source: 'github',"
-			"  id: args[1],"
-			"  days: Math.floor(((new Date()) - (new Date(user.createdAt))) / (1000 * 60 * 60 * 24)),"
-			"  followers: user.followers.totalCount,"
-			"  contributions: user.contributionsCollection.contributionCalendar.totalContributions"
-			"}));",
+			"const days = Math.floor(((new Date()) - (new Date(user.createdAt))) / (1000 * 60 * 60 * 24));"
+			"const uint32 = (v) => v.toString(16).padStart(64, '0');"
+			"const hex = uint32(days) + uint32(user.followers.totalCount) + uint32(user.contributionsCollection.contributionCalendar.totalContributions);"
+			"return Uint8Array.from(hex.match(/.{1,2}/g).map(b => parseInt(b, 16)));",
 			false
 		);
 		addSource(
@@ -129,14 +126,12 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 			"if (!data['status'] || !data.status.text.toLowerCase().includes(args[0].toLowerCase())) {"
 			"  throw Error('Not Owned');"
 			"}"
-			"return Functions.encodeString(JSON.stringify({"
-			"  source: 'buidlguidl',"
-			"  id: args[1],"
-			"  days: Math.floor(((new Date()) - (new Date(data.creationTimestamp))) / (1000 * 60 * 60 * 24)),"
-			"  role: data.role,"
-			"  function: data.function,"
-			"  builds: data.builds.length"
-			"}));",
+			"const days = Math.floor(((new Date()) - (new Date(data.creationTimestamp))) / (1000 * 60 * 60 * 24));"
+			"const roles = { builder: 1 };"
+			"const functions = { cadets: 1 };"
+			"const uint32 = v => v.toString(16).padStart(64, '0');"
+			"const hex = uint32(days) + uint32(data.builds.length) + uint32(roles[data.role] || 0) + uint32(functions[data.function] || 0);"
+			"return Uint8Array.from(hex.match(/.{1,2}/g).map(b => parseInt(b, 16)));",
 			true
 		);
 		// TODO addSource buidlbox
@@ -276,16 +271,6 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 	/**
 	 * HELPERS
 	 */
-	bytes32 targetPattern =
-		0x0000000000000000000000000000000000000000000000000000000000000001;
-	bytes targetBytes = abi.encodePacked(targetPattern);
-
-	function isTrue(bytes memory input) internal view returns (bool) {
-		return
-			input.length == targetBytes.length &&
-			keccak256(input) == keccak256(targetBytes);
-	}
-
 	function toAsciiString(address x) internal pure returns (string memory) {
 		bytes memory s = new bytes(40);
 		for (uint i = 0; i < 20; i++) {

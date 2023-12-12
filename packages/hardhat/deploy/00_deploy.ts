@@ -3,6 +3,10 @@ import { DeployFunction } from "hardhat-deploy/types";
 
 const subId = 877;
 
+function wait(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 /**
  * Deploys a contract named "YourContract" using the deployer account and
  * constructor arguments set to the deployer address
@@ -48,12 +52,15 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const consumer = await hre.ethers.getContract("upDevFunctionsConsumer", deployer);
 
   try {
-    // TODO check if consumer already added and skip if so
     const router = await hre.ethers.getContractAt(
       "IChainlinkFunctionsRouter",
-      "0x6e2dc0f9db014ae19888f539e59285d2ea04244c",
+      "0x6e2dc0f9db014ae19888f539e59285d2ea04244c", // polygon mumbai router
       deployer,
     );
+    const [isAdded] = await router.getConsumer(consumer.address, subId);
+    if (isAdded) {
+      throw new Error("skip");
+    }
     const tx = await router.addConsumer(subId, consumer.address, { gasPrice: 2850069165 });
     console.log("Adding consumer...", consumer.address);
     await tx.wait();
@@ -69,7 +76,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     console.log("Collection ownership already transferred");
   }
 
-  console.log("consumer.sendRequest...");
+  console.log("consumer.sendRequest( github )...");
   const tx = await consumer.sendRequest(
     subId,
     "0xfd4b538303d011a1ee86361cf33af34803dddef3d4a9ebbe9b5a3e61e58d3625d4ae1abcdb4c48845182373d3115ac9639956c1df6723d66bb5ff713061605ffbe2e7e7f1e75a186a5e0db36723cc979af7ca318fa034e1eddbcc2711adcc1bd4f6c5f6702587e05aa721b011c1c5f0dfee6f8fb0dcbbbef414eb7776a1e93ad7c69b317d03f4fe080704397ef7ff702b516653c2314bb1753345703e63b0e82bf",
@@ -80,6 +87,10 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     "bshevchenko",
     { gasPrice: 2850069165 },
   );
+  tx.wait().then(() => {
+    console.log("consumer.sendRequest( github ) waiting for Response...");
+  });
+  console.log("consumer.sendRequest( buidlguidl )...");
   const tx2 = await consumer.sendRequest(
     subId,
     "0x",
@@ -90,8 +101,35 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     "0x240588CeBBd7C2f7e146A9fC1F357C82A9C052DC",
     { gasPrice: 2850069165 },
   );
-  await Promise.all([tx.wait(), tx2.wait()]);
-  console.log("consumer.sendRequest done");
+  tx2.wait().then(() => {
+    console.log("consumer.sendRequest( buidlguidl ) waiting for Response...");
+  });
+
+  consumer.on("Response", async (requestId, up, isOwned, source, id, data) => {
+    let types;
+    if (source === "github") {
+      types = ["uint32", "uint32", "uint32"];
+    } else {
+      types = ["uint32", "uint32", "uint32", "uint32"];
+    }
+    const result = hre.ethers.utils.defaultAbiCoder.decode(types, data);
+    console.log(`${source} - ${id} - ${isOwned} - ${up} - ${requestId}`, result);
+    const tokenId = hre.ethers.utils.solidityKeccak256(["string", "string"], [source, id]);
+    try {
+      await consumer.claimToken(tokenId);
+    } catch (e: any) {
+      if (e.message.includes("replacement fee too low")) {
+        await wait(3000);
+        await consumer.claimToken(tokenId);
+      }
+    }
+
+    console.log(`${source} - ${id} token claimed`);
+  });
+
+  await wait(60000);
+
+  // TODO wait for Response and claim tokens after
 
   // await deploy("LSP23LinkedContractsFactory", {
   //   from: deployer,
