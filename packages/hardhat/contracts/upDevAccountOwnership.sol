@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-// redeploy
-
 // modules
 import { LSP8Mintable } from "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/LSP8Mintable.sol";
 import { LSP8IdentifiableDigitalAssetCore } from "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/LSP8IdentifiableDigitalAssetCore.sol";
@@ -32,9 +30,11 @@ contract upDevAccountOwnership is LSP8Mintable {
         bytes32 id;
         Name name;
         bytes data;
+        uint timestamp;
     }
 
     mapping (bytes32 => Name) public name; // token id => Name TODO get name from upDevFunctionsConsumer contract?
+    mapping (bytes32 => uint) public timestamp; // token id => mint/update Unix timestamp in seconds
 
     constructor(
         string memory nftCollectionName,
@@ -60,6 +60,7 @@ contract upDevAccountOwnership is LSP8Mintable {
         string memory id
     ) public onlyOwner {
         _setData(tokenId, data);
+        timestamp[tokenId] = block.timestamp;
         if (_tokenOwners[tokenId] != address(0)) {
             if (_tokenOwners[tokenId] == to) {
                 return;
@@ -82,7 +83,8 @@ contract upDevAccountOwnership is LSP8Mintable {
             tokens[i] = Token({
                 id: ids[i],
                 name: name[ids[i]],
-                data: data[i]
+                data: data[i],
+                timestamp: timestamp[ids[i]]
             });
         }
         return tokens;
