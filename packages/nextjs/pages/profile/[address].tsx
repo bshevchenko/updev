@@ -22,12 +22,14 @@ const GITHUB = "github";
 const BUIDLGUIDL = "buidlguidl";
 
 interface GitHubStats {
+  created: number; // timestamp in days
   days: number;
   followers: number;
   contributions: number;
 }
 
 interface BuidlGuidlStats {
+  created: number; // timestamp in days
   days: number;
   builds: number;
   role: string;
@@ -135,15 +137,20 @@ const Profile: NextPage = () => {
     console.log("tokens", tokens); // @ts-ignore
     tokens.forEach((t: Token) => {
       // const [source, id] = ethers.utils.defaultAbiCoder.decode(["string", "string"], d);
+      const unixTimestampInDays = Math.floor(Date.now() / 1000 / 86400);
       switch (t.name.source) {
         case GITHUB:
-          const [days, followers, contributions] = coder.decode(["uint32", "uint32", "uint32"], t.data); // @ts-ignore
-          t.stats = { days, followers, contributions };
+          const [created, followers, contributions] = coder.decode(["uint32", "uint32", "uint32"], t.data);
+          const days = unixTimestampInDays - created;
+          // @ts-ignore
+          t.stats = { created, days, followers, contributions };
           break;
 
         case BUIDLGUIDL: // @ts-ignore
-          const [days2, builds, role, func] = coder.decode(["uint32", "uint32", "uint32", "uint32"], t.data); // @ts-ignore
-          t.stats = { days: days2, builds: builds, role: roles[role], function: functions[func] };
+          const [created2, builds, role, func] = coder.decode(["uint32", "uint32", "uint32", "uint32"], t.data);
+          const days2 = unixTimestampInDays - created2;
+          // @ts-ignore
+          t.stats = { created: created2, days: days2, builds: builds, role: roles[role], function: functions[func] };
       }
       accounts[t.name.source] = t;
       setAccounts(accounts);

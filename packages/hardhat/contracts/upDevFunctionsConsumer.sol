@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
+// redeploy
+
 import { FunctionsClient } from "@chainlink/contracts/src/v0.8/functions/dev/v1_0_0/FunctionsClient.sol";
 import { ConfirmedOwner } from "@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol";
 import { FunctionsRequest } from "@chainlink/contracts/src/v0.8/functions/dev/v1_0_0/libraries/FunctionsRequest.sol";
@@ -108,9 +110,9 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 			"if (!user.socialAccounts.nodes.some(r => r.url.toLowerCase().includes(args[0].toLowerCase()))) {"
 			"  throw Error('URL Not Found');"
 			"}"
-			"const days = Math.floor(((new Date()) - (new Date(user.createdAt))) / (1000 * 60 * 60 * 24));"
+			"const created = Math.floor((new Date(user.createdAt)).getTime() / 86400000);"
 			"const uint32 = (v) => v.toString(16).padStart(64, '0');"
-			"const hex = uint32(days) + uint32(user.followers.totalCount) + uint32(user.contributionsCollection.contributionCalendar.totalContributions);"
+			"const hex = uint32(created) + uint32(user.followers.totalCount) + uint32(user.contributionsCollection.contributionCalendar.totalContributions);"
 			"return Uint8Array.from(hex.match(/.{1,2}/g).map(b => parseInt(b, 16)));",
 			false
 		);
@@ -126,11 +128,11 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 			"if (!data['status'] || !data.status.text.toLowerCase().includes(args[0].toLowerCase())) {"
 			"  throw Error('Not Owned');"
 			"}"
-			"const days = Math.floor(((new Date()) - (new Date(data.creationTimestamp))) / (1000 * 60 * 60 * 24));"
+			"const created = Math.floor(data.creationTimestamp / 86400000);"
 			"const roles = { builder: 1 };"
 			"const functions = { cadets: 1 };"
 			"const uint32 = v => v.toString(16).padStart(64, '0');"
-			"const hex = uint32(days) + uint32(data.builds.length) + uint32(roles[data.role] || 0) + uint32(functions[data.function] || 0);"
+			"const hex = uint32(created) + uint32(data.builds.length) + uint32(roles[data.role] || 0) + uint32(functions[data.function] || 0);"
 			"return Uint8Array.from(hex.match(/.{1,2}/g).map(b => parseInt(b, 16)));",
 			true
 		);
