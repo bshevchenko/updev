@@ -40,7 +40,7 @@ It leverages [Lukso Network](https://lukso.network/), [Univeral Profiles browser
 ## TODOs
 🌀 Deploy UP on Polygon Mumbai AT THE SAME ADDRESS using [LSP23](https://docs.lukso.tech/standards/generic-standards/lsp23-linked-contracts-factory)
 
-🌀 Retrieve on-chain and display on the dApp following GitHub account stats: date created, number of followers, contributions in the last year (available on [our Figma](https://www.figma.com/file/LVYEWZriiuiIdxoSq9mJ5g/upDev-v1.0?type=design&node-id=2102-385&mode=design&t=GnSTXkxvO6Wid6e1-0)) and following BuidlGuidl account stats: date created, role, functions, number of builds
+🌀 [DONE] Retrieve on-chain and display on the dApp following GitHub account stats: date created, number of followers, contributions in the last year and following BuidlGuidl account stats: date created, role, functions, number of builds
 
 🌀 Allow to mint a Repo NFT (with number of stars & other stats) shared by repository contributors proportionally to a number of their contributions
 
