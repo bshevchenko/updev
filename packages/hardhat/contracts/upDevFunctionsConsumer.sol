@@ -31,7 +31,7 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		string source;
 		string id;
 		bytes32 tokenId;
-		bytes tokenData;
+		bytes data;
 		bool isFinished;
 		bool isOwned;
 		bool isClaimed;
@@ -42,7 +42,8 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		address indexed up,
 		bool indexed isOwned,
 		string source,
-		string id
+		string id,
+		bytes data
 	);
 
 	mapping(string => Source) public source;
@@ -80,34 +81,57 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		setCollection(_collection);
 		addSource(
 			"github",
-			"const upAddress = args[0].toLowerCase();"
-			"const username = args[1];"
 			"const apiResponse = await Functions.makeHttpRequest({"
-			"  url: `https://api.github.com/users/${username}/social_accounts`,"
-			"  headers: secrets.apiKey ? {"
+			"  url: 'https://api.github.com/graphql',"
+			"  method: 'POST',"
+			"  headers: {"
 			"    'Authorization': `Bearer ${secrets.apiKey}`"
-			"  } : {},"
+			"  },"
+			"  data: {"
+			"    query: `{"
+			"      user(login: \"${args[1]}\") {"
+			"        createdAt"
+			"        socialAccounts(last: 5) { nodes { url } }"
+			"        followers { totalCount }"
+			"        contributionsCollection { contributionCalendar { totalContributions } }"
+			"      }"
+			"    }`"
+			"  },"
 			"});"
 			"if (apiResponse.error) {"
 			"  throw Error('Request failed');"
 			"}"
-			"const { data } = apiResponse;"
-			"const urlFound = data.some(row => row.url.toLowerCase().includes(upAddress));"
-			"return Functions.encodeUint256(urlFound ? 1 : 0);",
+			"if (apiResponse.data.errors) {"
+			"  throw Error(JSON.stringify(apiResponse.data.errors));"
+			"}"
+			"const { user } = apiResponse.data.data;"
+			"if (!user.socialAccounts.nodes.some(r => r.url.toLowerCase().includes(args[0].toLowerCase()))) {"
+			"  throw Error('URL Not Found');"
+			"}"
+			"const days = Math.floor(((new Date()) - (new Date(user.createdAt))) / (1000 * 60 * 60 * 24));"
+			"const uint32 = (v) => v.toString(16).padStart(64, '0');"
+			"const hex = uint32(days) + uint32(user.followers.totalCount) + uint32(user.contributionsCollection.contributionCalendar.totalContributions);"
+			"return Uint8Array.from(hex.match(/.{1,2}/g).map(b => parseInt(b, 16)));",
 			false
 		);
 		addSource(
 			"buidlguidl",
-			"const upAddress = args[0].toLowerCase();"
-			"const id = args[1];"
 			"const apiResponse = await Functions.makeHttpRequest({"
-			"  url: `https://buidlguidl-v3.appspot.com/builders/${id}`,"
+			"  url: 'https://buidlguidl-v3.appspot.com/builders/' + args[1],"
 			"});"
 			"if (apiResponse.error) {"
 			"  throw Error('Request failed');"
 			"}"
 			"const { data } = apiResponse;"
-			"return Functions.encodeUint256(data['status'] && data.status.text.toLowerCase().includes(upAddress) ? 1 : 0);",
+			"if (!data['status'] || !data.status.text.toLowerCase().includes(args[0].toLowerCase())) {"
+			"  throw Error('Not Owned');"
+			"}"
+			"const days = Math.floor(((new Date()) - (new Date(data.creationTimestamp))) / (1000 * 60 * 60 * 24));"
+			"const roles = { builder: 1 };"
+			"const functions = { cadets: 1 };"
+			"const uint32 = v => v.toString(16).padStart(64, '0');"
+			"const hex = uint32(days) + uint32(data.builds.length) + uint32(roles[data.role] || 0) + uint32(functions[data.function] || 0);"
+			"return Uint8Array.from(hex.match(/.{1,2}/g).map(b => parseInt(b, 16)));",
 			true
 		);
 		// TODO addSource buidlbox
@@ -143,14 +167,16 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		return sources;
 	}
 
-	function getUPRequests(address up) external view returns (Request[] memory) {
-        uint256 numRequests = upRequests[up].length;
-        Request[] memory result = new Request[](numRequests);
-        for (uint256 i = 0; i < numRequests; i++) {
-            result[i] = request[upRequests[up][i]];
-        }
-        return result;
-    }
+	function getUPRequests(
+		address up
+	) external view returns (Request[] memory) {
+		uint256 numRequests = upRequests[up].length;
+		Request[] memory result = new Request[](numRequests);
+		for (uint256 i = 0; i < numRequests; i++) {
+			result[i] = request[upRequests[up][i]];
+		}
+		return result;
+	}
 
 	/**
 	 * @notice Sends an HTTP request
@@ -190,8 +216,8 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 			up: up,
 			source: sourceName,
 			id: id,
-			tokenId: keccak256(abi.encodePacked(sourceName, id)), // TODO encode on claim?
-			tokenData: abi.encode(sourceName, id),
+			tokenId: keccak256(abi.encodePacked(sourceName, id)),
+			data: "0x",
 			isFinished: false,
 			isOwned: false,
 			isClaimed: false
@@ -211,16 +237,20 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		bytes memory err
 	) internal override {
 		request[requestId].isFinished = true;
-		if (isTrue(response)) {
+		if (err.length == 0) {
 			request[requestId].isOwned = true;
+			request[requestId].data = response;
 			token[request[requestId].tokenId] = requestId;
+		} else {
+			request[requestId].data = err;
 		}
 		emit Response(
 			requestId,
 			request[requestId].up,
 			request[requestId].isOwned,
 			request[requestId].source,
-			request[requestId].id
+			request[requestId].id,
+			request[requestId].data
 		);
 	}
 
@@ -233,7 +263,9 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 			request[id].up,
 			request[id].tokenId,
 			false,
-			request[id].tokenData
+			request[id].data,
+			request[id].source,
+			request[id].id
 		);
 		request[id].isClaimed = true;
 	}
@@ -241,16 +273,6 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 	/**
 	 * HELPERS
 	 */
-	bytes32 targetPattern =
-		0x0000000000000000000000000000000000000000000000000000000000000001;
-	bytes targetBytes = abi.encodePacked(targetPattern);
-
-	function isTrue(bytes memory input) internal view returns (bool) {
-		return
-			input.length == targetBytes.length &&
-			keccak256(input) == keccak256(targetBytes);
-	}
-
 	function toAsciiString(address x) internal pure returns (string memory) {
 		bytes memory s = new bytes(40);
 		for (uint i = 0; i < 20; i++) {

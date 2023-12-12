@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   80001: {
     upDevAccountOwnership: {
-      address: "0x9fc4937f337A7f20F290a4f532b7b2A8CB5BeDBf",
+      address: "0xc7cacc57479913D132c416c2AEBd4871b60d8b87",
       abi: [
         {
           inputs: [
@@ -492,6 +492,54 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "address",
+              name: "up",
+              type: "address",
+            },
+          ],
+          name: "getTokensByAddress",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "bytes32",
+                  name: "id",
+                  type: "bytes32",
+                },
+                {
+                  components: [
+                    {
+                      internalType: "string",
+                      name: "source",
+                      type: "string",
+                    },
+                    {
+                      internalType: "string",
+                      name: "id",
+                      type: "string",
+                    },
+                  ],
+                  internalType: "struct upDevAccountOwnership.Name",
+                  name: "name",
+                  type: "tuple",
+                },
+                {
+                  internalType: "bytes",
+                  name: "data",
+                  type: "bytes",
+                },
+              ],
+              internalType: "struct upDevAccountOwnership.Token[]",
+              name: "",
+              type: "tuple[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
               name: "operator",
               type: "address",
             },
@@ -534,10 +582,72 @@ const deployedContracts = {
               name: "data",
               type: "bytes",
             },
+            {
+              internalType: "string",
+              name: "source",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "id",
+              type: "string",
+            },
           ],
           name: "mint",
           outputs: [],
           stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "to",
+              type: "address",
+            },
+            {
+              internalType: "bytes32",
+              name: "tokenId",
+              type: "bytes32",
+            },
+            {
+              internalType: "bool",
+              name: "force",
+              type: "bool",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "mint",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
+            },
+          ],
+          name: "name",
+          outputs: [
+            {
+              internalType: "string",
+              name: "source",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "id",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
           type: "function",
         },
         {
@@ -698,27 +808,27 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "address",
-              name: "from",
+              name: "",
               type: "address",
             },
             {
               internalType: "address",
-              name: "to",
+              name: "",
               type: "address",
             },
             {
               internalType: "bytes32",
-              name: "tokenId",
+              name: "",
               type: "bytes32",
             },
             {
               internalType: "bool",
-              name: "force",
+              name: "",
               type: "bool",
             },
             {
               internalType: "bytes",
-              name: "data",
+              name: "",
               type: "bytes",
             },
           ],
@@ -731,27 +841,27 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "address[]",
-              name: "from",
+              name: "",
               type: "address[]",
             },
             {
               internalType: "address[]",
-              name: "to",
+              name: "",
               type: "address[]",
             },
             {
               internalType: "bytes32[]",
-              name: "tokenId",
+              name: "",
               type: "bytes32[]",
             },
             {
               internalType: "bool[]",
-              name: "force",
+              name: "",
               type: "bool[]",
             },
             {
               internalType: "bytes[]",
-              name: "data",
+              name: "",
               type: "bytes[]",
             },
           ],
@@ -800,7 +910,7 @@ const deployedContracts = {
       },
     },
     upDevFunctionsConsumer: {
-      address: "0xaBc51E822d1F590615145B02B8a67Cca56CD612D",
+      address: "0xB3C3fe24Cb8AE6505A48d2475914F60f3D10a57A",
       abi: [
         {
           inputs: [
@@ -944,6 +1054,12 @@ const deployedContracts = {
               internalType: "string",
               name: "id",
               type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
             },
           ],
           name: "Response",
@@ -1093,7 +1209,7 @@ const deployedContracts = {
                 },
                 {
                   internalType: "bytes",
-                  name: "tokenData",
+                  name: "data",
                   type: "bytes",
                 },
                 {
@@ -1188,7 +1304,7 @@ const deployedContracts = {
             },
             {
               internalType: "bytes",
-              name: "tokenData",
+              name: "data",
               type: "bytes",
             },
             {

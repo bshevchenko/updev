@@ -14,11 +14,47 @@ import { LoadingSkeleton, ProfileDetails } from "~~/components/updev/profile/";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 import upRegistryProfile from "~~/types/Profile";
 
+const coder = ethers.utils.defaultAbiCoder;
+
 // TODO change from ethers to viem?
 
-export interface Accounts {
-  [key: string]: string;
+const GITHUB = "github";
+const BUIDLGUIDL = "buidlguidl";
+
+interface GitHubStats {
+  days: number;
+  followers: number;
+  contributions: number;
 }
+
+interface BuidlGuidlStats {
+  days: number;
+  builds: number;
+  role: string;
+  function: string;
+}
+
+interface Token {
+  id: string;
+  data: string;
+  name: {
+    id: string;
+    source: string;
+  };
+  stats: GitHubStats & BuidlGuidlStats;
+}
+
+export interface Accounts {
+  [key: string]: Token;
+}
+
+const roles = {
+  1: "Builder",
+};
+
+const functions = {
+  1: "Cadets",
+};
 
 export const LSP24_SCHEMA_NAME = "LSP24MultichainAddressResolutionPolygon";
 
@@ -53,16 +89,10 @@ const Profile: NextPage = () => {
 
   const isMyProfile = myProfile && address == myProfile.up;
 
-  const { data: tokenIdsOf } = useScaffoldContractRead({
+  const { data: tokens } = useScaffoldContractRead({
     contractName: "upDevAccountOwnership",
-    functionName: "tokenIdsOf",
+    functionName: "getTokensByAddress",
     args: [address],
-  });
-
-  const { data: tokensData } = useScaffoldContractRead({
-    contractName: "upDevAccountOwnership",
-    functionName: "getDataBatch",
-    args: [tokenIdsOf],
   });
 
   const { data: upDevUsername, refetch: refetchUpDevUsername } = useContractRead({
@@ -99,16 +129,26 @@ const Profile: NextPage = () => {
   }, [upLukso, address, setIsNotVerified]);
 
   useEffect(() => {
-    if (!tokensData) {
+    if (!tokens) {
       return;
     }
-    console.log("tokensData", tokensData);
-    tokensData.forEach(d => {
-      const [source, id] = ethers.utils.defaultAbiCoder.decode(["string", "string"], d);
-      accounts[source] = id;
+    console.log("tokens", tokens); // @ts-ignore
+    tokens.forEach((t: Token) => {
+      // const [source, id] = ethers.utils.defaultAbiCoder.decode(["string", "string"], d);
+      switch (t.name.source) {
+        case GITHUB:
+          const [days, followers, contributions] = coder.decode(["uint32", "uint32", "uint32"], t.data); // @ts-ignore
+          t.stats = { days, followers, contributions };
+          break;
+
+        case BUIDLGUIDL: // @ts-ignore
+          const [days2, builds, role, func] = coder.decode(["uint32", "uint32", "uint32", "uint32"], t.data); // @ts-ignore
+          t.stats = { days: days2, builds: builds, role: roles[role], function: functions[func] };
+      }
+      accounts[t.name.source] = t;
       setAccounts(accounts);
     });
-  }, [tokensData, accounts]);
+  }, [tokens, accounts]);
 
   const handleVerify = async () => {
     if (!window.lukso) {
@@ -186,13 +226,30 @@ const Profile: NextPage = () => {
             <div className="tooltip tooltip-primary" data-tip="upDev Early Adopter">
               <Image width={117} height={117} alt="achievement icon" src="/achievements/og-updev.svg" />
             </div>
-            {accounts["github"] && (
-              <div className="tooltip tooltip-primary" data-tip="Verified GitHub Account">
+            {accounts[GITHUB] && (
+              <div
+                className="tooltip tooltip-primary"
+                data-tip={`
+                  Verified GitHub Account.
+                  Created ${accounts[GITHUB].stats.days} days ago, 
+                  ${accounts[GITHUB].stats.followers} followers,
+                  ${accounts[GITHUB].stats.contributions} contributions in the last year
+                `}
+              >
                 <Image width={117} height={117} alt="achievement icon" src="/achievements/github.svg" />
               </div>
             )}
-            {accounts["buidlguidl"] && (
-              <div className="tooltip tooltip-primary" data-tip="Verified BuidlGuidl Account">
+            {accounts[BUIDLGUIDL] && (
+              <div
+                className="tooltip tooltip-primary"
+                data-tip={`
+                  Verified BuidlGuidl Account.
+                  Created ${accounts[BUIDLGUIDL].stats.days} days ago, 
+                  ${accounts[BUIDLGUIDL].stats.role},
+                  ${accounts[BUIDLGUIDL].stats.function},
+                  ${accounts[BUIDLGUIDL].stats.builds} build(s) submitted
+                `}
+              >
                 <Image width={117} height={117} alt="achievement icon" src="/achievements/buidlguidl.svg" />
               </div>
             )}
