@@ -44,6 +44,7 @@ interface Token {
     source: string;
   };
   stats: GitHubStats & BuidlGuidlStats;
+  timestamp: bigint;
 }
 
 export interface Accounts {
@@ -194,6 +195,18 @@ const Profile: NextPage = () => {
     return <LoadingSkeleton />;
   }
 
+  function formatDate(date: Date) {
+    // Get day, month, and year components
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Month is zero-based
+    const year = date.getFullYear();
+
+    // Create the formatted date string
+    const formattedDate = `${day}.${month}.${year}`;
+
+    return formattedDate;
+  }
+
   return (
     <div className="flex flex-col items-center py-10">
       <div className="max-w-3xl flex flex-col" style={{ minWidth: "48rem" }}>
@@ -237,7 +250,7 @@ const Profile: NextPage = () => {
               <div
                 className="tooltip tooltip-primary"
                 data-tip={`
-                  Verified GitHub Account.
+                  Verified GitHub account on ${formatDate(new Date(Number(accounts[GITHUB].timestamp) * 1000))}.
                   Created ${accounts[GITHUB].stats.days} days ago, 
                   ${accounts[GITHUB].stats.followers} followers,
                   ${accounts[GITHUB].stats.contributions} contributions in the last year
@@ -250,7 +263,7 @@ const Profile: NextPage = () => {
               <div
                 className="tooltip tooltip-primary"
                 data-tip={`
-                  Verified BuidlGuidl Account.
+                  Verified BuidlGuidl account on ${formatDate(new Date(Number(accounts[BUIDLGUIDL].timestamp) * 1000))}.
                   Created ${accounts[BUIDLGUIDL].stats.days} days ago, 
                   ${accounts[BUIDLGUIDL].stats.role},
                   ${accounts[BUIDLGUIDL].stats.function},

@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   80001: {
     upDevAccountOwnership: {
-      address: "0xcf64E8D5f79b2d98042EA0dEf3Ff7D43ff889af5",
+      address: "0xe015eB341264Ac609761f31Beb1C55BE8b6C69b0",
       abi: [
         {
           inputs: [
@@ -527,6 +527,11 @@ const deployedContracts = {
                   name: "data",
                   type: "bytes",
                 },
+                {
+                  internalType: "uint256",
+                  name: "timestamp",
+                  type: "uint256",
+                },
               ],
               internalType: "struct upDevAccountOwnership.Token[]",
               name: "",
@@ -756,6 +761,25 @@ const deployedContracts = {
         {
           inputs: [
             {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
+            },
+          ],
+          name: "timestamp",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
               internalType: "address",
               name: "tokenOwner",
               type: "address",
@@ -910,7 +934,7 @@ const deployedContracts = {
       },
     },
     upDevFunctionsConsumer: {
-      address: "0x923431701D070F83C04112c8C12b255608171083",
+      address: "0x64B78FCB73500EB7Ce387b06bBa814BeaA7e2F9b",
       abi: [
         {
           inputs: [
