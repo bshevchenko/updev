@@ -155,7 +155,7 @@ export const ConnectSocialAccounts = () => {
     }
     console.log("handleVerify", sourceName, id, profile.up);
     try {
-      await consumer.write.sendRequest([877n, "0x", 0, 0n, sourceName, profile.up, id]);
+      await consumer.write.sendRequest([877n, "0xfd4b538303d011a1ee86361cf33af34803dddef3d4a9ebbe9b5a3e61e58d3625d4ae1abcdb4c48845182373d3115ac9639956c1df6723d66bb5ff713061605ffbe2e7e7f1e75a186a5e0db36723cc979af7ca318fa034e1eddbcc2711adcc1bd4f6c5f6702587e05aa721b011c1c5f0dfee6f8fb0dcbbbef414eb7776a1e93ad7c69b317d03f4fe080704397ef7ff702b516653c2314bb1753345703e63b0e82bf", 0, 0n, sourceName, profile.up, id]);
       setActiveModal(null);
       alert("Your account will appear on your page once it is verified.");
     } catch (e) {
