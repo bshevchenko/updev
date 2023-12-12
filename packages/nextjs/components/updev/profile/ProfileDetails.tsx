@@ -135,7 +135,7 @@ export function ProfileDetails({
               <>
                 <div className="text-[#FFFFFFA3]">{"\u2022"}</div>
                 <a
-                  href={"https://github.com/" + accounts["github"]}
+                  href={"https://github.com/" + accounts["github"].name.id}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-1"
@@ -151,7 +151,7 @@ export function ProfileDetails({
               <>
                 <div className="text-[#FFFFFFA3]">{"\u2022"}</div>
                 <a
-                  href={"https://app.buidlguidl.com/builders/" + accounts["buidlguidl"]}
+                  href={"https://app.buidlguidl.com/builders/" + accounts["buidlguidl"].name.id}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-1"
