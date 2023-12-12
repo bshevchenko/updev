@@ -46,8 +46,8 @@ const Profiles: NextPage = () => {
   }, [profiles]);
 
   return (
-    <div className="px-5 md:px-10 lg:px-20">
-      <div className="flex justify-center items-center my-20 gap-4">
+    <div className="px-5 md:px-10 lg:px-20 py-20">
+      <div className="flex justify-center items-center mb-20 gap-4">
         <h1 className="text-center text-5xl mb-0 mt-1 font-bold">Discover Profiles</h1>
       </div>
 

@@ -155,7 +155,15 @@ export const ConnectSocialAccounts = () => {
     }
     console.log("handleVerify", sourceName, id, profile.up);
     try {
-      await consumer.write.sendRequest([877n, "0xfd4b538303d011a1ee86361cf33af34803dddef3d4a9ebbe9b5a3e61e58d3625d4ae1abcdb4c48845182373d3115ac9639956c1df6723d66bb5ff713061605ffbe2e7e7f1e75a186a5e0db36723cc979af7ca318fa034e1eddbcc2711adcc1bd4f6c5f6702587e05aa721b011c1c5f0dfee6f8fb0dcbbbef414eb7776a1e93ad7c69b317d03f4fe080704397ef7ff702b516653c2314bb1753345703e63b0e82bf", 0, 0n, sourceName, profile.up, id]);
+      await consumer.write.sendRequest([
+        877n,
+        "0xfd4b538303d011a1ee86361cf33af34803dddef3d4a9ebbe9b5a3e61e58d3625d4ae1abcdb4c48845182373d3115ac9639956c1df6723d66bb5ff713061605ffbe2e7e7f1e75a186a5e0db36723cc979af7ca318fa034e1eddbcc2711adcc1bd4f6c5f6702587e05aa721b011c1c5f0dfee6f8fb0dcbbbef414eb7776a1e93ad7c69b317d03f4fe080704397ef7ff702b516653c2314bb1753345703e63b0e82bf",
+        0,
+        0n,
+        sourceName,
+        profile.up,
+        id,
+      ]);
       setActiveModal(null);
       alert("Your account will appear on your page once it is verified.");
     } catch (e) {
@@ -168,16 +176,16 @@ export const ConnectSocialAccounts = () => {
 
     const link = `https://updev-v1.vercel.app/profile/${profile && profile.up}`;
     return (
-      <div className="flex gap-5 items-center">
-        <div className="rounded-lg overflow-hidden">
+      <div className="flex gap-5 items-center w-full">
+        <div className="rounded-lg overflow-hidden hidden lg:flex">
           {account?.modalImage && <Image alt="brand logo" width={300} height={400} src={account?.modalImage} />}
         </div>
-        <div>
+        <div className="overflow-x-auto">
           <h2 className="text-2xl font-bold mb-14">How to Connect {account?.title}</h2>
           <ol className="list-decimal list-inside">
             <li className="text-xl">{account?.step1}</li>
             <div className="flex items-center gap-5 mt-2 mb-5">
-              <div className="w-[550px] bg-white text-black border border-white p-3 rounded-xl my-3 overflow-x-auto whitespace-nowrap hide-scrollbar">
+              <div className="bg-white text-black border border-white p-3 rounded-xl my-3 overflow-x-auto whitespace-nowrap hide-scrollbar">
                 {link}
               </div>
               <CopyToClipboard text={link} onCopy={() => setCopied(true)}>
@@ -195,11 +203,11 @@ export const ConnectSocialAccounts = () => {
             </div>
             <li className="text-xl mt-8">
               {account?.step2}
-              <div className="flex items-center gap-4 mt-2">
+              <div className="flex items-center mt-2 gap-3 w-full">
                 <input
                   type="text"
                   value={id}
-                  className="w-[550px] border border-base-200 p-2 rounded-xl my-3 bg-base-200"
+                  className="border border-base-200 p-2 rounded-xl my-3 bg-base-200 grow"
                   // style={{ backgroundColor: "#262626" }}
                   onChange={e => setId(e.target.value)}
                 />
