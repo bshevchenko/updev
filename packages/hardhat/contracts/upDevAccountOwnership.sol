@@ -20,6 +20,20 @@ enum TokenType {
 }
 
 contract upDevAccountOwnership is LSP8Mintable {
+
+    struct Name {
+        string source;
+        string id;
+    }
+
+    struct Token {
+        bytes32 id;
+        Name name;
+        bytes data;
+    }
+
+    mapping (bytes32 => Name) public name; // token id => Name TODO get name from upDevFunctionsConsumer contract?
+
     constructor(
         string memory nftCollectionName,
         string memory nftCollectionSymbol,
@@ -35,14 +49,14 @@ contract upDevAccountOwnership is LSP8Mintable {
         _setData(_LSP4_TOKEN_TYPE_DATA_KEY, abi.encode(TokenType.COLLECTION));
     }
 
-    error Soulbound();
-
     function mint(
         address to,
         bytes32 tokenId,
         bool force,
-        bytes memory data
-    ) public override onlyOwner {
+        bytes memory data,
+        string memory source,
+        string memory id
+    ) public onlyOwner {
         _setData(tokenId, data);
         if (_tokenOwners[tokenId] != address(0)) {
             if (_tokenOwners[tokenId] == to) {
@@ -52,7 +66,30 @@ contract upDevAccountOwnership is LSP8Mintable {
             return;
         }
         _mint(to, tokenId, force, data);
+        name[tokenId] = Name({
+            source: source,
+            id: id
+        });
     }
+
+    function getTokensByAddress(address up) external view returns (Token[] memory) {
+        bytes32[] memory ids = tokenIdsOf(up);
+        bytes[] memory data = getDataBatch(ids);
+        Token[] memory tokens = new Token[](ids.length);
+        for (uint256 i = 0; i < ids.length; i++) {
+            tokens[i] = Token({
+                id: ids[i],
+                name: name[ids[i]],
+                data: data[i]
+            });
+        }
+        return tokens;
+    }
+
+    /**
+     * SOULBOUND
+     */
+    error Soulbound();
 
     function transfer(
         address,
