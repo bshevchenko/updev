@@ -3,7 +3,7 @@ import Image from "next/image";
 import Modal from "./Modal";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useAccount, useWalletClient } from "wagmi";
-import { ArrowTopRightOnSquareIcon, CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
+import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import { useScaffoldContract, useScaffoldContractRead, useScaffoldEventSubscriber } from "~~/hooks/scaffold-eth";
 import Profile from "~~/types/Profile";
 
@@ -15,9 +15,17 @@ const socialAccounts = [
     comingSoon: false,
     description:
       "Connect your GitHub account to verify your proof-of-account-ownership and earn achievements related to your code commits and activity.",
-    step1: "Edit your GitHub profile to include the following link",
+    step1: (
+      <>
+        Edit your{" "}
+        <a href="https://github.com" className="underline cursor-pointer text-accent" target="_blank" rel="noreferrer">
+          GitHub profile
+        </a>{" "}
+        to include the following link
+      </>
+    ),
     step2: "Submit your GitHub username:",
-    modalImage: "/connectgithub.png",
+    modalImage: "/connect-github.png",
     url: "https://github.com",
   },
   {
@@ -27,9 +35,22 @@ const socialAccounts = [
     comingSoon: false,
     description:
       "Connect your buidlguidl account to verify your proof-of-account-ownership and earn achievements related to your scaffold-eth-2 builds, your role and your stream.",
-    step1: <>On your buidlguidl profile page, update your status to be</>,
-    step2: "Provide address of EOA associated with your BuidlGuidl profile",
-    modalImage: "/connectbuidlguidl.png",
+    step1: (
+      <>
+        On your BuidlGuidl{" "}
+        <a
+          href="https://app.buidlguidl.com/"
+          className="underline cursor-pointer text-accent"
+          target="_blank"
+          rel="noreferrer"
+        >
+          portfolio page
+        </a>
+        , update your status
+      </>
+    ),
+    step2: "Provide address of EOA for your BuidlGuidl profile",
+    modalImage: "/connect-bg.png",
     url: "https://app.buidlguidl.com/",
   },
   {
@@ -178,14 +199,14 @@ export const ConnectSocialAccounts = () => {
     return (
       <div className="flex gap-5 items-center w-full">
         <div className="rounded-lg overflow-hidden hidden lg:flex">
-          {account?.modalImage && <Image alt="brand logo" width={300} height={400} src={account?.modalImage} />}
+          {account?.modalImage && <Image alt="brand logo" width={400} height={400} src={account?.modalImage} />}
         </div>
         <div className="overflow-x-auto">
           <h2 className="text-2xl font-bold mb-14">How to Connect {account?.title}</h2>
           <ol className="list-decimal list-inside">
             <li className="text-xl">{account?.step1}</li>
             <div className="flex items-center gap-5 mt-2 mb-5">
-              <div className="bg-white text-black border border-white p-3 rounded-xl my-3 overflow-x-auto whitespace-nowrap hide-scrollbar">
+              <div className="bg-base-200 border-base-100 border p-3 rounded-xl my-3 overflow-x-auto whitespace-nowrap hide-scrollbar">
                 {link}
               </div>
               <CopyToClipboard text={link} onCopy={() => setCopied(true)}>
@@ -197,13 +218,10 @@ export const ConnectSocialAccounts = () => {
                   )}
                 </button>
               </CopyToClipboard>
-              <a href={account?.url} target="_blank" rel="noreferrer">
-                <ArrowTopRightOnSquareIcon className="w-6 h-6 cursor-pointer" />
-              </a>
             </div>
             <li className="text-xl mt-8">
               {account?.step2}
-              <div className="flex items-center mt-2 gap-3 w-full">
+              <div className="flex items-center my-2 gap-3 w-full">
                 <input
                   type="text"
                   value={id}
@@ -211,6 +229,8 @@ export const ConnectSocialAccounts = () => {
                   // style={{ backgroundColor: "#262626" }}
                   onChange={e => setId(e.target.value)}
                 />
+              </div>
+              <div className="flex justify-end">
                 <button className="btn btn-primary" onClick={() => handleVerify(title.toLowerCase(), id)}>
                   Submit
                 </button>
