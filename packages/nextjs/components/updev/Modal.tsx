@@ -1,5 +1,5 @@
 import React from "react";
-import { XCircleIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
 type ModalProps = {
   isOpen: boolean;
@@ -18,7 +18,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 
         <div className="relative bg-base-200 border border-base-200 rounded-lg p-7 max-w-5xl w-full">
           {children}
-          <XCircleIcon className="absolute top-4 right-4 w-10 h-10 hover:cursor-pointer" onClick={onClose} />
+          <XMarkIcon className="absolute top-4 right-4 w-10 h-10 hover:cursor-pointer" onClick={onClose} />
         </div>
       </div>
     </div>

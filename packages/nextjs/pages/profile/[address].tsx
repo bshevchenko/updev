@@ -209,7 +209,7 @@ const Profile: NextPage = () => {
 
   return (
     <div className="flex flex-col items-center py-10">
-      <div className="max-w-3xl flex flex-col" style={{ minWidth: "48rem" }}>
+      <div className="max-w-3xl flex flex-col">
         {isNotVerified && (
           <div className="border border-[#e36969] rounded-lg p-4 mb-3">
             <div className="text-[#e36969] flex items-center gap-3">
@@ -273,7 +273,6 @@ const Profile: NextPage = () => {
                 <Image width={117} height={117} alt="achievement icon" src="/achievements/buidlguidl.svg" />
               </div>
             )}
-            {/* <Image width={117} height={117} alt="achievement icon" src="/achievements/buildbox.svg" /> */}
           </div>
         </div>
         {isMyProfile && (

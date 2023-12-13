@@ -54,7 +54,7 @@ export function ProfileDetails({
 
   return (
     <section>
-      <div className="relative mb-3">
+      <div className="relative mb-3 md:min-w-[48rem]">
         <div className="w-full h-[200px] bg-base-200 rounded-xl overflow-hidden relative">
           <Image
             alt="cover picture"
@@ -184,7 +184,7 @@ export function ProfileDetails({
           <div className="text-[#FFFFFFA3]">Bio</div>
           <div>{metadata.LSP3Profile.description}</div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           {metadata.LSP3Profile.tags.map((tag: string) => (
             <div
               key={tag}

@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
-import { Bars3Icon, BugAntIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 
@@ -15,10 +15,13 @@ interface HeaderMenuLink {
 
 export const menuLinks: HeaderMenuLink[] = [
   {
-    label: "Debug Contracts",
-    href: "/debug",
-    icon: <BugAntIcon className="h-4 w-4" />,
+    label: "Discover Profiles",
+    href: "/profiles",
   },
+  // {
+  //   label: "Debug Contracts",
+  //   href: "/debug",
+  // },
 ];
 
 export const HeaderMenuLinks = () => {
@@ -68,7 +71,7 @@ export const Header = () => {
   }
 
   return (
-    <div className="sticky lg:static top-0 navbar min-h-0 flex-shrink-0 justify-between z-20 px-0 sm:px-2 border-b border-[#2D3748]">
+    <div className="sticky lg:static top-0 navbar min-h-0 flex-shrink-0 justify-between z-20 px-0 sm:px-2 bg-base-300 border-b border-[#2D3748]">
       <div className="navbar-start w-auto lg:w-1/2">
         <div className="lg:hidden dropdown" ref={burgerMenuRef}>
           <label
@@ -83,7 +86,7 @@ export const Header = () => {
           {isDrawerOpen && (
             <ul
               tabIndex={0}
-              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-300 rounded-box w-52"
               onClick={() => {
                 setIsDrawerOpen(false);
               }}
