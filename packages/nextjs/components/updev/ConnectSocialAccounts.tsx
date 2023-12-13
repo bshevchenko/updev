@@ -24,7 +24,7 @@ const socialAccounts = [
         to include the following link
       </>
     ),
-    step2: "Submit your GitHub username:",
+    step2: "Provide your GitHub username ( case sensitive )",
     modalImage: "/connect-github.png",
     url: "https://github.com",
   },
