@@ -23,7 +23,7 @@ It leverages [Lukso Network](https://lukso.network/), [Univeral Profiles browser
 <br />
 
 <div><img src="https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/002/700/276/datas/original.png" width="100%" /></div>
-<div><img src="providers.png" width="40%" /><img src="connect.png" width="60%" /></div>
+<div><img src="providers.png" width="40%" /><img src="https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/002/700/351/datas/original.png" width="60%" /></div>
 <br />
 
 ## Features
