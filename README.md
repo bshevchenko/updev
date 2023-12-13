@@ -67,7 +67,7 @@ https://www.figma.com/file/LVYEWZriiuiIdxoSq9mJ5g/upDev-v1.0?type=design&node-id
 
 first git clone this repo:
 
-`git clone https://github.com/tantodefi/updev.git`
+`git clone https://github.com/bshevchenko/updev.git`
 
 install dependencies:
 
