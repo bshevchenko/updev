@@ -22,12 +22,14 @@ const GITHUB = "github";
 const BUIDLGUIDL = "buidlguidl";
 
 interface GitHubStats {
+  created: number; // timestamp in days
   days: number;
   followers: number;
   contributions: number;
 }
 
 interface BuidlGuidlStats {
+  created: number; // timestamp in days
   days: number;
   builds: number;
   role: string;
@@ -42,6 +44,7 @@ interface Token {
     source: string;
   };
   stats: GitHubStats & BuidlGuidlStats;
+  timestamp: bigint;
 }
 
 export interface Accounts {
@@ -135,15 +138,20 @@ const Profile: NextPage = () => {
     console.log("tokens", tokens); // @ts-ignore
     tokens.forEach((t: Token) => {
       // const [source, id] = ethers.utils.defaultAbiCoder.decode(["string", "string"], d);
+      const unixTimestampInDays = Math.floor(Date.now() / 1000 / 86400);
       switch (t.name.source) {
         case GITHUB:
-          const [days, followers, contributions] = coder.decode(["uint32", "uint32", "uint32"], t.data); // @ts-ignore
-          t.stats = { days, followers, contributions };
+          const [created, followers, contributions] = coder.decode(["uint32", "uint32", "uint32"], t.data);
+          const days = unixTimestampInDays - created;
+          // @ts-ignore
+          t.stats = { created, days, followers, contributions };
           break;
 
         case BUIDLGUIDL: // @ts-ignore
-          const [days2, builds, role, func] = coder.decode(["uint32", "uint32", "uint32", "uint32"], t.data); // @ts-ignore
-          t.stats = { days: days2, builds: builds, role: roles[role], function: functions[func] };
+          const [created2, builds, role, func] = coder.decode(["uint32", "uint32", "uint32", "uint32"], t.data);
+          const days2 = unixTimestampInDays - created2;
+          // @ts-ignore
+          t.stats = { created: created2, days: days2, builds: builds, role: roles[role], function: functions[func] };
       }
       accounts[t.name.source] = t;
       setAccounts(accounts);
@@ -185,6 +193,18 @@ const Profile: NextPage = () => {
 
   if (!metadata || !profile) {
     return <LoadingSkeleton />;
+  }
+
+  function formatDate(date: Date) {
+    // Get day, month, and year components
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Month is zero-based
+    const year = date.getFullYear();
+
+    // Create the formatted date string
+    const formattedDate = `${day}.${month}.${year}`;
+
+    return formattedDate;
   }
 
   return (
@@ -230,7 +250,7 @@ const Profile: NextPage = () => {
               <div
                 className="tooltip tooltip-primary"
                 data-tip={`
-                  Verified GitHub Account.
+                  Verified GitHub account on ${formatDate(new Date(Number(accounts[GITHUB].timestamp) * 1000))}.
                   Created ${accounts[GITHUB].stats.days} days ago, 
                   ${accounts[GITHUB].stats.followers} followers,
                   ${accounts[GITHUB].stats.contributions} contributions in the last year
@@ -243,7 +263,7 @@ const Profile: NextPage = () => {
               <div
                 className="tooltip tooltip-primary"
                 data-tip={`
-                  Verified BuidlGuidl Account.
+                  Verified BuidlGuidl account on ${formatDate(new Date(Number(accounts[BUIDLGUIDL].timestamp) * 1000))}.
                   Created ${accounts[BUIDLGUIDL].stats.days} days ago, 
                   ${accounts[BUIDLGUIDL].stats.role},
                   ${accounts[BUIDLGUIDL].stats.function},

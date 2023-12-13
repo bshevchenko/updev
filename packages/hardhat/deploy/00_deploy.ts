@@ -83,7 +83,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     0,
     0,
     "github",
-    "0x7885f82e19e5950129cB78356C56DD571E792508",
+    "0x659278cb0106DB2fB1C840775CAc743a9703C22A",
     "bshevchenko",
     { gasPrice: 2850069165 },
   );
@@ -97,13 +97,16 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     0,
     0,
     "buidlguidl",
-    "0x7885f82e19e5950129cB78356C56DD571E792508",
+    "0x659278cb0106DB2fB1C840775CAc743a9703C22A",
     "0x240588CeBBd7C2f7e146A9fC1F357C82A9C052DC",
     { gasPrice: 2850069165 },
   );
   tx2.wait().then(() => {
     console.log("consumer.sendRequest( buidlguidl ) waiting for Response...");
   });
+  // github – 0x18D79f0AAB8e759CFA848fd0091c57614DD690B2 – timofeevs
+  // github – 0x659278cb0106DB2fB1C840775CAc743a9703C22A – MattPereira
+  // buidlguidl – 0x659278cb0106DB2fB1C840775CAc743a9703C22A – 0x41f727fA294E50400aC27317832A9F78659476B9
 
   consumer.on("Response", async (requestId, up, isOwned, source, id, data) => {
     let types;

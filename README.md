@@ -22,7 +22,7 @@ upDev is a multi-chain dApp that allows you to mint your web2/web3 accounts like
 It leverages [Lukso Network](https://lukso.network/), [Univeral Profiles browser extension](https://chromewebstore.google.com/detail/universal-profiles/abpickdkkbnbcoepogfhkhennhfhehfn), [Polygon Mumbai](https://mumbai.polygonscan.com/) and [Chainlink Functions](https://docs.chain.link/chainlink-functions)
 <br />
 
-<div><img src="https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/002/700/251/datas/original.png" width="100%" /></div>
+<div><img src="https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/002/700/276/datas/original.png" width="100%" /></div>
 <div><img src="providers.png" width="40%" /><img src="connect.png" width="60%" /></div>
 <br />
 
@@ -51,10 +51,10 @@ It leverages [Lukso Network](https://lukso.network/), [Univeral Profiles browser
 ## Verified Smart Contracts
 
 upDevAccountOwnership (LSP8 – NFT 2.0 Soulbound Collection)
-https://mumbai.polygonscan.com/address/0xc7cacc57479913D132c416c2AEBd4871b60d8b87
+https://mumbai.polygonscan.com/address/0xe015eB341264Ac609761f31Beb1C55BE8b6C69b0
 
 upDevFunctionsConsumer (Chainlink Functions Consumer & Minter)
-https://mumbai.polygonscan.com/address/0xB3C3fe24Cb8AE6505A48d2475914F60f3D10a57A
+https://mumbai.polygonscan.com/address/0x64B78FCB73500EB7Ce387b06bBa814BeaA7e2F9b
 
 upRegistry (upDev Profiles Registry)<br />
 https://mumbai.polygonscan.com/address/0xB665840C5929d140494708A619dA834d944d8CBC
