@@ -4,7 +4,7 @@
     <source media="(prefers-color-scheme: light)" srcset="logo-black.svg">
     <img alt="upDev" src="logo.svg">
   </picture>
-  <h3>Your universal dev profile – mint your web2/web3 accounts & merits on-chain. Powered by Lukso & Chainlink</h3>
+  <h3>Your universal dev profile – mint your web2/web3 accounts & merits on-chain.</h3>
   <h4>🏅 Winner of BuildUP #2 Lukso Hackathon</h4>
 </div>
 
