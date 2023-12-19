@@ -4,12 +4,12 @@
     <source media="(prefers-color-scheme: light)" srcset="logo-black.svg">
     <img alt="upDev" src="logo.svg">
   </picture>
-  <h3>Your universal dev profile – mint all your merits on-chain.</h3><h4>powered by Lukso & Chainlink</h4>
+  <h3>Your universal dev profile – mint all your merits on-chain. Powered by Lukso & Chainlink</h3>
+  <h4>🏅 Winner of BuildUP #2 Lukso Hackathon</h4>
 </div>
 
 <div align="center">
   <a href="https://www.youtube.com/watch?v=whP8iiYZW6Y">YouTube Video</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://updev-v1.vercel.app/">Live Site</a><br/><br/>
-  <h4>🏅 Winner of BuildUP #2 Lukso Hackathon</h4>
 </div>
 
 ###### This repo contains the code for a project submission for BuildUP #2 Lukso Hackathon on [buidlbox.io](https://app.buidlbox.io/lukso/build-up-2) which ended November 27th 2023 and [Chainlink Constellations Hackathon](https://devpost.com/software/updev) which ended December 10th 2023.
