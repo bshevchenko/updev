@@ -15,6 +15,10 @@ interface HeaderMenuLink {
 
 export const menuLinks: HeaderMenuLink[] = [
   {
+    label: "Home",
+    href: "/",
+  },
+  {
     label: "Discover Profiles",
     href: "/profiles",
   },
