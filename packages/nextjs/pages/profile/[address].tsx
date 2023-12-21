@@ -56,6 +56,7 @@ const roles = {
 };
 
 const functions = {
+  0: "Fullstack",
   1: "Cadets",
 };
 
