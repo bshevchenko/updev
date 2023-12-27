@@ -14,7 +14,7 @@
 
 ###### This repo contains the code for a project submission for BuildUP #2 Lukso Hackathon on [buidlbox.io](https://app.buidlbox.io/lukso/build-up-2) which ended November 27th 2023 and [Chainlink Constellations Hackathon](https://devpost.com/software/updev) which ended December 10th 2023.
 
-Imagine having a universal decentralized identity/profile that will connect all your web2/web3 accounts and keep any valuable public data from these accounts forever.
+Imagine having a universal decentralized identity/profile that will connect all your web2/web3 accounts and keep any valuable data from these accounts forever.
 
 upDev is a multi-chain dApp that allows you to mint your web2/web3 accounts like GitHub, Twitter or Buidlbox (thanks to Chainlink Functions) as soulbound NFT 2.0 ([Lukso's LSP8](https://docs.lukso.tech/standards/tokens/LSP8-Identifiable-Digital-Asset/)) to create Universal Dev Profile, that will contain all your merits on-chain – somewhere where they can never be lost.
 

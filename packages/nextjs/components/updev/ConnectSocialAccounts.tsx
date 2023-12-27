@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Modal from "./Modal";
+import { signIn } from "next-auth/react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useAccount, useWalletClient } from "wagmi";
 import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
@@ -279,7 +280,7 @@ export const ConnectSocialAccounts = () => {
               </div>
             ) : (
               <button
-                onClick={() => setActiveModal(item.title)}
+                onClick={() => (item.name === "github" ? signIn("instagram") : setActiveModal(item.title))}
                 className="btn bg-primary text-primary-content hover:bg-primary w-[117px]"
                 disabled={item.comingSoon}
               >

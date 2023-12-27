@@ -5,6 +5,7 @@ import { ERC725, ERC725JSONSchema } from "@erc725/erc725.js";
 import UniversalProfileContract from "@lukso/lsp-smart-contracts/artifacts/UniversalProfile.json";
 import { ethers } from "ethers";
 import type { NextPage } from "next";
+import { useSession } from "next-auth/react";
 import { toHex } from "viem";
 import { useAccount, useContractRead } from "wagmi";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
@@ -65,6 +66,7 @@ export const LSP24_SCHEMA_NAME = "LSP24MultichainAddressResolutionPolygon";
 const Profile: NextPage = () => {
   const router = useRouter();
   const account = useAccount();
+  const { data: session, status } = useSession();
   const address = Array.isArray(router.query.address) ? router.query.address[0] : router.query.address || "";
   const [isNotVerified, setIsNotVerified] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
@@ -158,6 +160,10 @@ const Profile: NextPage = () => {
       setAccounts(accounts);
     });
   }, [tokens, accounts]);
+
+  useEffect(() => {
+    console.log("SESSION", session);
+  }, [status]);
 
   const handleVerify = async () => {
     if (!window.lukso) {
