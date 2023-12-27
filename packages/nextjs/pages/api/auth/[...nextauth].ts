@@ -5,6 +5,7 @@ import TwitterProvider from "next-auth/providers/twitter";
 
 // TODO typescript
 export default NextAuth({
+  secret: process.env.SECRET,
   providers: [
     GithubProvider({
       // @ts-ignore
