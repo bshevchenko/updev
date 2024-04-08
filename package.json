@@ -39,6 +39,7 @@
     "ethereumjs-abi": "https://registry.npmjs.org/ethereumjs-abi/-/ethereumjs-abi-0.6.8.tgz"
   },
   "dependencies": {
+    "@typescript-eslint/eslint-plugin": "latest",
     "@typescript-eslint/parser": "latest",
     "next-auth": "^4.24.5"
   }

@@ -14951,6 +14951,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "se-2@workspace:."
   dependencies:
+    "@typescript-eslint/eslint-plugin": latest
     "@typescript-eslint/parser": latest
     husky: ^8.0.1
     lint-staged: ^13.0.3
