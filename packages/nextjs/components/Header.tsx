@@ -60,7 +60,6 @@ export const HeaderMenuLinks = () => {
 export const Header = () => {
   const account = useAccount();
   const { pathname } = useRouter();
-  console.log(pathname);
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const burgerMenuRef = useRef<HTMLDivElement>(null);
@@ -101,7 +100,7 @@ export const Header = () => {
         </div>
         <Link href="/" passHref className="hidden lg:flex items-center gap-2 ml-4 mr-6 shrink-0">
           <div className="flex relative w-36 h-12">
-            <Image alt="SE2 logo" className="cursor-pointer" fill src="/logo.svg" />
+            <Image alt="SE2 logo" className="cursor-pointer" fill src="/logo.svg" priority />
           </div>
           <div>
             <div className="badge badge-outline badge-accent rounded-sm px-0.5 border-[2px] text-[12px] font-bold">

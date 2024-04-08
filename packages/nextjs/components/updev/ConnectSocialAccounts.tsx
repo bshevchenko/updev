@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Modal from "./Modal";
 import { signIn } from "next-auth/react";
@@ -151,10 +151,6 @@ export const ConnectSocialAccounts = () => {
     },
   });
 
-  useEffect(() => {
-    console.log("Requests", requests);
-  }, [requests]);
-
   const isNotClaimed = (source: string) => {
     return requests && requests.some(r => r.source === source && r.isFinished && !r.isClaimed);
   };
@@ -257,7 +253,9 @@ export const ConnectSocialAccounts = () => {
           >
             <div>
               <div className="flex gap-3 items-center mb-3">
-                <Image alt="brand logo" width={24} height={24} src={item.logo} />
+                <div className="relative w-6 h-6">
+                  <Image fill alt="brand logo" src={item.logo} />
+                </div>
                 <h5 className="text-xl font-bold">{item.title}</h5>
                 {item.comingSoon && (
                   <div className="text-accent font-semibold border-2 border-accent rounded-md px-1">Coming soon</div>

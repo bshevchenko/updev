@@ -1,9 +1,25 @@
 // @ts-check
 
-/** @type {import('next').NextConfig} */
+/** @type {import("next").NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["ipfs.io", "gateway.ipfs.io", "api.universalprofile.cloud"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "ipfs.io",
+        pathname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "gateway.ipfs.io",
+        pathname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "api.universalprofile.cloud",
+        pathname: "**",
+      },
+    ],
   },
   reactStrictMode: true,
   typescript: {

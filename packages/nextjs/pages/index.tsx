@@ -30,8 +30,6 @@ const Home: NextPage = () => {
   useEffect(() => {
     if (account.isConnected && !isLoading) {
       const hasDeployedUP = profile && profile.up != "0x0000000000000000000000000000000000000000";
-      console.log("profile", profile);
-      console.log("hasDeployedUP", hasDeployedUP);
       if (!hasDeployedUP) {
         router.push("/onboarding");
       } else {

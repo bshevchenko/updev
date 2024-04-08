@@ -5,7 +5,6 @@ import { ERC725, ERC725JSONSchema } from "@erc725/erc725.js";
 import UniversalProfileContract from "@lukso/lsp-smart-contracts/artifacts/UniversalProfile.json";
 import { ethers } from "ethers";
 import type { NextPage } from "next";
-import { useSession } from "next-auth/react";
 import { toHex } from "viem";
 import { useAccount, useContractRead } from "wagmi";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
@@ -13,61 +12,34 @@ import lspSchemas from "~~/LSP3ProfileMetadata.json";
 import { ConnectSocialAccounts } from "~~/components/updev/";
 import { LoadingSkeleton, ProfileDetails } from "~~/components/updev/profile/";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
-import upRegistryProfile from "~~/types/Profile";
+import upRegistryProfile, {
+  Accounts,
+  BUIDLGUIDL,
+  GITHUB,
+  LSP24_SCHEMA_NAME,
+  Token,
+  functions,
+  roles,
+} from "~~/types/Profile";
 
-const coder = ethers.utils.defaultAbiCoder;
-
-// TODO change from ethers to viem?
-
-const GITHUB = "github";
-const BUIDLGUIDL = "buidlguidl";
-
-interface GitHubStats {
-  created: number; // timestamp in days
-  days: number;
-  followers: number;
-  contributions: number;
-}
-
-interface BuidlGuidlStats {
-  created: number; // timestamp in days
-  days: number;
-  builds: number;
-  role: string;
-  function: string;
-}
-
-interface Token {
-  id: string;
-  data: string;
-  name: {
-    id: string;
-    source: string;
-  };
-  stats: GitHubStats & BuidlGuidlStats;
-  timestamp: bigint;
-}
-
-export interface Accounts {
-  [key: string]: Token;
-}
-
-const roles = {
-  1: "Builder",
-};
-
-const functions = {
-  0: "Fullstack",
-  1: "Cadets",
-};
-
-export const LSP24_SCHEMA_NAME = "LSP24MultichainAddressResolutionPolygon";
+const coder = ethers.utils.defaultAbiCoder; // TODO change from ethers to viem
 
 const Profile: NextPage = () => {
   const router = useRouter();
+
+  if (!router.query.address) {
+    return <LoadingSkeleton />;
+  } else {
+    return (
+      <ProfileContents address={Array.isArray(router.query.address) ? router.query.address[0] : router.query.address} />
+    );
+  }
+};
+
+export default Profile;
+
+const ProfileContents = ({ address }: { address: string }) => {
   const account = useAccount();
-  const { data: session, status } = useSession();
-  const address = Array.isArray(router.query.address) ? router.query.address[0] : router.query.address || "";
   const [isNotVerified, setIsNotVerified] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [accounts, setAccounts] = useState<Accounts>({});
@@ -129,7 +101,6 @@ const Profile: NextPage = () => {
       }
     }
     if (upLukso) {
-      console.log("Fetching Lukso profile...");
       fetchData();
     }
   }, [upLukso, address, setIsNotVerified]);
@@ -137,10 +108,8 @@ const Profile: NextPage = () => {
   useEffect(() => {
     if (!tokens) {
       return;
-    }
-    console.log("tokens", tokens); // @ts-ignore
+    } // @ts-ignore
     tokens.forEach((t: Token) => {
-      // const [source, id] = ethers.utils.defaultAbiCoder.decode(["string", "string"], d);
       const unixTimestampInDays = Math.floor(Date.now() / 1000 / 86400);
       switch (t.name.source) {
         case GITHUB:
@@ -160,10 +129,6 @@ const Profile: NextPage = () => {
       setAccounts(accounts);
     });
   }, [tokens, accounts]);
-
-  useEffect(() => {
-    console.log("SESSION", session);
-  }, [status]);
 
   const handleVerify = async () => {
     if (!window.lukso) {
@@ -247,15 +212,15 @@ const Profile: NextPage = () => {
         <div className="mb-10">
           <h3 className="text-2xl font-bold mb-3">Achievements</h3>
           <div className="flex gap-3">
-            <div className="tooltip tooltip-primary" data-tip="Universal Profile Owner">
-              <Image width={117} height={117} alt="achievement icon" src="/achievements/up.svg" />
+            <div className="tooltip tooltip-primary w-32 h-32" data-tip="Universal Profile Owner">
+              <Image fill alt="achievement icon" src="/achievements/up.svg" priority />
             </div>
-            <div className="tooltip tooltip-primary" data-tip="upDev Early Adopter">
-              <Image width={117} height={117} alt="achievement icon" src="/achievements/og-updev.svg" />
+            <div className="tooltip tooltip-primary  w-32 h-32" data-tip="upDev Early Adopter">
+              <Image fill alt="achievement icon" src="/achievements/og-updev.svg" priority />
             </div>
             {accounts[GITHUB] && (
               <div
-                className="tooltip tooltip-primary"
+                className="tooltip tooltip-primary w-32 h-32"
                 data-tip={`
                   Verified GitHub account on ${formatDate(new Date(Number(accounts[GITHUB].timestamp) * 1000))}.
                   Created ${accounts[GITHUB].stats.days} days ago, 
@@ -263,12 +228,12 @@ const Profile: NextPage = () => {
                   ${accounts[GITHUB].stats.contributions} contributions in the last year
                 `}
               >
-                <Image width={117} height={117} alt="achievement icon" src="/achievements/github.svg" />
+                <Image fill alt="achievement icon" src="/achievements/github.svg" priority />
               </div>
             )}
             {accounts[BUIDLGUIDL] && (
               <div
-                className="tooltip tooltip-primary"
+                className="tooltip tooltip-primary w-32 h-32"
                 data-tip={`
                   Verified BuidlGuidl account on ${formatDate(new Date(Number(accounts[BUIDLGUIDL].timestamp) * 1000))}.
                   Created ${accounts[BUIDLGUIDL].stats.days} days ago, 
@@ -277,7 +242,7 @@ const Profile: NextPage = () => {
                   ${accounts[BUIDLGUIDL].stats.builds} build(s) submitted
                 `}
               >
-                <Image width={117} height={117} alt="achievement icon" src="/achievements/buidlguidl.svg" />
+                <Image fill alt="achievement icon" src="/achievements/buidlguidl.svg" priority />
               </div>
             )}
           </div>
@@ -292,5 +257,3 @@ const Profile: NextPage = () => {
     </div>
   );
 };
-
-export default Profile;

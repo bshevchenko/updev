@@ -4,7 +4,7 @@ import UniversalProfileContract from "@lukso/lsp-smart-contracts/artifacts/Unive
 import { hexToString, toHex } from "viem";
 import { useContractWrite } from "wagmi";
 import { CheckCircleIcon, PencilSquareIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { Accounts } from "~~/pages/profile/[address]";
+import { Accounts } from "~~/types/Profile";
 import upRegistryProfile from "~~/types/Profile";
 import { convertIpfsUrl } from "~~/utils/helpers";
 
@@ -61,6 +61,7 @@ export function ProfileDetails({
             fill
             src={convertIpfsUrl(metadata.LSP3Profile.backgroundImage[1].url)}
             className="object-cover object-center"
+            priority
           />
         </div>
         <div className="absolute -bottom-16 left-5 w-32">
@@ -70,6 +71,7 @@ export function ProfileDetails({
               width={500}
               height={500}
               src={convertIpfsUrl(metadata.LSP3Profile.profileImage[0].url)}
+              priority
             />
           </div>
         </div>
