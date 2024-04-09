@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Modal from "./Modal";
-import { signIn } from "next-auth/react";
+import axios from "axios";
+import { useSession } from "next-auth/react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useAccount, useWalletClient } from "wagmi";
 import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
@@ -10,7 +11,7 @@ import Profile from "~~/types/Profile";
 
 // TODO extract
 const githubSecret =
-  "0xfd4b538303d011a1ee86361cf33af34803dddef3d4a9ebbe9b5a3e61e58d3625d4ae1abcdb4c48845182373d3115ac9639956c1df6723d66bb5ff713061605ffbe2e7e7f1e75a186a5e0db36723cc979af7ca318fa034e1eddbcc2711adcc1bd4f6c5f6702587e05aa721b011c1c5f0dfee6f8fb0dcbbbef414eb7776a1e93ad7c69b317d03f4fe080704397ef7ff702b516653c2314bb1753345703e63b0e82bf";
+  "0x9d62f03e674df42a6fe539f7321871a902f5185e8797bd4bc8aa7280805c7e1daddf5371811fe6980c132247eecdb447941970deae33d785b5018fa576a84eb1f0ca1af369109c70d94f6b4444029919ebe5f02e42b953fa6cfc99b097fb17f32308b03bf0e5d3a642184916a15273c34c1c52b18e40a6fd19d21e982bf5020ecd48215d6358ffdfda737216380fddfc294b70479e98aafde6dc74bf1867c2395d";
 
 const socialAccounts = [
   {
@@ -111,6 +112,12 @@ export const ConnectSocialAccounts = () => {
   const [copied, setCopied] = useState(false);
   const [id, setId] = useState("");
 
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    console.log("SESSION", session);
+  }, [session]);
+
   const { data: _profile } = useScaffoldContractRead({
     contractName: "upRegistry", // @ts-ignore
     functionName: "upByEOA",
@@ -171,6 +178,17 @@ export const ConnectSocialAccounts = () => {
     }
   }
 
+  async function handleTestServer() {
+    // @ts-ignore
+    if (session && session.provider == "twitter" && session.accessToken) {
+      const result = await axios.get(
+        // @ts-ignore
+        "http://localhost:8000/?token=" + session.accessToken,
+      );
+      console.log("CURL", result.data);
+    }
+  }
+  // TODO merge top func into bottom func
   async function handleVerify(sourceName: string, id: string) {
     if (!consumer || !profile) {
       return;
@@ -192,6 +210,27 @@ export const ConnectSocialAccounts = () => {
       console.error("handleVerify error", e);
     }
   }
+
+  const popupCenter = (url: string, title: string) => {
+    const dualScreenLeft = window.screenLeft ?? window.screenX;
+    const dualScreenTop = window.screenTop ?? window.screenY;
+    const width = window.innerWidth ?? document.documentElement.clientWidth ?? screen.width;
+
+    const height = window.innerHeight ?? document.documentElement.clientHeight ?? screen.height;
+
+    const systemZoom = width / window.screen.availWidth;
+
+    const left = (width - 500) / 2 / systemZoom + dualScreenLeft;
+    const top = (height - 550) / 2 / systemZoom + dualScreenTop;
+
+    const newWindow = window.open(
+      url,
+      title,
+      `width=${500 / systemZoom},height=${550 / systemZoom},top=${top},left=${left}`,
+    );
+
+    newWindow?.focus();
+  };
 
   const renderModalContent = (title: string) => {
     const account = socialAccounts.find(account => account.title === title);
@@ -245,6 +284,13 @@ export const ConnectSocialAccounts = () => {
 
   return (
     <div className="w-full">
+      <button
+        onClick={() => handleTestServer()}
+        className="btn bg-primary text-primary-content hover:bg-primary w-[117px]"
+      >
+        WTF
+      </button>
+
       <div className="flex flex-col gap-4 w-full gap-5">
         {socialAccounts.map(item => (
           <div
@@ -278,7 +324,9 @@ export const ConnectSocialAccounts = () => {
               </div>
             ) : (
               <button
-                onClick={() => (item.name === "github" ? signIn("instagram") : setActiveModal(item.title))}
+                onClick={() =>
+                  item.name === "github" ? popupCenter("/signin", "Twitter Sign In") : setActiveModal(item.title)
+                }
                 className="btn bg-primary text-primary-content hover:bg-primary w-[117px]"
                 disabled={item.comingSoon}
               >

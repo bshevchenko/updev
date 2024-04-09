@@ -76,58 +76,65 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     console.log("Collection ownership already transferred");
   }
 
-  console.log("consumer.sendRequest( github )...");
+  console.log("consumer.sendRequest( twitter )...");
   const tx = await consumer.sendRequest(
     subId,
-    "0xfd4b538303d011a1ee86361cf33af34803dddef3d4a9ebbe9b5a3e61e58d3625d4ae1abcdb4c48845182373d3115ac9639956c1df6723d66bb5ff713061605ffbe2e7e7f1e75a186a5e0db36723cc979af7ca318fa034e1eddbcc2711adcc1bd4f6c5f6702587e05aa721b011c1c5f0dfee6f8fb0dcbbbef414eb7776a1e93ad7c69b317d03f4fe080704397ef7ff702b516653c2314bb1753345703e63b0e82bf",
+    "0x7dda7eb55a0adf7779245bc7d23e0bf20230e07bbfdf53efb667834d7c16f78aed1982f32f83f166bdc90bb2c163b96d500199b196dca3225dc34f99e5751feaf557f3953c7099703a0fadfe2bad93bb83508f9d656296937a7c76698e082eaf7e13dfc4a1776c436c40326a78a831af58e6fc584de64272504189dbf0319fe9b33e01d0108b70d243dfedbc65f6eccb360f05e06120f46e075c68393f7a81b630",
     0,
     0,
-    "github",
-    "0x659278cb0106DB2fB1C840775CAc743a9703C22A",
-    "bshevchenko",
+    "twitter",
+    "QmRtZ6w4Q9KKZ6xdW5F8xS1592NgrMhcUqFK7K4TqqJsTW", // IPFS HASH
+    "updevonly",
     { gasPrice: 2850069165 },
   );
   tx.wait().then(() => {
-    console.log("consumer.sendRequest( github ) waiting for Response...");
+    console.log("consumer.sendRequest( twitter ) waiting for Response...");
   });
-  console.log("consumer.sendRequest( buidlguidl )...");
-  const tx2 = await consumer.sendRequest(
-    subId,
-    "0x",
-    0,
-    0,
-    "buidlguidl",
-    "0x659278cb0106DB2fB1C840775CAc743a9703C22A",
-    "0x240588CeBBd7C2f7e146A9fC1F357C82A9C052DC",
-    { gasPrice: 2850069165 },
-  );
-  tx2.wait().then(() => {
-    console.log("consumer.sendRequest( buidlguidl ) waiting for Response...");
-  });
+  // console.log("consumer.sendRequest( buidlguidl )...");
+  // const tx2 = await consumer.sendRequest(
+  //   subId,
+  //   "0x",
+  //   0,
+  //   0,
+  //   "buidlguidl",
+  //   "0x659278cb0106DB2fB1C840775CAc743a9703C22A",
+  //   "0x240588CeBBd7C2f7e146A9fC1F357C82A9C052DC",
+  //   { gasPrice: 2850069165 },
+  // );
+  // tx2.wait().then(() => {
+  //   console.log("consumer.sendRequest( buidlguidl ) waiting for Response...");
+  // });
   // github – 0x18D79f0AAB8e759CFA848fd0091c57614DD690B2 – timofeevs
   // github – 0x659278cb0106DB2fB1C840775CAc743a9703C22A – MattPereira
   // buidlguidl – 0x659278cb0106DB2fB1C840775CAc743a9703C22A – 0x41f727fA294E50400aC27317832A9F78659476B9
 
-  consumer.on("Response", async (requestId, up, isOwned, source, id, data) => {
-    let types;
-    if (source === "github") {
-      types = ["uint32", "uint32", "uint32"];
-    } else {
-      types = ["uint32", "uint32", "uint32", "uint32"];
-    }
-    const result = hre.ethers.utils.defaultAbiCoder.decode(types, data);
-    console.log(`${source} - ${id} - ${isOwned} - ${up} - ${requestId}`, result);
-    const tokenId = hre.ethers.utils.solidityKeccak256(["string", "string"], [source, id]);
-    try {
-      await consumer.claimToken(tokenId);
-    } catch (e: any) {
-      if (e.message.includes("replacement fee too low")) {
-        await wait(3000);
-        await consumer.claimToken(tokenId);
-      }
-    }
+  consumer.on("Response", async (requestId, up, isOwned, source, id, ipfs, data) => {
+    console.log("requestId", requestId);
+    console.log("up", up);
+    console.log("isOwned", isOwned);
+    console.log("source", source);
+    console.log("id", id);
+    console.log("ipfs", ipfs);
+    console.log("data", data);
 
-    console.log(`${source} - ${id} token claimed`);
+    // let types;
+    // if (source === "github") {
+    //   types = ["uint32", "uint32", "uint32"];
+    // } else {
+    //   types = ["uint32", "uint32", "uint32", "uint32"];
+    // }
+    // const result = hre.ethers.utils.defaultAbiCoder.decode(types, data);
+    // console.log(`${source} - ${id} - ${isOwned} - ${up} - ${requestId}`, result);
+    // const tokenId = hre.ethers.utils.solidityKeccak256(["string", "string"], [source, id]);
+    // try {
+    //   await consumer.claimToken(tokenId);
+    // } catch (e: any) {
+    //   if (e.message.includes("replacement fee too low")) {
+    //     await wait(3000);
+    //     await consumer.claimToken(tokenId);
+    //   }
+    // }
+    // console.log(`${source} - ${id} token claimed`);
   });
 
   await wait(60000);

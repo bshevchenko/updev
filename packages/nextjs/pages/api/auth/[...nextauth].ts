@@ -23,21 +23,31 @@ export default NextAuth({
       clientSecret: process.env.INSTAGRAM_CLIENT_SECRET,
     }),
   ],
+  session: {
+    strategy: "jwt",
+  },
   callbacks: {
     async session({ session, token }) {
+      // console.log('session', session, token, user);
       // @ts-ignore
       session.user.id = token.id; // @ts-ignore
-      session.accessToken = token.accessToken;
+      session.accessToken = token.accessToken; // @ts-ignore
+      session.provider = token.provider;
       return session;
     },
-    async jwt({ token, user, account }) {
+    async jwt({ token, account, user }) {
+      // console.log('jwt 23 NEW', token, account, user);
       if (user) {
         token.id = user.id;
       }
       if (account) {
+        token.provider = account.provider;
         token.accessToken = account.access_token;
       }
       return token;
+    },
+    async redirect({ url }) {
+      return url;
     },
   },
 });

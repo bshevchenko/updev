@@ -1,0 +1,14 @@
+{
+  "name": "express",
+  "packageManager": "yarn@3.2.3",
+  "dependencies": {
+    "@pinata/sdk": "^2.1.0",
+    "axios": "^1.6.8",
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/cors": "^2",
+    "@types/express": "^4"
+  }
+}

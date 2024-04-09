@@ -9,7 +9,7 @@ export function LandingDisplay() {
     <div className="flex grow flex-col justify-center">
       <div className="flex flex-col items-center justify-center gap-14 relative">
         <div className="absolute left-10 -top-60">
-          <Image alt="pattern left" width={700} height={700} src="/pattern-left.svg" />
+          <Image alt="pattern left" width={700} height={700} src="/pattern-left.svg" priority />
         </div>
         <div className="flex flex-col items-center ">
           <div className="w-56 mb-5">
@@ -23,7 +23,7 @@ export function LandingDisplay() {
               strings={[
                 "Your universal dev profile on LUKSO&nbsp;",
                 "Your universal Web3 Resume&nbsp;",
-                "A Multi-Chain First dApp&nbsp;", // TODO like mobile-first? or The First Multi-Chain dApp? i'm not sure that we can claim we are first on this one :D
+                "A Multi-Chain First dApp&nbsp;",
                 "Powered by LUKSO, Polygon, Chainlink and...&nbsp;",
               ]}
               typeSpeed={40}
