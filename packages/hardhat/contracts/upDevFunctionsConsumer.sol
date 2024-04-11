@@ -5,7 +5,17 @@ import { FunctionsClient } from "@chainlink/contracts/src/v0.8/functions/dev/v1_
 import { ConfirmedOwner } from "@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol";
 import { FunctionsRequest } from "@chainlink/contracts/src/v0.8/functions/dev/v1_0_0/libraries/FunctionsRequest.sol";
 
-import { upDevAccountOwnership } from "./upDevAccountOwnership.sol";
+interface IUpDevAccountOwnership {
+    function mint(
+        address to,
+        bytes32 tokenId,
+        bool force,
+        bytes memory data,
+        string memory source,
+        string memory id,
+        string memory ipfs
+    ) external;
+}
 
 /**
  * Request testnet LINK and ETH here: https://faucets.chain.link/
@@ -37,15 +47,7 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		bool isClaimed;
 	}
 
-	event Response(
-		bytes32 indexed requestId,
-		address indexed up,
-		bool indexed isOwned,
-		string source,
-		string id,
-		string ipfs,
-		bytes data
-	);
+	event Response(bytes32 indexed requestId, Request request);
 
 	mapping(string => Source) public source;
 	mapping(bytes32 requiestId => Request) public request;
@@ -55,7 +57,7 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 	// TODO array or mapping to get not claimed tokens
 
 	string[] public availableSources;
-	upDevAccountOwnership public collection;
+	IUpDevAccountOwnership public collection;
 
 	// Router address - Hardcoded for Mumbai
 	// Check to get the router address for your supported network https://docs.chain.link/chainlink-functions/supported-networks
@@ -80,104 +82,22 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		address payable _collection
 	) FunctionsClient(router) ConfirmedOwner(msg.sender) {
 		setCollection(_collection);
-		addSource(
-			"twitter",
-			"const twitter = await Functions.makeHttpRequest({"
-			"  url: 'https://api.twitter.com/2/users/me?user.fields=created_at,description,location,most_recent_tweet_id,pinned_tweet_id,profile_image_url,protected,public_metrics,url,verified,verified_type,withheld',"
-			"  method: 'GET',"
-			"  headers: {"
-			"    'Authorization': `Bearer ${secrets.token}`"
-			"  }"
-			"});"
-			"if (twitter.error) {"
-			"  throw Error('Twitter fail');"
-			"}"
-			"const ipfs = await Functions.makeHttpRequest({"
-			"  url: 'https://gateway.pinata.cloud/ipfs/' + args[0],"
-			"  method: 'GET'"
-			"});"
-			"if (ipfs.error) {"
-			"  throw Error('IPFS fail');"
-			"}"
-			"if (twitter.data.data.username !== args[1] || ipfs.data.username !== args[1]) {"
-			"  throw Error('Username fail ' + twitter.data.data.username + ' ' + ipfs.data.username + ' ' + args[1]);"
-			"}"
-			// TODO throw error if twitter.data.data != ipfs.data. allow some % of divergence in ?.data.public_metrics
-			"return Functions.encodeUint256(1);"
-		);
-		// TODO refactor other sources
-		// addSource(
-		// 	"github",
-		// 	"const apiResponse = await Functions.makeHttpRequest({"
-		// 	"  url: 'https://api.github.com/graphql',"
-		// 	"  method: 'POST',"
-		// 	"  headers: {"
-		// 	"    'Authorization': `Bearer ${secrets.apiKey}`"
-		// 	"  },"
-		// 	"  data: {"
-		// 	"    query: `{"
-		// 	"      user(login: \"${args[1]}\") {"
-		// 	"        createdAt"
-		// 	"        socialAccounts(last: 5) { nodes { url } }"
-		// 	"        followers { totalCount }"
-		// 	"        contributionsCollection { contributionCalendar { totalContributions } }"
-		// 	"      }"
-		// 	"    }`"
-		// 	"  },"
-		// 	"});"
-		// 	"if (apiResponse.error) {"
-		// 	"  throw Error('Request failed');"
-		// 	"}"
-		// 	"if (apiResponse.data.errors) {"
-		// 	"  throw Error(JSON.stringify(apiResponse.data.errors));"
-		// 	"}"
-		// 	"const { user } = apiResponse.data.data;"
-		// 	"if (!user.socialAccounts.nodes.some(r => r.url.toLowerCase().includes(args[0].toLowerCase()))) {"
-		// 	"  throw Error('URL Not Found');"
-		// 	"}"
-		// 	"const created = Math.floor((new Date(user.createdAt)).getTime() / 86400000);"
-		// 	"const uint32 = (v) => v.toString(16).padStart(64, '0');"
-		// 	"const hex = uint32(created) + uint32(user.followers.totalCount) + uint32(user.contributionsCollection.contributionCalendar.totalContributions);"
-		// 	"return Uint8Array.from(hex.match(/.{1,2}/g).map(b => parseInt(b, 16)));",
-		// 	false
-		// );
-		// addSource(
-		// 	"buidlguidl",
-		// 	"const apiResponse = await Functions.makeHttpRequest({"
-		// 	"  url: 'https://buidlguidl-v3.appspot.com/builders/' + args[1],"
-		// 	"});"
-		// 	"if (apiResponse.error) {"
-		// 	"  throw Error('Request failed');"
-		// 	"}"
-		// 	"const { data } = apiResponse;"
-		// 	"if (!data['status'] || !data.status.text.toLowerCase().includes(args[0].toLowerCase())) {"
-		// 	"  throw Error('Not Owned');"
-		// 	"}"
-		// 	"const created = Math.floor(data.creationTimestamp / 86400000);"
-		// 	"const roles = { builder: 1 };"
-		// 	"const functions = { cadets: 1 };"
-		// 	"const uint32 = v => v.toString(16).padStart(64, '0');"
-		// 	"const hex = uint32(created) + uint32(data.builds.length) + uint32(roles[data.role] || 0) + uint32(functions[data.function] || 0);"
-		// 	"return Uint8Array.from(hex.match(/.{1,2}/g).map(b => parseInt(b, 16)));",
-		// 	true
-		// );
-		// TODO addSource buidlbox
-		// TODO addSource twitter
 	}
 
 	function setCollection(address payable _collection) public onlyOwner {
-		collection = upDevAccountOwnership(_collection);
+		collection = IUpDevAccountOwnership(_collection);
 	}
 
+	// TODO disable/remove sources?
 	function addSource(
-		string memory name,
+		string memory name, // TODO if name of new source is the same
 		string memory code
 	) public onlyOwner {
 		if (source[name].id != 0) {
 			revert SourceNameBusy();
 		}
 		source[name] = Source({
-			id: uint16(availableSources.length),
+			id: uint16(availableSources.length) + 1,
 			name: name,
 			code: code
 		});
@@ -248,39 +168,32 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 			isOwned: false,
 			isClaimed: false
 		});
-		upRequests[msg.sender].push(requestId);
+		upRequests[msg.sender].push(requestId); // TODO ???
 	}
 
 	/**
 	 * @notice Callback function for fulfilling a request
-	 * @param requestId The ID of the request to fulfill
+	 * @param id The ID of the request to fulfill
 	 * @param response The HTTP response data
 	 * @param err Any errors from the Functions request
 	 */
 	function fulfillRequest(
-		bytes32 requestId,
+		bytes32 id,
 		bytes memory response,
 		bytes memory err
 	) internal override {
-		request[requestId].isFinished = true;
+		request[id].isFinished = true;
 		if (err.length == 0) {
-			request[requestId].isOwned = true;
-			request[requestId].data = response;
-			token[request[requestId].tokenId] = requestId;
+			request[id].isOwned = true;
+			request[id].data = response;
+			token[request[id].tokenId] = id;
 		} else {
-			request[requestId].data = err;
+			request[id].data = err;
 		}
-		emit Response(
-			requestId,
-			request[requestId].up,
-			request[requestId].isOwned,
-			request[requestId].source,
-			request[requestId].id,
-			request[requestId].ipfs,
-			request[requestId].data
-		);
+		emit Response(id, request[id]);
 	}
 
+	// TODO automatically claim tokens for users from our oracle
 	function claimToken(bytes32 tokenId) external {
 		bytes32 id = token[tokenId];
 		if (request[id].isClaimed) {
@@ -288,11 +201,12 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		}
 		collection.mint(
 			request[id].up,
-			request[id].tokenId,
-			false,
+			id,
+			true,
 			request[id].data,
 			request[id].source,
-			request[id].id
+			request[id].id,
+			request[id].ipfs
 		);
 		request[id].isClaimed = true;
 	}

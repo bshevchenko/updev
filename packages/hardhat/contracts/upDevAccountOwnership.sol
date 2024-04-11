@@ -24,6 +24,7 @@ contract upDevAccountOwnership is LSP8Mintable {
     struct Name {
         string source;
         string id;
+        string ipfs;
     }
 
     struct Token {
@@ -57,7 +58,8 @@ contract upDevAccountOwnership is LSP8Mintable {
         bool force,
         bytes memory data,
         string memory source,
-        string memory id
+        string memory id,
+        string memory ipfs
     ) public onlyOwner {
         _setData(tokenId, data);
         timestamp[tokenId] = block.timestamp;
@@ -71,7 +73,8 @@ contract upDevAccountOwnership is LSP8Mintable {
         _mint(to, tokenId, force, data);
         name[tokenId] = Name({
             source: source,
-            id: id
+            id: id,
+            ipfs: ipfs
         });
     }
 

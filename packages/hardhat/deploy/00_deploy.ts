@@ -1,29 +1,13 @@
+import fs from "fs";
+import path from "path";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 
-const subId = 877;
+const subId = 877; // TODO extract
 
-function wait(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+const wait = (sec: number) => new Promise(resolve => setTimeout(resolve, sec * 1000));
 
-/**
- * Deploys a contract named "YourContract" using the deployer account and
- * constructor arguments set to the deployer address
- *
- * @param hre HardhatRuntimeEnvironment object.
- */
 const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
-  /*
-    On localhost, the deployer account is the one that comes with Hardhat, which is already funded.
-
-    When deploying to live networks (e.g `yarn deploy --network goerli`), the deployer account
-    should have sufficient balance to pay for the gas fees for contract creation.
-
-    You can generate a random account with `yarn generate` which will fill DEPLOYER_PRIVATE_KEY
-    with a random private key in the .env file (then used on hardhat.config.ts)
-    You can run the `yarn account` command to check your balance in every network.
-  */
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
@@ -51,6 +35,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   });
   const consumer = await hre.ethers.getContract("upDevFunctionsConsumer", deployer);
 
+  // Register Chainlink Functions consumer
   try {
     const router = await hre.ethers.getContractAt(
       "IChainlinkFunctionsRouter",
@@ -61,7 +46,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     if (isAdded) {
       throw new Error("skip");
     }
-    const tx = await router.addConsumer(subId, consumer.address, { gasPrice: 2850069165 });
+    const tx = await router.addConsumer(subId, consumer.address);
     console.log("Adding consumer...", consumer.address);
     await tx.wait();
     console.log("Consumer added");
@@ -69,77 +54,75 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     console.log("Consumer already added");
   }
 
+  // Transfer NFT collection ownership to consumer contract
   try {
     await collection.transferOwnership(consumer.address);
     console.log("Collection ownership transferred to", consumer.address);
   } catch (e) {
-    console.log("Collection ownership already transferred");
+    const owner = await collection.owner();
+    const consumerAddress = await consumer.resolvedAddress;
+    if (owner !== consumerAddress) {
+      console.error("Collection owner is invalid: ", owner, "Must be", consumer.address);
+      return;
+    } else {
+      console.log("Collection ownership already transferred");
+    }
   }
+
+  const addSource = async (name: string) => {
+    try {
+      const source = fs.readFileSync(path.resolve(__dirname + "/../sources/", name + ".js"), "utf8");
+      await consumer.addSource(name, source);
+      console.log(`Source ${name} added`);
+    } catch (e) {
+      console.log(`Source ${name} already added`);
+    }
+  };
+
+  await addSource("twitter");
+
+  // TODO remove and uncomment below
+  // const id = "0x44f506f0f6e907a222ef2fc36e7b0898717c3af76c28621654e5e6b129e5f77d";
+  // try {
+  //   await consumer.claimToken(id, { gasLimit: 5000000 });
+  //   console.log(`twitter - ${id} token claimed by ME`);
+  // } catch (e: any) {
+  //   console.error('Claim token failed', id, e)
+  // }
 
   console.log("consumer.sendRequest( twitter )...");
   const tx = await consumer.sendRequest(
     subId,
-    "0x7dda7eb55a0adf7779245bc7d23e0bf20230e07bbfdf53efb667834d7c16f78aed1982f32f83f166bdc90bb2c163b96d500199b196dca3225dc34f99e5751feaf557f3953c7099703a0fadfe2bad93bb83508f9d656296937a7c76698e082eaf7e13dfc4a1776c436c40326a78a831af58e6fc584de64272504189dbf0319fe9b33e01d0108b70d243dfedbc65f6eccb360f05e06120f46e075c68393f7a81b630",
+    "0xf32e7882d6aca82cd3ab60ecb182b81203e9f726650b7dd32dc2f0ed4cb23a01db00e8c3295f4b06e184068bd6d94f4317ef38a3a8567a3d00bb4a3e2a9a38079b15fdb82101564ff269a867ace4842833b10f2b10b86e764e219338c9c29a3d9e5b0e1bdf1aa7d665219a9dfed3d6e07959184335d3691371c2ccded8dcfcd5b1a1b514491b7aa32f9d2de265216f88389d9aa5f7e01c9df50d02636741ef5561",
     0,
     0,
     "twitter",
-    "QmRtZ6w4Q9KKZ6xdW5F8xS1592NgrMhcUqFK7K4TqqJsTW", // IPFS HASH
-    "updevonly",
-    { gasPrice: 2850069165 },
+    "QmP2Wpt6eCPrRkNjQmfDkvhdbgtC79ATHVz9Q1cBsY5WUR", // IPFS HASH
+    "BorisShevc64479",
   );
   tx.wait().then(() => {
-    console.log("consumer.sendRequest( twitter ) waiting for Response...");
-  });
-  // console.log("consumer.sendRequest( buidlguidl )...");
-  // const tx2 = await consumer.sendRequest(
-  //   subId,
-  //   "0x",
-  //   0,
-  //   0,
-  //   "buidlguidl",
-  //   "0x659278cb0106DB2fB1C840775CAc743a9703C22A",
-  //   "0x240588CeBBd7C2f7e146A9fC1F357C82A9C052DC",
-  //   { gasPrice: 2850069165 },
-  // );
-  // tx2.wait().then(() => {
-  //   console.log("consumer.sendRequest( buidlguidl ) waiting for Response...");
-  // });
-  // github – 0x18D79f0AAB8e759CFA848fd0091c57614DD690B2 – timofeevs
-  // github – 0x659278cb0106DB2fB1C840775CAc743a9703C22A – MattPereira
-  // buidlguidl – 0x659278cb0106DB2fB1C840775CAc743a9703C22A – 0x41f727fA294E50400aC27317832A9F78659476B9
-
-  consumer.on("Response", async (requestId, up, isOwned, source, id, ipfs, data) => {
-    console.log("requestId", requestId);
-    console.log("up", up);
-    console.log("isOwned", isOwned);
-    console.log("source", source);
-    console.log("id", id);
-    console.log("ipfs", ipfs);
-    console.log("data", data);
-
-    // let types;
-    // if (source === "github") {
-    //   types = ["uint32", "uint32", "uint32"];
-    // } else {
-    //   types = ["uint32", "uint32", "uint32", "uint32"];
-    // }
-    // const result = hre.ethers.utils.defaultAbiCoder.decode(types, data);
-    // console.log(`${source} - ${id} - ${isOwned} - ${up} - ${requestId}`, result);
-    // const tokenId = hre.ethers.utils.solidityKeccak256(["string", "string"], [source, id]);
-    // try {
-    //   await consumer.claimToken(tokenId);
-    // } catch (e: any) {
-    //   if (e.message.includes("replacement fee too low")) {
-    //     await wait(3000);
-    //     await consumer.claimToken(tokenId);
-    //   }
-    // }
-    // console.log(`${source} - ${id} token claimed`);
+    console.log("consumer.sendRequest( twitter ): waiting for Response...");
   });
 
-  await wait(60000);
+  consumer.on("Response", async (id, request) => {
+    if (!request.isOwned) {
+      console.log("Request failed", request);
+      return;
+    }
+    try {
+      await consumer.claimToken(request.tokenId);
+      console.log(`${request.source} - ${id} token claimed by ${request.up}`);
+    } catch (e: any) {
+      if (e.message.includes("replacement fee too low")) {
+        await wait(3000);
+        await consumer.claimToken(request.tokenId);
+      } else {
+        console.error("Claim token failed", request.tokenId, e);
+      }
+    }
+  });
 
-  // TODO wait for Response and claim tokens after
+  await wait(100);
 
   // await deploy("LSP23LinkedContractsFactory", {
   //   from: deployer,
