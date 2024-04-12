@@ -1,7 +1,6 @@
-import fs from "fs";
-import path from "path";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
+import getSourceCode from "../sources/get";
 
 const subId = 877; // TODO extract
 
@@ -116,7 +115,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 
   await deploy("upDevFunctionsConsumer", {
     from: deployer,
-    args: [collection.address],
+    args: [process.env.DON_ROUTER, process.env.DON_ID, collection.address],
     log: true,
     autoMine: true,
   });
@@ -158,8 +157,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 
   const addSource = async (name: string) => {
     try {
-      const source = fs.readFileSync(path.resolve(__dirname + "/../sources/", name + ".js"), "utf8");
-      await consumer.addSource(name, source);
+      await consumer.addSource(name, getSourceCode(name));
       console.log(`Source ${name} added`);
     } catch (e) {
       console.log(`Source ${name} already added`);

@@ -18,22 +18,10 @@ interface IUpDevAccountOwnership {
 }
 
 /**
- * Request testnet LINK and ETH here: https://faucets.chain.link/
- * Find information on LINK Token Contracts and get the latest ETH and LINK faucets here: https://docs.chain.link/resources/link-token-contracts/
- */
-
-/**
  * @title upDevFunctionsConsumer
- * @dev This contract uses hardcoded values and should not be used in production.
  */
 contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 	using FunctionsRequest for FunctionsRequest.Request;
-
-	struct Source {
-		uint16 id;
-		string name;
-		string code;
-	}
 
 	struct Request {
 		address up;
@@ -49,27 +37,19 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 
 	event Response(bytes32 indexed requestId, Request request);
 
-	mapping(string => Source) public source;
+	mapping(string => string) public source; // name => code
 	mapping(bytes32 requiestId => Request) public request;
 	mapping(address up => bytes32[] requests) public upRequests;
 	mapping(bytes32 tokenId => bytes32 requestId) public token;
 
-	// TODO array or mapping to get not claimed tokens
-
 	string[] public availableSources;
 	IUpDevAccountOwnership public collection;
 
-	// Router address - Hardcoded for Mumbai
-	// Check to get the router address for your supported network https://docs.chain.link/chainlink-functions/supported-networks
-	address router = 0x6E2dc0F9DB014aE19888F539E59285D2Ea04244C;
+	address router;
+	bytes32 donID;
 
-	// Callback gas limit TODO
-	uint32 gasLimit = 300000;
-
-	// donID - Hardcoded for Mumbai
-	// Check to get the donID for your supported network https://docs.chain.link/chainlink-functions/supported-networks
-	bytes32 donID =
-		0x66756e2d706f6c79676f6e2d6d756d6261692d31000000000000000000000000;
+	uint32 gasLimit = 300000; // TODO increase callback gasLimit to avoid claimToken flow
+	// TODO array or mapping to get not claimed tokens (if we won't avoid claimToken flow)
 
 	// Custom error type
 	error SourceNameBusy();
@@ -79,40 +59,35 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 	 * @notice Initializes the contract with the Chainlink router address and sets the contract owner
 	 */
 	constructor(
-		address payable _collection
+		address _router,
+		bytes32 _donID,
+		address _collection
 	) FunctionsClient(router) ConfirmedOwner(msg.sender) {
-		setCollection(_collection);
+		router = _router;
+		donID = _donID;
+		collection = IUpDevAccountOwnership(_collection); // TODO do we need to reset collection?
 	}
 
-	function setCollection(address payable _collection) public onlyOwner {
-		collection = IUpDevAccountOwnership(_collection);
-	}
-
-	// TODO disable/remove sources?
 	function addSource(
-		string memory name, // TODO if name of new source is the same
+		string memory name,
 		string memory code
 	) public onlyOwner {
-		if (source[name].id != 0) {
+		if (bytes(source[name]).length != 0) {
 			revert SourceNameBusy();
 		}
-		source[name] = Source({
-			id: uint16(availableSources.length) + 1,
-			name: name,
-			code: code
-		});
+		source[name] = code;
 		availableSources.push(name);
 	}
 
-	function getAvailableSources() external view returns (Source[] memory) {
-		Source[] memory sources = new Source[](availableSources.length);
-		for (uint256 i = 0; i < availableSources.length; i++) {
-			sources[i] = source[availableSources[i]];
+	function getAvailableSources() external view returns (string[] memory) {
+		string[] memory names = new string[](availableSources.length);
+		for (uint32 i = 0; i < availableSources.length; i++) {
+			names[i] = availableSources[i];
 		}
-		return sources;
+		return names;
 	}
 
-	function getUPRequests(
+	function getUPRequests( // TODO remove? currently used only for claim flow. other cases could be addressed by an events indexer
 		address up
 	) external view returns (Request[] memory) {
 		uint256 numRequests = upRequests[up].length;
@@ -132,12 +107,12 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		bytes memory encryptedSecretsUrls,
 		uint8 donHostedSecretsSlotID,
 		uint64 donHostedSecretsVersion,
-		string calldata sourceName,
+		string calldata _source,
 		string calldata ipfs,
 		string calldata id
 	) external returns (bytes32 requestId) {
 		FunctionsRequest.Request memory req;
-		req.initializeRequestForInlineJavaScript(source[sourceName].code);
+		req.initializeRequestForInlineJavaScript(source[_source]);
 		if (encryptedSecretsUrls.length > 0)
 			req.addSecretsReference(encryptedSecretsUrls);
 		else if (donHostedSecretsVersion > 0) {
@@ -159,16 +134,16 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		);
 		request[requestId] = Request({
 			up: msg.sender,
-			source: sourceName,
+			source: _source,
 			id: id,
-			tokenId: keccak256(abi.encodePacked(sourceName, id)),
+			tokenId: keccak256(abi.encodePacked(_source, id)),
 			ipfs: ipfs,
 			data: "0x",
 			isFinished: false,
 			isOwned: false,
 			isClaimed: false
 		});
-		upRequests[msg.sender].push(requestId); // TODO ???
+		upRequests[msg.sender].push(requestId); // TODO change to emit event?
 	}
 
 	/**
@@ -193,7 +168,7 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		emit Response(id, request[id]);
 	}
 
-	// TODO automatically claim tokens for users from our oracle
+	// TODO automatically claim tokens for users from our oracle if avoiding of claim flow is not
 	function claimToken(bytes32 tokenId) external {
 		bytes32 id = token[tokenId];
 		if (request[id].isClaimed) {
