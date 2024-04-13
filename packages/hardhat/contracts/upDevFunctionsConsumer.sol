@@ -62,7 +62,7 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		address _router,
 		bytes32 _donID,
 		address _collection
-	) FunctionsClient(router) ConfirmedOwner(msg.sender) {
+	) FunctionsClient(_router) ConfirmedOwner(msg.sender) {
 		router = _router;
 		donID = _donID;
 		collection = IUpDevAccountOwnership(_collection); // TODO do we need to reset collection?

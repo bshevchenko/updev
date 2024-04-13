@@ -18,7 +18,7 @@ enum TokenType {
     NFT,
     COLLECTION
 }
-
+// TODO tmp
 contract upDevAccountOwnership is LSP8Mintable {
 
     struct Name {

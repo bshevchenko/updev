@@ -2,8 +2,6 @@ import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import getSourceCode from "../sources/get";
 
-const subId = 877; // TODO extract
-
 const wait = (sec: number) => new Promise(resolve => setTimeout(resolve, sec * 1000));
 
 const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
@@ -11,6 +9,8 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const { deploy } = hre.deployments;
 
   const signer = new hre.ethers.Wallet(process.env.DEPLOYER_PRIVATE_KEY || "", hre.ethers.provider);
+
+  // TODO extract Nick factory deployments
 
   // For more information check: https://github.com/Arachnid/deterministic-deployment-proxy
   const NICK_FACTORY_ADDRESS = "0x4e59b44847b379578588920ca78fbf26c0b4956c";
@@ -123,16 +123,12 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 
   // Register Chainlink Functions consumer
   try {
-    const router = await hre.ethers.getContractAt(
-      "IChainlinkFunctionsRouter",
-      "0x6e2dc0f9db014ae19888f539e59285d2ea04244c", // polygon mumbai router
-      deployer,
-    );
-    const [isAdded] = await router.getConsumer(consumer.address, subId);
+    const router = await hre.ethers.getContractAt("IChainlinkFunctionsRouter", process.env.DON_ROUTER || "", deployer);
+    const [isAdded] = await router.getConsumer(consumer.address, process.env.DON_SUB_ID);
     if (isAdded) {
       throw new Error("skip");
     }
-    const tx = await router.addConsumer(subId, consumer.address);
+    const tx = await router.addConsumer(process.env.DON_SUB_ID, consumer.address);
     console.log("Adding consumer...", consumer.address);
     await tx.wait();
     console.log("Consumer added");
@@ -166,46 +162,37 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 
   await addSource("twitter");
 
-  // TODO remove and uncomment below
-  // const id = "0x44f506f0f6e907a222ef2fc36e7b0898717c3af76c28621654e5e6b129e5f77d";
-  // try {
-  //   await consumer.claimToken(id, { gasLimit: 5000000 });
-  //   console.log(`twitter - ${id} token claimed by ME`);
-  // } catch (e: any) {
-  //   console.error("Claim token failed", id, e)
-  // }
+  console.log("consumer.sendRequest( twitter )...");
+  const tx = await consumer.sendRequest(
+    process.env.DON_SUB_ID,
+    "0x",
+    0,
+    0,
+    "twitter",
+    "QmP2Wpt6eCPrRkNjQmfDkvhdbgtC79ATHVz9Q1cBsY5WUR", // IPFS HASH
+    "BorisShevc64479",
+  );
+  tx.wait().then(() => {
+    console.log("consumer.sendRequest( twitter ): waiting for Response...");
+  });
 
-  // console.log("consumer.sendRequest( twitter )...");
-  // const tx = await consumer.sendRequest(
-  //   subId,
-  //   "0xf32e7882d6aca82cd3ab60ecb182b81203e9f726650b7dd32dc2f0ed4cb23a01db00e8c3295f4b06e184068bd6d94f4317ef38a3a8567a3d00bb4a3e2a9a38079b15fdb82101564ff269a867ace4842833b10f2b10b86e764e219338c9c29a3d9e5b0e1bdf1aa7d665219a9dfed3d6e07959184335d3691371c2ccded8dcfcd5b1a1b514491b7aa32f9d2de265216f88389d9aa5f7e01c9df50d02636741ef5561",
-  //   0,
-  //   0,
-  //   "twitter",
-  //   "QmP2Wpt6eCPrRkNjQmfDkvhdbgtC79ATHVz9Q1cBsY5WUR", // IPFS HASH
-  //   "BorisShevc64479",
-  // );
-  // tx.wait().then(() => {
-  //   console.log("consumer.sendRequest( twitter ): waiting for Response...");
-  // });
-
-  // consumer.on("Response", async (id, request) => {
-  //   if (!request.isOwned) {
-  //     console.log("Request failed", request);
-  //     return;
-  //   }
-  //   try {
-  //     await consumer.claimToken(request.tokenId);
-  //     console.log(`${request.source} - ${id} token claimed by ${request.up}`);
-  //   } catch (e: any) {
-  //     if (e.message.includes("replacement fee too low")) {
-  //       await wait(3000);
-  //       await consumer.claimToken(request.tokenId);
-  //     } else {
-  //       console.error("Claim token failed", request.tokenId, e);
-  //     }
-  //   }
-  // });
+  consumer.on("Response", async (id, request) => {
+    if (!request.isOwned) {
+      console.log("Request failed", request);
+      return;
+    }
+    try {
+      await consumer.claimToken(request.tokenId);
+      console.log(`${request.source} - ${id} token claimed by ${request.up}`);
+    } catch (e: any) {
+      if (e.message.includes("replacement fee too low")) {
+        await wait(3000);
+        await consumer.claimToken(request.tokenId);
+      } else {
+        console.error("Claim token failed", request.tokenId, e);
+      }
+    }
+  });
 
   await wait(100);
 
