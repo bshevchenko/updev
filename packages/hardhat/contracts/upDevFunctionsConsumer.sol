@@ -39,7 +39,7 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 
 	mapping(string => string) public source; // name => code
 	mapping(bytes32 requiestId => Request) public request;
-	mapping(address up => bytes32[] requests) public upRequests;
+	mapping(address up => bytes32[] requests) public upRequests; // TODO replace with events indexer?
 	mapping(bytes32 tokenId => bytes32 requestId) public token;
 
 	string[] public availableSources;
@@ -48,15 +48,14 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 	address router;
 	bytes32 donID;
 
-	uint32 gasLimit = 300000; // TODO increase callback gasLimit to avoid claimToken flow
-	// TODO array or mapping to get not claimed tokens (if we won't avoid claimToken flow)
+	uint32 gasLimit = 300000; // TODO increase callback gasLimit to avoid claimToken flow?
 
 	// Custom error type
 	error SourceNameBusy();
 	error AlreadyClaimed();
 
 	/**
-	 * @notice Initializes the contract with the Chainlink router address and sets the contract owner
+	 * @notice Initializes the contract with the Chainlink router address, DON id and sets the contract owner
 	 */
 	constructor(
 		address _router,
@@ -87,7 +86,7 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		return names;
 	}
 
-	function getUPRequests( // TODO remove? currently used only for claim flow. other cases could be addressed by an events indexer
+	function getUPRequests(
 		address up
 	) external view returns (Request[] memory) {
 		uint256 numRequests = upRequests[up].length;
@@ -143,7 +142,7 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 			isOwned: false,
 			isClaimed: false
 		});
-		upRequests[msg.sender].push(requestId); // TODO change to emit event?
+		upRequests[msg.sender].push(requestId);
 	}
 
 	/**
@@ -168,7 +167,7 @@ contract upDevFunctionsConsumer is FunctionsClient, ConfirmedOwner {
 		emit Response(id, request[id]);
 	}
 
-	// TODO automatically claim tokens for users from our oracle if avoiding of claim flow is not
+	// TODO automatically claim tokens for users from our oracle if avoiding of claim flow is not possible
 	function claimToken(bytes32 tokenId) external {
 		bytes32 id = token[tokenId];
 		if (request[id].isClaimed) {
