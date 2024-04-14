@@ -104,7 +104,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     console.log("LSP1UniversalReceiverDelegateUP deployed");
   }
 
-  // deploy my UP profile on Sepolia
+  // TODO deploy my UP profile on Sepolia
   // const lsp23Factory = await hre.ethers.getContractAt("LSP23LinkedContractsFactory", LSP23_FACTORY_ADDRESS, deployer);
   // const upTX = await lsp23Factory.deployERC1167Proxies(
   //   [

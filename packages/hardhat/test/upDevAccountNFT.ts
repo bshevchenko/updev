@@ -1,48 +1,41 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { UpDevFunctionsConsumer } from "../typechain-types";
+import { UpDevAccountNFT } from "../typechain-types";
 import getSourceCode from "../sources/get";
 
-describe("upDevFunctionsConsumer", () => {
-  let consumer: UpDevFunctionsConsumer;
-  // let owner: any; TODO ???
+describe("upDevAccountNFT", () => {
+  let nft: UpDevAccountNFT;
 
-  const source = "twitter";
-
-  // before(async () => {
-  //     owner = (await ethers.getSigners())[0];
-  // });
+  const source = "twitter"; // TODO
 
   it("Should deploy & add consumer to Chainlink router", async () => {
-    const factory = await ethers.getContractFactory("upDevFunctionsConsumer");
-    const collectionAddress = "0x0000000000000000000000000000000000000000"; // TODO tmp
+    const factory = await ethers.getContractFactory("upDevAccountNFT");
 
-    consumer = (await factory.deploy(
+    nft = (await factory.deploy(
       process.env.DON_ROUTER,
       process.env.DON_ID,
-      collectionAddress,
-    )) as UpDevFunctionsConsumer;
-    await consumer.deployed();
-
-    expect(await consumer.collection()).to.equal(collectionAddress);
+      process.env.ACCOUNT_NFT_FORCE,
+      process.env.DON_GAS_LIMIT,
+    )) as UpDevAccountNFT;
+    await nft.deployed();
 
     const router = await ethers.getContractAt("IChainlinkFunctionsRouter", process.env.DON_ROUTER || "");
-    const tx = await router.addConsumer(process.env.DON_SUB_ID, consumer.address);
+    const tx = await router.addConsumer(process.env.DON_SUB_ID, nft.address);
     await tx.wait();
   });
 
   it("Should add source & get available sources", async () => {
-    const tx = await consumer.addSource(source, getSourceCode(source));
+    const tx = await nft.addSource(source, getSourceCode(source));
     await tx.wait();
-    expect(await consumer.getAvailableSources()).to.deep.equal([source]);
+    expect(await nft.getSources()).to.deep.equal([source]);
   });
 
   it("Shouldn't add source if name is already busy", async () => {
-    await expect(consumer.addSource(source, "")).to.be.revertedWithCustomError(consumer, "SourceNameBusy");
+    await expect(nft.addSource(source, "")).to.be.revertedWithCustomError(nft, "SourceNameBusy");
   });
 
   it("Should send & fulfill request with error", async () => {
-    consumer.sendRequest(
+    nft.sendRequest(
       // TODO add test source code and use it here (to avoid OAuth flow)
       process.env.DON_SUB_ID || 0, // TODO switch to DON hosted secrets to avoid using GitHub Gist API
       "0x",
@@ -52,8 +45,8 @@ describe("upDevFunctionsConsumer", () => {
       "QmP2Wpt6eCPrRkNjQmfDkvhdbgtC79ATHVz9Q1cBsY5WUR",
       "updevonly",
     );
-    const event: Promise<UpDevFunctionsConsumer.RequestStruct> = new Promise(resolve => {
-      consumer.on("Response", async (id, request) => {
+    const event: Promise<UpDevAccountNFT.RequestStruct> = new Promise(resolve => {
+      nft.on("Response", async (id, request) => {
         resolve(request);
       });
     });
@@ -63,6 +56,14 @@ describe("upDevFunctionsConsumer", () => {
     expect(ethers.utils.toUtf8String(request.data.toString())).to.include("Twitter fail");
   });
 
-  // TODO it should fulfill request, including errors
+  // TODO it should fulfill request – all cases
   // TODO it should mint/claim token
+
+  // TODO it should getRequests
+  // TODO it should getPendingRequests
+
+  // TODO should transfer existing token to new address
+  // TODO it should not transfer/transferBatch (soulbound)
+
+  // TODO LSP8 Mintable tests?
 });

@@ -2,7 +2,7 @@
 
 // TODO think through UI/UX
 
-// contract upDevEOAOwnership is LSP8Mintable {
+// contract upDevEOANFT is LSP8Mintable {
 //     mapping(address => uint256) public nonces;
 
 //     // Function to generate a message that the user should sign
