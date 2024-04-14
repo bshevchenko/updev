@@ -47,7 +47,7 @@
   },
   "dependencies": {
     "@chainlink/contracts": "^0.8.0",
-    "@lukso/lsp-smart-contracts": "^0.12.1",
+    "@lukso/lsp-smart-contracts": "^0.15.0",
     "@openzeppelin/contracts": "^4.8.1",
     "dotenv": "^16.0.3",
     "envfile": "^6.18.0",

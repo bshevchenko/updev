@@ -49,7 +49,7 @@ It leverages [Lukso Network](https://lukso.network/), [Univeral Profiles browser
 
 ## Verified Smart Contracts
 
-upDevAccountOwnership (LSP8 – NFT 2.0 Soulbound Collection)
+upDevAccountNFT (LSP8 – NFT 2.0 Soulbound Collection)
 https://mumbai.polygonscan.com/address/0xe015eB341264Ac609761f31Beb1C55BE8b6C69b0
 
 upDevFunctionsConsumer (Chainlink Functions Consumer & Minter)

@@ -2,7 +2,7 @@
 // import { ethers } from "hardhat";
 // import { UpDevAccountOwnership } from "../typechain-types";
 
-describe("upDevAccountOwnership", () => {
+describe("upDevAccountNFT", () => {
   // const tokenId = ethers.utils.keccak256(ethers.utils.solidityPack(["string", "string"], ["github", "bshevchenko"]));
   // const defaultAbiCoder = new ethers.utils.AbiCoder();
   // const data = defaultAbiCoder.encode([ "string", "string" ], [ "github", "bshevchenko" ]);
@@ -12,7 +12,7 @@ describe("upDevAccountOwnership", () => {
   // before(async () => {
   //   owner = (await ethers.getSigners())[0];
   //   dude = (await ethers.getSigners())[1];
-  //   const factory = await ethers.getContractFactory("upDevAccountOwnership");
+  //   const factory = await ethers.getContractFactory("upDevAccountNFT");
   //   collection = (await factory.deploy("Account Ownership", "UPDEV", owner.address)) as UpDevAccountOwnership;
   //   await collection.deployed();
   // });

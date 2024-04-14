@@ -513,6 +513,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@erc725/smart-contracts@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "@erc725/smart-contracts@npm:7.0.0"
+  dependencies:
+    "@openzeppelin/contracts": ^4.9.3
+    "@openzeppelin/contracts-upgradeable": ^4.9.3
+    solidity-bytes-utils: 0.8.0
+  checksum: 20fdca88eb7a33f4009c92d150c1c4b9b6ccd22bf4796c8b438d10afe5bf206ffa29b2b6c6aba7087b2117aeb2de533c1f4ce8d91ee21ff2012de95228c02bf5
+  languageName: node
+  linkType: hard
+
 "@eslint/eslintrc@npm:^1.3.2":
   version: 1.3.2
   resolution: "@eslint/eslintrc@npm:1.3.2"
@@ -1263,7 +1274,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lukso/lsp-smart-contracts@npm:^0.12.0, @lukso/lsp-smart-contracts@npm:^0.12.1":
+"@lukso/lsp-smart-contracts@npm:^0.12.0":
   version: 0.12.1
   resolution: "@lukso/lsp-smart-contracts@npm:0.12.1"
   dependencies:
@@ -1273,6 +1284,275 @@ __metadata:
     "@openzeppelin/contracts-upgradeable": ^4.9.2
     solidity-bytes-utils: 0.8.0
   checksum: dab9a972a2886789434bce8940b562bdd07fa5ac5287664a8f19cd41dd115ffa15d26a4fac8fc49448022c2b207feb84cd65a48cf0097963d1a0ff91b48fde40
+  languageName: node
+  linkType: hard
+
+"@lukso/lsp-smart-contracts@npm:^0.15.0":
+  version: 0.15.0
+  resolution: "@lukso/lsp-smart-contracts@npm:0.15.0"
+  dependencies:
+    "@lukso/lsp0-contracts": ~0.15.0
+    "@lukso/lsp1-contracts": ~0.15.0
+    "@lukso/lsp10-contracts": ~0.15.0
+    "@lukso/lsp12-contracts": ~0.15.0
+    "@lukso/lsp14-contracts": ~0.15.0
+    "@lukso/lsp16-contracts": ~0.15.0
+    "@lukso/lsp17-contracts": ~0.15.0
+    "@lukso/lsp17contractextension-contracts": ~0.15.0
+    "@lukso/lsp1delegate-contracts": ~0.15.0
+    "@lukso/lsp2-contracts": ~0.15.0
+    "@lukso/lsp20-contracts": ~0.15.0
+    "@lukso/lsp23-contracts": ~0.15.0
+    "@lukso/lsp25-contracts": ~0.15.0
+    "@lukso/lsp3-contracts": ~0.15.0
+    "@lukso/lsp4-contracts": ~0.15.0
+    "@lukso/lsp5-contracts": ~0.15.0
+    "@lukso/lsp6-contracts": ~0.15.0
+    "@lukso/lsp7-contracts": ~0.15.0
+    "@lukso/lsp8-contracts": ~0.15.0
+    "@lukso/lsp9-contracts": ~0.15.0
+    "@lukso/universalprofile-contracts": ~0.15.0
+  checksum: 298e946ab91a22ee42760baeb846f7cc1e4af90983adc5a841da8346ab5458b77fff4d3ea38bfa2e55c31d4a45b1b914100afa70abd9e8498e13972d9f71d7c1
+  languageName: node
+  linkType: hard
+
+"@lukso/lsp0-contracts@npm:~0.15.0":
+  version: 0.15.0
+  resolution: "@lukso/lsp0-contracts@npm:0.15.0"
+  dependencies:
+    "@erc725/smart-contracts": ^7.0.0
+    "@lukso/lsp1-contracts": ~0.15.0
+    "@lukso/lsp14-contracts": ~0.15.0
+    "@lukso/lsp17contractextension-contracts": ~0.15.0
+    "@lukso/lsp2-contracts": ~0.15.0
+    "@lukso/lsp20-contracts": ~0.15.0
+    "@openzeppelin/contracts": ^4.9.3
+  checksum: 85b2355d1aac490f8abb6cda8ce5b8d07de842c15150fcbef33d06f71127f4849918aeb02d6cbe0a7227b3b2e8d047031e784e20b2164415b7c517efbc8fd4ed
+  languageName: node
+  linkType: hard
+
+"@lukso/lsp1-contracts@npm:~0.15.0":
+  version: 0.15.0
+  resolution: "@lukso/lsp1-contracts@npm:0.15.0"
+  dependencies:
+    "@lukso/lsp2-contracts": ~0.15.0
+    "@openzeppelin/contracts": ^4.9.3
+  checksum: 9358b4938c230ebbad8a73c15947ab8cbc03e84ee1f734116498352ea44861205ce3f727e22cd47fca8a58dfd4c0bd5fd27d1d6ae92691b0c788f4e2caadeaa6
+  languageName: node
+  linkType: hard
+
+"@lukso/lsp10-contracts@npm:~0.15.0":
+  version: 0.15.0
+  resolution: "@lukso/lsp10-contracts@npm:0.15.0"
+  dependencies:
+    "@erc725/smart-contracts": ^6.0.0
+    "@lukso/lsp2-contracts": ~0.15.0
+  checksum: 0f901a581ae945e91c57ad2123392dca37b21145398a4ea4a998400c7dbbb98767b9883228ccc7c777ee051e219afe7d8519621c8c214438e214f24df67eee2d
+  languageName: node
+  linkType: hard
+
+"@lukso/lsp12-contracts@npm:~0.15.0":
+  version: 0.15.0
+  resolution: "@lukso/lsp12-contracts@npm:0.15.0"
+  dependencies:
+    "@lukso/lsp2-contracts": ~0.15.0
+  checksum: 8dd3e2341624671b32a334271cb904228d9bf4026137804cbb7395df7195efccf41694943dd49b89d3f07c0c459e7b2977401e31afcfd2c73a60e2e07a17a76d
+  languageName: node
+  linkType: hard
+
+"@lukso/lsp14-contracts@npm:~0.15.0":
+  version: 0.15.0
+  resolution: "@lukso/lsp14-contracts@npm:0.15.0"
+  dependencies:
+    "@erc725/smart-contracts": ^7.0.0
+    "@lukso/lsp1-contracts": ~0.15.0
+  checksum: a9785fe9abbf55d90374562d247fb3badf07f086e7b7b21746de3be5e67995162a2a6bb11965cf56081c98978fe1965b4fdd71395e4b86d99f68daf1a13ff76a
+  languageName: node
+  linkType: hard
+
+"@lukso/lsp16-contracts@npm:~0.15.0":
+  version: 0.15.0
+  resolution: "@lukso/lsp16-contracts@npm:0.15.0"
+  dependencies:
+    "@erc725/smart-contracts": ^7.0.0
+    "@openzeppelin/contracts": ^4.9.2
+    "@openzeppelin/contracts-upgradeable": ^4.9.2
+  checksum: 374fd97597ee0c3234e1538448292425b779a96c3c86e09b679f931805544b03d4510693a853b9225c086fce64d65d61aeef99eb12c09a352a8e93d8c0a56103
+  languageName: node
+  linkType: hard
+
+"@lukso/lsp17-contracts@npm:~0.15.0":
+  version: 0.15.0
+  resolution: "@lukso/lsp17-contracts@npm:0.15.0"
+  dependencies:
+    "@account-abstraction/contracts": ^0.6.0
+    "@erc725/smart-contracts": ^7.0.0
+    "@lukso/lsp14-contracts": ~0.15.0
+    "@lukso/lsp17contractextension-contracts": ~0.15.0
+    "@lukso/lsp20-contracts": ~0.15.0
+    "@lukso/lsp6-contracts": ~0.15.0
+    "@openzeppelin/contracts": ^4.9.3
+  checksum: ee2c03fc4c14ded36f52deebfc73bc24e4e0850169d495b4c10f9c3ea412e20b8ea373ae27e0e3156ba9423e92e2b972d591256eb54487d103d891a0f23ff90f
+  languageName: node
+  linkType: hard
+
+"@lukso/lsp17contractextension-contracts@npm:~0.15.0":
+  version: 0.15.0
+  resolution: "@lukso/lsp17contractextension-contracts@npm:0.15.0"
+  dependencies:
+    "@erc725/smart-contracts": ^7.0.0
+    "@openzeppelin/contracts": ^4.9.3
+  checksum: 3a5774c2c64899ecf0592eb4a4b48ea56f045c271577f842c26b7e607db705f05deaf6b825f85b0e6914b6702b9a0b7050f9a78fe15464ab956a8854d86e9735
+  languageName: node
+  linkType: hard
+
+"@lukso/lsp1delegate-contracts@npm:~0.15.0":
+  version: 0.15.0
+  resolution: "@lukso/lsp1delegate-contracts@npm:0.15.0"
+  dependencies:
+    "@erc725/smart-contracts": ^7.0.0
+    "@lukso/lsp1-contracts": ~0.15.0
+    "@lukso/lsp10-contracts": ~0.15.0
+    "@lukso/lsp5-contracts": ~0.15.0
+    "@lukso/lsp7-contracts": ~0.15.0
+    "@lukso/lsp8-contracts": ~0.15.0
+    "@lukso/lsp9-contracts": ~0.15.0
+    "@openzeppelin/contracts": ^4.9.3
+  checksum: 5f627632ec15077aa498e001ff4f1b326de52f9c4f963131202275c33a6790ab9a5f7e89fce63467e6d0a57e1f04e9686b3b522607ce2002f2e395a7bc0e84ed
+  languageName: node
+  linkType: hard
+
+"@lukso/lsp2-contracts@npm:~0.15.0":
+  version: 0.15.0
+  resolution: "@lukso/lsp2-contracts@npm:0.15.0"
+  dependencies:
+    "@erc725/smart-contracts": ^7.0.0
+    "@openzeppelin/contracts": ^4.9.3
+  checksum: a31bcc6fea5fe445a507299309f4708e195c6c89911d29238f919c8a7001487b7d3e33c1f8ab8688967d3de3cc07dba5fd378a3de7b59275f29d7c3e05f959ee
+  languageName: node
+  linkType: hard
+
+"@lukso/lsp20-contracts@npm:~0.15.0":
+  version: 0.15.0
+  resolution: "@lukso/lsp20-contracts@npm:0.15.0"
+  checksum: a9d5572b39baa2b9780e6ee86f3844081a40495747b6c3664fddb91af0856e4ae3fae194eb2a44ebd8be86dc0f9de49571e34904dd144f2acb342258ced1f12d
+  languageName: node
+  linkType: hard
+
+"@lukso/lsp23-contracts@npm:~0.15.0":
+  version: 0.15.0
+  resolution: "@lukso/lsp23-contracts@npm:0.15.0"
+  dependencies:
+    "@erc725/smart-contracts": ^7.0.0
+    "@lukso/universalprofile-contracts": ~0.15.0
+    "@openzeppelin/contracts": ^4.9.3
+  checksum: 53139da237e5f78b2c381648934d301eedff81e83399f7c2c8ba574a95c452a45a7f35cd32f0e88529cfe49acc0de7050ad66c7eac5802c5001bbfca86a5ebf8
+  languageName: node
+  linkType: hard
+
+"@lukso/lsp25-contracts@npm:~0.15.0":
+  version: 0.15.0
+  resolution: "@lukso/lsp25-contracts@npm:0.15.0"
+  dependencies:
+    "@openzeppelin/contracts": ^4.9.3
+  checksum: 2dfe69e2b609010816e59197afff3f7fdbebd7f550d36ccef154b29cf82cabfb23d132a4d35756c9276fb69bb4dc729f27aa4744cae0d540bbc13ebefcaaf0d6
+  languageName: node
+  linkType: hard
+
+"@lukso/lsp3-contracts@npm:~0.15.0":
+  version: 0.15.0
+  resolution: "@lukso/lsp3-contracts@npm:0.15.0"
+  dependencies:
+    "@lukso/lsp2-contracts": ~0.15.0
+  checksum: 7058b63b7dcbf6bf2aefee929e840941ce7d799fdab1b2e0b411684d33ba068256fe95da0755ade70d372936e376db3bec086f5a355d52e70caac230ac146620
+  languageName: node
+  linkType: hard
+
+"@lukso/lsp4-contracts@npm:~0.15.0":
+  version: 0.15.0
+  resolution: "@lukso/lsp4-contracts@npm:0.15.0"
+  dependencies:
+    "@erc725/smart-contracts": ^7.0.0
+    "@lukso/lsp2-contracts": ~0.15.0
+  checksum: c80e8880c108745d15583f3a178fe2a9895eeb8d40892d8fd4303d70b84dc2ecb999f37dc940f43a3de18806cd798cd8fd2aa1d5588e4159833cb9de2bcac3a6
+  languageName: node
+  linkType: hard
+
+"@lukso/lsp5-contracts@npm:~0.15.0":
+  version: 0.15.0
+  resolution: "@lukso/lsp5-contracts@npm:0.15.0"
+  dependencies:
+    "@erc725/smart-contracts": ^7.0.0
+    "@lukso/lsp2-contracts": ~0.15.0
+  checksum: 364049d7a301d58b090c28e71753c75a9211481fabae742963565835033f0184de180b143378eb0585aa5209692a5a2e6add43adf826aaea8cf5f548d967e9c7
+  languageName: node
+  linkType: hard
+
+"@lukso/lsp6-contracts@npm:~0.15.0":
+  version: 0.15.0
+  resolution: "@lukso/lsp6-contracts@npm:0.15.0"
+  dependencies:
+    "@erc725/smart-contracts": ^7.0.0
+    "@lukso/lsp1-contracts": ~0.15.0
+    "@lukso/lsp14-contracts": ~0.15.0
+    "@lukso/lsp17contractextension-contracts": ~0.15.0
+    "@lukso/lsp2-contracts": ~0.15.0
+    "@lukso/lsp20-contracts": ~0.15.0
+    "@lukso/lsp25-contracts": ~0.15.0
+    "@openzeppelin/contracts": ^4.9.3
+  checksum: c54f92423b72afdb3102c7719ccee2f82f7394610a8c79cd03fe0fee8947803cab5d991a97ede4ef715c0dafc70494eb1c1bb06fa039550553a5f0e937c4ffe4
+  languageName: node
+  linkType: hard
+
+"@lukso/lsp7-contracts@npm:~0.15.0":
+  version: 0.15.0
+  resolution: "@lukso/lsp7-contracts@npm:0.15.0"
+  dependencies:
+    "@erc725/smart-contracts": ^7.0.0
+    "@lukso/lsp1-contracts": ~0.15.0
+    "@lukso/lsp17contractextension-contracts": ~0.15.0
+    "@lukso/lsp2-contracts": ~0.15.0
+    "@lukso/lsp4-contracts": ~0.15.0
+    "@openzeppelin/contracts": ^4.9.3
+  checksum: 502aa0b0ddfb41b507b58289c8c947ec0c20ca942651ade77deaa5c6f7cc7a668ca4ab59afbef1a5eda39edb19a945f29a7357db0e4631e068a2d0a7602fbbf0
+  languageName: node
+  linkType: hard
+
+"@lukso/lsp8-contracts@npm:~0.15.0":
+  version: 0.15.0
+  resolution: "@lukso/lsp8-contracts@npm:0.15.0"
+  dependencies:
+    "@erc725/smart-contracts": ^7.0.0
+    "@lukso/lsp1-contracts": ~0.15.0
+    "@lukso/lsp17contractextension-contracts": ~0.15.0
+    "@lukso/lsp2-contracts": ~0.15.0
+    "@lukso/lsp4-contracts": ~0.15.0
+    "@openzeppelin/contracts": ^4.9.3
+  checksum: e45a05776857e906b62554aa689ef6731b89321aea44aa74a4df4c2b7916aec2067fdc58995f259421a0a851653c9afd6d6bf0c759d411c022b70c604e1a526e
+  languageName: node
+  linkType: hard
+
+"@lukso/lsp9-contracts@npm:~0.15.0":
+  version: 0.15.0
+  resolution: "@lukso/lsp9-contracts@npm:0.15.0"
+  dependencies:
+    "@erc725/smart-contracts": ^7.0.0
+    "@lukso/lsp1-contracts": ~0.15.0
+    "@lukso/lsp6-contracts": ~0.15.0
+    "@openzeppelin/contracts": ^4.9.3
+  checksum: 38dbc77f6051c2ed984a970389e93892e495b012416191d6f5b95b792850cb1d59a2b79fcaefb756ea4b888f8886ca327da1a964013f35338020c2d7b056341d
+  languageName: node
+  linkType: hard
+
+"@lukso/universalprofile-contracts@npm:~0.15.0":
+  version: 0.15.0
+  resolution: "@lukso/universalprofile-contracts@npm:0.15.0"
+  dependencies:
+    "@erc725/smart-contracts": ^7.0.0
+    "@lukso/lsp0-contracts": ~0.15.0
+    "@lukso/lsp3-contracts": ~0.15.0
+    "@openzeppelin/contracts": ^4.9.3
+  checksum: 5462e6703feb904f7dae774281921032bfbfe061e583fc62934d924a16f1bc4547f0a9256a4b97579c8c3cf678dd86fba1263b6279d329067716d349b525c292
   languageName: node
   linkType: hard
 
@@ -2322,7 +2602,7 @@ __metadata:
     "@chainlink/contracts": ^0.8.0
     "@ethersproject/abi": ^5.7.0
     "@ethersproject/providers": ^5.7.1
-    "@lukso/lsp-smart-contracts": ^0.12.1
+    "@lukso/lsp-smart-contracts": ^0.15.0
     "@matterlabs/hardhat-zksync-solc": ^0.3.17
     "@matterlabs/hardhat-zksync-verify": ^0.1.8
     "@nomicfoundation/hardhat-chai-matchers": ^1.0.3

@@ -14,17 +14,23 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   });
   // const upRegistry = await hre.ethers.getContract("upRegistry", deployer);
 
-  await deploy("upDevAccountOwnership", {
+  await deploy("upDevAccountNFT", {
     from: deployer,
-    args: ["Account Ownership", "UPDEV", deployer],
+    args: [],
     log: true,
     autoMine: true,
   });
-  const collection = await hre.ethers.getContract("upDevAccountOwnership", deployer);
+  const nft = await hre.ethers.getContract("upDevAccountNFT", deployer);
 
   await deploy("upDevFunctionsConsumer", {
     from: deployer,
-    args: [process.env.DON_ROUTER, process.env.DON_ID, collection.address],
+    args: [
+      process.env.DON_ROUTER,
+      process.env.DON_ID,
+      nft.address,
+      process.env.ACCOUNT_NFT_FORCE,
+      process.env.DON_GAS_LIMIT,
+    ],
     log: true,
     autoMine: true,
   });
@@ -45,18 +51,18 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     console.log("Consumer already added");
   }
 
-  // Transfer NFT collection ownership to consumer contract
+  // Transfer NFT contract ownership to consumer contract
   try {
-    await collection.transferOwnership(consumer.address);
-    console.log("Collection ownership transferred to", consumer.address);
+    await nft.transferOwnership(consumer.address);
+    console.log("NFT contract ownership transferred to", consumer.address);
   } catch (e) {
-    const owner = await collection.owner();
+    const owner = await nft.owner();
     const consumerAddress = await consumer.resolvedAddress;
     if (owner !== consumerAddress) {
-      console.error("Collection owner is invalid: ", owner, "Must be", consumer.address);
+      console.error("NFT contract owner is invalid: ", owner, "Must be", consumer.address);
       return;
     } else {
-      console.log("Collection ownership already transferred");
+      console.log("NFT contract ownership already transferred");
     }
   }
 
