@@ -15,6 +15,8 @@ contract upRegistry {
 	error InvalidKeyManager();
 	error NoPermissions();
 
+	// TODO event
+
 	function setUP(address _up) public {
 		if (!ERC725Y(_up).getPermissionsFor(msg.sender).hasPermission(_PERMISSION_SIGN)) {
 			revert NoPermissions();

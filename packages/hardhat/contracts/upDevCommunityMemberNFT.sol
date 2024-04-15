@@ -45,8 +45,8 @@ contract upDevCommunityMemberNFT is LSP8Soulbound {
 			force,
 			"0x" // TODO keep empty?
 		);
-		setDataForTokenId(tokenId, _LSP4_COMMUNITY_TOKEN_ID_KEY, communityTokenId);
-		setDataForTokenId(tokenId, _LSP4_ACCOUNT_TOKEN_ID_KEY, accountTokenId);
+		setDataForTokenId(tokenId, _LSP4_COMMUNITY_TOKEN_ID_KEY, abi.encodePacked(communityTokenId));
+		setDataForTokenId(tokenId, _LSP4_ACCOUNT_TOKEN_ID_KEY, abi.encodePacked(accountTokenId));
 
 		// TODO emit events. check other contracts for necessary indexer events too
 	}

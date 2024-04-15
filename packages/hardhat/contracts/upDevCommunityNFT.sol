@@ -13,6 +13,11 @@ pragma solidity ^0.8.20;
 import { LSP8Mintable } from "@lukso/lsp8-contracts/contracts/presets/LSP8Mintable.sol";
 import { _LSP8_TOKENID_FORMAT_UNIQUE_ID } from "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/LSP8Constants.sol";
 
+bytes32 constant _LSP4_WHITELIST_KEY = 0x57484954454c4953540000000000000000000000000000000000000000000000;
+
+// bytes constant TRUE = "0x1"; TODO
+// bytes constant FALSE = "0x0";
+
 contract upDevCommunityNFT is LSP8Mintable {
 	bool force;
 
@@ -31,28 +36,38 @@ contract upDevCommunityNFT is LSP8Mintable {
 	}
 
 	function mint(
-        bytes memory data, // TODO what is data? IPFS hash? allow NFT admins to update it
+		bytes memory data, // TODO what is data? IPFS hash? allow NFT admins to update it
         bool whitelist
-    ) public {
+	) public {
 		bytes32 tokenId = keccak256(
 			abi.encodePacked(msg.sender, block.timestamp)
 		);
-		// setDataForTokenId(tokenId, _LSP4_ID_KEY, bytes(request[id].id)); // TODO ???
+		// setDataForTokenId(tokenId, _LSP4_WHITELIST_KEY, whitelist ? TRUE : FALSE);
 		_mint(
 			msg.sender,
 			tokenId,
 			force,
-			"0x" // TODO keep empty?
+			data // TODO keep?
 		);
 	}
 
-    // TODO merkle-tree with whitelist (of accountTokenIds) stored on IPFS? whitelist is optional
+    // TODO function disableWhitelist(communityTokenId) ???
 
-    // TODO modifier onlyCommunityAdmin
+	// TODO merkle-tree with whitelist (of accountTokenIds) stored on IPFS? whitelist is optional
+	function isWhitelisted(
+		bytes32 tokenId,
+		bytes32 accountTokenId
+	) public view returns (bool) {
+        // if (getDataForTokenId(tokenId, _LSP4_WHITELIST_KEY) == TRUE) {} // TODO
+        // TODO is whitelist enabled for tokenId?
+		return true; // TODO
+	}
+
+	// TODO modifier onlyCommunityAdmin
 	// TODO function setAdmin() onlyCommunityOwner
 	// TODO function getAdmins() view
 
-    // TODO function burn(bytes32 tokenId) onlyCommunityOwner. burn or disable?
+	// TODO function burn(bytes32 tokenId) onlyCommunityOwner. burn or disable?
 
 	// TODO isWhitelisted(bytes32 tokenId, bytes32 accountTokenId) return bool
 
