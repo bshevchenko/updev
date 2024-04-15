@@ -15,7 +15,7 @@ describe("upDevAccountNFT", () => {
     nft = (await factory.deploy(
       process.env.DON_ROUTER,
       process.env.DON_ID,
-      process.env.ACCOUNT_NFT_FORCE,
+      process.env.LSP8_FORCE,
       process.env.DON_GAS_LIMIT,
     )) as UpDevAccountNFT;
     await nft.deployed();
@@ -37,13 +37,15 @@ describe("upDevAccountNFT", () => {
 
   // TODO add test source code and use it here (to avoid OAuth flow) ???
   it("Should send & fulfill request with error", async () => {
+    const accountId = "1283746192347";
+    const ipfsHash = "QmP2Wpt6eCPrRkNjQmfDkvhdbgtC79ATHVz9Q1cBsY5WUR";
     nft.sendRequest(
       process.env.DON_SUB_ID || 0,
-      "0x",
+      "0x", // TODO
       source.provider,
       source.version,
-      "updevonly",
-      "QmP2Wpt6eCPrRkNjQmfDkvhdbgtC79ATHVz9Q1cBsY5WUR",
+      accountId,
+      ipfsHash,
     );
     const event: Promise<UpDevAccountNFT.RequestStruct> = new Promise(resolve => {
       nft.on("Response", async (id, request) => {

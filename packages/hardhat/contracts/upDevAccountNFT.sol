@@ -1,34 +1,28 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-// modules
 import { LSP8Mintable } from "@lukso/lsp8-contracts/contracts/presets/LSP8Mintable.sol";
-import { LSP8IdentifiableDigitalAssetCore } from "@lukso/lsp8-contracts/contracts/LSP8IdentifiableDigitalAssetCore.sol";
-import { ILSP8IdentifiableDigitalAsset } from "@lukso/lsp8-contracts/contracts/ILSP8IdentifiableDigitalAsset.sol";
-
 import { FunctionsClient } from "@chainlink/contracts/src/v0.8/functions/dev/v1_0_0/FunctionsClient.sol";
 import { FunctionsRequest } from "@chainlink/contracts/src/v0.8/functions/dev/v1_0_0/libraries/FunctionsRequest.sol";
+import { _LSP8_TOKENID_FORMAT_HASH, _LSP8_TOKEN_METADATA_BASE_URI } from "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/LSP8Constants.sol";
 
-// constants
-import { _LSP8_TOKENID_FORMAT_STRING, _LSP8_TOKEN_METADATA_BASE_URI } from "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/LSP8Constants.sol";
-
-uint256 constant NFT = 1;
+import { LSP8Soulbound } from "./LSP8Soulbound.sol";
 
 // custom LSP4 keys
-bytes32 constant _LSP4_ABI_DATA_KEY = 0x5f4c5350345f4142495f444154415f4b45590000000000000000000000000000;
-bytes32 constant _LSP4_TIMESTAMP_KEY = 0x5f4c5350345f54494d455354414d505f4b455900000000000000000000000000;
-bytes32 constant _LSP4_PROVIDER_KEY = 0x5f4c5350345f50524f56494445525f4b45590000000000000000000000000000;
-bytes32 constant _LSP4_VERSION_KEY = 0x5f4c5350345f56455253494f4e5f4b4559000000000000000000000000000000;
-bytes32 constant _LSP4_USERNAME_KEY = 0x5f4c5350345f555345524e414d455f4b45590000000000000000000000000000;
+bytes32 constant _LSP4_ABI_DATA_KEY = 0x4142495f44415441000000000000000000000000000000000000000000000000;
+bytes32 constant _LSP4_TIMESTAMP_KEY = 0x54494d455354414d500000000000000000000000000000000000000000000000;
+bytes32 constant _LSP4_PROVIDER_KEY = 0x50524f5649444552000000000000000000000000000000000000000000000000;
+bytes32 constant _LSP4_VERSION_KEY = 0x56455253494f4e00000000000000000000000000000000000000000000000000;
+bytes32 constant _LSP4_ID_KEY = 0x4944000000000000000000000000000000000000000000000000000000000000;
 
-contract upDevAccountNFT is LSP8Mintable, FunctionsClient {
+contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 	using FunctionsRequest for FunctionsRequest.Request;
 
 	struct Request {
 		address sender;
 		string provider;
 		string version;
-		string username;
+		string id;
 		string ipfs;
 		bytes32 tokenId;
 		bytes data;
@@ -76,8 +70,8 @@ contract upDevAccountNFT is LSP8Mintable, FunctionsClient {
 			"upDev Account NFT",
 			"account",
 			msg.sender,
-			NFT,
-			_LSP8_TOKENID_FORMAT_STRING
+			1, // NFT
+			_LSP8_TOKENID_FORMAT_HASH
 		)
 	{
 		router = _router;
@@ -151,7 +145,7 @@ contract upDevAccountNFT is LSP8Mintable, FunctionsClient {
 		// uint64 donHostedSecretsVersion,
 		string calldata provider,
 		string calldata version,
-		string calldata username,
+		string calldata id, // TODO bytes instead of strings?
 		string calldata ipfs // hash
 	) external returns (bytes32 requestId) {
 		FunctionsRequest.Request memory req;
@@ -168,7 +162,7 @@ contract upDevAccountNFT is LSP8Mintable, FunctionsClient {
 		// }
 		string[] memory args = new string[](2);
 		args[0] = ipfs;
-		args[1] = username;
+		args[1] = id;
 		req.setArgs(args);
 
 		requestId = _sendRequest(
@@ -181,8 +175,8 @@ contract upDevAccountNFT is LSP8Mintable, FunctionsClient {
 			sender: msg.sender,
 			provider: provider,
 			version: version,
-			username: username,
-			tokenId: keccak256(abi.encodePacked(provider, username)),
+			id: id,
+			tokenId: keccak256(abi.encodePacked(provider, id)),
 			ipfs: ipfs,
 			data: "0x",
 			isFinished: false,
@@ -215,7 +209,7 @@ contract upDevAccountNFT is LSP8Mintable, FunctionsClient {
 		emit Response(id, request[id]);
 	}
 
-	function mint(bytes32 tokenId) external {
+	function mint(bytes32 tokenId) public {
 		bytes32 id = token[tokenId];
 
 		pendingNum[request[id].sender]--;
@@ -252,47 +246,8 @@ contract upDevAccountNFT is LSP8Mintable, FunctionsClient {
 
 		setDataForTokenId(tokenId, _LSP4_PROVIDER_KEY, bytes(request[id].provider));
 		setDataForTokenId(tokenId, _LSP4_VERSION_KEY, bytes(request[id].version));
-		setDataForTokenId(tokenId, _LSP4_USERNAME_KEY, bytes(request[id].username));
+		setDataForTokenId(tokenId, _LSP4_ID_KEY, bytes(request[id].id));
 
 		_mint(request[id].sender, tokenId, force, request[id].data);
-	}
-
-	/**
-	 * SOULBOUND
-	 */
-	error Soulbound();
-
-	function transfer(
-		address,
-		address,
-		bytes32,
-		bool,
-		bytes memory
-	)
-		public
-		pure
-		override(
-			ILSP8IdentifiableDigitalAsset,
-			LSP8IdentifiableDigitalAssetCore
-		)
-	{
-		revert Soulbound();
-	}
-
-	function transferBatch(
-		address[] memory,
-		address[] memory,
-		bytes32[] memory,
-		bool[] memory,
-		bytes[] memory
-	)
-		public
-		pure
-		override(
-			ILSP8IdentifiableDigitalAsset,
-			LSP8IdentifiableDigitalAssetCore
-		)
-	{
-		revert Soulbound();
 	}
 }

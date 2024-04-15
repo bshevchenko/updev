@@ -16,7 +16,7 @@ const ipfs = await Functions.makeHttpRequest({
 if (ipfs.error) {
     throw Error('IPFS fail');
 }
-if (twitter.data.data.username !== id || ipfs.data.username !== id) {
+if (twitter.data.data.username !== id || ipfs.data.username !== id) { // TODO id is not username
     throw Error('Username fail ' + twitter.data.data.username + ' ' + ipfs.data.username + ' ' + id);
 }
 // TODO throw error if twitter.data.data != ipfs.data. allow some % of divergence in ?.data.public_metrics
