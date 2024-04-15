@@ -17,16 +17,18 @@ uint256 constant NFT = 1;
 // custom LSP4 keys
 bytes32 constant _LSP4_ABI_DATA_KEY = 0x5f4c5350345f4142495f444154415f4b45590000000000000000000000000000;
 bytes32 constant _LSP4_TIMESTAMP_KEY = 0x5f4c5350345f54494d455354414d505f4b455900000000000000000000000000;
-bytes32 constant _LSP4_SOURCE_KEY = 0x5f4c5350345f534f555243455f4b455900000000000000000000000000000000;
-bytes32 constant _LSP4_ID_KEY = 0x5f4c5350345f49445f4b45590000000000000000000000000000000000000000;
+bytes32 constant _LSP4_PROVIDER_KEY = 0x5f4c5350345f50524f56494445525f4b45590000000000000000000000000000;
+bytes32 constant _LSP4_VERSION_KEY = 0x5f4c5350345f56455253494f4e5f4b4559000000000000000000000000000000;
+bytes32 constant _LSP4_USERNAME_KEY = 0x5f4c5350345f555345524e414d455f4b45590000000000000000000000000000;
 
 contract upDevAccountNFT is LSP8Mintable, FunctionsClient {
 	using FunctionsRequest for FunctionsRequest.Request;
 
 	struct Request {
 		address sender;
-		string source;
-		string id;
+		string provider;
+		string version;
+		string username;
 		string ipfs;
 		bytes32 tokenId;
 		bytes data;
@@ -41,7 +43,7 @@ contract upDevAccountNFT is LSP8Mintable, FunctionsClient {
 	mapping(bytes32 id => Request) public request;
 	mapping(bytes32 id => bytes32 requestId) public token;
 
-	mapping(address sender => bytes32[] ids) public requests; // TODO replace with events indexer?
+	mapping(address sender => bytes32[] ids) public requests;
 	mapping(address sender => uint256 num) public pendingNum;
 
 	string[] public sources;
@@ -85,7 +87,7 @@ contract upDevAccountNFT is LSP8Mintable, FunctionsClient {
 	}
 
 	function addSource(
-		string memory name,
+		string memory name, // f.e. github@1.0
 		string memory code
 	) public onlyOwner {
 		if (bytes(source[name]).length != 0) {
@@ -145,25 +147,28 @@ contract upDevAccountNFT is LSP8Mintable, FunctionsClient {
 	function sendRequest(
 		uint64 subscriptionId,
 		bytes memory encryptedSecretsUrls,
-		uint8 donHostedSecretsSlotID,
-		uint64 donHostedSecretsVersion,
-		string calldata _source,
-		string calldata ipfs,
-		string calldata id
+		// uint8 donHostedSecretsSlotID, // TODO switch to DON hosted secrets to avoid using GitHub Gist API
+		// uint64 donHostedSecretsVersion,
+		string calldata provider,
+		string calldata version,
+		string calldata username,
+		string calldata ipfs // hash
 	) external returns (bytes32 requestId) {
 		FunctionsRequest.Request memory req;
-		req.initializeRequestForInlineJavaScript(source[_source]);
+		req.initializeRequestForInlineJavaScript(
+			source[string.concat(provider, "@", version)]
+		);
 		if (encryptedSecretsUrls.length > 0)
 			req.addSecretsReference(encryptedSecretsUrls);
-		else if (donHostedSecretsVersion > 0) {
-			req.addDONHostedSecrets(
-				donHostedSecretsSlotID,
-				donHostedSecretsVersion
-			);
-		}
+		// else if (donHostedSecretsVersion > 0) {
+		// 	req.addDONHostedSecrets(
+		// 		donHostedSecretsSlotID,
+		// 		donHostedSecretsVersion
+		// 	);
+		// }
 		string[] memory args = new string[](2);
 		args[0] = ipfs;
-		args[1] = id;
+		args[1] = username;
 		req.setArgs(args);
 
 		requestId = _sendRequest(
@@ -174,9 +179,10 @@ contract upDevAccountNFT is LSP8Mintable, FunctionsClient {
 		);
 		request[requestId] = Request({
 			sender: msg.sender,
-			source: _source,
-			id: id,
-			tokenId: keccak256(abi.encodePacked(_source, id)),
+			provider: provider,
+			version: version,
+			username: username,
+			tokenId: keccak256(abi.encodePacked(provider, username)),
 			ipfs: ipfs,
 			data: "0x",
 			isFinished: false,
@@ -233,13 +239,20 @@ contract upDevAccountNFT is LSP8Mintable, FunctionsClient {
 
 		if (_tokenOwners[tokenId] != address(0)) {
 			if (_tokenOwners[tokenId] != request[id].sender) {
-				_transfer(_tokenOwners[tokenId], request[id].sender, tokenId, force, request[id].data);
+				_transfer(
+					_tokenOwners[tokenId],
+					request[id].sender,
+					tokenId,
+					force,
+					request[id].data
+				);
 			}
 			return;
 		}
 
-		setDataForTokenId(tokenId, _LSP4_SOURCE_KEY, bytes(request[id].source));
-		setDataForTokenId(tokenId, _LSP4_ID_KEY, bytes(request[id].id));
+		setDataForTokenId(tokenId, _LSP4_PROVIDER_KEY, bytes(request[id].provider));
+		setDataForTokenId(tokenId, _LSP4_VERSION_KEY, bytes(request[id].version));
+		setDataForTokenId(tokenId, _LSP4_USERNAME_KEY, bytes(request[id].username));
 
 		_mint(request[id].sender, tokenId, force, request[id].data);
 	}

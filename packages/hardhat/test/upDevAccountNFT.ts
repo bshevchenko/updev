@@ -1,12 +1,13 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { UpDevAccountNFT } from "../typechain-types";
-import getSourceCode from "../sources/get";
+import getSource from "../sources/get";
 
 describe("upDevAccountNFT", () => {
   let nft: UpDevAccountNFT;
 
-  const source = "twitter"; // TODO
+  // TODO more sources
+  const source = getSource("twitter", "1.0");
 
   it("Should deploy & add consumer to Chainlink router", async () => {
     const factory = await ethers.getContractFactory("upDevAccountNFT");
@@ -25,25 +26,24 @@ describe("upDevAccountNFT", () => {
   });
 
   it("Should add source & get available sources", async () => {
-    const tx = await nft.addSource(source, getSourceCode(source));
+    const tx = await nft.addSource(source.name, source.code);
     await tx.wait();
-    expect(await nft.getSources()).to.deep.equal([source]);
+    expect(await nft.getSources()).to.deep.equal([source.name]);
   });
 
   it("Shouldn't add source if name is already busy", async () => {
-    await expect(nft.addSource(source, "")).to.be.revertedWithCustomError(nft, "SourceNameBusy");
+    await expect(nft.addSource(source.name, "")).to.be.revertedWithCustomError(nft, "SourceNameBusy");
   });
 
+  // TODO add test source code and use it here (to avoid OAuth flow) ???
   it("Should send & fulfill request with error", async () => {
     nft.sendRequest(
-      // TODO add test source code and use it here (to avoid OAuth flow)
-      process.env.DON_SUB_ID || 0, // TODO switch to DON hosted secrets to avoid using GitHub Gist API
+      process.env.DON_SUB_ID || 0,
       "0x",
-      0,
-      0,
-      source,
-      "QmP2Wpt6eCPrRkNjQmfDkvhdbgtC79ATHVz9Q1cBsY5WUR",
+      source.provider,
+      source.version,
       "updevonly",
+      "QmP2Wpt6eCPrRkNjQmfDkvhdbgtC79ATHVz9Q1cBsY5WUR",
     );
     const event: Promise<UpDevAccountNFT.RequestStruct> = new Promise(resolve => {
       nft.on("Response", async (id, request) => {
