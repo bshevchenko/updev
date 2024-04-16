@@ -20,35 +20,44 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 
 	struct Request {
 		address sender;
-		string provider;
+		string provider; // TODO bytes vs string?
 		string version;
 		string id;
 		string ipfs;
 		bytes32 tokenId;
-		bytes data;
-		bool isFinished;
-		bool isOwned;
+		bool isFulfilled;
+		bool isOK;
 		bool isClaimed;
+		bytes data; // isOK ? ABI data : err
 	}
 
-	event Response(bytes32 indexed requestId, Request request);
+	event NewSource(string indexed name);
+	event Requested(
+		bytes32 indexed requestId,
+		address indexed sender,
+		bytes32 indexed tokenId,
+		string provider,
+		string version,
+		string id,
+		string ipfs
+	);
+	event Fulfilled(bytes32 indexed requestId, address indexed sender, bytes32 indexed tokenId, bool isOK);
+	event Claimed(bytes32 indexed requestId, address indexed sender, bytes32 indexed tokenId);
 
 	mapping(string name => string code) public source;
 	mapping(bytes32 id => Request) public request;
 	mapping(bytes32 id => bytes32 requestId) public token;
 
-	mapping(address sender => bytes32[] ids) public requests;
-	mapping(address sender => uint256 num) public pendingNum;
+	mapping(address sender => bytes32[] ids) public requests; // TODO just use indexer instead?
+	mapping(address sender => uint256 num) public pendingNum; // TODO just use indexer instead?
 
 	string[] public sources;
-	upDevAccountNFT nft;
 
 	address router;
 	bytes32 donID;
 	bool force;
 	uint32 gasLimit;
 
-	// Custom error type
 	error SourceNameBusy();
 	error AlreadyClaimed();
 
@@ -89,6 +98,7 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		}
 		source[name] = code;
 		sources.push(name);
+		emit NewSource(name);
 	}
 
 	function getSources() external view returns (string[] memory) {
@@ -140,11 +150,10 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 
 	function sendRequest(
 		uint64 subscriptionId,
-		uint8 donHostedSecretsSlotID,
 		uint64 donHostedSecretsVersion,
 		string calldata provider,
 		string calldata version,
-		string calldata id, // TODO bytes instead of strings?
+		string calldata id,
 		string calldata ipfs // hash
 	) external returns (bytes32 requestId) {
 		FunctionsRequest.Request memory req;
@@ -153,7 +162,7 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		);
 		if (donHostedSecretsVersion > 0) {
 			req.addDONHostedSecrets(
-				donHostedSecretsSlotID,
+				0, // TODO keep slot id hardcoded?
 				donHostedSecretsVersion
 			);
 		}
@@ -161,6 +170,8 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		args[0] = ipfs;
 		args[1] = id;
 		req.setArgs(args);
+
+		bytes32 tokenId = keccak256(abi.encodePacked(provider, id));
 
 		requestId = _sendRequest(
 			req.encodeCBOR(),
@@ -173,15 +184,17 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 			provider: provider,
 			version: version,
 			id: id,
-			tokenId: keccak256(abi.encodePacked(provider, id)),
+			tokenId: tokenId,
 			ipfs: ipfs,
 			data: "0x",
-			isFinished: false,
-			isOwned: false,
+			isFulfilled: false,
+			isOK: false,
 			isClaimed: false
 		});
 		requests[msg.sender].push(requestId);
 		pendingNum[msg.sender]++;
+
+		emit Requested(requestId, msg.sender, tokenId, provider, version, id, ipfs);
 	}
 
 	/**
@@ -195,19 +208,19 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		bytes memory response,
 		bytes memory err
 	) internal override {
-		request[id].isFinished = true;
+		request[id].isFulfilled = true;
 		if (err.length == 0) {
-			request[id].isOwned = true;
+			request[id].isOK = true;
 			request[id].data = response;
 			token[request[id].tokenId] = id;
 		} else {
 			request[id].data = err;
 		}
-		emit Response(id, request[id]);
+		emit Fulfilled(id, request[id].sender, request[id].tokenId, request[id].isOK);
 	}
 
 	function mint(bytes32 tokenId) public {
-		bytes32 id = token[tokenId];
+		bytes32 id = token[tokenId]; // requestId
 
 		pendingNum[request[id].sender]--;
 		request[id].isClaimed = true;
@@ -215,6 +228,8 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		if (request[id].isClaimed) {
 			revert AlreadyClaimed();
 		}
+
+		emit Claimed(id, request[id].sender, tokenId);
 
 		setDataForTokenId(
 			tokenId,

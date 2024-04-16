@@ -10,7 +10,7 @@ if (twitter.error) {
     throw Error('Twitter fail');
 }
 const ipfs = await Functions.makeHttpRequest({
-    url: 'https://gateway.pinata.cloud/ipfs/' + ipfsHash,
+    url: 'https://gateway.pinata.cloud/ipfs/' + ipfsHash, // TODO pass IPFS gateway in args?
     method: 'GET'
 });
 if (ipfs.error) {
