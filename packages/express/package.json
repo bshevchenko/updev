@@ -2,10 +2,13 @@
   "name": "express",
   "packageManager": "yarn@3.2.3",
   "dependencies": {
+    "@openzeppelin/defender-relay-client": "^1.54.1",
+    "@openzeppelin/defender-sdk": "^1.12.0",
     "@pinata/sdk": "^2.1.0",
     "axios": "^1.6.8",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
+    "ethers": "^5.7.1",
     "express": "^4.19.2"
   },
   "devDependencies": {

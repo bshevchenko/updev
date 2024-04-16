@@ -1,80 +1,74 @@
+const axios = require("axios")
+const { DefenderRelaySigner, DefenderRelayProvider } = require('@openzeppelin/defender-relay-client/lib/ethers')
+const { ethers } = require('ethers');
+
+// TODO duplicates in hardhat/deploy/00_LSP23.ts
+const LSP23_FACTORY_ADDRESS = "0x2300000a84d25df63081feaa37ba6b62c4c89a30";
+
+// TODO get from deployedContracts
+const UP_REGISTRY_ADDRESS = "0x4D820F82d44DF73011A3d10F39545a577A253d2a";
+
+// TODO make sure artifacts are compiled
+const LSP23_FACTORY_ABI = require("../../hardhat/artifacts/@lukso/lsp23-contracts/contracts/LSP23LinkedContractsFactory.sol/LSP23LinkedContractsFactory.json").abi
+const UP_REGISTRY_ABI = require("../../hardhat/artifacts/contracts/upRegistry.sol/upRegistry.json").abi
+
+const delay = (time) => new Promise(resolve => setTimeout(resolve, time));
 
 module.exports = async function (req, res) {
-    // TODO deploy new UP on Lukso Mainnet via Relayer API (what about rate limits?)
-    //   curl -X 'POST' \
-    //   'https://relayer-api.testnet.lukso.network/v1/relayer/universal-profile' \
-    //   -H 'accept: application/json' \
-    //   -H 'Authorization: Bearer ' \ // TODO get api key from .env
-    //   -H 'Content-Type: application/json' \
-    //   -d '{
-    //   "lsp6ControllerAddress":["0x240588CeBBd7C2f7e146A9fC1F357C82A9C052DC"],
-    //   "lsp3Profile": "0x6f357c6a3e2e3b435dd1ee4b8a2435722ee5533ea3f6cf6cb44c7fc278ac57ea1480295e697066733a2f2f516d5861714d67646971664b7931384373574768534a4c62626136316f6676666857387175506e6e6a6e76625966"
-    // }'
-    // Response body
-    // {
-    //   "taskUuid": "79c53ff5-0dfa-4ae4-b608-9d41e7087572",
-    //   "universalProfileAddress": "0x6a61454fCE3770E533E7E005474e9E8086ca1E95",
-    //   "transactionHash": "0x0a7c6fb808875ccab0447f949ac8f64618e26dded4113234938723ef3e5e5487"
-    // }
+
+    // TODO COMMON Controller Auth for all routes. Rate limits?
+
+    // TODO throw error if controllerAddress is already in upRegistry
+    const controller = req.body.controller;
+
+    // TODO bytecode; waiting for reply from Magali. pass via req.body.profile
+    const lsp3Profile = "0x6f357c6a3e2e3b435dd1ee4b8a2435722ee5533ea3f6cf6cb44c7fc278ac57ea1480295e697066733a2f2f516d5861714d67646971664b7931384373574768534a4c62626136316f6676666857387175506e6e6a6e76625966";
+
+    const { data } = await axios.post("https://relayer-api.testnet.lukso.network/v1/relayer/universal-profile", { // TODO testnet url
+        lsp6ControllerAddress: [controller],
+        lsp3Profile
+    }, {
+        headers: {
+            "Authorization": "Bearer " + process.env.LUKSO_RELAYER_API_KEY,
+            "Content-Type": "application/json"
+        }
+    })
+
+    // TODO Explorer API takes some time to get new tx data. I asked Magali to include deployment data in Relayer API response
+    await delay(5000);
+
+    // TODO use Lukso Explorer API to get deployment data
+    const { data: { decoded_input: { parameters } } } = await axios.get(
+        // TODO testnet url
+        "https://explorer.execution.testnet.lukso.network/api/v2/transactions/" + data.transactionHash
+    )
 
     // TODO deploy created UP on Sepolia via Defender gas relayer
 
-    // TODO use Lukso Explorer API to get deployment data
-    //     curl -X 'GET' \
-    //   'https://explorer.execution.testnet.lukso.network/api/v2/transactions/0x0a7c6fb808875ccab0447f949ac8f64618e26dded4113234938723ef3e5e5487' \
-    //   -H 'accept: application/json'
-    
-    // decoded_input."parameters": [
-    //   {
-    //     "name": "primaryContractDeploymentInit",
-    //     "type": "(bytes32,uint256,address,bytes)",
-    //     "value": [
-    //       "0x2c4988eef2926f98ec30edbdd6d30798c97393cf67fd6704fa1cd3eca6326b67",
-    //       "0",
-    //       "0x3024d38ea2434ba6635003dc1bdc0dab5882ed4f",
-    //       "0xc4d66de8000000000000000000000000000000000066093407b6704b89793beffd0d8f00"
-    //     ]
-    //   },
-    //   {
-    //     "name": "secondaryContractDeploymentInit",
-    //     "type": "(uint256,address,bytes,bool,bytes)",
-    //     "value": [
-    //       "0",
-    //       "0x2fe3aed98684e7351ad2d408a43ce09a738bf8a4",
-    //       "0xc4d66de8",
-    //       "true",
-    //       "0x"
-    //     ]
-    //   },
-    //   {
-    //     "name": "postDeploymentModule",
-    //     "type": "address",
-    //     "value": "0x000000000066093407b6704b89793beffd0d8f00"
-    //   },
-    //   {
-    //     "name": "postDeploymentModuleCalldata",
-    //     "type": "bytes",
-    //     "value": "0x000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000e00000000000000000000000000000000000000000000000000000000000000004df30dba06db6a30e65354d9a64c609861f089545ca58c6b4dbe31a5f338cb0e3df30dba06db6a30e65354d9a64c60986000000000000000000000000000000004b80742de2bf82acb3630000240588cebbd7c2f7e146a9fc1f357c82a9c052dc5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc50000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000140000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000014240588cebbd7c2f7e146a9fc1f357c82a9c052dc000000000000000000000000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000007f3f0600000000000000000000000000000000000000000000000000000000000000596f357c6a3e2e3b435dd1ee4b8a2435722ee5533ea3f6cf6cb44c7fc278ac57ea1480295e697066733a2f2f516d5861714d67646971664b7931384373574768534a4c62626136316f6676666857387175506e6e6a6e7662596600000000000000"
-    //   }
-    // ]
-    // const lsp23Factory = await hre.ethers.getContractAt("LSP23LinkedContractsFactory", LSP23_FACTORY_ADDRESS, deployer);
-    // const upTX = await lsp23Factory.deployERC1167Proxies(
-    //   [
-    //     "0x2c4988eef2926f98ec30edbdd6d30798c97393cf67fd6704fa1cd3eca6326b67",
-    //     "0",
-    //     "0x3024d38ea2434ba6635003dc1bdc0dab5882ed4f",
-    //     "0xc4d66de8000000000000000000000000000000000066093407b6704b89793beffd0d8f00"
-    //   ],
-    //   [
-    //     "0",
-    //     "0x2fe3aed98684e7351ad2d408a43ce09a738bf8a4",
-    //     "0xc4d66de8",
-    //     "true",
-    //     "0x"
-    //   ],
-    //   "0x000000000066093407b6704b89793beffd0d8f00",
-    //   "0x000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000e00000000000000000000000000000000000000000000000000000000000000004df30dba06db6a30e65354d9a64c609861f089545ca58c6b4dbe31a5f338cb0e3df30dba06db6a30e65354d9a64c60986000000000000000000000000000000004b80742de2bf82acb3630000240588cebbd7c2f7e146a9fc1f357c82a9c052dc5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc50000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000140000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000014240588cebbd7c2f7e146a9fc1f357c82a9c052dc000000000000000000000000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000007f3f0600000000000000000000000000000000000000000000000000000000000000596f357c6a3e2e3b435dd1ee4b8a2435722ee5533ea3f6cf6cb44c7fc278ac57ea1480295e697066733a2f2f516d5861714d67646971664b7931384373574768534a4c62626136316f6676666857387175506e6e6a6e7662596600000000000000",
-    // );
-    // const receipt = await upTX.wait();
-    // console.log('RECEIPT', receipt);
+    const credentials = {
+        apiKey: process.env.DEFENDER_RELAYER_API_KEY,
+        apiSecret: process.env.DEFENDER_RELAYER_API_SECRET
+    };
+
+    const provider = new DefenderRelayProvider(credentials);
+    const signer = new DefenderRelaySigner(credentials, provider, { speed: 'fast' });
+
+    const lsp23Factory = new ethers.Contract(LSP23_FACTORY_ADDRESS, LSP23_FACTORY_ABI, signer);
+    const lsp23Tx = await lsp23Factory.deployERC1167Proxies(
+        parameters[0].value,
+        parameters[1].value,
+        parameters[2].value,
+        parameters[3].value,
+    );
+    const lsp23TxMined = await lsp23Tx.wait();
+    console.log('lsp23TxMined', lsp23TxMined);
+
+    const upRegistry = new ethers.Contract(UP_REGISTRY_ADDRESS, UP_REGISTRY_ABI, signer);
+    const upRegistryTx = await upRegistry.setUP(data.universalProfileAddress, controller);
+    const upRegistryTxMined = await upRegistryTx.wait();
+    console.log('upRegistryTxMined', upRegistryTxMined);
+
+    console.log('Deployed UP', data.universalProfileAddress);
+
+    // TODO return
 }

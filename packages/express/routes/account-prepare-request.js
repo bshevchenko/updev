@@ -2,14 +2,13 @@ const axios = require("axios")
 const pinataSDK = require("@pinata/sdk")
 const { SecretsManager } = require("@chainlink/functions-toolkit")
 
+// TODO free pinata tier has only 500 Pinned Files max. switch to Filebase or pay for another tier?
 const pinata = new pinataSDK(process.env.PINATA_API_KEY, process.env.PINATA_API_SECRET)
 
 module.exports = async function (req, res) {
     try {
         // request user data
-        const result = await axios.get(
-            // TODO X entities?
-            // TODO API URL duplicated in hardhat/sources/
+        const result = await axios.get( // TODO dynamic API URL. pass provider & version in req.body?
             "https://api.twitter.com/2/users/me?user.fields=created_at,description,location,most_recent_tweet_id,pinned_tweet_id,profile_image_url,protected,public_metrics,url,verified,verified_type,withheld",
             { headers: { Authorization: "Bearer " + req.body.token } }
         );

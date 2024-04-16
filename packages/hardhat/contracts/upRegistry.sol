@@ -8,20 +8,32 @@ import { _PERMISSION_SIGN } from "@lukso/lsp-smart-contracts/contracts/LSP6KeyMa
 contract upRegistry {
 	using LSP6Utils for *;
 
-	mapping(address => address) public up; // EOA => UP
-	mapping(address => address) public eoa; // UP => EOA
+	mapping(address controller => address up) public up;
+	mapping(address up => address controller) public controller;
 	address[] public _ups;
 
-	error InvalidKeyManager();
+	error AlreadySetUp();
 	error NoPermissions();
 
-	// TODO event
+	event SetUp(address indexed up, address indexed controller);
 
-	function setUP(address _up) public {
-		if (!ERC725Y(_up).getPermissionsFor(msg.sender).hasPermission(_PERMISSION_SIGN)) {
+	function setUP(address _up, address _controller) public {
+		if (!ERC725Y(_up).getPermissionsFor(_controller).hasPermission(_PERMISSION_SIGN)) {
 			revert NoPermissions();
 		}
-		up[msg.sender] = _up;
-		eoa[_up] = msg.sender;
+		up[_controller] = _up;
+		controller[_up] = _controller;
+
+		_ups.push(_up);
+
+		emit SetUp(_up, _controller);
+	}
+
+	function ups() view public returns (address[] memory) {
+		address[] memory u = new address[](_ups.length);
+		for (uint i = 0; i < _ups.length; i++) {
+			u[i] = _ups[i];
+		}
+		return u;
 	}
 }

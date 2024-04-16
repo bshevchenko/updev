@@ -1,5 +1,5 @@
 const [ipfsHash, id] = args;
-const twitter = await Functions.makeHttpRequest({
+const twitter = await Functions.makeHttpRequest({ // TODO X entities?
     url: 'https://api.twitter.com/2/users/me?user.fields=created_at,description,location,most_recent_tweet_id,pinned_tweet_id,profile_image_url,protected,public_metrics,url,verified,verified_type,withheld',
     method: 'GET',
     headers: {

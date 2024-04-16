@@ -1,6 +1,6 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
-import getSourceCode from "../sources/get";
+import getSource from "../sources/get";
 
 const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await hre.getNamedAccounts();
@@ -37,16 +37,17 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     console.log("Consumer already added");
   }
 
-  const addSource = async (name: string) => {
+  const addSource = async (provider: string, version: string) => {
+    const source = getSource(provider, version);
     try {
-      await nft.addSource(name, getSourceCode(name));
-      console.log(`Source ${name} added`);
+      await nft.addSource(source.name, source.code);
+      console.log(`Source ${source.name} added`);
     } catch (e) {
-      console.log(`Source ${name} already added`);
+      console.log(`Source ${source.name} already added`);
     }
   };
 
-  await addSource("twitter");
+  await addSource("twitter", "1.0");
 };
 
 export default deployYourContract;
