@@ -140,9 +140,8 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 
 	function sendRequest(
 		uint64 subscriptionId,
-		bytes memory encryptedSecretsUrls,
-		// uint8 donHostedSecretsSlotID, // TODO switch to DON hosted secrets to avoid using GitHub Gist API
-		// uint64 donHostedSecretsVersion,
+		uint8 donHostedSecretsSlotID,
+		uint64 donHostedSecretsVersion,
 		string calldata provider,
 		string calldata version,
 		string calldata id, // TODO bytes instead of strings?
@@ -152,14 +151,12 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		req.initializeRequestForInlineJavaScript(
 			source[string.concat(provider, "@", version)]
 		);
-		if (encryptedSecretsUrls.length > 0)
-			req.addSecretsReference(encryptedSecretsUrls);
-		// else if (donHostedSecretsVersion > 0) {
-		// 	req.addDONHostedSecrets(
-		// 		donHostedSecretsSlotID,
-		// 		donHostedSecretsVersion
-		// 	);
-		// }
+		if (donHostedSecretsVersion > 0) {
+			req.addDONHostedSecrets(
+				donHostedSecretsSlotID,
+				donHostedSecretsVersion
+			);
+		}
 		string[] memory args = new string[](2);
 		args[0] = ipfs;
 		args[1] = id;
