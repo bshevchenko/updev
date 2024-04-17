@@ -1,30 +1,77 @@
-// TODO mints token if user verifies ownership over some EOA
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
 
-// TODO think through UI/UX
+import { LSP8Mintable } from "@lukso/lsp8-contracts/contracts/presets/LSP8Mintable.sol";
+import { _LSP8_TOKENID_FORMAT_ADDRESS } from "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/LSP8Constants.sol";
 
-// contract upDevEOANFT is LSP8Mintable {
-//     mapping(address => uint256) public nonces;
+import { LSP8Soulbound } from "./LSP8Soulbound.sol";
 
-//     // Function to generate a message that the user should sign
-//     function getMessageToSign(address user) public view returns (bytes32) {
-//         uint256 nonce = nonces[user];  // Get current nonce for user
-//         return keccak256(abi.encodePacked(user, address(this), nonce, "I prove that I own this address"));
-//     }
+contract upDevGroupNFT is LSP8Soulbound {
+	bool force;
 
-//     // Function to verify the signature
-//     function verify(address user, uint8 v, bytes32 r, bytes32 s) public returns (bool) {
-//         bytes32 message = getMessageToSign(user);
-//         bytes32 ethSignedMessageHash = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", message));
-//         address recovered = ecrecover(ethSignedMessageHash, v, r, s);
+	mapping(address => uint256) public nonce;
 
-//         if (recovered == user) {
-//             nonces[user]++;  // Increment nonce for the user after successful verification
+	error Failed();
 
-//             // TODO mint token here
+	constructor(
+		bool _force
+	)
+		LSP8Mintable(
+			"upDev EOA NFT",
+			"eoa",
+			msg.sender,
+			1, // NFT
+			_LSP8_TOKENID_FORMAT_ADDRESS
+		)
+	{
+		force = _force;
+	}
 
-//             return true;
-//         }
+	function getMessageToSign(address up) public view returns (bytes32) {
+		uint256 _nonce = nonce[up];
+		return
+			keccak256(
+				abi.encodePacked(
+					up,
+					address(this),
+					_nonce,
+					"I prove that I own this address" // TODO
+				)
+			);
+	}
 
-//         return false;
-//     }
-// }
+	function mint(
+		address eoa,
+		uint8 v,
+		bytes32 r,
+		bytes32 s,
+		bytes memory data
+	) public {
+		bytes32 message = getMessageToSign(msg.sender);
+		bytes32 ethSignedMessageHash = keccak256(
+			abi.encodePacked("\x19Ethereum Signed Message:\n32", message)
+		);
+		address recovered = ecrecover(ethSignedMessageHash, v, r, s);
+
+		if (recovered != eoa) {
+			revert Failed();
+		}
+
+        bytes32 tokenId = bytes32(uint256(uint160(eoa)));
+        
+		if (_exists(tokenId)) {
+			if (_tokenOwners[tokenId] != msg.sender) {
+				_transfer(
+					_tokenOwners[tokenId],
+					msg.sender,
+					tokenId,
+					force,
+					data
+				);
+			}
+			return;
+		}
+
+		_mint(msg.sender, tokenId, force, data);
+	}
+}

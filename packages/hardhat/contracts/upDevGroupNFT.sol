@@ -9,10 +9,10 @@ import "./upConstants.sol";
 import "./BytesUtils.sol";
 
 bytes32 constant _LSP4_WHITELIST_KEY = 0x57484954454c4953540000000000000000000000000000000000000000000000;
-bytes32 constant _LSP4_WHITELIST_IPFS_KEY = 0x57484954454c4953545f49504653000000000000000000000000000000000000;
 bytes32 constant _LSP4_METADATA_KEY = 0x4d45544144415441000000000000000000000000000000000000000000000000;
+bytes32 constant _LSP4_PARENT_KEY = 0x504152454e540000000000000000000000000000000000000000000000000000;
 
-contract upDevCommunityNFT is LSP8Mintable {
+contract upDevGroupNFT is LSP8Mintable {
 	using BytesUtils for bytes;
 
 	bool force;
@@ -23,8 +23,8 @@ contract upDevCommunityNFT is LSP8Mintable {
 		bool _force
 	)
 		LSP8Mintable(
-			"upDev Community NFT",
-			"community",
+			"upDev Group NFT",
+			"group",
 			msg.sender,
 			1, // NFT
 			_LSP8_TOKENID_FORMAT_UNIQUE_ID
@@ -33,26 +33,26 @@ contract upDevCommunityNFT is LSP8Mintable {
 		force = _force;
 	}
 
+	modifier onlyAdmin(bytes32 tokenId) {
+		// TODO extra admins besides of just token owner
+		if (tokenId != bytes32(0) && tokenOwnerOf(tokenId) != msg.sender) {
+			revert NotAllowed();
+		}
+		_;
+	}
+
 	function mint(
 		bytes calldata metadata,
 		bytes calldata whitelist, // merkle root
-		bytes calldata whitelistIPFS // optional
-	) public {
+		bytes32 parentTokenId // optional
+	) public onlyAdmin(parentTokenId) {
 		bytes32 tokenId = keccak256(
 			abi.encodePacked(msg.sender, block.timestamp)
 		);
 		_mint(msg.sender, tokenId, force, "0x");
 		setDataForTokenId(tokenId, _LSP4_METADATA_KEY, metadata);
 		setDataForTokenId(tokenId, _LSP4_WHITELIST_KEY, whitelist);
-		setDataForTokenId(tokenId, _LSP4_WHITELIST_IPFS_KEY, whitelistIPFS);
-	}
-
-	modifier onlyAdmin(bytes32 tokenId) {
-		// TODO extra admins besides of just token owner
-		if (tokenOwnerOf(tokenId) != msg.sender) {
-			revert NotAllowed();
-		}
-		_;
+		setDataForTokenId(tokenId, _LSP4_PARENT_KEY, whitelist);
 	}
 
 	function setMetadata(
@@ -64,11 +64,9 @@ contract upDevCommunityNFT is LSP8Mintable {
 
 	function setWhitelist(
 		bytes32 tokenId,
-		bytes calldata whitelist,
-		bytes calldata whitelistIPFS
+		bytes calldata whitelist
 	) public onlyAdmin(tokenId) {
 		setDataForTokenId(tokenId, _LSP4_WHITELIST_KEY, whitelist);
-		setDataForTokenId(tokenId, _LSP4_WHITELIST_IPFS_KEY, whitelistIPFS);
 	}
 
 	function setArchive(bytes32 tokenId, bool on) public onlyAdmin(tokenId) {
@@ -77,9 +75,12 @@ contract upDevCommunityNFT is LSP8Mintable {
 
 	function isWhitelisted(
 		bytes32 tokenId,
-		bytes32 accountTokenId,
+		address up,
 		bytes32[] calldata merkleProof
 	) public view returns (bool) {
+		if (!_exists(tokenId)) {
+			return false;
+		}
 		bytes memory merkleRoot = getDataForTokenId(
 			tokenId,
 			_LSP4_WHITELIST_KEY
@@ -88,12 +89,7 @@ contract upDevCommunityNFT is LSP8Mintable {
 			// whitelist disabled
 			return true;
 		}
-		bytes32 leaf = keccak256(abi.encodePacked(accountTokenId));
-		return
-			MerkleProof.verify(
-				merkleProof,
-				merkleRoot.toBytes32(0),
-				leaf
-			);
+		bytes32 leaf = keccak256(abi.encodePacked(up));
+		return MerkleProof.verify(merkleProof, merkleRoot.toBytes32(0), leaf);
 	}
 }

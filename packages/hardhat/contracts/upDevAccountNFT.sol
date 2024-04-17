@@ -19,7 +19,7 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 	using FunctionsRequest for FunctionsRequest.Request;
 
 	struct Request {
-		address sender;
+		address sender; // TODO rename sender to up
 		string provider; // TODO bytes vs string?
 		string version;
 		string id;
@@ -28,7 +28,7 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		bool isFulfilled;
 		bool isOK;
 		bool isClaimed;
-		bytes data; // isOK ? ABI data : err
+		bytes data; // = isOK ? ABI data : err
 	}
 
 	event NewSource(string indexed name);
@@ -41,8 +41,17 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		string id,
 		string ipfs
 	);
-	event Fulfilled(bytes32 indexed requestId, address indexed sender, bytes32 indexed tokenId, bool isOK);
-	event Claimed(bytes32 indexed requestId, address indexed sender, bytes32 indexed tokenId);
+	event Fulfilled(
+		bytes32 indexed requestId,
+		address indexed sender,
+		bytes32 indexed tokenId,
+		bool isOK
+	);
+	event Claimed(
+		bytes32 indexed requestId,
+		address indexed sender,
+		bytes32 indexed tokenId
+	);
 
 	mapping(string name => string code) public source;
 	mapping(bytes32 id => Request) public request;
@@ -194,7 +203,15 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		requests[msg.sender].push(requestId);
 		pendingNum[msg.sender]++;
 
-		emit Requested(requestId, msg.sender, tokenId, provider, version, id, ipfs);
+		emit Requested(
+			requestId,
+			msg.sender,
+			tokenId,
+			provider,
+			version,
+			id,
+			ipfs
+		);
 	}
 
 	/**
@@ -216,7 +233,12 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		} else {
 			request[id].data = err;
 		}
-		emit Fulfilled(id, request[id].sender, request[id].tokenId, request[id].isOK);
+		emit Fulfilled(
+			id,
+			request[id].sender,
+			request[id].tokenId,
+			request[id].isOK
+		);
 	}
 
 	function mint(bytes32 tokenId) public {
@@ -243,7 +265,7 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 			abi.encode(block.timestamp)
 		);
 
-		if (_tokenOwners[tokenId] != address(0)) {
+		if (_exists(tokenId)) {
 			if (_tokenOwners[tokenId] != request[id].sender) {
 				_transfer(
 					_tokenOwners[tokenId],
@@ -256,8 +278,16 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 			return;
 		}
 
-		setDataForTokenId(tokenId, _LSP4_PROVIDER_KEY, bytes(request[id].provider));
-		setDataForTokenId(tokenId, _LSP4_VERSION_KEY, bytes(request[id].version));
+		setDataForTokenId(
+			tokenId,
+			_LSP4_PROVIDER_KEY,
+			bytes(request[id].provider)
+		);
+		setDataForTokenId(
+			tokenId,
+			_LSP4_VERSION_KEY,
+			bytes(request[id].version)
+		);
 		setDataForTokenId(tokenId, _LSP4_ID_KEY, bytes(request[id].id));
 
 		_mint(request[id].sender, tokenId, force, request[id].data);
