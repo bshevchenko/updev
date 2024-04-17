@@ -7,11 +7,15 @@ import { _LSP8_TOKENID_FORMAT_HASH } from "@lukso/lsp-smart-contracts/contracts/
 import { LSP8Soulbound } from "./LSP8Soulbound.sol";
 import { upDevCommunityNFT } from "./upDevCommunityNFT.sol";
 
-// custom LSP4 keys
+import "./upConstants.sol";
+import "./BytesUtils.sol";
+
 bytes32 constant _LSP4_COMMUNITY_TOKEN_ID_KEY = 0x434f4d4d554e4954595f544f4b454e5f49440000000000000000000000000000;
 bytes32 constant _LSP4_ACCOUNT_TOKEN_ID_KEY = 0x4143434f554e545f544f4b454e5f494400000000000000000000000000000000;
+bytes32 constant _LSP4_BAN_KEY = 0x4152434849564500000000000000000000000000000000000000000000000000;
 
 contract upDevCommunityMemberNFT is LSP8Soulbound {
+	using BytesUtils for bytes;
 
 	upDevCommunityNFT community;
 	bool force;
@@ -34,24 +38,51 @@ contract upDevCommunityMemberNFT is LSP8Soulbound {
 		force = _force;
 	}
 
-	function mint(bytes32 communityTokenId, bytes32 accountTokenId) public {
-		if (!community.isWhitelisted(communityTokenId, accountTokenId)) {
+	function mint(
+		bytes32 communityTokenId,
+		bytes32 accountTokenId,
+		bytes32[] calldata merkleProof
+	) public {
+		if (
+			!community.isWhitelisted(
+				communityTokenId,
+				accountTokenId,
+				merkleProof
+			)
+		) {
 			revert NotAllowed();
 		}
-		bytes32 tokenId = keccak256(abi.encodePacked(communityTokenId, msg.sender));
-		_mint(
-			msg.sender,
-			tokenId,
-			force,
-			"0x" // TODO keep empty?
+		bytes32 tokenId = keccak256(
+			abi.encodePacked(communityTokenId, msg.sender)
 		);
-		setDataForTokenId(tokenId, _LSP4_COMMUNITY_TOKEN_ID_KEY, abi.encodePacked(communityTokenId));
-		setDataForTokenId(tokenId, _LSP4_ACCOUNT_TOKEN_ID_KEY, abi.encodePacked(accountTokenId));
-
-		// TODO emit events. check other contracts for necessary indexer events too
+		_mint(msg.sender, tokenId, force, "0x");
+		setDataForTokenId(
+			tokenId,
+			_LSP4_COMMUNITY_TOKEN_ID_KEY,
+			abi.encodePacked(communityTokenId)
+		);
+		setDataForTokenId(
+			tokenId,
+			_LSP4_ACCOUNT_TOKEN_ID_KEY,
+			abi.encodePacked(accountTokenId)
+		);
 	}
 
-	// TODO function burn(tokenId) communityAdminOrCommunityMember. burn or disable?
-	// TODO if community admin removes a member, then member can still be in a whitelist to mint new token...
-	// TODO ...avoid that by introducing ban rather than burn?
+	function setArchive(bytes32 tokenId, bool on) public {
+		if (tokenOwnerOf(tokenId) != msg.sender) {
+			revert NotAllowed();
+		}
+		setDataForTokenId(tokenId, _LSP4_ARCHIVE_KEY, on ? TRUE : FALSE);
+	}
+
+	function setBan(bytes32 tokenId, bool on) public {
+		if (
+			community.tokenOwnerOf(
+				getDataForTokenId(tokenId, _LSP4_COMMUNITY_TOKEN_ID_KEY).toBytes32(0)
+			) != msg.sender
+		) {
+			revert NotAllowed();
+		}
+		setDataForTokenId(tokenId, _LSP4_BAN_KEY, on ? TRUE : FALSE);
+	}
 }

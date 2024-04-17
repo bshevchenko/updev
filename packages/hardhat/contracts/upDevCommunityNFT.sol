@@ -1,25 +1,23 @@
-// TODO
-// Alice is a [Community NFT].owner that resides in a Telegram channel. Alice:
-// 1. Allows upDev to access her Telegram channels.
-// 2. Picks her community channel & N participants of it.
-// 3. Whitelists Telegram AccountNFT tokenIds generated from picked participants (keccak256(abi.encodePacked("telegram", id))
-// 4. Shares with invited people the link /community/[communityTokenId]/claimMembership/[provider] which shows either:
-//   A. message "Sign Up & Mint Your [provider] Account first"
-//   B. button "Claim cryptoOKO Member NFT" if user has whitelisted [Account NFT]
-
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
 import { LSP8Mintable } from "@lukso/lsp8-contracts/contracts/presets/LSP8Mintable.sol";
 import { _LSP8_TOKENID_FORMAT_UNIQUE_ID } from "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/LSP8Constants.sol";
+import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
+
+import "./upConstants.sol";
+import "./BytesUtils.sol";
 
 bytes32 constant _LSP4_WHITELIST_KEY = 0x57484954454c4953540000000000000000000000000000000000000000000000;
-
-// bytes constant TRUE = "0x1"; TODO
-// bytes constant FALSE = "0x0";
+bytes32 constant _LSP4_WHITELIST_IPFS_KEY = 0x57484954454c4953545f49504653000000000000000000000000000000000000;
+bytes32 constant _LSP4_METADATA_KEY = 0x4d45544144415441000000000000000000000000000000000000000000000000;
 
 contract upDevCommunityNFT is LSP8Mintable {
+	using BytesUtils for bytes;
+
 	bool force;
+
+	error NotAllowed();
 
 	constructor(
 		bool _force
@@ -36,40 +34,66 @@ contract upDevCommunityNFT is LSP8Mintable {
 	}
 
 	function mint(
-		bytes memory data, // TODO what is data? IPFS hash? allow NFT admins to update it
-        bool whitelist
+		bytes calldata metadata,
+		bytes calldata whitelist, // merkle root
+		bytes calldata whitelistIPFS // optional
 	) public {
 		bytes32 tokenId = keccak256(
 			abi.encodePacked(msg.sender, block.timestamp)
 		);
-		// setDataForTokenId(tokenId, _LSP4_WHITELIST_KEY, whitelist ? TRUE : FALSE);
-		_mint(
-			msg.sender,
-			tokenId,
-			force,
-			data // TODO keep?
-		);
+		_mint(msg.sender, tokenId, force, "0x");
+		setDataForTokenId(tokenId, _LSP4_METADATA_KEY, metadata);
+		setDataForTokenId(tokenId, _LSP4_WHITELIST_KEY, whitelist);
+		setDataForTokenId(tokenId, _LSP4_WHITELIST_IPFS_KEY, whitelistIPFS);
 	}
 
-    // TODO function disableWhitelist(communityTokenId) ???
+	modifier onlyAdmin(bytes32 tokenId) {
+		// TODO extra admins besides of just token owner
+		if (tokenOwnerOf(tokenId) != msg.sender) {
+			revert NotAllowed();
+		}
+		_;
+	}
 
-	// TODO merkle-tree with whitelist (of accountTokenIds) stored on IPFS? whitelist is optional
+	function setMetadata(
+		bytes32 tokenId,
+		bytes calldata data
+	) public onlyAdmin(tokenId) {
+		setDataForTokenId(tokenId, _LSP4_METADATA_KEY, data);
+	}
+
+	function setWhitelist(
+		bytes32 tokenId,
+		bytes calldata whitelist,
+		bytes calldata whitelistIPFS
+	) public onlyAdmin(tokenId) {
+		setDataForTokenId(tokenId, _LSP4_WHITELIST_KEY, whitelist);
+		setDataForTokenId(tokenId, _LSP4_WHITELIST_IPFS_KEY, whitelistIPFS);
+	}
+
+	function setArchive(bytes32 tokenId, bool on) public onlyAdmin(tokenId) {
+		setDataForTokenId(tokenId, _LSP4_ARCHIVE_KEY, on ? TRUE : FALSE);
+	}
+
 	function isWhitelisted(
 		bytes32 tokenId,
-		bytes32 accountTokenId
+		bytes32 accountTokenId,
+		bytes32[] calldata merkleProof
 	) public view returns (bool) {
-        // if (getDataForTokenId(tokenId, _LSP4_WHITELIST_KEY) == TRUE) {} // TODO
-        // TODO is whitelist enabled for tokenId?
-		return true; // TODO
+		bytes memory merkleRoot = getDataForTokenId(
+			tokenId,
+			_LSP4_WHITELIST_KEY
+		);
+		if (merkleRoot.length == 0) {
+			// whitelist disabled
+			return true;
+		}
+		bytes32 leaf = keccak256(abi.encodePacked(accountTokenId));
+		return
+			MerkleProof.verify(
+				merkleProof,
+				merkleRoot.toBytes32(0),
+				leaf
+			);
 	}
-
-	// TODO modifier onlyCommunityAdmin
-	// TODO function setAdmin() onlyCommunityOwner
-	// TODO function getAdmins() view
-
-	// TODO function burn(bytes32 tokenId) onlyCommunityOwner. burn or disable?
-
-	// TODO isWhitelisted(bytes32 tokenId, bytes32 accountTokenId) return bool
-
-	// TODO blacklist, isBlacklisted? blacklist by account NFTs and/or by UP addresses?
 }

@@ -21,7 +21,7 @@ module.exports = async function (req, res) {
     // TODO throw error if controllerAddress is already in upRegistry
     const controller = req.body.controller;
 
-    // TODO bytecode; waiting for reply from Magali. pass via req.body.profile
+    // TODO bytecode; pass via req.body.profile. https://github.com/magalimorin18/relayer-example/blob/main/scripts/encode-data/encode-lsp3Profile.ts
     const lsp3Profile = "0x6f357c6a3e2e3b435dd1ee4b8a2435722ee5533ea3f6cf6cb44c7fc278ac57ea1480295e697066733a2f2f516d5861714d67646971664b7931384373574768534a4c62626136316f6676666857387175506e6e6a6e76625966";
 
     const { data } = await axios.post("https://relayer-api.testnet.lukso.network/v1/relayer/universal-profile", { // TODO testnet url
