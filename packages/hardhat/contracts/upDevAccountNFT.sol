@@ -19,7 +19,7 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 	using FunctionsRequest for FunctionsRequest.Request;
 
 	struct Request {
-		address sender; // TODO rename sender to up
+		address up;
 		string provider; // TODO bytes vs string?
 		string version;
 		string id;
@@ -34,7 +34,7 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 	event NewSource(string indexed name);
 	event Requested(
 		bytes32 indexed requestId,
-		address indexed sender,
+		address indexed up,
 		bytes32 indexed tokenId,
 		string provider,
 		string version,
@@ -43,13 +43,13 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 	);
 	event Fulfilled(
 		bytes32 indexed requestId,
-		address indexed sender,
+		address indexed up,
 		bytes32 indexed tokenId,
 		bool isOK
 	);
 	event Claimed(
 		bytes32 indexed requestId,
-		address indexed sender,
+		address indexed up,
 		bytes32 indexed tokenId
 	);
 
@@ -57,8 +57,8 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 	mapping(bytes32 id => Request) public request;
 	mapping(bytes32 id => bytes32 requestId) public token;
 
-	mapping(address sender => bytes32[] ids) public requests; // TODO just use indexer instead?
-	mapping(address sender => uint256 num) public pendingNum; // TODO just use indexer instead?
+	mapping(address up => bytes32[] ids) public requests; // TODO just use indexer instead?
+	mapping(address up => uint256 num) public pendingNum; // TODO just use indexer instead?
 
 	string[] public sources;
 
@@ -121,9 +121,9 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 	function getRequests(
 		uint256 offset,
 		uint256 limit,
-		address sender
+		address up
 	) external view returns (Request[] memory) {
-		uint256 total = requests[sender].length;
+		uint256 total = requests[up].length;
 		if (offset >= total) {
 			return new Request[](0);
 		}
@@ -133,22 +133,22 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		}
 		Request[] memory result = new Request[](num);
 		for (uint256 i = 0; i < num; i++) {
-			result[i] = request[requests[sender][offset + i]];
+			result[i] = request[requests[up][offset + i]];
 		}
 		return result;
 	}
 
 	function getPendingRequests(
-		address sender
+		address up
 	) external view returns (Request[] memory) {
-		uint256 _pendingNum = pendingNum[sender];
-		Request[] memory result = new Request[](pendingNum[sender]);
+		uint256 _pendingNum = pendingNum[up];
+		Request[] memory result = new Request[](pendingNum[up]);
 		uint256 j = 0;
-		for (uint256 i = requests[sender].length - 1; i >= 0; i--) {
-			if (request[requests[sender][i]].isClaimed) {
+		for (uint256 i = requests[up].length - 1; i >= 0; i--) {
+			if (request[requests[up][i]].isClaimed) {
 				continue;
 			}
-			result[i] = request[requests[sender][i]];
+			result[i] = request[requests[up][i]];
 			j++;
 			if (j == _pendingNum) {
 				break;
@@ -189,7 +189,7 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 			donID
 		);
 		request[requestId] = Request({
-			sender: msg.sender,
+			up: msg.sender,
 			provider: provider,
 			version: version,
 			id: id,
@@ -235,23 +235,24 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		}
 		emit Fulfilled(
 			id,
-			request[id].sender,
+			request[id].up,
 			request[id].tokenId,
 			request[id].isOK
 		);
 	}
 
-	function mint(bytes32 tokenId) public {
+	function claim(bytes32 tokenId) public {
 		bytes32 id = token[tokenId]; // requestId
 
-		pendingNum[request[id].sender]--;
-		request[id].isClaimed = true;
+		pendingNum[request[id].up]--;
 
 		if (request[id].isClaimed) {
 			revert AlreadyClaimed();
 		}
 
-		emit Claimed(id, request[id].sender, tokenId);
+		request[id].isClaimed = true;
+
+		emit Claimed(id, request[id].up, tokenId);
 
 		setDataForTokenId(
 			tokenId,
@@ -266,10 +267,10 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		);
 
 		if (_exists(tokenId)) {
-			if (_tokenOwners[tokenId] != request[id].sender) {
+			if (_tokenOwners[tokenId] != request[id].up) {
 				_transfer(
 					_tokenOwners[tokenId],
-					request[id].sender,
+					request[id].up,
 					tokenId,
 					force,
 					request[id].data
@@ -290,6 +291,6 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		);
 		setDataForTokenId(tokenId, _LSP4_ID_KEY, bytes(request[id].id));
 
-		_mint(request[id].sender, tokenId, force, request[id].data);
+		_mint(request[id].up, tokenId, force, request[id].data);
 	}
 }

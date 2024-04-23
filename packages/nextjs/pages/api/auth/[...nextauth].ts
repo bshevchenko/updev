@@ -1,22 +1,29 @@
 import NextAuth from "next-auth";
+import DiscordProvider from "next-auth/providers/discord";
 import GithubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
 import InstagramProvider from "next-auth/providers/instagram";
 import TwitterProvider from "next-auth/providers/twitter";
 
-// TODO typescript
 export default NextAuth({
   secret: process.env.SECRET,
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    }),
     GithubProvider({
-      // @ts-ignore
-      clientId: process.env.GITHUB_ID, // @ts-ignore
-      clientSecret: process.env.GITHUB_SECRET,
+      clientId: process.env.GITHUB_CLIENT_ID || "",
+      clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
     }),
     TwitterProvider({
-      // @ts-ignore
-      clientId: process.env.TWITTER_CLIENT_ID, // @ts-ignore
-      clientSecret: process.env.TWITTER_CLIENT_SECRET,
+      clientId: process.env.TWITTER_CLIENT_ID || "",
+      clientSecret: process.env.TWITTER_CLIENT_SECRET || "",
       version: "2.0",
+    }),
+    DiscordProvider({
+      clientId: process.env.DISCORD_CLIENT_ID || "",
+      clientSecret: process.env.DISCORD_CLIENT_SECRET || "",
     }),
     InstagramProvider({
       clientId: process.env.INSTAGRAM_CLIENT_ID,
@@ -28,7 +35,6 @@ export default NextAuth({
   },
   callbacks: {
     async session({ session, token }) {
-      // console.log('session', session, token, user);
       // @ts-ignore
       session.user.id = token.id; // @ts-ignore
       session.accessToken = token.accessToken; // @ts-ignore
@@ -36,7 +42,6 @@ export default NextAuth({
       return session;
     },
     async jwt({ token, account, user }) {
-      // console.log('jwt 23 NEW', token, account, user);
       if (user) {
         token.id = user.id;
       }
