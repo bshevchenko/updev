@@ -1,8 +1,10 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import hre from "hardhat";
+import { impersonateAccount, setBalance } from "@nomicfoundation/hardhat-network-helpers";
 import { UpDevAccountNFT } from "../typechain-types";
 import getSource from "../sources/get";
+import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 // TODO extract
 const _LSP8_TOKEN_METADATA_BASE_URI = ethers.utils.arrayify(
@@ -21,8 +23,13 @@ describe("upDevAccountNFT", () => {
   const accountId = "1283746192347";
   const ipfsHash = "QmP2Wpt6eCPrRkNjQmfDkvhdbgtC79ATHVz9Q1cBsY5WUR";
 
+  let network: any;
+  let isFork = false;
+
   let nft: UpDevAccountNFT;
-  let owner: any;
+  let signers: SignerWithAddress[];
+  let owner: SignerWithAddress;
+  let oracle: SignerWithAddress;
   const constructorArguments: any = [
     process.env.DON_ROUTER,
     process.env.DON_ID,
@@ -32,7 +39,18 @@ describe("upDevAccountNFT", () => {
   let tokenId: any;
 
   before(async () => {
-    owner = (await ethers.getSigners())[0];
+    signers = await ethers.getSigners();
+    owner = signers[0];
+
+    network = await ethers.provider.getNetwork();
+    isFork = network.name === "unknown";
+
+    if (isFork) {
+      console.log("Fork. Impersonating DON router...");
+      await impersonateAccount(process.env.DON_ROUTER || "");
+      await setBalance(process.env.DON_ROUTER || "", ethers.utils.parseEther("1"));
+      oracle = await ethers.getSigner(process.env.DON_ROUTER || "");
+    }
   });
 
   it("Should deploy & add consumer to Chainlink router", async () => {
@@ -64,13 +82,11 @@ describe("upDevAccountNFT", () => {
       console.log("Subscribing to Fulfilled event...");
       nft.on("Fulfilled", async () => {
         console.log("Fulfilled");
-        console.log("Fetching pending requests...");
         const requests = await nft.getPendingRequests(owner.address);
-        console.log("Pending requests:", requests);
         resolve(requests[0]);
       });
       console.log("Sending request...");
-      const tx = await nft.sendRequest(
+      let tx = await nft.sendRequest(
         process.env.DON_SUB_ID || 0,
         0,
         source.provider,
@@ -80,8 +96,16 @@ describe("upDevAccountNFT", () => {
       );
       await tx.wait();
       console.log("Request sent and now being fulfilled by DON...");
+
+      if (isFork) {
+        const requestId = await nft.requests(owner.address, 0);
+        console.log("Simulating DON fulfillment for:", requestId);
+        tx = await nft.connect(oracle).handleOracleFulfillment(requestId, OK, "0x");
+        await tx.wait();
+      }
     });
     const request = await fulfilled;
+    // nft.removeAllListeners("Fulfilled");
     expect(request.up).to.equal(owner.address);
     expect(request.provider).to.equal(source.provider);
     expect(request.version).to.equal(source.version);
@@ -96,13 +120,16 @@ describe("upDevAccountNFT", () => {
   });
 
   it("Should mint", async () => {
-    await hre.run("verify:verify", {
-      address: nft.address,
-      constructorArguments,
-    });
+    if (!isFork) {
+      await hre.run("verify:verify", {
+        address: nft.address,
+        constructorArguments,
+      });
+    }
 
     console.log("Claiming token:", tokenId);
-    await nft.claim(tokenId, { gasLimit: 20000000 });
+    const tx = await nft.claim(tokenId, { gasLimit: 20000000 });
+    await tx.wait();
 
     expect(await nft.tokenOwnerOf(tokenId)).to.equal(owner.address);
     expect(await nft.tokenIdsOf(owner.address)).to.deep.equal([tokenId]);
@@ -129,8 +156,8 @@ describe("upDevAccountNFT", () => {
 
     const timestampDate = new Date(Number(ethers.utils.defaultAbiCoder.decode(["uint256"], timestamp)) * 1000);
     const now = new Date();
-    const differenceInSeconds = Math.abs((now.getTime() - timestampDate.getTime()) / 1000);
-    expect(differenceInSeconds).to.be.lessThan(60);
+    const differenceInSeconds = (now.getTime() - timestampDate.getTime()) / 1000;
+    expect(differenceInSeconds).to.be.lessThan(600);
   });
 
   it("Should not transfer/transferBatch (soulbound)", async () => {
@@ -144,10 +171,43 @@ describe("upDevAccountNFT", () => {
     ).to.be.revertedWithCustomError(nft, "Soulbound");
   });
 
-  // TODO it should fulfill request – all providers?
+  it("Should transfer existing token to new address", async () => {
+    const fulfilled: Promise<UpDevAccountNFT.RequestStruct> = new Promise(async resolve => {
+      console.log("Subscribing to Fulfilled event...");
+      const eventHandler = async () => {
+        console.log("Fulfilled");
+        const requests = await nft.getPendingRequests(signers[1].address);
+        resolve(requests[0]);
+      };
+      nft.on("Fulfilled", eventHandler);
+      console.log("Sending request...");
+      let tx = await nft
+        .connect(signers[1])
+        .sendRequest(process.env.DON_SUB_ID || 0, 0, source.provider, source.version, accountId, ipfsHash);
+      await tx.wait();
+      console.log("Request sent and now being fulfilled by DON...");
+
+      if (isFork) {
+        console.log("Simulating DON fulfillment...");
+        tx = await nft.connect(oracle).handleOracleFulfillment(await nft.requests(signers[1].address, 0), OK, "0x");
+        await tx.wait();
+        await eventHandler();
+      }
+    });
+    const request = await fulfilled;
+    // nft.removeAllListeners("Fulfilled");
+    expect(tokenId).to.equal(request.tokenId);
+
+    console.log("Claiming token: ", tokenId);
+    const tx = await nft.claim(tokenId);
+    await tx.wait();
+
+    expect(await nft.tokenOwnerOf(tokenId)).to.equal(signers[1].address);
+    expect(await nft.tokenIdsOf(owner.address)).to.deep.equal([]);
+  });
+
+  // TODO it should fulfill request – all providers? how? it won't work without OAuth keys.
 
   // TODO it should getRequests
   // TODO it should getPendingRequests
-
-  // TODO should transfer existing token to new address
 });

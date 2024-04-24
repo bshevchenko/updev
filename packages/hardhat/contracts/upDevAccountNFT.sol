@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import { LSP8Mintable } from "@lukso/lsp8-contracts/contracts/presets/LSP8Mintable.sol";
 import { FunctionsClient } from "@chainlink/contracts/src/v0.8/functions/dev/v1_0_0/FunctionsClient.sol";
 import { FunctionsRequest } from "@chainlink/contracts/src/v0.8/functions/dev/v1_0_0/libraries/FunctionsRequest.sol";
 import { _LSP8_TOKENID_FORMAT_HASH, _LSP8_TOKEN_METADATA_BASE_URI } from "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/LSP8Constants.sol";
@@ -55,10 +54,10 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 
 	mapping(string name => string code) public source;
 	mapping(bytes32 id => Request) public request;
-	mapping(bytes32 id => bytes32 requestId) public token;
+	mapping(bytes32 tokenId => bytes32 requestId) public requestId;
 
 	mapping(address up => bytes32[] ids) public requests; // TODO just use indexer instead?
-	mapping(address up => uint256 num) public pendingNum; // TODO just use indexer instead?
+	mapping(address up => uint256 num) public pendingNum;
 
 	string[] public sources;
 
@@ -84,7 +83,7 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		uint32 _gasLimit
 	)
 		FunctionsClient(_router)
-		LSP8Mintable(
+		LSP8Soulbound(
 			"upDev Account NFT",
 			"account",
 			msg.sender,
@@ -164,7 +163,7 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		string calldata version,
 		string calldata id,
 		string calldata ipfs // hash
-	) external returns (bytes32 requestId) {
+	) external returns (bytes32 _requestId) {
 		FunctionsRequest.Request memory req;
 		req.initializeRequestForInlineJavaScript(
 			source[string.concat(provider, "@", version)]
@@ -182,13 +181,13 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 
 		bytes32 tokenId = keccak256(abi.encodePacked(provider, id));
 
-		requestId = _sendRequest(
+		_requestId = _sendRequest(
 			req.encodeCBOR(),
 			subscriptionId,
 			gasLimit,
 			donID
 		);
-		request[requestId] = Request({
+		request[_requestId] = Request({
 			up: msg.sender,
 			provider: provider,
 			version: version,
@@ -200,11 +199,11 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 			isOK: false,
 			isClaimed: false
 		});
-		requests[msg.sender].push(requestId);
+		requests[msg.sender].push(_requestId);
 		pendingNum[msg.sender]++;
 
 		emit Requested(
-			requestId,
+			_requestId,
 			msg.sender,
 			tokenId,
 			provider,
@@ -229,7 +228,7 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		if (err.length == 0) {
 			request[id].isOK = true;
 			request[id].data = response;
-			token[request[id].tokenId] = id;
+			requestId[request[id].tokenId] = id;
 		} else {
 			request[id].data = err;
 		}
@@ -242,7 +241,7 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 	}
 
 	function claim(bytes32 tokenId) public {
-		bytes32 id = token[tokenId]; // requestId
+		bytes32 id = requestId[tokenId];
 
 		pendingNum[request[id].up]--;
 

@@ -1,13 +1,27 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import { LSP8Mintable } from "@lukso/lsp8-contracts/contracts/presets/LSP8Mintable.sol";
 import { LSP8IdentifiableDigitalAssetCore } from "@lukso/lsp8-contracts/contracts/LSP8IdentifiableDigitalAssetCore.sol";
-import { ILSP8IdentifiableDigitalAsset } from "@lukso/lsp8-contracts/contracts/ILSP8IdentifiableDigitalAsset.sol";
+import { LSP8IdentifiableDigitalAsset } from "@lukso/lsp8-contracts/contracts/LSP8IdentifiableDigitalAsset.sol";
 
-abstract contract LSP8Soulbound is LSP8Mintable {
-
+abstract contract LSP8Soulbound is LSP8IdentifiableDigitalAsset {
 	error Soulbound();
+
+	constructor(
+        string memory name_,
+        string memory symbol_,
+        address newOwner_,
+        uint256 lsp4TokenType_,
+        uint256 lsp8TokenIdFormat_
+    )
+        LSP8IdentifiableDigitalAsset(
+            name_,
+            symbol_,
+            newOwner_,
+            lsp4TokenType_,
+            lsp8TokenIdFormat_
+        )
+    {}
 
 	function transfer(
 		address,
@@ -19,7 +33,6 @@ abstract contract LSP8Soulbound is LSP8Mintable {
 		public
 		pure
 		override(
-			ILSP8IdentifiableDigitalAsset,
 			LSP8IdentifiableDigitalAssetCore
 		)
 	{
@@ -36,7 +49,6 @@ abstract contract LSP8Soulbound is LSP8Mintable {
 		public
 		pure
 		override(
-			ILSP8IdentifiableDigitalAsset,
 			LSP8IdentifiableDigitalAssetCore
 		)
 	{

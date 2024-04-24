@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import { LSP8Mintable } from "@lukso/lsp8-contracts/contracts/presets/LSP8Mintable.sol";
 import { _LSP8_TOKENID_FORMAT_HASH } from "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/LSP8Constants.sol";
 
 import { LSP8Soulbound } from "./LSP8Soulbound.sol";
@@ -27,7 +26,7 @@ contract upDevGroupMemberNFT is LSP8Soulbound {
 		address payable groupNFT,
 		bool _force
 	)
-		LSP8Mintable(
+		LSP8Soulbound(
 			"upDev Group Member NFT",
 			"groupMember",
 			msg.sender,
