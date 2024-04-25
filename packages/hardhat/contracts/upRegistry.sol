@@ -18,7 +18,11 @@ contract upRegistry {
 	event SetUp(address indexed up, address indexed controller);
 
 	function setUP(address _up, address _controller) public {
-		if (!ERC725Y(_up).getPermissionsFor(_controller).hasPermission(_PERMISSION_SIGN)) {
+		if (
+			!ERC725Y(_up).getPermissionsFor(_controller).hasPermission(
+				_PERMISSION_SIGN
+			)
+		) {
 			revert NoPermissions();
 		}
 		up[_controller] = _up;
@@ -29,11 +33,21 @@ contract upRegistry {
 		emit SetUp(_up, _controller);
 	}
 
-	function ups() view public returns (address[] memory) {
-		address[] memory u = new address[](_ups.length);
-		for (uint i = 0; i < _ups.length; i++) {
-			u[i] = _ups[i];
+	function ups(
+		uint offset,
+		uint limit
+	) public view returns (address[] memory) {
+		uint maxIndex = offset + limit;
+		if (maxIndex > _ups.length) {
+			maxIndex = _ups.length;
 		}
-		return u;
+		uint resultSize = maxIndex > offset ? maxIndex - offset : 0;
+		address[] memory result = new address[](resultSize);
+		uint resultIndex = 0;
+		for (uint i = offset; i < maxIndex; i++) {
+			result[resultIndex] = _ups[i];
+			resultIndex++;
+		}
+		return result;
 	}
 }

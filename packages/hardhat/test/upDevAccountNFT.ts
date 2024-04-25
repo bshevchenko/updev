@@ -2,9 +2,9 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import hre from "hardhat";
 import { impersonateAccount, setBalance } from "@nomicfoundation/hardhat-network-helpers";
+import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { UpDevAccountNFT } from "../typechain-types";
 import getSource from "../sources/get";
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 // TODO extract
 const _LSP8_TOKEN_METADATA_BASE_URI = ethers.utils.arrayify(
@@ -17,12 +17,9 @@ const _LSP4_VERSION_KEY = ethers.utils.arrayify("0x56455253494f4e000000000000000
 const _LSP4_ID_KEY = ethers.utils.arrayify("0x4944000000000000000000000000000000000000000000000000000000000000");
 
 const OK = "0x0000000000000000000000000000000000000000000000000000000000000001";
+const OK_2 = "0x0000000000000000000000000000000000000000000000000000000000000002";
 
 describe("upDevAccountNFT", () => {
-  const source = getSource("test", "0.1");
-  const accountId = "1283746192347";
-  const ipfsHash = "QmP2Wpt6eCPrRkNjQmfDkvhdbgtC79ATHVz9Q1cBsY5WUR";
-
   let network: any;
   let isFork = false;
 
@@ -37,6 +34,10 @@ describe("upDevAccountNFT", () => {
     process.env.DON_GAS_LIMIT,
   ];
   let tokenId: any;
+  const source = getSource("test/ok", "0.1");
+  const accountId = "1283746192347";
+  const ipfsHash = "QmP2Wpt6eCPrRkNjQmfDkvhdbgtC79ATHVz9Q1cBsY5WUR";
+  const ipfsHash2 = "QmRuQ4xZ2UJWU8VP1dhvX1DBP5ZENjibEV82dSEmN2yQeZ";
 
   before(async () => {
     signers = await ethers.getSigners();
@@ -50,6 +51,8 @@ describe("upDevAccountNFT", () => {
       await impersonateAccount(process.env.DON_ROUTER || "");
       await setBalance(process.env.DON_ROUTER || "", ethers.utils.parseEther("1"));
       oracle = await ethers.getSigner(process.env.DON_ROUTER || "");
+    } else {
+      expect(await signers[1].getBalance()).to.be.greaterThan(ethers.utils.parseEther("0.1"));
     }
   });
 
@@ -105,7 +108,7 @@ describe("upDevAccountNFT", () => {
       }
     });
     const request = await fulfilled;
-    // nft.removeAllListeners("Fulfilled");
+    nft.removeAllListeners("Fulfilled");
     expect(request.up).to.equal(owner.address);
     expect(request.provider).to.equal(source.provider);
     expect(request.version).to.equal(source.version);
@@ -128,7 +131,7 @@ describe("upDevAccountNFT", () => {
     }
 
     console.log("Claiming token:", tokenId);
-    const tx = await nft.claim(tokenId, { gasLimit: 20000000 });
+    const tx = await nft.claim(tokenId);
     await tx.wait();
 
     expect(await nft.tokenOwnerOf(tokenId)).to.equal(owner.address);
@@ -147,7 +150,6 @@ describe("upDevAccountNFT", () => {
         _LSP4_ID_KEY,
       ],
     );
-
     expect(abiData).to.equal(OK);
     expect(ethers.utils.toUtf8String(metaData)).to.equal("ipfs://" + ipfsHash);
     expect(ethers.utils.toUtf8String(provider)).to.equal(source.provider);
@@ -171,7 +173,13 @@ describe("upDevAccountNFT", () => {
     ).to.be.revertedWithCustomError(nft, "Soulbound");
   });
 
-  it("Should transfer existing token to new address", async () => {
+  it("Should update existing token & transfer it to new owner", async () => {
+    const newSource = getSource("test/ok", "0.2");
+
+    console.log("Adding source test/ok@0.2...");
+    let tx = await nft.addSource(newSource.name, newSource.code);
+    await tx.wait();
+
     const fulfilled: Promise<UpDevAccountNFT.RequestStruct> = new Promise(async resolve => {
       console.log("Subscribing to Fulfilled event...");
       const eventHandler = async () => {
@@ -183,31 +191,91 @@ describe("upDevAccountNFT", () => {
       console.log("Sending request...");
       let tx = await nft
         .connect(signers[1])
-        .sendRequest(process.env.DON_SUB_ID || 0, 0, source.provider, source.version, accountId, ipfsHash);
+        .sendRequest(process.env.DON_SUB_ID || 0, 0, newSource.provider, newSource.version, accountId, ipfsHash2);
       await tx.wait();
       console.log("Request sent and now being fulfilled by DON...");
 
       if (isFork) {
         console.log("Simulating DON fulfillment...");
-        tx = await nft.connect(oracle).handleOracleFulfillment(await nft.requests(signers[1].address, 0), OK, "0x");
+        tx = await nft.connect(oracle).handleOracleFulfillment(await nft.requests(signers[1].address, 0), OK_2, "0x");
         await tx.wait();
         await eventHandler();
       }
     });
     const request = await fulfilled;
-    // nft.removeAllListeners("Fulfilled");
+    nft.removeAllListeners("Fulfilled");
     expect(tokenId).to.equal(request.tokenId);
 
     console.log("Claiming token: ", tokenId);
-    const tx = await nft.claim(tokenId);
+    tx = await nft.claim(tokenId);
     await tx.wait();
 
     expect(await nft.tokenOwnerOf(tokenId)).to.equal(signers[1].address);
     expect(await nft.tokenIdsOf(owner.address)).to.deep.equal([]);
+
+    const [abiData, metaData, provider, version, id] = await nft.getDataBatchForTokenIds(new Array(5).fill(tokenId), [
+      _LSP4_ABI_DATA_KEY,
+      _LSP8_TOKEN_METADATA_BASE_URI,
+      _LSP4_PROVIDER_KEY,
+      _LSP4_VERSION_KEY,
+      _LSP4_ID_KEY,
+    ]);
+    expect(abiData).to.equal(OK_2);
+    expect(ethers.utils.toUtf8String(metaData)).to.equal("ipfs://" + ipfsHash2);
+    expect(ethers.utils.toUtf8String(provider)).to.equal(source.provider);
+    expect(ethers.utils.toUtf8String(version)).to.equal(newSource.version);
+    expect(ethers.utils.toUtf8String(id)).to.equal(accountId);
+
+    expect("0.2").to.equal(newSource.version);
   });
 
-  // TODO it should fulfill request – all providers? how? it won't work without OAuth keys.
+  it("should not claim failed request", async () => {
+    const errorSource = getSource("test/error", "0.1");
+    console.log("Adding source test/error@0.1...");
+    const tx = await nft.addSource(errorSource.name, errorSource.code);
+    await tx.wait();
 
-  // TODO it should getRequests
-  // TODO it should getPendingRequests
+    const expectedError = ethers.utils.toUtf8Bytes("test");
+
+    const fulfilled: Promise<UpDevAccountNFT.RequestStruct> = new Promise(async resolve => {
+      console.log("Subscribing to Fulfilled event...");
+      const eventHandler = async () => {
+        console.log("Fulfilled");
+        const requests = await nft.getRequests(1, 1, owner.address);
+        resolve(requests[0]);
+      };
+      nft.on("Fulfilled", eventHandler);
+      console.log("Sending request...");
+      let tx = await nft.sendRequest(
+        process.env.DON_SUB_ID || 0,
+        0,
+        errorSource.provider,
+        errorSource.version,
+        accountId,
+        ipfsHash,
+      );
+      await tx.wait();
+      console.log("Request sent and now being fulfilled by DON...");
+
+      if (isFork) {
+        console.log("Simulating DON fulfillment...");
+        tx = await nft
+          .connect(oracle)
+          .handleOracleFulfillment(await nft.requests(owner.address, 1), "0x", expectedError);
+        await tx.wait();
+        await eventHandler();
+      }
+    });
+    const request: any = await fulfilled;
+    nft.removeAllListeners("Fulfilled");
+    expect(request.up).to.equal(owner.address);
+    expect(request.provider).to.equal(errorSource.provider);
+    expect(request.version).to.equal(errorSource.version);
+    expect(request.id).to.equal(accountId);
+    expect(request.ipfs).to.equal(ipfsHash);
+    expect(request.isFulfilled).to.equal(true);
+    expect(request.isOK).to.equal(false);
+    expect(request.isClaimed).to.equal(false);
+    expect(ethers.utils.toUtf8String(request.data)).to.equal("test");
+  });
 });

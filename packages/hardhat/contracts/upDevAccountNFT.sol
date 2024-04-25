@@ -19,7 +19,7 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 
 	struct Request {
 		address up;
-		string provider; // TODO bytes vs string?
+		string provider;
 		string version;
 		string id;
 		string ipfs;
@@ -56,8 +56,10 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 	mapping(bytes32 id => Request) public request;
 	mapping(bytes32 tokenId => bytes32 requestId) public requestId;
 
-	mapping(address up => bytes32[] ids) public requests; // TODO just use indexer instead?
+	mapping(address up => bytes32[] ids) public requests;
 	mapping(address up => uint256 num) public pendingNum;
+
+	mapping(address up => string stringUP) public stringUP;
 
 	string[] public sources;
 
@@ -144,6 +146,12 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		Request[] memory result = new Request[](pendingNum[up]);
 		uint256 j = 0;
 		for (uint256 i = requests[up].length - 1; i >= 0; i--) {
+			if (
+				request[requests[up][i]].isFulfilled &&
+				!request[requests[up][i]].isOK
+			) {
+				continue;
+			}
 			if (request[requests[up][i]].isClaimed) {
 				continue;
 			}
@@ -174,9 +182,9 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 				donHostedSecretsVersion
 			);
 		}
-		string[] memory args = new string[](2);
-		args[0] = ipfs;
-		args[1] = id;
+		string[] memory args = new string[](3);
+		args[0] = id;
+		args[1] = bytes(ipfs).length == 0 ? getStringUP(msg.sender) : ipfs;
 		req.setArgs(args);
 
 		bytes32 tokenId = keccak256(abi.encodePacked(provider, id));
@@ -255,6 +263,11 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 
 		setDataForTokenId(
 			tokenId,
+			_LSP4_VERSION_KEY,
+			bytes(request[id].version)
+		);
+		setDataForTokenId(
+			tokenId,
 			_LSP8_TOKEN_METADATA_BASE_URI,
 			bytes(string.concat("ipfs://", request[id].ipfs))
 		);
@@ -283,13 +296,33 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 			_LSP4_PROVIDER_KEY,
 			bytes(request[id].provider)
 		);
-		setDataForTokenId(
-			tokenId,
-			_LSP4_VERSION_KEY,
-			bytes(request[id].version)
-		);
 		setDataForTokenId(tokenId, _LSP4_ID_KEY, bytes(request[id].id));
 
 		_mint(request[id].up, tokenId, force, request[id].data);
+	}
+
+	function getStringUP(address up) internal returns (string memory) {
+		if (bytes(stringUP[up]).length > 0) {
+			return stringUP[up];
+		}
+		stringUP[up] = toAsciiString(up);
+		return stringUP[up];
+	}
+
+	function toAsciiString(address x) internal pure returns (string memory) {
+		bytes memory s = new bytes(40);
+		for (uint i = 0; i < 20; i++) {
+			bytes1 b = bytes1(uint8(uint(uint160(x)) / (2 ** (8 * (19 - i)))));
+			bytes1 hi = bytes1(uint8(b) / 16);
+			bytes1 lo = bytes1(uint8(b) - 16 * uint8(hi));
+			s[2 * i] = char(hi);
+			s[2 * i + 1] = char(lo);
+		}
+		return string(s);
+	}
+
+	function char(bytes1 b) internal pure returns (bytes1 c) {
+		if (uint8(b) < 10) return bytes1(uint8(b) + 0x30);
+		else return bytes1(uint8(b) + 0x57);
 	}
 }

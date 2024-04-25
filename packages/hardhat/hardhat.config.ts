@@ -6,15 +6,11 @@ import "hardhat-deploy";
 import "@matterlabs/hardhat-zksync-solc";
 import "@matterlabs/hardhat-zksync-verify";
 
-const defaultPrivateKey = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
-
-// If not set, it uses ours Alchemy's default API key.
-// You can get your own at https://dashboard.alchemyapi.io
 const providerApiKey = process.env.ALCHEMY_API_KEY || "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
-// If not set, it uses the hardhat account 0 private key.
-const deployerPrivateKey = process.env.DEPLOYER_PRIVATE_KEY ?? defaultPrivateKey;
-// If not set, it uses ours Etherscan default API key.
+const deployerPrivateKey = process.env.DEPLOYER_PRIVATE_KEY ?? "";
 const etherscanApiKey = process.env.ETHERSCAN_API_KEY || "DNXJA8RX2Q3VZ4URQIWP7Z68CJXQZSC6AW";
+
+const accounts = [deployerPrivateKey, process.env.TEST_PRIVATE_KEY || ""];
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -27,7 +23,7 @@ const config: HardhatUserConfig = {
       },
     },
   },
-  defaultNetwork: "sepolia",
+  defaultNetwork: "localhost",
   namedAccounts: {
     deployer: {
       // By default, it will take the first Hardhat account as the deployer
@@ -35,8 +31,6 @@ const config: HardhatUserConfig = {
     },
   },
   networks: {
-    // View the networks that are pre-configured.
-    // If the network you are looking for is not here you can add new network settings
     hardhat: {
       forking: {
         url: `https://eth-sepolia.g.alchemy.com/v2/${providerApiKey}`,
@@ -48,35 +42,34 @@ const config: HardhatUserConfig = {
           balance: "10000000000000000000000",
         },
         {
-          privateKey: defaultPrivateKey,
+          privateKey: process.env.TEST_PRIVATE_KEY || "",
           balance: "10000000000000000000000",
         },
       ],
     },
     sepolia: {
       url: `https://eth-sepolia.g.alchemy.com/v2/${providerApiKey}`,
-      accounts: [deployerPrivateKey],
+      accounts,
     },
     polygonMumbai: {
       url: `https://polygon-mumbai.g.alchemy.com/v2/${providerApiKey}`,
-      accounts: [deployerPrivateKey],
+      accounts,
     },
     base: {
       url: "https://mainnet.base.org",
-      accounts: [deployerPrivateKey],
+      accounts,
     },
     baseSepolia: {
       url: "https://sepolia.base.org",
-      accounts: [deployerPrivateKey],
-      gasPrice: 1000000000,
+      accounts,
     },
     luksoTestnet: {
       url: "https://rpc.testnet.lukso.gateway.fm",
-      accounts: [deployerPrivateKey],
+      accounts,
     },
     lukso: {
       url: "https://rpc.lukso.gateway.fm",
-      accounts: [deployerPrivateKey],
+      accounts,
     },
   },
   etherscan: {
