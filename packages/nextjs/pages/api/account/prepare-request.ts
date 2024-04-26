@@ -1,11 +1,12 @@
-const axios = require("axios")
-const pinataSDK = require("@pinata/sdk")
-const { SecretsManager } = require("@chainlink/functions-toolkit")
+import axios from "axios";
+import pinataSDK from "@pinata/sdk";
+import { SecretsManager } from "@chainlink/functions-toolkit";
+import { ethers } from 'ethers';
 
 // TODO free pinata tier has only 500 Pinned Files max. switch to Filebase or pay for another tier?
 const pinata = new pinataSDK(process.env.PINATA_API_KEY, process.env.PINATA_API_SECRET)
 
-module.exports = async function (req, res) {
+export async function POST(req: Request) {
     try {
         // request user data
         const result = await axios.get( // TODO dynamic API URL. pass provider & version in req.body?

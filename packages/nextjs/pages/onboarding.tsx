@@ -5,12 +5,10 @@ import { useAccount } from "wagmi";
 import { MetaHeader } from "~~/components/MetaHeader";
 import {
   ConnectSocialAccountsStep, // TODO
-  ConnectUniversalProfileStep,
   DeployUniversalProfileStep,
 } from "~~/components/updev/onboarding/";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 import { UniversalProfileContext } from "~~/providers/UniversalProfile";
-import Profile from "~~/types/Profile";
 
 const Onboarding: NextPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -19,19 +17,18 @@ const Onboarding: NextPage = () => {
   const account = useAccount(); // EOA connected to rainbow kit
   const router = useRouter();
 
-  const { data: _profile } = useScaffoldContractRead({
-    contractName: "upRegistry", // @ts-ignore
-    functionName: "upByEOA",
+  const { data: up } = useScaffoldContractRead({
+    contractName: "upRegistry",
+    functionName: "up",
     args: [account.address],
-  }); // @ts-ignore
-  const profile: Profile | undefined = _profile;
+  });
 
   useEffect(() => {
     if (!account.isConnected) {
       router.push("/");
       return;
     }
-    if (profile && profile.up != "0x0000000000000000000000000000000000000000") {
+    if (up != "0x0000000000000000000000000000000000000000") {
       setCurrentStep(3);
       return;
     }
@@ -43,7 +40,7 @@ const Onboarding: NextPage = () => {
       setCurrentStep(2);
       return;
     }
-  }, [account.isConnected, router, universalProfileData, profile]);
+  }, [account.isConnected, router, universalProfileData, up]);
 
   return (
     <>
@@ -55,11 +52,9 @@ const Onboarding: NextPage = () => {
           <p className="my-0 text-lg">Complete 3 steps to onboard to the dApp</p>
         </div>
 
-        {currentStep === 1 && <ConnectUniversalProfileStep />}
+        {currentStep === 1 && <DeployUniversalProfileStep setCurrentStep={setCurrentStep} />}
 
-        {currentStep === 2 && <DeployUniversalProfileStep setCurrentStep={setCurrentStep} />}
-
-        {currentStep === 3 && <ConnectSocialAccountsStep luksoUP={profile && profile.up} />}
+        {currentStep === 2 && <ConnectSocialAccountsStep luksoUP={up} />}
       </div>
     </>
   );

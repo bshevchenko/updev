@@ -5,30 +5,40 @@
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 const deployedContracts = {
-  80001: {
-    upDevAccountOwnership: {
-      address: "0xe015eB341264Ac609761f31Beb1C55BE8b6C69b0",
+  11155111: {
+    upDevAccountNFT: {
+      address: "0x078F38Cc721CD74454Fe354F422305ADBdA99B58",
       abi: [
         {
           inputs: [
             {
-              internalType: "string",
-              name: "nftCollectionName",
-              type: "string",
-            },
-            {
-              internalType: "string",
-              name: "nftCollectionSymbol",
-              type: "string",
-            },
-            {
               internalType: "address",
-              name: "contractOwner",
+              name: "_router",
               type: "address",
+            },
+            {
+              internalType: "bytes32",
+              name: "_donID",
+              type: "bytes32",
+            },
+            {
+              internalType: "bool",
+              name: "_force",
+              type: "bool",
+            },
+            {
+              internalType: "uint32",
+              name: "_gasLimit",
+              type: "uint32",
             },
           ],
           stateMutability: "nonpayable",
           type: "constructor",
+        },
+        {
+          inputs: [],
+          name: "AlreadyClaimed",
+          type: "error",
         },
         {
           inputs: [],
@@ -43,6 +53,16 @@ const deployedContracts = {
         {
           inputs: [],
           name: "ERC725Y_MsgValueDisallowed",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "EmptyArgs",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "EmptySource",
           type: "error",
         },
         {
@@ -79,12 +99,23 @@ const deployedContracts = {
         },
         {
           inputs: [],
-          name: "LSP8CannotSendToAddressZero",
+          name: "LSP4TokenTypeNotEditable",
+          type: "error",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "callIndex",
+              type: "uint256",
+            },
+          ],
+          name: "LSP8BatchCallFailed",
           type: "error",
         },
         {
           inputs: [],
-          name: "LSP8CannotSendToSelf",
+          name: "LSP8CannotSendToAddressZero",
           type: "error",
         },
         {
@@ -179,6 +210,27 @@ const deployedContracts = {
           type: "error",
         },
         {
+          inputs: [
+            {
+              internalType: "address",
+              name: "caller",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "tokenOwner",
+              type: "address",
+            },
+            {
+              internalType: "bytes32",
+              name: "tokenId",
+              type: "bytes32",
+            },
+          ],
+          name: "LSP8RevokeOperatorNotAuthorized",
+          type: "error",
+        },
+        {
           inputs: [],
           name: "LSP8TokenContractCannotHoldValue",
           type: "error",
@@ -196,12 +248,43 @@ const deployedContracts = {
         },
         {
           inputs: [],
-          name: "LSP8TokenIdTypeNotEditable",
+          name: "LSP8TokenIdFormatNotEditable",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "LSP8TokenIdsDataEmptyArray",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "LSP8TokenIdsDataLengthMismatch",
           type: "error",
         },
         {
           inputs: [],
           name: "LSP8TokenOwnerCannotBeOperator",
+          type: "error",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "tokenId",
+              type: "bytes32",
+            },
+            {
+              internalType: "address",
+              name: "oldOwner",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "newOwner",
+              type: "address",
+            },
+          ],
+          name: "LSP8TokenOwnerChanged",
           type: "error",
         },
         {
@@ -213,6 +296,16 @@ const deployedContracts = {
             },
           ],
           name: "NoExtensionFoundForFunctionSelector",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "NoInlineSecrets",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "OnlyRouterCanFulfill",
           type: "error",
         },
         {
@@ -235,6 +328,99 @@ const deployedContracts = {
           inputs: [],
           name: "Soulbound",
           type: "error",
+        },
+        {
+          inputs: [],
+          name: "SourceNameBusy",
+          type: "error",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "requestId",
+              type: "bytes32",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "up",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "tokenId",
+              type: "bytes32",
+            },
+          ],
+          name: "Claimed",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "dataKey",
+              type: "bytes32",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "dataValue",
+              type: "bytes",
+            },
+          ],
+          name: "DataChanged",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "requestId",
+              type: "bytes32",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "up",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "tokenId",
+              type: "bytes32",
+            },
+            {
+              indexed: false,
+              internalType: "bool",
+              name: "isOK",
+              type: "bool",
+            },
+          ],
+          name: "Fulfilled",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "string",
+              name: "name",
+              type: "string",
+            },
+          ],
+          name: "NewSource",
+          type: "event",
         },
         {
           anonymous: false,
@@ -264,45 +450,7 @@ const deployedContracts = {
               type: "bytes",
             },
           ],
-          name: "AuthorizedOperator",
-          type: "event",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: "bytes32",
-              name: "dataKey",
-              type: "bytes32",
-            },
-            {
-              indexed: false,
-              internalType: "bytes",
-              name: "dataValue",
-              type: "bytes",
-            },
-          ],
-          name: "DataChanged",
-          type: "event",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: "address",
-              name: "previousOwner",
-              type: "address",
-            },
-            {
-              indexed: true,
-              internalType: "address",
-              name: "newOwner",
-              type: "address",
-            },
-          ],
-          name: "OwnershipTransferred",
+          name: "OperatorAuthorizationChanged",
           type: "event",
         },
         {
@@ -339,7 +487,126 @@ const deployedContracts = {
               type: "bytes",
             },
           ],
-          name: "RevokedOperator",
+          name: "OperatorRevoked",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "previousOwner",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "newOwner",
+              type: "address",
+            },
+          ],
+          name: "OwnershipTransferred",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "id",
+              type: "bytes32",
+            },
+          ],
+          name: "RequestFulfilled",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "id",
+              type: "bytes32",
+            },
+          ],
+          name: "RequestSent",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "requestId",
+              type: "bytes32",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "up",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "tokenId",
+              type: "bytes32",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "provider",
+              type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "version",
+              type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "id",
+              type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "ipfs",
+              type: "string",
+            },
+          ],
+          name: "Requested",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "tokenId",
+              type: "bytes32",
+            },
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "dataKey",
+              type: "bytes32",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "dataValue",
+              type: "bytes",
+            },
+          ],
+          name: "TokenIdDataChanged",
           type: "event",
         },
         {
@@ -392,6 +659,24 @@ const deployedContracts = {
         {
           inputs: [
             {
+              internalType: "string",
+              name: "name",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "code",
+              type: "string",
+            },
+          ],
+          name: "addSource",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
               internalType: "address",
               name: "operator",
               type: "address",
@@ -429,6 +714,38 @@ const deployedContracts = {
             },
           ],
           stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes[]",
+              name: "data",
+              type: "bytes[]",
+            },
+          ],
+          name: "batchCalls",
+          outputs: [
+            {
+              internalType: "bytes[]",
+              name: "results",
+              type: "bytes[]",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "tokenId",
+              type: "bytes32",
+            },
+          ],
+          name: "claim",
+          outputs: [],
+          stateMutability: "nonpayable",
           type: "function",
         },
         {
@@ -472,6 +789,54 @@ const deployedContracts = {
         {
           inputs: [
             {
+              internalType: "bytes32[]",
+              name: "tokenIds",
+              type: "bytes32[]",
+            },
+            {
+              internalType: "bytes32[]",
+              name: "dataKeys",
+              type: "bytes32[]",
+            },
+          ],
+          name: "getDataBatchForTokenIds",
+          outputs: [
+            {
+              internalType: "bytes[]",
+              name: "dataValues",
+              type: "bytes[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "tokenId",
+              type: "bytes32",
+            },
+            {
+              internalType: "bytes32",
+              name: "dataKey",
+              type: "bytes32",
+            },
+          ],
+          name: "getDataForTokenId",
+          outputs: [
+            {
+              internalType: "bytes",
+              name: "dataValue",
+              type: "bytes",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
               internalType: "bytes32",
               name: "tokenId",
               type: "bytes32",
@@ -496,49 +861,184 @@ const deployedContracts = {
               type: "address",
             },
           ],
-          name: "getTokensByAddress",
+          name: "getPendingRequests",
           outputs: [
             {
               components: [
                 {
-                  internalType: "bytes32",
+                  internalType: "address",
+                  name: "up",
+                  type: "address",
+                },
+                {
+                  internalType: "string",
+                  name: "provider",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "version",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
                   name: "id",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "ipfs",
+                  type: "string",
+                },
+                {
+                  internalType: "bytes32",
+                  name: "tokenId",
                   type: "bytes32",
                 },
                 {
-                  components: [
-                    {
-                      internalType: "string",
-                      name: "source",
-                      type: "string",
-                    },
-                    {
-                      internalType: "string",
-                      name: "id",
-                      type: "string",
-                    },
-                  ],
-                  internalType: "struct upDevAccountOwnership.Name",
-                  name: "name",
-                  type: "tuple",
+                  internalType: "bool",
+                  name: "isFulfilled",
+                  type: "bool",
+                },
+                {
+                  internalType: "bool",
+                  name: "isOK",
+                  type: "bool",
+                },
+                {
+                  internalType: "bool",
+                  name: "isClaimed",
+                  type: "bool",
                 },
                 {
                   internalType: "bytes",
                   name: "data",
                   type: "bytes",
                 },
-                {
-                  internalType: "uint256",
-                  name: "timestamp",
-                  type: "uint256",
-                },
               ],
-              internalType: "struct upDevAccountOwnership.Token[]",
+              internalType: "struct upDevAccountNFT.Request[]",
               name: "",
               type: "tuple[]",
             },
           ],
           stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "offset",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "limit",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
+              name: "up",
+              type: "address",
+            },
+          ],
+          name: "getRequests",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "address",
+                  name: "up",
+                  type: "address",
+                },
+                {
+                  internalType: "string",
+                  name: "provider",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "version",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "id",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "ipfs",
+                  type: "string",
+                },
+                {
+                  internalType: "bytes32",
+                  name: "tokenId",
+                  type: "bytes32",
+                },
+                {
+                  internalType: "bool",
+                  name: "isFulfilled",
+                  type: "bool",
+                },
+                {
+                  internalType: "bool",
+                  name: "isOK",
+                  type: "bool",
+                },
+                {
+                  internalType: "bool",
+                  name: "isClaimed",
+                  type: "bool",
+                },
+                {
+                  internalType: "bytes",
+                  name: "data",
+                  type: "bytes",
+                },
+              ],
+              internalType: "struct upDevAccountNFT.Request[]",
+              name: "",
+              type: "tuple[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "getSources",
+          outputs: [
+            {
+              internalType: "string[]",
+              name: "",
+              type: "string[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "requestId",
+              type: "bytes32",
+            },
+            {
+              internalType: "bytes",
+              name: "response",
+              type: "bytes",
+            },
+            {
+              internalType: "bytes",
+              name: "err",
+              type: "bytes",
+            },
+          ],
+          name: "handleOracleFulfillment",
+          outputs: [],
+          stateMutability: "nonpayable",
           type: "function",
         },
         {
@@ -566,96 +1066,6 @@ const deployedContracts = {
           type: "function",
         },
         {
-          inputs: [
-            {
-              internalType: "address",
-              name: "to",
-              type: "address",
-            },
-            {
-              internalType: "bytes32",
-              name: "tokenId",
-              type: "bytes32",
-            },
-            {
-              internalType: "bool",
-              name: "force",
-              type: "bool",
-            },
-            {
-              internalType: "bytes",
-              name: "data",
-              type: "bytes",
-            },
-            {
-              internalType: "string",
-              name: "source",
-              type: "string",
-            },
-            {
-              internalType: "string",
-              name: "id",
-              type: "string",
-            },
-          ],
-          name: "mint",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "to",
-              type: "address",
-            },
-            {
-              internalType: "bytes32",
-              name: "tokenId",
-              type: "bytes32",
-            },
-            {
-              internalType: "bool",
-              name: "force",
-              type: "bool",
-            },
-            {
-              internalType: "bytes",
-              name: "data",
-              type: "bytes",
-            },
-          ],
-          name: "mint",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "bytes32",
-              name: "",
-              type: "bytes32",
-            },
-          ],
-          name: "name",
-          outputs: [
-            {
-              internalType: "string",
-              name: "source",
-              type: "string",
-            },
-            {
-              internalType: "string",
-              name: "id",
-              type: "string",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
           inputs: [],
           name: "owner",
           outputs: [
@@ -669,10 +1079,136 @@ const deployedContracts = {
           type: "function",
         },
         {
+          inputs: [
+            {
+              internalType: "address",
+              name: "up",
+              type: "address",
+            },
+          ],
+          name: "pendingNum",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "num",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
           inputs: [],
           name: "renounceOwnership",
           outputs: [],
           stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "id",
+              type: "bytes32",
+            },
+          ],
+          name: "request",
+          outputs: [
+            {
+              internalType: "address",
+              name: "up",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "provider",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "version",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "id",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "ipfs",
+              type: "string",
+            },
+            {
+              internalType: "bytes32",
+              name: "tokenId",
+              type: "bytes32",
+            },
+            {
+              internalType: "bool",
+              name: "isFulfilled",
+              type: "bool",
+            },
+            {
+              internalType: "bool",
+              name: "isOK",
+              type: "bool",
+            },
+            {
+              internalType: "bool",
+              name: "isClaimed",
+              type: "bool",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "tokenId",
+              type: "bytes32",
+            },
+          ],
+          name: "requestId",
+          outputs: [
+            {
+              internalType: "bytes32",
+              name: "requestId",
+              type: "bytes32",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "up",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "requests",
+          outputs: [
+            {
+              internalType: "bytes32",
+              name: "ids",
+              type: "bytes32",
+            },
+          ],
+          stateMutability: "view",
           type: "function",
         },
         {
@@ -700,6 +1236,50 @@ const deployedContracts = {
           ],
           name: "revokeOperator",
           outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint64",
+              name: "subscriptionId",
+              type: "uint64",
+            },
+            {
+              internalType: "uint64",
+              name: "donHostedSecretsVersion",
+              type: "uint64",
+            },
+            {
+              internalType: "string",
+              name: "provider",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "version",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "id",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "ipfs",
+              type: "string",
+            },
+          ],
+          name: "sendRequest",
+          outputs: [
+            {
+              internalType: "bytes32",
+              name: "_requestId",
+              type: "bytes32",
+            },
+          ],
           stateMutability: "nonpayable",
           type: "function",
         },
@@ -742,6 +1322,109 @@ const deployedContracts = {
         {
           inputs: [
             {
+              internalType: "bytes32[]",
+              name: "tokenIds",
+              type: "bytes32[]",
+            },
+            {
+              internalType: "bytes32[]",
+              name: "dataKeys",
+              type: "bytes32[]",
+            },
+            {
+              internalType: "bytes[]",
+              name: "dataValues",
+              type: "bytes[]",
+            },
+          ],
+          name: "setDataBatchForTokenIds",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "tokenId",
+              type: "bytes32",
+            },
+            {
+              internalType: "bytes32",
+              name: "dataKey",
+              type: "bytes32",
+            },
+            {
+              internalType: "bytes",
+              name: "dataValue",
+              type: "bytes",
+            },
+          ],
+          name: "setDataForTokenId",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "string",
+              name: "name",
+              type: "string",
+            },
+          ],
+          name: "source",
+          outputs: [
+            {
+              internalType: "string",
+              name: "code",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "sources",
+          outputs: [
+            {
+              internalType: "string",
+              name: "",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "up",
+              type: "address",
+            },
+          ],
+          name: "stringUP",
+          outputs: [
+            {
+              internalType: "string",
+              name: "stringUP",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
               internalType: "bytes4",
               name: "interfaceId",
               type: "bytes4",
@@ -753,25 +1436,6 @@ const deployedContracts = {
               internalType: "bool",
               name: "",
               type: "bool",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "bytes32",
-              name: "",
-              type: "bytes32",
-            },
-          ],
-          name: "timestamp",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
             },
           ],
           stateMutability: "view",
@@ -913,609 +1577,39 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {
-        authorizeOperator:
-          "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        balanceOf: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        getData: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        getDataBatch: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        getOperatorsOf: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        isOperatorFor: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        mint: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        revokeOperator: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        setData: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        setDataBatch: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        supportsInterface:
-          "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        tokenIdsOf: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        tokenOwnerOf: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        totalSupply: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        transfer: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-        transferBatch: "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/presets/ILSP8Mintable.sol",
-      },
-    },
-    upDevFunctionsConsumer: {
-      address: "0x64B78FCB73500EB7Ce387b06bBa814BeaA7e2F9b",
-      abi: [
-        {
-          inputs: [
-            {
-              internalType: "address payable",
-              name: "_collection",
-              type: "address",
-            },
-          ],
-          stateMutability: "nonpayable",
-          type: "constructor",
-        },
-        {
-          inputs: [],
-          name: "AlreadyClaimed",
-          type: "error",
-        },
-        {
-          inputs: [],
-          name: "EmptyArgs",
-          type: "error",
-        },
-        {
-          inputs: [],
-          name: "EmptySecrets",
-          type: "error",
-        },
-        {
-          inputs: [],
-          name: "EmptySource",
-          type: "error",
-        },
-        {
-          inputs: [],
-          name: "NoInlineSecrets",
-          type: "error",
-        },
-        {
-          inputs: [],
-          name: "OnlyRouterCanFulfill",
-          type: "error",
-        },
-        {
-          inputs: [],
-          name: "SourceNameBusy",
-          type: "error",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: "address",
-              name: "from",
-              type: "address",
-            },
-            {
-              indexed: true,
-              internalType: "address",
-              name: "to",
-              type: "address",
-            },
-          ],
-          name: "OwnershipTransferRequested",
-          type: "event",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: "address",
-              name: "from",
-              type: "address",
-            },
-            {
-              indexed: true,
-              internalType: "address",
-              name: "to",
-              type: "address",
-            },
-          ],
-          name: "OwnershipTransferred",
-          type: "event",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: "bytes32",
-              name: "id",
-              type: "bytes32",
-            },
-          ],
-          name: "RequestFulfilled",
-          type: "event",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: "bytes32",
-              name: "id",
-              type: "bytes32",
-            },
-          ],
-          name: "RequestSent",
-          type: "event",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: "bytes32",
-              name: "requestId",
-              type: "bytes32",
-            },
-            {
-              indexed: true,
-              internalType: "address",
-              name: "up",
-              type: "address",
-            },
-            {
-              indexed: true,
-              internalType: "bool",
-              name: "isOwned",
-              type: "bool",
-            },
-            {
-              indexed: false,
-              internalType: "string",
-              name: "source",
-              type: "string",
-            },
-            {
-              indexed: false,
-              internalType: "string",
-              name: "id",
-              type: "string",
-            },
-            {
-              indexed: false,
-              internalType: "bytes",
-              name: "data",
-              type: "bytes",
-            },
-          ],
-          name: "Response",
-          type: "event",
-        },
-        {
-          inputs: [],
-          name: "acceptOwnership",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "string",
-              name: "name",
-              type: "string",
-            },
-            {
-              internalType: "string",
-              name: "code",
-              type: "string",
-            },
-            {
-              internalType: "bool",
-              name: "isAddressId",
-              type: "bool",
-            },
-          ],
-          name: "addSource",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          name: "availableSources",
-          outputs: [
-            {
-              internalType: "string",
-              name: "",
-              type: "string",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "bytes32",
-              name: "tokenId",
-              type: "bytes32",
-            },
-          ],
-          name: "claimToken",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "collection",
-          outputs: [
-            {
-              internalType: "contract upDevAccountOwnership",
-              name: "",
-              type: "address",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "getAvailableSources",
-          outputs: [
-            {
-              components: [
-                {
-                  internalType: "uint16",
-                  name: "id",
-                  type: "uint16",
-                },
-                {
-                  internalType: "string",
-                  name: "name",
-                  type: "string",
-                },
-                {
-                  internalType: "string",
-                  name: "code",
-                  type: "string",
-                },
-                {
-                  internalType: "bool",
-                  name: "isAddressId",
-                  type: "bool",
-                },
-              ],
-              internalType: "struct upDevFunctionsConsumer.Source[]",
-              name: "",
-              type: "tuple[]",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "up",
-              type: "address",
-            },
-          ],
-          name: "getUPRequests",
-          outputs: [
-            {
-              components: [
-                {
-                  internalType: "address",
-                  name: "up",
-                  type: "address",
-                },
-                {
-                  internalType: "string",
-                  name: "source",
-                  type: "string",
-                },
-                {
-                  internalType: "string",
-                  name: "id",
-                  type: "string",
-                },
-                {
-                  internalType: "bytes32",
-                  name: "tokenId",
-                  type: "bytes32",
-                },
-                {
-                  internalType: "bytes",
-                  name: "data",
-                  type: "bytes",
-                },
-                {
-                  internalType: "bool",
-                  name: "isFinished",
-                  type: "bool",
-                },
-                {
-                  internalType: "bool",
-                  name: "isOwned",
-                  type: "bool",
-                },
-                {
-                  internalType: "bool",
-                  name: "isClaimed",
-                  type: "bool",
-                },
-              ],
-              internalType: "struct upDevFunctionsConsumer.Request[]",
-              name: "",
-              type: "tuple[]",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "bytes32",
-              name: "requestId",
-              type: "bytes32",
-            },
-            {
-              internalType: "bytes",
-              name: "response",
-              type: "bytes",
-            },
-            {
-              internalType: "bytes",
-              name: "err",
-              type: "bytes",
-            },
-          ],
-          name: "handleOracleFulfillment",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "owner",
-          outputs: [
-            {
-              internalType: "address",
-              name: "",
-              type: "address",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "bytes32",
-              name: "requiestId",
-              type: "bytes32",
-            },
-          ],
-          name: "request",
-          outputs: [
-            {
-              internalType: "address",
-              name: "up",
-              type: "address",
-            },
-            {
-              internalType: "string",
-              name: "source",
-              type: "string",
-            },
-            {
-              internalType: "string",
-              name: "id",
-              type: "string",
-            },
-            {
-              internalType: "bytes32",
-              name: "tokenId",
-              type: "bytes32",
-            },
-            {
-              internalType: "bytes",
-              name: "data",
-              type: "bytes",
-            },
-            {
-              internalType: "bool",
-              name: "isFinished",
-              type: "bool",
-            },
-            {
-              internalType: "bool",
-              name: "isOwned",
-              type: "bool",
-            },
-            {
-              internalType: "bool",
-              name: "isClaimed",
-              type: "bool",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "uint64",
-              name: "subscriptionId",
-              type: "uint64",
-            },
-            {
-              internalType: "bytes",
-              name: "encryptedSecretsUrls",
-              type: "bytes",
-            },
-            {
-              internalType: "uint8",
-              name: "donHostedSecretsSlotID",
-              type: "uint8",
-            },
-            {
-              internalType: "uint64",
-              name: "donHostedSecretsVersion",
-              type: "uint64",
-            },
-            {
-              internalType: "string",
-              name: "sourceName",
-              type: "string",
-            },
-            {
-              internalType: "address",
-              name: "up",
-              type: "address",
-            },
-            {
-              internalType: "string",
-              name: "id",
-              type: "string",
-            },
-          ],
-          name: "sendRequest",
-          outputs: [
-            {
-              internalType: "bytes32",
-              name: "requestId",
-              type: "bytes32",
-            },
-          ],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address payable",
-              name: "_collection",
-              type: "address",
-            },
-          ],
-          name: "setCollection",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "string",
-              name: "",
-              type: "string",
-            },
-          ],
-          name: "source",
-          outputs: [
-            {
-              internalType: "uint16",
-              name: "id",
-              type: "uint16",
-            },
-            {
-              internalType: "string",
-              name: "name",
-              type: "string",
-            },
-            {
-              internalType: "string",
-              name: "code",
-              type: "string",
-            },
-            {
-              internalType: "bool",
-              name: "isAddressId",
-              type: "bool",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "bytes32",
-              name: "tokenId",
-              type: "bytes32",
-            },
-          ],
-          name: "token",
-          outputs: [
-            {
-              internalType: "bytes32",
-              name: "requestId",
-              type: "bytes32",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "to",
-              type: "address",
-            },
-          ],
-          name: "transferOwnership",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "up",
-              type: "address",
-            },
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          name: "upRequests",
-          outputs: [
-            {
-              internalType: "bytes32",
-              name: "requests",
-              type: "bytes32",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-      ],
-      inheritedFunctions: {
-        handleOracleFulfillment: "@chainlink/contracts/src/v0.8/functions/dev/v1_0_0/FunctionsClient.sol",
-        acceptOwnership: "@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol",
-        owner: "@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol",
-        transferOwnership: "@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol",
+        authorizeOperator: "contracts/LSP8Soulbound.sol",
+        balanceOf: "contracts/LSP8Soulbound.sol",
+        batchCalls: "contracts/LSP8Soulbound.sol",
+        getData: "contracts/LSP8Soulbound.sol",
+        getDataBatch: "contracts/LSP8Soulbound.sol",
+        getDataBatchForTokenIds: "contracts/LSP8Soulbound.sol",
+        getDataForTokenId: "contracts/LSP8Soulbound.sol",
+        getOperatorsOf: "contracts/LSP8Soulbound.sol",
+        isOperatorFor: "contracts/LSP8Soulbound.sol",
+        owner: "contracts/LSP8Soulbound.sol",
+        renounceOwnership: "contracts/LSP8Soulbound.sol",
+        revokeOperator: "contracts/LSP8Soulbound.sol",
+        setData: "contracts/LSP8Soulbound.sol",
+        setDataBatch: "contracts/LSP8Soulbound.sol",
+        setDataBatchForTokenIds: "contracts/LSP8Soulbound.sol",
+        setDataForTokenId: "contracts/LSP8Soulbound.sol",
+        supportsInterface: "contracts/LSP8Soulbound.sol",
+        tokenIdsOf: "contracts/LSP8Soulbound.sol",
+        tokenOwnerOf: "contracts/LSP8Soulbound.sol",
+        totalSupply: "contracts/LSP8Soulbound.sol",
+        transfer: "contracts/LSP8Soulbound.sol",
+        transferBatch: "contracts/LSP8Soulbound.sol",
+        transferOwnership: "contracts/LSP8Soulbound.sol",
+        handleOracleFulfillment:
+          "@chainlink/contracts/src/v0.8/functions/dev/v1_0_0/FunctionsClient.sol",
       },
     },
     upRegistry: {
-      address: "0xB665840C5929d140494708A619dA834d944d8CBC",
+      address: "0x7bb9c3235A6b5F8968A32A84052B7480D54CBB00",
       abi: [
         {
           inputs: [],
-          name: "InvalidKeyManager",
+          name: "AlreadySetUp",
           type: "error",
         },
         {
@@ -1524,23 +1618,23 @@ const deployedContracts = {
           type: "error",
         },
         {
+          anonymous: false,
           inputs: [
             {
+              indexed: true,
               internalType: "address",
-              name: "",
+              name: "up",
               type: "address",
             },
-          ],
-          name: "_upByEOA",
-          outputs: [
             {
+              indexed: true,
               internalType: "address",
-              name: "",
+              name: "controller",
               type: "address",
             },
           ],
-          stateMutability: "view",
-          type: "function",
+          name: "SetUp",
+          type: "event",
         },
         {
           inputs: [
@@ -1565,53 +1659,15 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "address",
-              name: "_up",
-              type: "address",
-            },
-            {
-              internalType: "address",
-              name: "_km",
-              type: "address",
-            },
-            {
-              internalType: "address",
-              name: "_upLukso",
-              type: "address",
-            },
-          ],
-          name: "setUp",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "",
-              type: "address",
-            },
-          ],
-          name: "up",
-          outputs: [
-            {
-              internalType: "address",
               name: "up",
               type: "address",
             },
+          ],
+          name: "controller",
+          outputs: [
             {
               internalType: "address",
-              name: "keyManager",
-              type: "address",
-            },
-            {
-              internalType: "address",
-              name: "upLukso",
-              type: "address",
-            },
-            {
-              internalType: "address",
-              name: "eoa",
+              name: "controller",
               type: "address",
             },
           ],
@@ -1622,73 +1678,58 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "address",
-              name: "eoa",
+              name: "_up",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "_controller",
               type: "address",
             },
           ],
-          name: "upByEOA",
-          outputs: [
-            {
-              components: [
-                {
-                  internalType: "address",
-                  name: "up",
-                  type: "address",
-                },
-                {
-                  internalType: "address",
-                  name: "keyManager",
-                  type: "address",
-                },
-                {
-                  internalType: "address",
-                  name: "upLukso",
-                  type: "address",
-                },
-                {
-                  internalType: "address",
-                  name: "eoa",
-                  type: "address",
-                },
-              ],
-              internalType: "struct upRegistry.Profile",
-              name: "",
-              type: "tuple",
-            },
-          ],
+          name: "setUP",
+          outputs: [],
           stateMutability: "nonpayable",
           type: "function",
         },
         {
-          inputs: [],
+          inputs: [
+            {
+              internalType: "address",
+              name: "controller",
+              type: "address",
+            },
+          ],
+          name: "up",
+          outputs: [
+            {
+              internalType: "address",
+              name: "up",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "offset",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "limit",
+              type: "uint256",
+            },
+          ],
           name: "ups",
           outputs: [
             {
-              components: [
-                {
-                  internalType: "address",
-                  name: "up",
-                  type: "address",
-                },
-                {
-                  internalType: "address",
-                  name: "keyManager",
-                  type: "address",
-                },
-                {
-                  internalType: "address",
-                  name: "upLukso",
-                  type: "address",
-                },
-                {
-                  internalType: "address",
-                  name: "eoa",
-                  type: "address",
-                },
-              ],
-              internalType: "struct upRegistry.Profile[]",
+              internalType: "address[]",
               name: "",
-              type: "tuple[]",
+              type: "address[]",
             },
           ],
           stateMutability: "view",
