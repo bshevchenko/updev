@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
 import { MetaHeader } from "~~/components/MetaHeader";
 import { LandingDisplay } from "~~/components/updev/";
-import { ConnectUniversalProfile } from "~~/components/updev/";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 import type { NextPage } from "next";
 
@@ -47,15 +46,9 @@ const Home: NextPage = () => {
         <LandingDisplay />
       ) : (
         <>
-          {isLoading || up ? (
-            <div className="grow flex flex-col justify-center items-center">
-              <span className="loading loading-spinner loading-lg"></span>
-            </div>
-          ) : (
-            <div className="flex items-center flex-col flex-grow py-28">
-              <ConnectUniversalProfile />
-            </div>
-          )}
+          <div className="grow flex flex-col justify-center items-center">
+            <span className="loading loading-spinner loading-lg"></span>
+          </div>
         </>
       )}
     </>

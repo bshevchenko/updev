@@ -114,25 +114,20 @@ export const ConnectSocialAccounts = () => {
 
   const { data: session } = useSession();
 
-  useEffect(() => {
-    console.log("SESSION", session);
-  }, [session]);
-
-  const { data: _profile } = useScaffoldContractRead({
-    contractName: "upRegistry", // @ts-ignore
-    functionName: "upByEOA",
+  const { data: up } = useScaffoldContractRead({
+    contractName: "upRegistry",
+    functionName: "up",
     args: [account.address],
-  }); // @ts-ignore
-  const profile: Profile | undefined = _profile;
+  });
 
   const { data: walletClient } = useWalletClient();
   const { data: consumer } = useScaffoldContract({
-    contractName: "upDevFunctionsConsumer",
+    contractName: "upDevAccountNFT",
     walletClient,
   });
 
   const { data: requests } = useScaffoldContractRead({
-    contractName: "upDevFunctionsConsumer",
+    contractName: "upDevAccountNFT",
     functionName: "getUPRequests",
     args: [profile && profile.up],
   });

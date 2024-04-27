@@ -1,21 +1,21 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { MetaHeader } from "~~/components/MetaHeader";
 import {
-  ConnectSocialAccountsStep, // TODO
   DeployUniversalProfileStep,
+  OAuthStep,
 } from "~~/components/updev/onboarding/";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
-import { UniversalProfileContext } from "~~/providers/UniversalProfile";
+import type { NextPage } from "next";
 
 const Onboarding: NextPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
-  const { universalProfileData } = useContext(UniversalProfileContext);
 
   const account = useAccount(); // EOA connected to rainbow kit
   const router = useRouter();
+  const { data: session } = useSession();
 
   const { data: up } = useScaffoldContractRead({
     contractName: "upRegistry",
@@ -24,23 +24,23 @@ const Onboarding: NextPage = () => {
   });
 
   useEffect(() => {
-    if (!account.isConnected) {
-      router.push("/");
-      return;
-    }
-    if (up != "0x0000000000000000000000000000000000000000") {
-      setCurrentStep(3);
-      return;
-    }
-    if (universalProfileData.address === "") {
-      setCurrentStep(1);
-      return;
-    }
-    if (universalProfileData.address.length > 0) {
+    console.log("SESSION", session);
+    if (session && new Date(session.expires) > new Date()) {
       setCurrentStep(2);
+    }
+  }, [session]);
+
+  useEffect(() => {
+    // if (!account.isConnected) { // TODO
+    //   router.push("/");
+    //   return;
+    // }
+    if (up && up != "0x0000000000000000000000000000000000000000") {
+      // setCurrentStep(3); // TODO mint first Account NFT
+      router.push("/profile/" + up);
       return;
     }
-  }, [account.isConnected, router, universalProfileData, up]);
+  }, [account.isConnected, router, up, currentStep]);
 
   return (
     <>
@@ -52,9 +52,18 @@ const Onboarding: NextPage = () => {
           <p className="my-0 text-lg">Complete 3 steps to onboard to the dApp</p>
         </div>
 
-        {currentStep === 1 && <DeployUniversalProfileStep setCurrentStep={setCurrentStep} />}
-
-        {currentStep === 2 && <ConnectSocialAccountsStep luksoUP={up} />}
+        {session !== undefined ? (
+          <>
+            {currentStep === 1 && <OAuthStep setCurrentStep={setCurrentStep} />}
+            {currentStep === 2 && <DeployUniversalProfileStep setCurrentStep={setCurrentStep} />}
+          </>
+        ) : (
+          <>
+            <div className="grow flex flex-col justify-center items-center">
+              <span className="loading loading-spinner loading-lg"></span>
+            </div>
+          </>
+        )}
       </div>
     </>
   );

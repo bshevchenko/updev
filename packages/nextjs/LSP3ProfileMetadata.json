@@ -61,12 +61,5 @@
         "keyType": "Mapping",
         "valueType": "address",
         "valueContent": "Address"
-    },
-    {
-        "name": "LSP24MultichainAddressResolutionPolygon",
-        "key": "0xc5e773c54da703f2723fb8f3553ae61f92dffc427a27a6f89484d24befd75efe",
-        "keyType": "Singleton",
-        "valueType": "address",
-        "valueContent": "Address"
     }
 ]

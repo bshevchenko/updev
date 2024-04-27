@@ -5,23 +5,20 @@ import { hexToString, toHex } from "viem";
 import { useContractWrite } from "wagmi";
 import { CheckCircleIcon, PencilSquareIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { Accounts } from "~~/types/Profile";
-import upRegistryProfile from "~~/types/Profile";
 import { convertIpfsUrl } from "~~/utils/helpers";
 
 export function ProfileDetails({
-  profile,
+  up,
   metadata,
   upDevUsername,
   isMyProfile,
-  isNotVerified,
   accounts,
   refetchUpDevUsername,
 }: {
-  profile: upRegistryProfile;
+  up: string;
   metadata: any;
   upDevUsername: any;
   isMyProfile: boolean | undefined;
-  isNotVerified: boolean;
   accounts: Accounts;
   refetchUpDevUsername: any;
 }) {
@@ -39,7 +36,7 @@ export function ProfileDetails({
   }, [upDevUsername, metadata.LSP3Profile.name]);
 
   const { writeAsync: updateUpDevUsername, isLoading } = useContractWrite({
-    address: profile?.up,
+    address: up,
     abi: UniversalProfileContract.abi,
     functionName: "setData",
     args: [toHex("username", { size: 32 }), toHex(usernameInput)],
@@ -114,9 +111,9 @@ export function ProfileDetails({
           <div className="flex items-center gap-3 flex-wrap">
             <div className="flex gap-1">
               <div className="text-[#FFFFFFA3]">
-                {!isNotVerified && profile.upLukso ? (
+                {up ? (
                   <a
-                    href={`https://wallet.universalprofile.cloud/` + profile.upLukso}
+                    href={`https://wallet.universalprofile.cloud/` + up}
                     className="underline"
                     target="_blank"
                     rel="noreferrer"
@@ -127,11 +124,11 @@ export function ProfileDetails({
                   <>@{metadata.LSP3Profile.name}</>
                 )}
               </div>
-              <div className="text-[#FFFFFF5C]">#{profile.up.slice(2, 6)}</div>
+              <div className="text-[#FFFFFF5C]">#{up.slice(2, 6)}</div>
             </div>
             <div className="text-[#FFFFFFA3]">{"\u2022"}</div>
             <div className="bg-base-100 border border-base-200 rounded-sm px-2 p-0.5">
-              🆙 <span className="text-[#FFFFFFA3]">{profile.up.slice(0, 6) + "..." + profile.up.slice(-4)}</span>
+              🆙 <span className="text-[#FFFFFFA3]">{up.slice(0, 6) + "..." + up.slice(-4)}</span>
             </div>
             {accounts["github"] && (
               <>

@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
 import { providers } from "ethers";
 import { WalletClient, useWalletClient } from "wagmi";
@@ -27,14 +28,27 @@ export function DeployUniversalProfileStep({ setCurrentStep }: { setCurrentStep:
   const signer = useEthersSigner();
   const [isDeploying, setIsDeploying] = useState(false);
 
+  const { data: session } = useSession();
+
   async function handleDeploy() {
     if (!signer) {
       return;
     }
+    
+    const _session = await axios.get("/api/session");
+    if (!_session.data.token) {
+      return;
+    }
+    console.log("Sign from", signer._address);
+    const signature = await signer.signMessage(_session.data.token);
+
     setIsDeploying(true);
+
     try {
       const result = await axios.post("/api/sign-up", {
-        controller: signer._address
+        token: _session.data.token,
+        controller: signer._address,
+        signature
       });
       console.log('API Result', result.data);
       setIsDeploying(false);
@@ -49,7 +63,10 @@ export function DeployUniversalProfileStep({ setCurrentStep }: { setCurrentStep:
     <>
       <OnboardProgressIndicator completedSteps={1} />
       <div className="bg-base-100 border border-base-200 p-8 rounded-lg w-96">
-        <div className="text-center mt-10">Click to create your UP on Lukso & Sepolia</div>
+        <div className="text-center mt-10">
+          <p><b>Hello, {session && session.user && session.user.name}!</b></p>
+          Click to create your UP on Lukso & Sepolia.
+        </div>
         <div className="mt-10 text-center">
           <button onClick={() => handleDeploy()} className="btn btn-primary py-0 text-md" disabled={isDeploying}>
             {isDeploying ? (
@@ -63,7 +80,7 @@ export function DeployUniversalProfileStep({ setCurrentStep }: { setCurrentStep:
       <button
         className="btn border-white hover:border-accent fixed bottom-10 right-9 w-[128px]"
         onClick={() => {
-          setCurrentStep(1);
+          signOut();
         }}
         disabled={isDeploying}
       >

@@ -1,3 +1,3 @@
 export * from "./ConnectSocialAccountsStep";
-export * from "./ConnectUniversalProfileStep";
+export * from "./OAuthStep";
 export * from "./DeployUniversalProfileStep";

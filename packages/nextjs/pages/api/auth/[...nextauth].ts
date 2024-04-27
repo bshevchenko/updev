@@ -2,10 +2,12 @@ import NextAuth from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
-import InstagramProvider from "next-auth/providers/instagram";
 import TwitterProvider from "next-auth/providers/twitter";
+import { MongoDBAdapter } from "@auth/mongodb-adapter";
+import clientPromise from "../../../lib/db";
 
 export default NextAuth({
+  adapter: MongoDBAdapter(clientPromise),
   secret: process.env.SECRET,
   providers: [
     GoogleProvider({
@@ -25,32 +27,11 @@ export default NextAuth({
       clientId: process.env.DISCORD_CLIENT_ID || "",
       clientSecret: process.env.DISCORD_CLIENT_SECRET || "",
     }),
-    InstagramProvider({
-      clientId: process.env.INSTAGRAM_CLIENT_ID,
-      clientSecret: process.env.INSTAGRAM_CLIENT_SECRET,
-    }),
   ],
   session: {
-    strategy: "jwt",
+    strategy: "database",
   },
   callbacks: {
-    async session({ session, token }) {
-      // @ts-ignore
-      session.user.id = token.id; // @ts-ignore
-      session.accessToken = token.accessToken; // @ts-ignore
-      session.provider = token.provider;
-      return session;
-    },
-    async jwt({ token, account, user }) {
-      if (user) {
-        token.id = user.id;
-      }
-      if (account) {
-        token.provider = account.provider;
-        token.accessToken = account.access_token;
-      }
-      return token;
-    },
     async redirect({ url }) {
       return url;
     },
