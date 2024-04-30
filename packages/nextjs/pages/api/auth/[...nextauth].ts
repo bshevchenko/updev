@@ -4,7 +4,7 @@ import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import TwitterProvider from "next-auth/providers/twitter";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
-import clientPromise from "../../../lib/db";
+import clientPromise from "~~/lib/db/clientPromise";
 
 export default NextAuth({
   adapter: MongoDBAdapter(clientPromise),

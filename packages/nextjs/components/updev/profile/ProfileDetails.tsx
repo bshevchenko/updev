@@ -56,7 +56,7 @@ export function ProfileDetails({
           <Image
             alt="cover picture"
             fill
-            src={convertIpfsUrl(metadata.LSP3Profile.backgroundImage[1].url)}
+            src={convertIpfsUrl("ipfs://bafybeid2tcmtlzmpmrlg4h4eomajvt2vpzpq7bo76ymwcyw5f5oedhyvc4/")}
             className="object-cover object-center"
             priority
           />
@@ -184,7 +184,7 @@ export function ProfileDetails({
           <div>{metadata.LSP3Profile.description}</div>
         </div>
         <div className="flex gap-2 flex-wrap">
-          {metadata.LSP3Profile.tags.map((tag: string) => (
+          {["hello", "my", "friend"].map((tag: string) => (
             <div
               key={tag}
               className="text-accent font-semibold bg-base-100 px-2 py-0.5 rounded-md border border-base-200"

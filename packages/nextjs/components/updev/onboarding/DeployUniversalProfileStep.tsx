@@ -39,6 +39,9 @@ export function DeployUniversalProfileStep({ setCurrentStep }: { setCurrentStep:
     if (!_session.data.token) {
       return;
     }
+    if (!session || !session.user) {
+      return;
+    }
     console.log("Sign from", signer._address);
     const signature = await signer.signMessage(_session.data.token);
 
@@ -48,7 +51,9 @@ export function DeployUniversalProfileStep({ setCurrentStep }: { setCurrentStep:
       const result = await axios.post("/api/sign-up", {
         token: _session.data.token,
         controller: signer._address,
-        signature
+        signature,
+        name: session.user.name, // TODO
+        description: "Boris has more than 15 years of full-stack software architecture and development experience at high-tech startups and DeFi, DAO dApps/projects.", 
       });
       console.log('API Result', result.data);
       setIsDeploying(false);
@@ -68,8 +73,8 @@ export function DeployUniversalProfileStep({ setCurrentStep }: { setCurrentStep:
           Click to create your UP on Lukso & Sepolia.
         </div>
         <div className="mt-10 text-center">
-          <button onClick={() => handleDeploy()} className="btn btn-primary py-0 text-md" disabled={isDeploying}>
-            {isDeploying ? (
+          <button onClick={() => handleDeploy()} className="btn btn-primary py-0 text-md" disabled={isDeploying && false}>
+            {isDeploying && false ? (
               "Deploying..."
             ) : (
               "Sign Up"

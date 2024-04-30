@@ -19,6 +19,11 @@ const nextConfig = {
         hostname: "api.universalprofile.cloud",
         pathname: "**",
       },
+      {
+        protocol: "https",
+        hostname: "avatars.githubusercontent.com",
+        pathname: "**",
+      },
     ],
   },
   reactStrictMode: true,

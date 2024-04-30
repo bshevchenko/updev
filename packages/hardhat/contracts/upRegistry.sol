@@ -10,6 +10,7 @@ contract upRegistry {
 
 	mapping(address controller => address up) public up;
 	mapping(address up => address controller) public controller;
+	mapping(address up => address keyManager) public keyManager;
 	address[] public _ups;
 
 	error AlreadySetUp();
@@ -27,6 +28,7 @@ contract upRegistry {
 		}
 		up[_controller] = _up;
 		controller[_up] = _controller;
+		keyManager[_up] = ERC725Y(_up).owner();
 
 		_ups.push(_up);
 

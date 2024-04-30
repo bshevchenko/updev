@@ -1605,7 +1605,7 @@ const deployedContracts = {
       },
     },
     upRegistry: {
-      address: "0x7bb9c3235A6b5F8968A32A84052B7480D54CBB00",
+      address: "0xf98b357Cdb887E0c22Aa6994D6a41430A044708c",
       abi: [
         {
           inputs: [],
@@ -1668,6 +1668,25 @@ const deployedContracts = {
             {
               internalType: "address",
               name: "controller",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "up",
+              type: "address",
+            },
+          ],
+          name: "keyManager",
+          outputs: [
+            {
+              internalType: "address",
+              name: "keyManager",
               type: "address",
             },
           ],

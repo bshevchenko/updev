@@ -1,8 +1,8 @@
 import axios from "axios";
 import { ethers } from "ethers";
-import pinataSDK from "@pinata/sdk";
 import { SecretsManager } from "@chainlink/functions-toolkit";
 import { NextApiRequest, NextApiResponse } from "next/types";
+import pinata from "~~/lib/pinata";
 
 type ResponseData = {
     user: object,
@@ -23,8 +23,6 @@ export default async function AccountRequest(req: NextApiRequest, res: NextApiRe
     );
 
     // pin user data to IPFS
-    // TODO free pinata tier has only 500 Pinned Files max. Filebase? Or Lukso? https://github.com/lukso-network/tools-data-providers
-    const pinata = new pinataSDK(process.env.PINATA_API_KEY, process.env.PINATA_API_SECRET);
     const pin = await pinata.pinJSONToIPFS(result.data.data);
 
     // encrypt secrets and upload to DON

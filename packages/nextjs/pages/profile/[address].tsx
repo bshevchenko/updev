@@ -2,12 +2,10 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { ERC725, ERC725JSONSchema } from "@erc725/erc725.js";
-import UniversalProfileContract from "@lukso/lsp-smart-contracts/artifacts/UniversalProfile.json";
 import type { NextPage } from "next";
 import { toHex } from "viem";
-import { useAccount, useContractRead } from "wagmi";
+import { useAccount } from "wagmi";
 import lspSchemas from "~~/LSP3ProfileMetadata.json";
-import { ConnectSocialAccounts } from "~~/components/updev/";
 import { LoadingSkeleton, ProfileDetails } from "~~/components/updev/profile/";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 import {
@@ -72,8 +70,8 @@ const ProfileContents = ({ up }: { up: string }) => {
       try {
         const erc725js = new ERC725(
           lspSchemas as ERC725JSONSchema[],
-          "0x4D454777ddDf8541D01c54fe03Cf216a7391cb62", // TODO tmp
-          "https://rpc.lukso.gateway.fm", {
+          up,
+          "https://rpc.testnet.lukso.network", {
           ipfsGateway: "https://api.universalprofile.cloud/ipfs",
         });
         const profileMetaData = await erc725js.fetchData("LSP3Profile");
@@ -88,7 +86,7 @@ const ProfileContents = ({ up }: { up: string }) => {
     }
   }, [up]);
 
-  useEffect(() => {
+  useEffect(() => { // TODO
     if (!tokens) {
       return;
     } // @ts-ignore
