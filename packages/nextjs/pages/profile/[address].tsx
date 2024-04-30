@@ -36,12 +36,6 @@ const ProfileContents = ({ up }: { up: string }) => {
   const [accounts, setAccounts] = useState<Accounts>({});
   const [metadata, setMetadata] = useState<any>(null);
 
-  const { data: controller } = useScaffoldContractRead({
-    contractName: "upRegistry",
-    functionName: "controller",
-    args: [up],
-  });
-
   const { data: myUP } = useScaffoldContractRead({
     contractName: "upRegistry",
     functionName: "up",
