@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 import { SecretsManager } from "@chainlink/functions-toolkit";
 import { NextApiRequest, NextApiResponse } from "next/types";
 import pinata from "~~/lib/pinata";
+import URLs from "../../../hardhat/sources/urls.json"
 
 type ResponseData = {
     user: object,
@@ -15,10 +16,8 @@ export default async function AccountRequest(req: NextApiRequest, res: NextApiRe
     const { token } = req.body;
 
     // request user data
-    // TODO dynamic API URL. pass provider & version in req.body?
-    // TODO use user data from next-auth DB since it should be already there (check timestamp & necessary fields tho)
-    const result = await axios.get(
-        "https://api.twitter.com/2/users/me?user.fields=created_at,description,location,most_recent_tweet_id,pinned_tweet_id,profile_image_url,protected,public_metrics,url,verified,verified_type,withheld",
+    const result = await axios.get( // @ts-ignore
+        URLs[source],
         { headers: { Authorization: "Bearer " + token } }
     );
 
@@ -42,8 +41,9 @@ export default async function AccountRequest(req: NextApiRequest, res: NextApiRe
         slotId: 0,
         minutesUntilExpiration: 30,
     });
-    if (!uploadResult.success)
+    if (!uploadResult.success) {
         throw new Error("Encrypted secrets not uploaded to DON");
+    }
 
     // return everything
     res.status(200).json({
