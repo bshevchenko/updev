@@ -19,12 +19,6 @@ const Home: NextPage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (up != "0x0000000000000000000000000000000000000000") {
-      setIsLoading(false);
-    }
-  }, [up]);
-
-  useEffect(() => {
     const hasDeployedUP = up && up != "0x0000000000000000000000000000000000000000";
     if (hasDeployedUP) {
       setIsLoading(false);
