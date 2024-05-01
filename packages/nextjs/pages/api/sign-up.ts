@@ -7,7 +7,8 @@ import LSP3Schema from "@erc725/erc725.js/schemas/LSP3ProfileMetadata.json";
 import pinata from "~~/lib/pinata";
 import { getDeploymentData } from "~~/lib/up";
 import { upRegistry, lsp23Factory, isEmptyAddress } from "~~/lib/contracts";
-import { sessions, users } from "~~/lib/db";
+import { getAccountBySession } from "~~/lib/db";
+import { prepareRequest } from "~~/lib/don";
 
 const erc725 = new ERC725(LSP3Schema);
 
@@ -15,22 +16,19 @@ type ResponseData = {
     up: string
 }
 
+// TODO it should mintBatch interests and mint account NFT using user data from provider...
+// TODO ...we need to own user's UP until everything is minted
+
 export default async function SignUp(
     req: NextApiRequest,
     res: NextApiResponse<ResponseData>
 ) {
-    const sessionToken = req.cookies["__Secure-next-auth.session-token"] || "";
-    const session = await sessions.findOne({ sessionToken });
-    if (!session || (new Date() > new Date(session.expires))) {
-        throw new Error("invalid session");
-    }
+    const account = await getAccountBySession(req);
 
-    const { controller, signature, token, name, description } = req.body;
+    // TODO get & verify tags (tokenIds), location, userpic, cover, personal OR company profile
+    const { controller, signature, name, description } = req.body;
 
-    if (token !== sessionToken) {
-        throw new Error("invalid session token");
-    }
-    if (ethers.utils.recoverAddress(hashMessage(sessionToken), signature) !== controller) {
+    if (ethers.utils.recoverAddress(hashMessage(account.session.sessionToken), signature) !== controller) {
         throw new Error("invalid signature");
     }
     if (!isEmptyAddress(await upRegistry.up(controller))) {
@@ -43,21 +41,15 @@ export default async function SignUp(
         throw new Error("invalid description");
     }
 
-    const user = await users.findOne(session.userId);
-    if (!user) {
-        throw new Error("invalid user");
-    }
-
     const json = {
         LSP3Profile: {
             name,
             description,
-            tags: ["foot", "samKerr"], // TODO use Group NFT instead?
             profileImage: [
                 {
                     // width: 1024, // TODO remove?
                     // height: 1024,
-                    url: user.image,
+                    url: user.image, // TODO
                     // verification: {
                     //     method: "keccak256(bytes)",
                     //     data: ethers.utils.keccak256(`0x${profileImg}`),
@@ -67,7 +59,7 @@ export default async function SignUp(
             // backgroundImage: [],
         },
     };
-    const pin = await pinata.pinJSONToIPFS(json);
+    const pin = await pinata.pinJSONToIPFS(json); // TODO remove? we can prob use just json
     const { values } = erc725.encodeData([
         {
             keyName: "LSP3Profile",
@@ -78,7 +70,7 @@ export default async function SignUp(
         },
     ]);
     const { data } = await axios.post(process.env.LUKSO_RELAYER_API_URL + "/v1/relayer/universal-profile", {
-        lsp6ControllerAddress: [controller],
+        lsp6ControllerAddress: [controller], // TODO add upDev controller
         lsp3Profile: values[0]
     }, {
         headers: {
@@ -87,7 +79,7 @@ export default async function SignUp(
         }
     });
     const parameters = await getDeploymentData(data.transactionHash);
-    
+
     const lsp23Tx = await lsp23Factory.deployERC1167Proxies(
         parameters[0].value,
         parameters[1].value,
@@ -98,6 +90,18 @@ export default async function SignUp(
 
     const upRegistryTx = await upRegistry.setUP(data.universalProfileAddress, controller);
     await upRegistryTx.wait();
+
+    // TODO mint AccountNFT
+    const request = await prepareRequest(
+        account.provider,
+        account.access_token
+    );
+    // TODO send tx on behalf of created UP (via KeyManager? use data.keyManagerAddress? use tx.ts?) on Sepolia
+    // TODO remove updev controller from Sepolia's UP
+
+    // TODO mintBatch Group Member NFTs
+    // TODO send tx on behalf of created UP (via KeyManager? use data.keyManagerAddress? use tx.ts?) on Lukso. btw check Lukso's Gas Relayer
+    // TODO remove updev controller from Lukso's UP
 
     res.status(200).json({
         up: data.universalProfileAddress

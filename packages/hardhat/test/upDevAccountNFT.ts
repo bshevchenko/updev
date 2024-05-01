@@ -6,7 +6,6 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { UpDevAccountNFT } from "../typechain-types";
 import getSource from "../sources/get";
 
-// TODO extract
 const _LSP8_TOKEN_METADATA_BASE_URI = ethers.utils.arrayify(
   "0x1a7628600c3bac7101f53697f48df381ddc36b9015e7d7c9c5633d1252aa2843",
 );
@@ -30,7 +29,7 @@ describe("upDevAccountNFT", () => {
   const constructorArguments: any = [
     process.env.DON_ROUTER,
     process.env.DON_ID,
-    process.env.LSP8_FORCE,
+    true,
     process.env.DON_GAS_LIMIT,
   ];
   let tokenId: any;

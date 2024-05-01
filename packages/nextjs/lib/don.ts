@@ -1,28 +1,21 @@
-import axios from "axios";
 import { ethers } from "ethers";
 import { SecretsManager } from "@chainlink/functions-toolkit";
-import { NextApiRequest, NextApiResponse } from "next/types";
 import pinata from "~~/lib/pinata";
-import URLs from "../../../hardhat/sources/urls.json"
+import { getUserData } from "./provider";
 
-type ResponseData = {
+export type PreparedRequest = {
     user: object,
     pin: object,
     secret: number
 }
 
-export default async function AccountRequest(req: NextApiRequest, res: NextApiResponse<ResponseData>) {
+export async function prepareRequest(
+    source: string,
+    token: string
+): Promise<PreparedRequest> {
 
-    const { token } = req.body;
-
-    // request user data
-    const result = await axios.get( // @ts-ignore
-        URLs[source],
-        { headers: { Authorization: "Bearer " + token } }
-    );
-
-    // pin user data to IPFS
-    const pin = await pinata.pinJSONToIPFS(result.data.data);
+    const user = await getUserData(source, token);
+    const pin = await pinata.pinJSONToIPFS(user);
 
     // encrypt secrets and upload to DON
     const secretsManager = new SecretsManager({
@@ -44,11 +37,9 @@ export default async function AccountRequest(req: NextApiRequest, res: NextApiRe
     if (!uploadResult.success) {
         throw new Error("Encrypted secrets not uploaded to DON");
     }
-
-    // return everything
-    res.status(200).json({
-        user: result.data.data,
+    return {
+        user,
         pin,
         secret: uploadResult.version,
-    });
+    };
 }

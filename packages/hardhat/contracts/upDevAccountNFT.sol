@@ -261,18 +261,18 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 
 		emit Claimed(id, request[id].up, tokenId);
 
-		setDataForTokenId(
+		_setDataForTokenId(
 			tokenId,
 			_LSP4_VERSION_KEY,
 			bytes(request[id].version)
 		);
-		setDataForTokenId(
+		_setDataForTokenId(
 			tokenId,
 			_LSP8_TOKEN_METADATA_BASE_URI,
 			bytes(string.concat("ipfs://", request[id].ipfs))
 		);
-		setDataForTokenId(tokenId, _LSP4_ABI_DATA_KEY, request[id].data);
-		setDataForTokenId(
+		_setDataForTokenId(tokenId, _LSP4_ABI_DATA_KEY, request[id].data);
+		_setDataForTokenId(
 			tokenId,
 			_LSP4_TIMESTAMP_KEY,
 			abi.encode(block.timestamp)
@@ -291,12 +291,12 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 			return;
 		}
 
-		setDataForTokenId(
+		_setDataForTokenId(
 			tokenId,
 			_LSP4_PROVIDER_KEY,
 			bytes(request[id].provider)
 		);
-		setDataForTokenId(tokenId, _LSP4_ID_KEY, bytes(request[id].id));
+		_setDataForTokenId(tokenId, _LSP4_ID_KEY, bytes(request[id].id));
 
 		_mint(request[id].up, tokenId, force, request[id].data);
 	}

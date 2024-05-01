@@ -15,7 +15,7 @@ bytes32 constant _LSP4_BAN_KEY = 0x415243484956450000000000000000000000000000000
 contract upDevGroupMemberNFT is LSP8Soulbound {
 	using BytesUtils for bytes;
 
-	upDevGroupNFT group;
+	upDevGroupNFT public group;
 
 	bool force;
 
@@ -38,46 +38,56 @@ contract upDevGroupMemberNFT is LSP8Soulbound {
 		force = _force;
 	}
 
-	function mint(
-		bytes32 groupTokenId,
-		bytes32[] calldata merkleProof
-	) public {
-		if (
-			!group.isWhitelisted(
-				groupTokenId,
-				msg.sender,
-				merkleProof
-			)
-		) {
+	function mint(bytes32 groupTokenId, bytes32[] calldata merkleProof) public {
+		if (!group.isWhitelisted(groupTokenId, msg.sender, merkleProof)) {
 			revert NotAllowed();
 		}
-
-		bytes32 tokenId = keccak256(
-			abi.encodePacked(groupTokenId, msg.sender)
-		);
+		bytes32 tokenId = keccak256(abi.encodePacked(groupTokenId, msg.sender));
 		_mint(msg.sender, tokenId, force, "0x");
-		setDataForTokenId(
+		_setDataForTokenId(
 			tokenId,
 			_LSP4_GROUP_TOKEN_ID_KEY,
 			abi.encodePacked(groupTokenId)
 		);
 	}
 
+	function mintBatch(bytes32[] calldata groupTokenIds) public {
+		bytes32[] memory tmp;
+		for (uint i = 0; i < groupTokenIds.length; i++) {
+			if (!group.isWhitelisted(groupTokenIds[i], msg.sender, tmp)) {
+				revert NotAllowed();
+			}
+			bytes32 tokenId = keccak256(
+				abi.encodePacked(groupTokenIds[i], msg.sender)
+			);
+			_mint(msg.sender, tokenId, force, "0x");
+			_setDataForTokenId(
+				tokenId,
+				_LSP4_GROUP_TOKEN_ID_KEY,
+				abi.encodePacked(groupTokenIds[i])
+			);
+		}
+	}
+
 	function setArchive(bytes32 tokenId, bool on) public {
 		if (tokenOwnerOf(tokenId) != msg.sender) {
 			revert NotAllowed();
 		}
-		setDataForTokenId(tokenId, _LSP4_ARCHIVE_KEY, on ? TRUE : FALSE);
+		_setDataForTokenId(tokenId, _LSP4_ARCHIVE_KEY, on ? TRUE : FALSE);
 	}
 
 	function setBan(bytes32 tokenId, bool on) public {
 		if (
 			group.tokenOwnerOf( // TODO token admin
-				getDataForTokenId(tokenId, _LSP4_GROUP_TOKEN_ID_KEY).toBytes32(0)
-			) != msg.sender
+					getDataForTokenId(tokenId, _LSP4_GROUP_TOKEN_ID_KEY)
+						.toBytes32(0)
+				) != msg.sender
 		) {
 			revert NotAllowed();
 		}
-		setDataForTokenId(tokenId, _LSP4_BAN_KEY, on ? TRUE : FALSE);
+		_setDataForTokenId(tokenId, _LSP4_BAN_KEY, on ? TRUE : FALSE);
 	}
+
+	// TODO archiveBatch
+	// TODO banBatch
 }

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import { LSP8Mintable } from "@lukso/lsp8-contracts/contracts/presets/LSP8Mintable.sol";
+import { LSP8IdentifiableDigitalAsset } from "@lukso/lsp8-contracts/contracts/LSP8IdentifiableDigitalAsset.sol";
 import { _LSP8_TOKENID_FORMAT_UNIQUE_ID } from "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/LSP8Constants.sol";
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 
@@ -12,17 +12,18 @@ bytes32 constant _LSP4_WHITELIST_KEY = 0x57484954454c495354000000000000000000000
 bytes32 constant _LSP4_METADATA_KEY = 0x4d45544144415441000000000000000000000000000000000000000000000000;
 bytes32 constant _LSP4_PARENT_KEY = 0x504152454e540000000000000000000000000000000000000000000000000000;
 
-contract upDevGroupNFT is LSP8Mintable {
+contract upDevGroupNFT is LSP8IdentifiableDigitalAsset {
 	using BytesUtils for bytes;
 
 	bool force;
+	uint private nonce = 0;
 
 	error NotAllowed();
 
 	constructor(
 		bool _force
 	)
-		LSP8Mintable(
+		LSP8IdentifiableDigitalAsset(
 			"upDev Group NFT",
 			"group",
 			msg.sender,
@@ -33,9 +34,16 @@ contract upDevGroupNFT is LSP8Mintable {
 		force = _force;
 	}
 
-	modifier onlyAdmin(bytes32 tokenId) {
+	function isAdmin(
+		address sender,
+		bytes32 tokenId
+	) public view returns (bool) {
 		// TODO extra admins besides of just token owner
-		if (tokenId != bytes32(0) && tokenOwnerOf(tokenId) != msg.sender) {
+		return tokenOwnerOf(tokenId) == sender;
+	}
+
+	modifier onlyAdmin(bytes32 tokenId) {
+		if (tokenId != bytes32(0) && !isAdmin(msg.sender, tokenId)) {
 			revert NotAllowed();
 		}
 		_;
@@ -46,32 +54,62 @@ contract upDevGroupNFT is LSP8Mintable {
 		bytes calldata whitelist, // merkle root
 		bytes32 parentTokenId // optional
 	) public onlyAdmin(parentTokenId) {
-		bytes32 tokenId = keccak256(
-			abi.encodePacked(msg.sender, block.timestamp)
-		);
+		nonce++;
+		bytes32 tokenId = keccak256(abi.encodePacked(msg.sender, nonce));
 		_mint(msg.sender, tokenId, force, "0x");
-		setDataForTokenId(tokenId, _LSP4_METADATA_KEY, metadata);
-		setDataForTokenId(tokenId, _LSP4_WHITELIST_KEY, whitelist);
-		setDataForTokenId(tokenId, _LSP4_PARENT_KEY, whitelist);
+		_setDataForTokenId(tokenId, _LSP4_METADATA_KEY, metadata);
+		_setDataForTokenId(tokenId, _LSP4_WHITELIST_KEY, whitelist);
+		_setDataForTokenId(
+			tokenId,
+			_LSP4_PARENT_KEY,
+			abi.encodePacked(parentTokenId)
+		);
+	}
+
+	function mintBatch(
+		bytes[] calldata metadata,
+		bytes[] calldata whitelist,
+		bytes32[] calldata parentTokenIds
+	) public {
+		for (uint i = 0; i < metadata.length; i++) {
+			if (
+				parentTokenIds[i] != bytes32(0) &&
+				!isAdmin(msg.sender, parentTokenIds[i])
+			) {
+				revert NotAllowed();
+			}
+			nonce++;
+			bytes32 tokenId = keccak256(abi.encodePacked(msg.sender, nonce));
+			_mint(msg.sender, tokenId, force, "0x");
+			_setDataForTokenId(tokenId, _LSP4_METADATA_KEY, metadata[i]);
+			_setDataForTokenId(tokenId, _LSP4_WHITELIST_KEY, whitelist[i]);
+			_setDataForTokenId(
+				tokenId,
+				_LSP4_PARENT_KEY,
+				abi.encodePacked(parentTokenIds[i])
+			);
+		}
 	}
 
 	function setMetadata(
 		bytes32 tokenId,
 		bytes calldata data
 	) public onlyAdmin(tokenId) {
-		setDataForTokenId(tokenId, _LSP4_METADATA_KEY, data);
+		_setDataForTokenId(tokenId, _LSP4_METADATA_KEY, data);
 	}
 
 	function setWhitelist(
 		bytes32 tokenId,
 		bytes calldata whitelist
 	) public onlyAdmin(tokenId) {
-		setDataForTokenId(tokenId, _LSP4_WHITELIST_KEY, whitelist);
+		_setDataForTokenId(tokenId, _LSP4_WHITELIST_KEY, whitelist);
 	}
 
 	function setArchive(bytes32 tokenId, bool on) public onlyAdmin(tokenId) {
-		setDataForTokenId(tokenId, _LSP4_ARCHIVE_KEY, on ? TRUE : FALSE);
+		_setDataForTokenId(tokenId, _LSP4_ARCHIVE_KEY, on ? TRUE : FALSE);
 	}
+
+	// TODO setArchiveBatch?
 
 	function isWhitelisted(
 		bytes32 tokenId,

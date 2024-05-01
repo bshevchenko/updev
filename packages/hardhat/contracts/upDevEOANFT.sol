@@ -5,7 +5,7 @@ import { _LSP8_TOKENID_FORMAT_ADDRESS } from "@lukso/lsp-smart-contracts/contrac
 
 import { LSP8Soulbound } from "./LSP8Soulbound.sol";
 
-contract upDevGroupNFT is LSP8Soulbound {
+contract upDevEOANFT is LSP8Soulbound {
 	bool force;
 
 	mapping(address => uint256) public nonce;

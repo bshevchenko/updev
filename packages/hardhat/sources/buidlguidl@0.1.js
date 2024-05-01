@@ -1,6 +1,4 @@
-// TODO refactor
-// addSource(
-// 	"buidlguidl",
+// TODO enable this source or just connect to buidlguidl via EOA NFT?
 // 	"const apiResponse = await Functions.makeHttpRequest({"
 // 	"  url: 'https://buidlguidl-v3.appspot.com/builders/' + args[1],"
 // 	"});"
@@ -16,6 +14,4 @@
 // 	"const functions = { cadets: 1 };"
 // 	"const uint32 = v => v.toString(16).padStart(64, '0');"
 // 	"const hex = uint32(created) + uint32(data.builds.length) + uint32(roles[data.role] || 0) + uint32(functions[data.function] || 0);"
-// 	"return Uint8Array.from(hex.match(/.{1,2}/g).map(b => parseInt(b, 16)));",
-// 	true
-// );
+// 	"return Uint8Array.from(hex.match(/.{1,2}/g).map(b => parseInt(b, 16)));"
