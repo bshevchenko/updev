@@ -1,4 +1,4 @@
 export * from "./LandingDisplay";
-export * from "./ConnectSocialAccounts";
+export * from "./MintAccounts";
 export * from "./ProfileCard";
 export * from "./RainbowKitCustomConnectButton";

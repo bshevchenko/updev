@@ -162,7 +162,7 @@ const deployedContracts = {
   },
   11155111: {
     upDevAccountNFT: {
-      address: "0xbb9eEf11b744F8eC252BfFF43851e6Fa9f9eDfba",
+      address: "0x88290c77E7f89191B0454132C8aAb3A396A6E8A1",
       abi: [
         {
           inputs: [
@@ -1778,7 +1778,7 @@ const deployedContracts = {
       },
     },
     upRegistry: {
-      address: "0xB3bfc28C836019553737777B4Dd70B6F1957D3C8",
+      address: "0x86C685520288EF50c07A3bE7d389A7E43676C830",
       abi: [
         {
           inputs: [],

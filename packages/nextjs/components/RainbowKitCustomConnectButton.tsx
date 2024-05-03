@@ -89,7 +89,7 @@ export const RainbowKitCustomConnectButton = () => {
               }
               return (
                 <div className="px-2 flex justify-end items-center">
-                  {session && session.user && session.user.image && <div className="rounded-full overflow-hidden">
+                  {session && session.user && session.user.image && <div className="rounded-full overflow-hidden mr-2">
                     <Image
                       alt="userpic"
                       width={36}

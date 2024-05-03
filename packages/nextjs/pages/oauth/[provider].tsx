@@ -10,7 +10,7 @@ export default () => {
     if (!router.query.provider) {
       return;
     }
-    if (!session || (session && new Date(session.expires) <= new Date())) {
+    if (!session || session.account.provider != router.query.provider || new Date(session.expires) <= new Date()) {
       void signIn(String(router.query.provider));
     } else {
       window.close();

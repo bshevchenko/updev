@@ -11,12 +11,13 @@ import {
   Accounts,
   BUIDLGUIDL,
   GITHUB,
-  Token,
-  functions,
-  roles,
+  // Token,
+  // functions,
+  // roles,
 } from "~~/types/Profile";
 import { NextPageWithLayout } from "~~/pages/_app";
 import Layout from "../../components/layout";
+import { MintAccounts } from "~~/components/MintAccounts";
 
 const Profile: NextPageWithLayout = () => {
   const router = useRouter();
@@ -78,7 +79,6 @@ const ProfileContents = ({ up }: { up: string }) => {
           ipfsGateway: "https://api.universalprofile.cloud/ipfs",
         });
         const profileMetaData = await erc725js.fetchData("LSP3Profile");
-
         setMetadata(profileMetaData.value);
       } catch (error) {
         console.error("Error fetching ERC725 data:", error);
@@ -89,30 +89,30 @@ const ProfileContents = ({ up }: { up: string }) => {
     }
   }, [up]);
 
-  useEffect(() => { // TODO
-    if (!tokens) {
-      return;
-    } // @ts-ignore
-    tokens.forEach((t: Token) => {
-      const unixTimestampInDays = Math.floor(Date.now() / 1000 / 86400);
-      switch (t.name.source) {
-        case GITHUB:
-          const [created, followers, contributions] = coder.decode(["uint32", "uint32", "uint32"], t.data);
-          const days = unixTimestampInDays - created;
-          // @ts-ignore
-          t.stats = { created, days, followers, contributions };
-          break;
+  // useEffect(() => { // TODO
+  //   if (!tokens) {
+  //     return;
+  //   } // @ts-ignore
+  //   tokens.forEach((t: Token) => {
+  //     const unixTimestampInDays = Math.floor(Date.now() / 1000 / 86400);
+  //     switch (t.name.source) {
+  //       case GITHUB:
+  //         const [created, followers, contributions] = coder.decode(["uint32", "uint32", "uint32"], t.data);
+  //         const days = unixTimestampInDays - created;
+  //         // @ts-ignore
+  //         t.stats = { created, days, followers, contributions };
+  //         break;
 
-        case BUIDLGUIDL: // @ts-ignore
-          const [created2, builds, role, func] = coder.decode(["uint32", "uint32", "uint32", "uint32"], t.data);
-          const days2 = unixTimestampInDays - created2;
-          // @ts-ignore
-          t.stats = { created: created2, days: days2, builds: builds, role: roles[role], function: functions[func] };
-      }
-      accounts[t.name.source] = t;
-      setAccounts(accounts);
-    });
-  }, [tokens, accounts]);
+  //       case BUIDLGUIDL: // @ts-ignore
+  //         const [created2, builds, role, func] = coder.decode(["uint32", "uint32", "uint32", "uint32"], t.data);
+  //         const days2 = unixTimestampInDays - created2;
+  //         // @ts-ignore
+  //         t.stats = { created: created2, days: days2, builds: builds, role: roles[role], function: functions[func] };
+  //     }
+  //     accounts[t.name.source] = t;
+  //     setAccounts(accounts);
+  //   });
+  // }, [tokens, accounts]);
 
   if (!metadata || !up) {
     return <LoadingSkeleton />;
@@ -183,9 +183,8 @@ const ProfileContents = ({ up }: { up: string }) => {
         </div>
         {isMyProfile && (
           <div>
-            <h3 className="text-2xl font-bold mb-3">Connect accounts</h3>
-            TODO
-            {/* <ConnectSocialAccounts /> */}
+            <h3 className="text-2xl font-bold mb-3">Mint Account NFTs</h3>
+            <MintAccounts up={up} />
           </div>
         )}
       </div>

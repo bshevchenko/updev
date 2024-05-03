@@ -19,12 +19,11 @@ const Home: NextPage = () => {
   useEffect(() => {
     const hasDeployedUP = up && up != "0x0000000000000000000000000000000000000000";
     if (account.isConnected) {
-      router.push("/onboarding");
-      // if (!hasDeployedUP) { // TODO uncomment
-      //   router.push("/onboarding");
-      // } else {
-      //   router.push("/profile/" + up);
-      // }
+      if (!hasDeployedUP) {
+        router.push("/onboarding");
+      } else {
+        router.push("/profile/" + up);
+      }
     }
   }, [account.isConnected, router, up]);
 

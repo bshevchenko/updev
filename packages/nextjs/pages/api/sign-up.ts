@@ -7,7 +7,6 @@ import LSP3Schema from "@erc725/erc725.js/schemas/LSP3ProfileMetadata.json";
 import pinata from "~~/lib/pinata";
 import { getDeploymentData } from "~~/lib/up";
 import { upRegistry, upDevAccountNFT, lsp23Factory, isEmptyAddress } from "~~/lib/contracts";
-import { getAccountBySession } from "~~/lib/db";
 import { prepareRequest } from "~~/lib/don";
 
 const erc725 = new ERC725(LSP3Schema);
@@ -20,19 +19,16 @@ export default async function SignUp(
     req: NextApiRequest,
     res: NextApiResponse<ResponseData>
 ) {
-    const account = await getAccountBySession(req);
-
     // TODO get & verify interests tags (tokenIds)
     // TODO userpic, cover
+    const { controller, signature, name, description, location, isCompany, provider, token, id, image } = req.body;
 
-    const { controller, signature, name, description, location, isCompany } = req.body;
-
-    if (ethers.utils.recoverAddress(hashMessage(account.session.sessionToken), signature) !== controller) {
+    if (ethers.utils.recoverAddress(hashMessage(token), signature) !== controller) {
         throw new Error("invalid signature");
     }
-    // if (!isEmptyAddress(await upRegistry.up(controller))) { // TODO uncomment
-    //     throw new Error("already signed up");
-    // }
+    if (!isEmptyAddress(await upRegistry.up(controller))) {
+        throw new Error("already signed up");
+    }
     if (name.length < 3 || name.length > 40) { // TODO increase max name.length?
         throw new Error("invalid name");
     }
@@ -53,7 +49,7 @@ export default async function SignUp(
                 {
                     // width: 1024, // TODO
                     // height: 1024,
-                    url: account.user.image,
+                    url: image,
                     // verification: {
                     //     method: "keccak256(bytes)",
                     //     data: ethers.utils.keccak256(`0x${profileImg}`),
@@ -102,16 +98,16 @@ export default async function SignUp(
     // mint Account NFT for the created UP
     console.log("Preparing request for Account NFT...");
     const request = await prepareRequest(
-        account.provider,
-        account.access_token
+        provider,
+        token
     );
     console.log("Sending request for Account NFT...");
     const accountTx = await upDevAccountNFT.sendRequest(
         up,
         request.secret,
-        account.provider,
+        provider,
         request.version,
-        account.providerAccountId,
+        id,
         request.pin.IpfsHash
     );
     await accountTx.wait();

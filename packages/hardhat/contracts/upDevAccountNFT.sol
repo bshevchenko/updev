@@ -170,6 +170,7 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		return result;
 	}
 
+	// TODO rn anyone are able to spam users with foreign accounts? if yes, then require msg.sender == (up || [admins])
 	function sendRequest(
 		address up,
 		uint64 donHostedSecretsVersion,

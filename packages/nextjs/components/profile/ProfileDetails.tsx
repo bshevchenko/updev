@@ -109,7 +109,7 @@ export function ProfileDetails({
         </div>
         <div className="flex gap-3 items-center justify-between">
           <div className="flex items-center gap-3 flex-wrap">
-            <div className="flex gap-1">
+            {/* <div className="flex gap-1">
               <div className="text-[#FFFFFFA3]">
                 {up ? (
                   <a
@@ -125,9 +125,9 @@ export function ProfileDetails({
                 )}
               </div>
               <div className="text-[#FFFFFF5C]">#{up.slice(2, 6)}</div>
-            </div>
-            <div className="text-[#FFFFFFA3]">{"\u2022"}</div>
-            <div className="bg-base-100 border border-base-200 rounded-sm px-2 p-0.5">
+            </div> */}
+            {/* <div className="text-[#FFFFFFA3]">{"\u2022"}</div> */}
+            <div className="bg-base-100 border border-base-200 rounded-sm">
               🆙 <span className="text-[#FFFFFFA3]">{up.slice(0, 6) + "..." + up.slice(-4)}</span>
             </div>
             {accounts["github"] && (

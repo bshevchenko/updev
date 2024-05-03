@@ -3,6 +3,7 @@ import { SecretsManager } from "@chainlink/functions-toolkit";
 import { PinataPinResponse } from "@pinata/sdk";
 import pinata from "~~/lib/pinata";
 import { getUserData } from "./provider";
+import latestVersions from "../../hardhat/sources/latest.json";
 
 export type PreparedRequest = {
     user: object,
@@ -16,16 +17,20 @@ export async function prepareRequest(
     token: string
 ): Promise<PreparedRequest> {
 
-    const { data: user, version } = await getUserData(source, token);
+    const { data: user } = await getUserData(source, token);
+    
+    // @ts-ignore
+    const version = latestVersions[source];
+
     const pin = await pinata.pinJSONToIPFS(user);
 
-    // TODO save user data to mongo db
+    // TODO save user data to mongo db?
 
     const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
 
     // encrypt secrets and upload to DON
     const secretsManager = new SecretsManager({
-        // TODO whitelist Defender relayer and use it here 
+        // TODO try to whitelist Defender relayer and use it here
         signer: new ethers.Wallet(process.env.DEPLOYER_PRIVATE_KEY || "", provider),
         functionsRouterAddress: process.env.DON_ROUTER || "",
         donId: process.env.DON_ID_STRING || "",

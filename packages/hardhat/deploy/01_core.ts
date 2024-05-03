@@ -1,6 +1,5 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
-import getSource from "../sources/get";
 
 const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await hre.getNamedAccounts();
@@ -12,7 +11,6 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     log: true,
     autoMine: true,
   });
-  // const upRegistry = await hre.ethers.getContract("upRegistry", deployer);
 
   await deploy("upDevAccountNFT", {
     from: deployer,
@@ -36,24 +34,8 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   } catch (e) {
     console.log("Consumer already added");
   }
-
-  const addSource = async (provider: string, version: string) => {
-    const source = getSource(provider, version);
-    try {
-      await nft.addSource(source.name, source.code);
-      console.log(`Source ${source.name} added`);
-    } catch (e) {
-      console.log(`Source ${source.name} already added`);
-    }
-  };
-
-  // TODO use latests.json
-  await addSource("twitter", "1.0");
-  await addSource("github", "1.0");
 };
 
 export default deployYourContract;
 
-// Tags are useful if you have multiple deploy files and only want to run one of them.
-// e.g. yarn deploy --tags YourContract
 deployYourContract.tags = ["core"];

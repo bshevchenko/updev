@@ -15,27 +15,25 @@ export function DeployStep({ setCurrentStep }: { setCurrentStep: any }) {
     if (!signer) {
       return;
     }
-    const _session = await axios.get("/api/session");
-    const { sessionToken } = _session.data.session;
-    if (!sessionToken) {
-      return;
-    }
     if (!session || !session.user) {
       return;
     }
     setIsDeploying(true);
     try {
-      const signature = await signer.signMessage(sessionToken);
+      const signature = await signer.signMessage(session.account.access_token); // TODO salt
       const result = await axios.post("/api/sign-up", {
-        token: sessionToken,
         controller: signer._address,
         signature,
         name: session.user.name, // TODO
         description: "Boris has more than 15 years of full-stack software architecture and development experience at high-tech startups and DeFi, DAO dApps/projects.",
         location: "Koh Phangan, Thailand",
-        isCompany: false
+        isCompany: false,
+        provider: session.account.provider,
+        token: session.account.access_token,
+        id: session.account.providerAccountId,
+        image: session.user.image
       });
-      console.log('API Result', result.data);
+      console.log("API Result", result.data);
       setIsDeploying(false);
       // setCurrentStep(3); TODO
     } catch (e) {

@@ -3,11 +3,11 @@ import DiscordProvider from "next-auth/providers/discord";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import TwitterProvider from "next-auth/providers/twitter";
-import { MongoDBAdapter } from "@auth/mongodb-adapter";
-import clientPromise from "~~/lib/db/clientPromise";
+// import { MongoDBAdapter } from "@auth/mongodb-adapter";
+// import clientPromise from "~~/lib/db/clientPromise";
 
 export default NextAuth({
-  adapter: MongoDBAdapter(clientPromise),
+  // adapter: MongoDBAdapter(clientPromise),
   secret: process.env.SECRET,
   providers: [
     GoogleProvider({
@@ -29,9 +29,23 @@ export default NextAuth({
     }),
   ],
   session: {
-    strategy: "database",
+    strategy: "jwt",
   },
   callbacks: {
+    async session({ session, token, user }) {
+      session.account = token.account // @ts-ignore
+      session.profile = token.profile
+      return session
+    },
+    async jwt({ token, account, profile }) {
+      if (account) {
+        token.account = account
+      }
+      if (profile) {
+        token.profile = profile
+      }
+      return token
+    },
     async redirect({ url }) {
       return url;
     },

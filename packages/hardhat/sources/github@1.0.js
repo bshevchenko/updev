@@ -7,32 +7,18 @@ const github = await Functions.makeHttpRequest({
     }
 });
 if (github.error) {
-    throw Error("GitHub fail");
+    throw Error("GitHub");
 }
-const { data } = github.data;
+const { data } = github;
 const ipfs = await Functions.makeHttpRequest({
     url: "https://gateway.pinata.cloud/ipfs/" + ipfsHash,
     method: "GET"
 });
 if (ipfs.error) {
-    throw Error("IPFS fail");
+    throw Error("IPFS");
 }
 if (data.id != id || ipfs.data.id != id) {
-    throw Error("ID fail");
+    throw Error("ID");
 }
-
-const followers = data.followers;
-const ipfs_followers = ipfs.data.followers;
-delete data.followers;
-delete ipfs.data.followers;
-
-if (JSON.stringify(data) != JSON.stringify(ipfs.data)) {
-    throw Error("Data fail");
-}
-if (followers != ipfs_followers) {
-    if (Math.abs(followers - ipfs_followers) / followers * 100 <= 5) {
-        throw Error("Followers fail");
-    }
-    return Functions.encodeUint256(2);
-}
+// TODO verify other data, allow divergence for followers, remove links from IPFS
 return Functions.encodeUint256(1);

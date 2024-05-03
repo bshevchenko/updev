@@ -1,5 +1,7 @@
 import { ReactElement, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { useAccount } from "wagmi";
+import { useRouter } from "next/router";
 import { MetaHeader } from "~~/components/MetaHeader";
 import {
   DeployStep,
@@ -7,10 +9,25 @@ import {
 } from "~~/components/onboarding";
 import Layout from "~~/components/layout";
 import { NextPageWithLayout } from "./_app";
+import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
 const Onboarding: NextPageWithLayout = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const { data: session } = useSession();
+  const account = useAccount();
+  const router = useRouter();
+
+  const { data: up } = useScaffoldContractRead({
+    contractName: "upRegistry",
+    functionName: "up",
+    args: [account.address],
+  });
+
+  useEffect(() => {
+    if (up && up != "0x0000000000000000000000000000000000000000") {
+      router.push("/profile/" + up);
+    }
+  }, [account.isConnected, router, up]);
 
   useEffect(() => {
     console.log("SESSION", session);
