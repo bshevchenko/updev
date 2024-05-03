@@ -5,9 +5,164 @@
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 const deployedContracts = {
+  31337: {
+    upRegistry: {
+      address: "0xFa98865E75dD11cef8DCE16ad2Ac505d17994CAC",
+      abi: [
+        {
+          inputs: [],
+          name: "AlreadySetUp",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "NoPermissions",
+          type: "error",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "up",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "controller",
+              type: "address",
+            },
+          ],
+          name: "SetUp",
+          type: "event",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "_ups",
+          outputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "up",
+              type: "address",
+            },
+          ],
+          name: "controller",
+          outputs: [
+            {
+              internalType: "address",
+              name: "controller",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "up",
+              type: "address",
+            },
+          ],
+          name: "keyManager",
+          outputs: [
+            {
+              internalType: "address",
+              name: "keyManager",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_up",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "_controller",
+              type: "address",
+            },
+          ],
+          name: "setUP",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "controller",
+              type: "address",
+            },
+          ],
+          name: "up",
+          outputs: [
+            {
+              internalType: "address",
+              name: "up",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "offset",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "limit",
+              type: "uint256",
+            },
+          ],
+          name: "ups",
+          outputs: [
+            {
+              internalType: "address[]",
+              name: "",
+              type: "address[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+      ],
+      inheritedFunctions: {},
+    },
+  },
   11155111: {
     upDevAccountNFT: {
-      address: "0x078F38Cc721CD74454Fe354F422305ADBdA99B58",
+      address: "0xbb9eEf11b744F8eC252BfFF43851e6Fa9f9eDfba",
       abi: [
         {
           inputs: [
@@ -30,6 +185,11 @@ const deployedContracts = {
               internalType: "uint32",
               name: "_gasLimit",
               type: "uint32",
+            },
+            {
+              internalType: "uint64",
+              name: "_subscriptionId",
+              type: "uint64",
             },
           ],
           stateMutability: "nonpayable",
@@ -1242,9 +1402,9 @@ const deployedContracts = {
         {
           inputs: [
             {
-              internalType: "uint64",
-              name: "subscriptionId",
-              type: "uint64",
+              internalType: "address",
+              name: "up",
+              type: "address",
             },
             {
               internalType: "uint64",
@@ -1361,6 +1521,19 @@ const deployedContracts = {
             },
           ],
           name: "setDataForTokenId",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint64",
+              name: "_subscriptionId",
+              type: "uint64",
+            },
+          ],
+          name: "setSubscriptionId",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",
@@ -1605,7 +1778,7 @@ const deployedContracts = {
       },
     },
     upRegistry: {
-      address: "0xf98b357Cdb887E0c22Aa6994D6a41430A044708c",
+      address: "0xB3bfc28C836019553737777B4Dd70B6F1957D3C8",
       abi: [
         {
           inputs: [],

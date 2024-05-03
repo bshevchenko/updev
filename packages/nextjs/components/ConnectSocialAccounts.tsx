@@ -7,7 +7,6 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useAccount, useWalletClient } from "wagmi";
 import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import { useScaffoldContract, useScaffoldContractRead, useScaffoldEventSubscriber } from "~~/hooks/scaffold-eth";
-import Profile from "~~/types/Profile";
 
 // TODO extract
 const githubSecret =

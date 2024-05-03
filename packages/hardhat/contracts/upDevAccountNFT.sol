@@ -7,7 +7,6 @@ import { _LSP8_TOKENID_FORMAT_HASH, _LSP8_TOKEN_METADATA_BASE_URI } from "@lukso
 
 import { LSP8Soulbound } from "./LSP8Soulbound.sol";
 
-// custom LSP4 keys
 bytes32 constant _LSP4_ABI_DATA_KEY = 0x4142495f44415441000000000000000000000000000000000000000000000000;
 bytes32 constant _LSP4_TIMESTAMP_KEY = 0x54494d455354414d500000000000000000000000000000000000000000000000;
 bytes32 constant _LSP4_PROVIDER_KEY = 0x50524f5649444552000000000000000000000000000000000000000000000000;
@@ -67,6 +66,7 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 	bytes32 donID;
 	bool force;
 	uint32 gasLimit;
+	uint64 subscriptionId;
 
 	error SourceNameBusy();
 	error AlreadyClaimed();
@@ -82,7 +82,8 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		address _router,
 		bytes32 _donID,
 		bool _force,
-		uint32 _gasLimit
+		uint32 _gasLimit,
+		uint64 _subscriptionId
 	)
 		FunctionsClient(_router)
 		LSP8Soulbound(
@@ -97,6 +98,11 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		donID = _donID;
 		force = _force;
 		gasLimit = _gasLimit;
+		subscriptionId = _subscriptionId;
+	}
+
+	function setSubscriptionId(uint64 _subscriptionId) public onlyOwner {
+		subscriptionId = _subscriptionId;
 	}
 
 	function addSource(
@@ -165,12 +171,12 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 	}
 
 	function sendRequest(
-		uint64 subscriptionId,
+		address up,
 		uint64 donHostedSecretsVersion,
 		string calldata provider,
 		string calldata version,
 		string calldata id,
-		string calldata ipfs // hash
+		string calldata ipfs // hash, optional
 	) external returns (bytes32 _requestId) {
 		FunctionsRequest.Request memory req;
 		req.initializeRequestForInlineJavaScript(
@@ -178,13 +184,13 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		);
 		if (donHostedSecretsVersion > 0) {
 			req.addDONHostedSecrets(
-				0, // TODO keep slot id hardcoded?
+				0,
 				donHostedSecretsVersion
 			);
 		}
 		string[] memory args = new string[](3);
 		args[0] = id;
-		args[1] = bytes(ipfs).length == 0 ? getStringUP(msg.sender) : ipfs;
+		args[1] = bytes(ipfs).length == 0 ? getStringUP(up) : ipfs;
 		req.setArgs(args);
 
 		bytes32 tokenId = keccak256(abi.encodePacked(provider, id));
@@ -196,7 +202,7 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 			donID
 		);
 		request[_requestId] = Request({
-			up: msg.sender,
+			up: up,
 			provider: provider,
 			version: version,
 			id: id,
@@ -207,12 +213,12 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 			isOK: false,
 			isClaimed: false
 		});
-		requests[msg.sender].push(_requestId);
-		pendingNum[msg.sender]++;
+		requests[up].push(_requestId);
+		pendingNum[up]++;
 
 		emit Requested(
 			_requestId,
-			msg.sender,
+			up,
 			tokenId,
 			provider,
 			version,

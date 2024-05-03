@@ -1,27 +1,16 @@
-import { useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import { useAccount } from "wagmi";
 import { MetaHeader } from "~~/components/MetaHeader";
 import {
-  DeployUniversalProfileStep,
+  DeployStep,
   OAuthStep,
-} from "~~/components/updev/onboarding/";
-import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
-import type { NextPage } from "next";
+} from "~~/components/onboarding";
+import Layout from "~~/components/layout";
+import { NextPageWithLayout } from "./_app";
 
-const Onboarding: NextPage = () => {
+const Onboarding: NextPageWithLayout = () => {
   const [currentStep, setCurrentStep] = useState(1);
-
-  const account = useAccount(); // EOA connected to rainbow kit
-  const router = useRouter();
   const { data: session } = useSession();
-
-  const { data: up } = useScaffoldContractRead({
-    contractName: "upRegistry",
-    functionName: "up",
-    args: [account.address],
-  });
 
   useEffect(() => {
     console.log("SESSION", session);
@@ -29,18 +18,6 @@ const Onboarding: NextPage = () => {
       setCurrentStep(2);
     }
   }, [session]);
-
-  useEffect(() => {
-    // if (!account.isConnected) { // TODO
-    //   router.push("/");
-    //   return;
-    // }
-    if (up && up != "0x0000000000000000000000000000000000000000") {
-      // setCurrentStep(3); // TODO mint first Account NFT
-      router.push("/profile/" + up);
-      return;
-    }
-  }, [account.isConnected, router, up, currentStep]);
 
   return (
     <>
@@ -54,8 +31,8 @@ const Onboarding: NextPage = () => {
 
         {session !== undefined ? (
           <>
-            {currentStep === 1 && <OAuthStep setCurrentStep={setCurrentStep} />}
-            {currentStep === 2 && <DeployUniversalProfileStep setCurrentStep={setCurrentStep} />}
+            {currentStep === 1 && <OAuthStep />}
+            {currentStep === 2 && <DeployStep setCurrentStep={setCurrentStep} />}
           </>
         ) : (
           <>
@@ -68,5 +45,13 @@ const Onboarding: NextPage = () => {
     </>
   );
 };
+
+Onboarding.getLayout = function getLayout(page: ReactElement) {
+  return (
+    <Layout>
+      {page}
+    </Layout>
+  )
+}
 
 export default Onboarding;

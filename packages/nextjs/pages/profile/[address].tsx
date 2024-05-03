@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { ERC725, ERC725JSONSchema } from "@erc725/erc725.js";
-import type { NextPage } from "next";
 import { toHex } from "viem";
 import { useAccount } from "wagmi";
 import lspSchemas from "~~/LSP3ProfileMetadata.json";
-import { LoadingSkeleton, ProfileDetails } from "~~/components/updev/profile/";
+import { LoadingSkeleton, ProfileDetails } from "~~/components/profile";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 import {
   Accounts,
@@ -16,8 +15,10 @@ import {
   functions,
   roles,
 } from "~~/types/Profile";
+import { NextPageWithLayout } from "~~/pages/_app";
+import Layout from "../../components/layout";
 
-const Profile: NextPage = () => {
+const Profile: NextPageWithLayout = () => {
   const router = useRouter();
 
   if (!router.query.address) {
@@ -28,6 +29,14 @@ const Profile: NextPage = () => {
     );
   }
 };
+
+Profile.getLayout = function getLayout(page: ReactElement) {
+  return (
+    <Layout>
+      {page}
+    </Layout>
+  )
+}
 
 export default Profile;
 
@@ -75,7 +84,7 @@ const ProfileContents = ({ up }: { up: string }) => {
         console.error("Error fetching ERC725 data:", error);
       }
     }
-    if (up) {
+    if (up) { // TODO only one fetch
       fetchData();
     }
   }, [up]);

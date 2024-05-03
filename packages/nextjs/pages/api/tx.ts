@@ -7,6 +7,8 @@ type ResponseData = {
 
 // https://docs.lukso.tech/learn/expert-guides/key-manager/execute-relay-transactions/
 
+// TODO Lukso network tx
+
 export default async function Transaction(req: NextApiRequest, res: NextApiResponse<ResponseData>) {
 
     const { up, signature, nonce, validityTimestamps, abiPayload } = req.body;

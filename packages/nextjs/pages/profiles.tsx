@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ERC725, ERC725JSONSchema } from "@erc725/erc725.js";
 import type { NextPage } from "next";
 import lspSchemas from "~~/LSP3ProfileMetadata.json";
-import { ProfileCard } from "~~/components/updev";
+import { ProfileCard } from "~~/components";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 import { LSP24_SCHEMA_NAME } from "~~/types/Profile";
 import upRegistryProfile from "~~/types/Profile";

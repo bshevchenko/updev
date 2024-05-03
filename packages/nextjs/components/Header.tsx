@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
 import { Bars3Icon } from "@heroicons/react/24/outline";
-import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
+import { RainbowKitCustomConnectButton } from "~~/components";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 
 interface HeaderMenuLink {
@@ -40,9 +40,8 @@ export const HeaderMenuLinks = () => {
             <Link
               href={href}
               passHref
-              className={`${
-                isActive ? "bg-secondary shadow-md" : ""
-              } hover:bg-secondary hover:shadow-md focus:!bg-secondary active:!text-neutral py-1.5 px-3 text-sm rounded-full gap-2 grid grid-flow-col`}
+              className={`${isActive ? "bg-secondary shadow-md" : ""
+                } hover:bg-secondary hover:shadow-md focus:!bg-secondary active:!text-neutral py-1.5 px-3 text-sm rounded-full gap-2 grid grid-flow-col`}
             >
               {icon}
               <span>{label}</span>
@@ -54,9 +53,6 @@ export const HeaderMenuLinks = () => {
   );
 };
 
-/**
- * Site header
- */
 export const Header = () => {
   const account = useAccount();
   const { pathname } = useRouter();
@@ -104,12 +100,11 @@ export const Header = () => {
           </div>
           <div>
             <div className="badge badge-outline badge-accent rounded-sm px-0.5 border-[2px] text-[12px] font-bold">
-              BETA V1.0
+              BETA V2.0
             </div>
           </div>
         </Link>
         <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">
-          {/* <HeaderMenuLinks /> */}
           <Link href="/profiles" className="items-center text-lg">
             Discover Profiles
           </Link>
@@ -117,7 +112,6 @@ export const Header = () => {
       </div>
       <div className="navbar-end flex-grow mr-4">
         <RainbowKitCustomConnectButton />
-        <FaucetButton />
       </div>
     </div>
   );

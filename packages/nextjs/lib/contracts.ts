@@ -20,6 +20,12 @@ export const lsp23Factory = new ethers.Contract(
     signer
 );
 
+export const upDevAccountNFT = new ethers.Contract(
+    (deployedContracts as any)[chainId].upDevAccountNFT.address,
+    (deployedContracts as any)[chainId].upDevAccountNFT.abi,
+    signer
+);
+
 export const keyManager = (address: string) => {
     return new ethers.Contract(
         address,

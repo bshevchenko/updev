@@ -16,7 +16,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 
   await deploy("upDevAccountNFT", {
     from: deployer,
-    args: [process.env.DON_ROUTER, process.env.DON_ID, process.env.LSP8_FORCE, process.env.DON_GAS_LIMIT],
+    args: [process.env.DON_ROUTER, process.env.DON_ID, process.env.LSP8_FORCE, process.env.DON_GAS_LIMIT, process.env.DON_SUB_ID],
     log: true,
     autoMine: true,
   });
@@ -47,7 +47,9 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     }
   };
 
+  // TODO use latests.json
   await addSource("twitter", "1.0");
+  await addSource("github", "1.0");
 };
 
 export default deployYourContract;

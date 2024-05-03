@@ -1,6 +1,6 @@
 const [id, ipfsHash] = args;
 const github = await Functions.makeHttpRequest({
-    url: "https://api.github.com/user", // TODO try GET Graph QL request with num. of contributions included
+    url: "https://api.github.com/user",
     method: "GET",
     headers: {
         "Authorization": `Bearer ${secrets.token}`
@@ -11,7 +11,7 @@ if (github.error) {
 }
 const { data } = github.data;
 const ipfs = await Functions.makeHttpRequest({
-    url: "https://gateway.pinata.cloud/ipfs/" + ipfsHash, // TODO pass IPFS gateway in args?
+    url: "https://gateway.pinata.cloud/ipfs/" + ipfsHash,
     method: "GET"
 });
 if (ipfs.error) {

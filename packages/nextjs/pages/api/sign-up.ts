@@ -6,7 +6,7 @@ import ERC725 from "@erc725/erc725.js";
 import LSP3Schema from "@erc725/erc725.js/schemas/LSP3ProfileMetadata.json";
 import pinata from "~~/lib/pinata";
 import { getDeploymentData } from "~~/lib/up";
-import { upRegistry, lsp23Factory, isEmptyAddress } from "~~/lib/contracts";
+import { upRegistry, upDevAccountNFT, lsp23Factory, isEmptyAddress } from "~~/lib/contracts";
 import { getAccountBySession } from "~~/lib/db";
 import { prepareRequest } from "~~/lib/don";
 
@@ -16,40 +16,44 @@ type ResponseData = {
     up: string
 }
 
-// TODO it should mintBatch interests and mint account NFT using user data from provider...
-// TODO ...we need to own user's UP until everything is minted
-
 export default async function SignUp(
     req: NextApiRequest,
     res: NextApiResponse<ResponseData>
 ) {
     const account = await getAccountBySession(req);
 
-    // TODO get & verify tags (tokenIds), location, userpic, cover, personal OR company profile
-    const { controller, signature, name, description } = req.body;
+    // TODO get & verify interests tags (tokenIds)
+    // TODO userpic, cover
+
+    const { controller, signature, name, description, location, isCompany } = req.body;
 
     if (ethers.utils.recoverAddress(hashMessage(account.session.sessionToken), signature) !== controller) {
         throw new Error("invalid signature");
     }
-    if (!isEmptyAddress(await upRegistry.up(controller))) {
-        throw new Error("already signed up");
-    }
-    if (name.length < 3 || name.length > 40) { // TODO increase max name.length
+    // if (!isEmptyAddress(await upRegistry.up(controller))) { // TODO uncomment
+    //     throw new Error("already signed up");
+    // }
+    if (name.length < 3 || name.length > 40) { // TODO increase max name.length?
         throw new Error("invalid name");
     }
     if (description.length < 12 || description.length > 160) {
         throw new Error("invalid description");
+    }
+    if (location.length > 30) {
+        throw new Error("invalid location");
     }
 
     const json = {
         LSP3Profile: {
             name,
             description,
+            location,
+            isCompany: !!isCompany,
             profileImage: [
                 {
-                    // width: 1024, // TODO remove?
+                    // width: 1024, // TODO
                     // height: 1024,
-                    url: user.image, // TODO
+                    url: account.user.image,
                     // verification: {
                     //     method: "keccak256(bytes)",
                     //     data: ethers.utils.keccak256(`0x${profileImg}`),
@@ -59,7 +63,7 @@ export default async function SignUp(
             // backgroundImage: [],
         },
     };
-    const pin = await pinata.pinJSONToIPFS(json); // TODO remove? we can prob use just json
+    const pin = await pinata.pinJSONToIPFS(json);
     const { values } = erc725.encodeData([
         {
             keyName: "LSP3Profile",
@@ -69,8 +73,9 @@ export default async function SignUp(
             },
         },
     ]);
+    console.log("Creating new UP...");
     const { data } = await axios.post(process.env.LUKSO_RELAYER_API_URL + "/v1/relayer/universal-profile", {
-        lsp6ControllerAddress: [controller], // TODO add upDev controller
+        lsp6ControllerAddress: [controller],
         lsp3Profile: values[0]
     }, {
         headers: {
@@ -78,8 +83,10 @@ export default async function SignUp(
             "Content-Type": "application/json"
         }
     });
+    const up = data.universalProfileAddress;
     const parameters = await getDeploymentData(data.transactionHash);
 
+    console.log("Deploying UP on another chain...");
     const lsp23Tx = await lsp23Factory.deployERC1167Proxies(
         parameters[0].value,
         parameters[1].value,
@@ -88,22 +95,37 @@ export default async function SignUp(
     );
     await lsp23Tx.wait();
 
-    const upRegistryTx = await upRegistry.setUP(data.universalProfileAddress, controller);
+    console.log("Registering UP...");
+    const upRegistryTx = await upRegistry.setUP(up, controller);
     await upRegistryTx.wait();
 
-    // TODO mint AccountNFT
+    // mint Account NFT for the created UP
+    console.log("Preparing request for Account NFT...");
     const request = await prepareRequest(
         account.provider,
         account.access_token
     );
-    // TODO send tx on behalf of created UP (via KeyManager? use data.keyManagerAddress? use tx.ts?) on Sepolia
-    // TODO remove updev controller from Sepolia's UP
+    console.log("Sending request for Account NFT...");
+    const accountTx = await upDevAccountNFT.sendRequest(
+        up,
+        request.secret,
+        account.provider,
+        request.version,
+        account.providerAccountId,
+        request.pin.IpfsHash
+    );
+    await accountTx.wait();
 
-    // TODO mintBatch Group Member NFTs
-    // TODO send tx on behalf of created UP (via KeyManager? use data.keyManagerAddress? use tx.ts?) on Lukso. btw check Lukso's Gas Relayer
-    // TODO remove updev controller from Lukso's UP
+    // TODO claim here or via relayer? we need to wait for Fulfilled event first. so prob via relayer
+    // const tokenId = ethers.utils.solidityKeccak256(["string", "string"], [account.provider, account.providerAccountId]);
+    // console.log("Claiming Account NFT", tokenId);
+    // const claimTx = await upDevAccountNFT.claim(tokenId);
+    // await claimTx.wait();
 
+    // TODO mintBatch Group Member NFTs on Lukso here? // TODO won't be possible without UP permissions rn
+
+    console.log("Done! UP:", up);
     res.status(200).json({
-        up: data.universalProfileAddress
+        up
     });
 }

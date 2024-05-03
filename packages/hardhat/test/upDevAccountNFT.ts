@@ -31,6 +31,7 @@ describe("upDevAccountNFT", () => {
     process.env.DON_ID,
     true,
     process.env.DON_GAS_LIMIT,
+    process.env.DON_SUB_ID,
   ];
   let tokenId: any;
   const source = getSource("test/ok", "0.1");
@@ -89,7 +90,7 @@ describe("upDevAccountNFT", () => {
       });
       console.log("Sending request...");
       let tx = await nft.sendRequest(
-        process.env.DON_SUB_ID || 0,
+        owner.address,
         0,
         source.provider,
         source.version,
@@ -135,8 +136,6 @@ describe("upDevAccountNFT", () => {
 
     expect(await nft.tokenOwnerOf(tokenId)).to.equal(owner.address);
     expect(await nft.tokenIdsOf(owner.address)).to.deep.equal([tokenId]);
-
-    // TODO await expect(contract.call()).to.emit(contract, "Event")
 
     const [abiData, metaData, timestamp, provider, version, id] = await nft.getDataBatchForTokenIds(
       new Array(6).fill(tokenId),
@@ -190,7 +189,7 @@ describe("upDevAccountNFT", () => {
       console.log("Sending request...");
       let tx = await nft
         .connect(signers[1])
-        .sendRequest(process.env.DON_SUB_ID || 0, 0, newSource.provider, newSource.version, accountId, ipfsHash2);
+        .sendRequest(signers[1].address, 0, newSource.provider, newSource.version, accountId, ipfsHash2);
       await tx.wait();
       console.log("Request sent and now being fulfilled by DON...");
 
@@ -246,7 +245,7 @@ describe("upDevAccountNFT", () => {
       nft.on("Fulfilled", eventHandler);
       console.log("Sending request...");
       let tx = await nft.sendRequest(
-        process.env.DON_SUB_ID || 0,
+        owner.address,
         0,
         errorSource.provider,
         errorSource.version,

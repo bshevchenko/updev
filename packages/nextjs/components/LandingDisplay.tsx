@@ -6,6 +6,7 @@ export function LandingDisplay() {
   const { openConnectModal } = useConnectModal();
 
   return (
+
     <div className="flex grow flex-col justify-center">
       <div className="flex flex-col items-center justify-center gap-14 relative">
         <div className="absolute left-10 -top-60">
@@ -35,14 +36,9 @@ export function LandingDisplay() {
             />
           </h3>
         </div>
-
-        <div className="z-1 absolute -bottom-20 text-3xl">
-          <div>{/* <b>TODO Move here supported browsers and Powered by LUKSO ?</b> */}</div>
-        </div>
         <div className="z-1 absolute right-10 -bottom-60">
           <Image alt="pattern right" width={700} height={700} src="/pattern-right.svg" />
         </div>
-
         <div className="z-0">
           <button className="btn btn-accent px-6 capitalize" onClick={openConnectModal} type="button">
             Connect Wallet

@@ -13,13 +13,11 @@ import {
   DocumentDuplicateIcon,
   QrCodeIcon,
 } from "@heroicons/react/24/outline";
-import { Address } from "~~/components/scaffold-eth";
+import { Address } from "~~/components/scaffold-eth/Address";
 import { useAutoConnect, useNetworkColor } from "~~/hooks/scaffold-eth";
 import { getBlockExplorerAddressLink, getTargetNetwork } from "~~/utils/scaffold-eth";
+import { useSession } from "next-auth/react";
 
-/**
- * Custom Wagmi Connect Button (watch balance + custom design)
- */
 export const RainbowKitCustomConnectButton = () => {
   useAutoConnect();
   const networkColor = useNetworkColor();
@@ -27,6 +25,8 @@ export const RainbowKitCustomConnectButton = () => {
   const { disconnect } = useDisconnect();
   const { switchNetwork } = useSwitchNetwork();
   const [addressCopied, setAddressCopied] = useState(false);
+
+  const { data: session } = useSession();
 
   return (
     <ConnectButton.Custom>
@@ -87,15 +87,16 @@ export const RainbowKitCustomConnectButton = () => {
                   </div>
                 );
               }
-
               return (
                 <div className="px-2 flex justify-end items-center">
-                  <div className="flex gap-1 items-center mr-1">
-                    {/* <Balance address={account.address} className="min-h-0 h-auto" /> */}
-                    <Image alt="upDev logo" width={24} height={24} src={chain.iconUrl || "/up.png"} />
-                    <div>{chain.hasIcon}</div>
-                    <span className="text-sm font-bold mr-2">{chain.name}</span>
-                  </div>
+                  {session && session.user && session.user.image && <div className="rounded-full overflow-hidden">
+                    <Image
+                      alt="userpic"
+                      width={36}
+                      height={36}
+                      src={session.user.image}
+                    />
+                  </div>}
                   <div className="dropdown dropdown-end leading-3">
                     <label
                       tabIndex={0}

@@ -1,58 +1,51 @@
 import type { AppProps } from "next/app";
-import { useEffect, useState } from "react";
-import { RainbowKitProvider, darkTheme, lightTheme } from "@rainbow-me/rainbowkit";
+import { RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
 import { SessionProvider } from "next-auth/react";
-import NextNProgress from "nextjs-progressbar";
-import { Toaster } from "react-hot-toast";
-import { useDarkMode } from "usehooks-ts";
+import { NextPage } from "next/types";
+import { ReactElement, ReactNode } from "react";
 import { WagmiConfig } from "wagmi";
-import { Header } from "~~/components/Header";
-import { BlockieAvatar } from "~~/components/scaffold-eth";
-import { useNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
-import { useGlobalState } from "~~/services/store/store";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
+// import NextNProgress from "nextjs-progressbar";
+// import { useNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
+// import { useGlobalState } from "~~/services/store/store";
 import { appChains } from "~~/services/web3/wagmiConnectors";
 import "~~/styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 
-const ScaffoldEthApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
-  const price = useNativeCurrencyPrice();
-  const setNativeCurrencyPrice = useGlobalState(state => state.setNativeCurrencyPrice);
-  
-  // This variable is required for initial client side rendering of correct theme for RainbowKit
-  const [isDarkTheme, setIsDarkTheme] = useState(true);
-  const { isDarkMode } = useDarkMode();
+// TODO deal with commented code
 
-  useEffect(() => {
-    if (price > 0) {
-      setNativeCurrencyPrice(price);
-    }
-  }, [setNativeCurrencyPrice, price]);
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode
+}
 
-  useEffect(() => {
-    setIsDarkTheme(isDarkMode);
-  }, [isDarkMode]);
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout
+}
+
+const ScaffoldEthApp = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLayout) => {
+  // const price = useNativeCurrencyPrice();
+  // const setNativeCurrencyPrice = useGlobalState(state => state.setNativeCurrencyPrice);
+
+  // useEffect(() => {
+  //   if (price > 0) {
+  //     setNativeCurrencyPrice(price);
+  //   }
+  // }, [setNativeCurrencyPrice, price]);
+
+  const getLayout = Component.getLayout ?? ((page) => page)
 
   return (
-    <SessionProvider session={session}>
-      <WagmiConfig config={wagmiConfig}>
-        <NextNProgress />
+    <WagmiConfig config={wagmiConfig}>
+      <SessionProvider session={session}>
         <RainbowKitProvider
           chains={appChains.chains}
-          avatar={BlockieAvatar}
           coolMode={true}
-          theme={isDarkTheme ? darkTheme() : lightTheme()}
+          theme={darkTheme()}
         >
-          <div className="flex flex-col min-h-screen">
-            <Header />
-            <main className="relative flex flex-col flex-1">
-              <Component {...pageProps} />
-            </main>
-          </div>
-          <Toaster />
-        </RainbowKitProvider>
-      </WagmiConfig>
-    </SessionProvider>
+          {getLayout(<Component {...pageProps} />)}
+        </RainbowKitProvider >
+      </SessionProvider>
+    </WagmiConfig>
   );
 };
 

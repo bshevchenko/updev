@@ -24,6 +24,11 @@ const nextConfig = {
         hostname: "avatars.githubusercontent.com",
         pathname: "**",
       },
+      {
+        protocol: "https",
+        hostname: "pbs.twimg.com",
+        pathname: "**",
+      },
     ],
   },
   reactStrictMode: true,
