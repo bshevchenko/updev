@@ -6,27 +6,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "ipfs.io",
-        pathname: "**",
-      },
-      {
-        protocol: "https",
-        hostname: "gateway.ipfs.io",
-        pathname: "**",
-      },
-      {
-        protocol: "https",
-        hostname: "api.universalprofile.cloud",
-        pathname: "**",
-      },
-      {
-        protocol: "https",
-        hostname: "avatars.githubusercontent.com",
-        pathname: "**",
-      },
-      {
-        protocol: "https",
-        hostname: "pbs.twimg.com",
+        hostname: "**",
         pathname: "**",
       },
     ],

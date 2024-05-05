@@ -20,7 +20,7 @@ export function DeployStep({ setCurrentStep }: { setCurrentStep: any }) {
     }
     setIsDeploying(true);
     try {
-      const signature = await signer.signMessage(session.account.access_token); // TODO salt
+      const signature = await signer.signMessage(session.account.access_token);
       const result = await axios.post("/api/sign-up", {
         controller: signer._address,
         signature,

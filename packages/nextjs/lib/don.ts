@@ -6,23 +6,26 @@ import { getUserData } from "./provider";
 import latestVersions from "../../hardhat/sources/latest.json";
 
 export type PreparedRequest = {
-    user: object,
-    pin: PinataPinResponse,
+    pin: PinataPinResponse | undefined,
     secret: number,
     version: string
 }
 
 export async function prepareRequest(
+    up: string,
     source: string,
-    token: string
+    token: string,
+    id?: string
 ): Promise<PreparedRequest> {
-
-    const { data: user } = await getUserData(source, token);
-    
     // @ts-ignore
     const version = latestVersions[source];
 
-    const pin = await pinata.pinJSONToIPFS(user);
+    let pin
+    try {
+        const { data: user } = await getUserData(source, token, id);
+        pin = await pinata.pinJSONToIPFS(user);
+    } catch (e) {
+    }
 
     // TODO save user data to mongo db?
 
@@ -30,13 +33,13 @@ export async function prepareRequest(
 
     // encrypt secrets and upload to DON
     const secretsManager = new SecretsManager({
-        // TODO try to whitelist Defender relayer and use it here
+        // TODO pass subscription ownership to Defender relayer and use it here
         signer: new ethers.Wallet(process.env.DEPLOYER_PRIVATE_KEY || "", provider),
         functionsRouterAddress: process.env.DON_ROUTER || "",
         donId: process.env.DON_ID_STRING || "",
     });
     await secretsManager.initialize();
-    const encryptedSecretsObj = await secretsManager.encryptSecrets({ token });
+    const encryptedSecretsObj = await secretsManager.encryptSecrets({ token, up });
     const uploadResult = await secretsManager.uploadEncryptedSecretsToDON({
         encryptedSecretsHexstring: encryptedSecretsObj.encryptedSecrets,
         gatewayUrls: [
@@ -44,13 +47,12 @@ export async function prepareRequest(
             process.env.DON_GATEWAY_URL_2 || "",
         ],
         slotId: 0,
-        minutesUntilExpiration: 30,
+        minutesUntilExpiration: 10,
     });
     if (!uploadResult.success) {
         throw new Error("Encrypted secrets not uploaded to DON");
     }
     return {
-        user,
         pin,
         secret: uploadResult.version,
         version

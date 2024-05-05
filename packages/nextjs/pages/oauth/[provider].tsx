@@ -13,6 +13,7 @@ export default () => {
     if (!session || session.account.provider != router.query.provider || new Date(session.expires) <= new Date()) {
       void signIn(String(router.query.provider));
     } else {
+      window.opener.postMessage({ message: "OAuth-OK", data: session }, "*");
       window.close();
     }
   }, [session, status, router]);

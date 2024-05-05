@@ -1,4 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next/types";
+import { ethers } from "ethers";
+import { hashMessage } from "@ethersproject/hash";
 import { isEmptyAddress, upDevAccountNFT, upRegistry } from "~~/lib/contracts";
 import { prepareRequest } from "~~/lib/don";
 
@@ -7,16 +9,22 @@ type ResponseData = {
 
 export default async function Account(req: NextApiRequest, res: NextApiResponse<ResponseData>) {
 
-    const { up, provider, token, id } = req.body;
+    const { up, provider, token, id, signature } = req.body;
 
-    if (isEmptyAddress(await upRegistry.controller(up))) {
+    const controller = await upRegistry.controller(up);
+    if (isEmptyAddress(controller)) {
         throw new Error("not allowed");
+    }
+    if (ethers.utils.recoverAddress(hashMessage(token), signature) !== controller) { // TODO salt token
+        throw new Error("invalid signature");
     }
 
     console.log("Preraing request...");
     const request = await prepareRequest(
+        up,
         provider,
-        token
+        token,
+        id
     );
 
     console.log("Sending request...");
@@ -26,7 +34,7 @@ export default async function Account(req: NextApiRequest, res: NextApiResponse<
         provider,
         request.version,
         id,
-        request.pin.IpfsHash
+        request.pin ? request.pin.IpfsHash : ""
     );
     await accountTx.wait();
 

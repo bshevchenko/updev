@@ -23,7 +23,7 @@ export default async function SignUp(
     // TODO userpic, cover
     const { controller, signature, name, description, location, isCompany, provider, token, id, image } = req.body;
 
-    if (ethers.utils.recoverAddress(hashMessage(token), signature) !== controller) {
+    if (ethers.utils.recoverAddress(hashMessage(token), signature) !== controller) { // TODO salt token
         throw new Error("invalid signature");
     }
     if (!isEmptyAddress(await upRegistry.up(controller))) {
@@ -98,6 +98,7 @@ export default async function SignUp(
     // mint Account NFT for the created UP
     console.log("Preparing request for Account NFT...");
     const request = await prepareRequest(
+        up,
         provider,
         token
     );
@@ -108,7 +109,7 @@ export default async function SignUp(
         provider,
         request.version,
         id,
-        request.pin.IpfsHash
+        request.pin ? request.pin.IpfsHash : ""
     );
     await accountTx.wait();
 

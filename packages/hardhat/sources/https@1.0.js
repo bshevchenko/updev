@@ -1,12 +1,11 @@
-const [id, up] = args;
 const response = await Functions.makeHttpRequest({
-    url: `https://${id}/updev.json`,
+    url: `https://${args[0]}/updev.json`,
     method: "GET"
-});
+})
 if (response.error) {
-    throw Error("HTTPs fail");
+    throw Error("HTTPs")
 }
-if (response.data.data.up !== up) {
-    throw Error("Unexpected UP");
+if (response.data.up != args[2]) {
+    throw Error("UP")
 }
-return Functions.encodeUint256(1);
+return Functions.encodeUint256(1)

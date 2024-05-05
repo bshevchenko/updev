@@ -13,7 +13,7 @@ export default (url: string, title: string) => {
     const newWindow = window.open(
       url,
       title,
-      `width=${500 / systemZoom},height=${550 / systemZoom},top=${top},left=${left}`,
+      `width=${500 / systemZoom},height=${650 / systemZoom},top=${top},left=${left}`,
     );
 
     newWindow?.focus();

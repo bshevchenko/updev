@@ -170,7 +170,6 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		return result;
 	}
 
-	// TODO rn anyone are able to spam users with foreign accounts? if yes, then require msg.sender == (up || [admins])
 	function sendRequest(
 		address up,
 		uint64 donHostedSecretsVersion,
@@ -191,7 +190,8 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		}
 		string[] memory args = new string[](3);
 		args[0] = id;
-		args[1] = bytes(ipfs).length == 0 ? getStringUP(up) : ipfs;
+		args[1] = ipfs;
+		args[2] = getStringUP(up);
 		req.setArgs(args);
 
 		bytes32 tokenId = keccak256(abi.encodePacked(provider, id));
