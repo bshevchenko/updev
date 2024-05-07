@@ -3,34 +3,36 @@ import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
 import axios from "axios";
 import { OnboardProgressIndicator } from "./OnboardProgressIndicator";
-import { useEthersSigner } from "~~/hooks/scaffold-eth/useEthersSigner";
+import { signMessage } from "@wagmi/core";
+import { useAccount } from "wagmi";
+import { utils } from "ethers";
 
 export function DeployStep({ setCurrentStep }: { setCurrentStep: any }) {
-  const signer = useEthersSigner();
   const [isDeploying, setIsDeploying] = useState(false);
 
   const { data: session } = useSession();
+  const account = useAccount();
 
   async function handleDeploy() {
-    if (!signer) {
-      return;
-    }
     if (!session || !session.user) {
       return;
     }
     setIsDeploying(true);
     try {
-      const signature = await signer.signMessage(session.account.access_token);
+      const token = session.account.access_token;
+      const id = session.account.providerAccountId;
+      const message = utils.keccak256(utils.toUtf8Bytes(token + id));
+      const signature = await signMessage({ message });
       const result = await axios.post("/api/sign-up", {
-        controller: signer._address,
+        controller: account.address,
         signature,
         name: session.user.name, // TODO
         description: "Boris has more than 15 years of full-stack software architecture and development experience at high-tech startups and DeFi, DAO dApps/projects.",
         location: "Koh Phangan, Thailand",
         isCompany: false,
         provider: session.account.provider,
-        token: session.account.access_token,
-        id: session.account.providerAccountId,
+        token,
+        id,
         image: session.user.image
       });
       console.log("API Result", result.data);

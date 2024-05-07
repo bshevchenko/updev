@@ -39,7 +39,7 @@ export async function prepareRequest(
         donId: process.env.DON_ID_STRING || "",
     });
     await secretsManager.initialize();
-    const encryptedSecretsObj = await secretsManager.encryptSecrets({ token, up });
+    const encryptedSecretsObj = await secretsManager.encryptSecrets({ token, up: up.slice(2).toLowerCase() });
     const uploadResult = await secretsManager.uploadEncryptedSecretsToDON({
         encryptedSecretsHexstring: encryptedSecretsObj.encryptedSecrets,
         gatewayUrls: [

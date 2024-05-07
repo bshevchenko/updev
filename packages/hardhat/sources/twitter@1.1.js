@@ -1,9 +1,9 @@
-if (secrets.up.toLowerCase() != args[2].toLowerCase()) {
+if (secrets.up != args[2]) {
     throw Error("UP")
 }
-const fields = ["id", "created_at", "username", "verified", "verified_type"]
+const fields = ["created_at", "username", "verified", "verified_type"]
 const api = await Functions.makeHttpRequest({
-    url: "https://api.twitter.com/2/users/me?user.fields=" + fields.join(",") + ",public_metrics",
+    url: "https://api.twitter.com/2/users/me?user.fields=id," + fields.join(",") + ",public_metrics",
     method: "GET",
     headers: {
         "Authorization": `Bearer ${secrets.token}`
@@ -18,6 +18,9 @@ const ipfs = await Functions.makeHttpRequest({
 })
 if (ipfs.error) {
     throw Error("IPFS")
+}
+if (api.data.id != args[0] || ipfs.data.id != args[0]) {
+    throw Error("ID")
 }
 fields.forEach(field => {
     if (data[field] !== ipfs.data[field]) {

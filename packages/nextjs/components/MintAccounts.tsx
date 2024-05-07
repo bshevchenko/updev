@@ -6,17 +6,17 @@ import accounts from "./accounts";
 import popupCenter from "./popupCenter";
 import { useEffect, useState } from "react";
 import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
-import { useEthersSigner } from "~~/hooks/scaffold-eth/useEthersSigner";
+import { signMessage } from "@wagmi/core";
+import { useAccount } from "wagmi";
+import { utils } from "ethers";
 // import { useScaffoldContract, useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
 // TODO deal with commented code
 
 export const MintAccounts = ({ up }: { up: string }) => {
-  const signer = useEthersSigner();
-
   const [activeModal, setActiveModal] = useState<{} | null>(null);
   const [copied, setCopied] = useState(false);
-  const [id, setId] = useState(""); // TODO
+  const [id, setId] = useState("");
 
   // useScaffoldEventSubscriber({
   //   contractName: "upDevFunctionsConsumer",
@@ -44,11 +44,8 @@ export const MintAccounts = ({ up }: { up: string }) => {
   // };
 
   async function handleMint(provider: string, token: string, id: string) {
-    if (!signer) {
-      console.error("No Signer");
-      return;
-    }
-    const signature = await signer.signMessage(token);
+    const message = utils.keccak256(utils.toUtf8Bytes(token + id));
+    const signature = await signMessage({ message });
     closeModal();
     const data = {
       up,

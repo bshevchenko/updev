@@ -1,11 +1,15 @@
+if (secrets.up != args[2]) {
+    throw Error("UP")
+}
 const api = await Functions.makeHttpRequest({
-    url: "https://buidlguidl-v3.appspot.com/builders/" + args[0],
+    url: "https://www.googleapis.com/oauth2/v1/userinfo?alt=json",
+    method: "GET",
+    headers: {
+        "Authorization": `Bearer ${secrets.token}`
+    }
 })
 if (api.error) {
     throw Error("API")
-}
-if (!api.data.status.text.toLowerCase().includes(args[2])) {
-    throw Error("UP")
 }
 const ipfs = await Functions.makeHttpRequest({
     url: "https://gateway.pinata.cloud/ipfs/" + args[1],
@@ -14,7 +18,10 @@ const ipfs = await Functions.makeHttpRequest({
 if (ipfs.error) {
     throw Error("IPFS")
 }
-["id", "role", "function", "scholarship", "ens", "creationTimestamp"].forEach(field => {
+if (api.data.id != args[0] || ipfs.data.id != args[0]) {
+    throw Error("ID")
+}
+["email", "verified_email"].forEach(field => {
     if (api.data[field] !== ipfs.data[field]) {
         throw Error(field)
     }

@@ -54,7 +54,7 @@ export default [
     modalImage: "/connect-bg.png",
   },
   {
-    name: "website",
+    name: "https",
     title: "WebSite",
     logo: "/link.svg",
     comingSoon: false,

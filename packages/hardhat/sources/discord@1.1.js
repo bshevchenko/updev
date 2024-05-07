@@ -1,5 +1,5 @@
-if (secrets.up.toLowerCase() != args[2].toLowerCase()) {
-    throw Error("UP");
+if (secrets.up != args[2]) {
+    throw Error("UP")
 }
 const api = await Functions.makeHttpRequest({
     url: "https://discord.com/api/v10/users/@me",
@@ -18,7 +18,10 @@ const ipfs = await Functions.makeHttpRequest({
 if (ipfs.error) {
     throw Error("IPFS")
 }
-["id", "username", "discriminator", "public_flags", "flags", "mfa_enabled", "clan", "premium_type", "email", "verified"].forEach(field => {
+if (api.data.id != args[0] || ipfs.data.id != args[0]) {
+    throw Error("ID")
+}
+["username", "discriminator", "public_flags", "flags", "mfa_enabled", "clan", "premium_type", "email", "verified"].forEach(field => {
     if (api.data[field] !== ipfs.data[field]) {
         throw Error(field)
     }

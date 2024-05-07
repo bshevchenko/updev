@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import axios from "axios";
-import { ethers } from "ethers";
+import { ethers, utils } from "ethers";
 import { hashMessage } from "@ethersproject/hash";
 import ERC725 from "@erc725/erc725.js";
 import LSP3Schema from "@erc725/erc725.js/schemas/LSP3ProfileMetadata.json";
@@ -23,7 +23,8 @@ export default async function SignUp(
     // TODO userpic, cover
     const { controller, signature, name, description, location, isCompany, provider, token, id, image } = req.body;
 
-    if (ethers.utils.recoverAddress(hashMessage(token), signature) !== controller) { // TODO salt token
+    const message = utils.keccak256(utils.toUtf8Bytes(token + id));
+    if (ethers.utils.recoverAddress(hashMessage(message), signature) !== controller) {
         throw new Error("invalid signature");
     }
     if (!isEmptyAddress(await upRegistry.up(controller))) {
