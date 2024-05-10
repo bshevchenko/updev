@@ -11,6 +11,10 @@ export default async function Account(req: NextApiRequest, res: NextApiResponse<
 
     const { up, provider, token, id, signature } = req.body;
 
+    if (!up) {
+        throw new Error("Invalid UP");
+    }
+
     const controller = await upRegistry.controller(up);
     if (isEmptyAddress(controller)) {
         throw new Error("not allowed");

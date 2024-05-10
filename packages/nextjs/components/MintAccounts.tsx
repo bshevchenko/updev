@@ -9,6 +9,8 @@ import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outl
 import { signMessage } from "@wagmi/core";
 import { useAccount } from "wagmi";
 import { utils } from "ethers";
+import { LoginButton } from "@telegram-auth/react";
+import { signIn, useSession } from "next-auth/react";
 // import { useScaffoldContract, useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
 // TODO deal with commented code
@@ -67,6 +69,11 @@ export const MintAccounts = ({ up }: { up: string }) => {
   function handleStartMint(provider: string) {
     popupCenter("/oauth/" + provider, provider)
   }
+
+  const { data: session } = useSession();
+  useEffect(() => {
+    console.log("SESSION", session);
+  }, [session]);
 
   useEffect(() => {
     function handleReceiveMessage(event: any) {
@@ -141,6 +148,12 @@ export const MintAccounts = ({ up }: { up: string }) => {
   return (
     <div className="w-full">
       <div className="flex flex-col gap-4 w-full gap-5">
+        <LoginButton
+          botUsername={process.env.TELEGRAM_BOT_USERNAME || "upDev_auth_bot"}
+          onAuthCallback={(data) => {
+            signIn("telegram", { }, data as any);
+          }}
+        />
         {accounts.map(item => (
           <div
             key={item.title}

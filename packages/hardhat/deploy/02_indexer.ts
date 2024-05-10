@@ -38,9 +38,9 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     const events = {
         "upDevAccountNFT": [
             "NewSource(string,string)",
-            // "Requested",
-            // "Fulfilled",
-            // "Claimed"
+            "Requested(bytes32,address,bytes32,string,string,string)",
+            "Fulfilled(bytes32,address,bytes32,bool)",
+            "Claimed(bytes32,address,bytes32,bytes)"
         ],
     };
 
@@ -55,7 +55,6 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
                 description,
                 tag: contract,
                 chains: [_chainId],
-                includeNativeTxs: false,
                 topic0: [event],
                 abi: [getEventABI(abi, name)],
                 includeContractLogs: true

@@ -54,12 +54,6 @@ const ProfileContents = ({ up }: { up: string }) => {
 
   const isMyProfile = !!(myUP && up == myUP);
 
-  const { data: tokens } = useScaffoldContractRead({
-    contractName: "upDevAccountNFT",
-    functionName: "tokenIdsOf",
-    args: [up],
-  });
-
   const upDevUsername = toHex("Boris Shevchenko"); // TODO tmp
   // const { data: upDevUsername, refetch: refetchUpDevUsername } = useContractRead({
   //   address: up,

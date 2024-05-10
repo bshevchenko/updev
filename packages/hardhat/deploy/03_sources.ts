@@ -18,7 +18,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     }
   }
 
-  await addSource("https", "1.84");
+  await addSource("github", "1.0");
   // const latest = await getLatestVersions();
   // for (let key in latest) {
   //   await addSource(key, latest[key]);

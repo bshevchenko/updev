@@ -162,7 +162,7 @@ const deployedContracts = {
   },
   11155111: {
     upDevAccountNFT: {
-      address: "0x7a1FC9aDA12170735d29F196c9dB45306a74820b",
+      address: "0x59482337a3a142F5e8EB2Ccf18cFd32102E9fA16",
       abi: [
         {
           inputs: [
@@ -188,7 +188,7 @@ const deployedContracts = {
             },
             {
               internalType: "uint64",
-              name: "_subscriptionId",
+              name: "_subId",
               type: "uint64",
             },
           ],
@@ -218,6 +218,11 @@ const deployedContracts = {
         {
           inputs: [],
           name: "EmptyArgs",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "EmptySecrets",
           type: "error",
         },
         {
@@ -413,11 +418,6 @@ const deployedContracts = {
         },
         {
           inputs: [],
-          name: "LSP8TokenIdsDataEmptyArray",
-          type: "error",
-        },
-        {
-          inputs: [],
           name: "LSP8TokenIdsDataLengthMismatch",
           type: "error",
         },
@@ -461,6 +461,11 @@ const deployedContracts = {
         {
           inputs: [],
           name: "NoInlineSecrets",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "NotAllowed",
           type: "error",
         },
         {
@@ -514,6 +519,12 @@ const deployedContracts = {
               internalType: "bytes32",
               name: "tokenId",
               type: "bytes32",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
             },
           ],
           name: "Claimed",
@@ -819,6 +830,11 @@ const deployedContracts = {
             },
             {
               internalType: "string",
+              name: "version",
+              type: "string",
+            },
+            {
+              internalType: "string",
               name: "code",
               type: "string",
             },
@@ -1010,161 +1026,6 @@ const deployedContracts = {
         {
           inputs: [
             {
-              internalType: "address",
-              name: "up",
-              type: "address",
-            },
-          ],
-          name: "getPendingRequests",
-          outputs: [
-            {
-              components: [
-                {
-                  internalType: "address",
-                  name: "up",
-                  type: "address",
-                },
-                {
-                  internalType: "string",
-                  name: "provider",
-                  type: "string",
-                },
-                {
-                  internalType: "string",
-                  name: "version",
-                  type: "string",
-                },
-                {
-                  internalType: "string",
-                  name: "id",
-                  type: "string",
-                },
-                {
-                  internalType: "bytes32",
-                  name: "tokenId",
-                  type: "bytes32",
-                },
-                {
-                  internalType: "bool",
-                  name: "isFulfilled",
-                  type: "bool",
-                },
-                {
-                  internalType: "bool",
-                  name: "isOK",
-                  type: "bool",
-                },
-                {
-                  internalType: "bool",
-                  name: "isClaimed",
-                  type: "bool",
-                },
-                {
-                  internalType: "bytes",
-                  name: "data",
-                  type: "bytes",
-                },
-              ],
-              internalType: "struct upDevAccountNFT.Request[]",
-              name: "",
-              type: "tuple[]",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "uint256",
-              name: "offset",
-              type: "uint256",
-            },
-            {
-              internalType: "uint256",
-              name: "limit",
-              type: "uint256",
-            },
-            {
-              internalType: "address",
-              name: "up",
-              type: "address",
-            },
-          ],
-          name: "getRequests",
-          outputs: [
-            {
-              components: [
-                {
-                  internalType: "address",
-                  name: "up",
-                  type: "address",
-                },
-                {
-                  internalType: "string",
-                  name: "provider",
-                  type: "string",
-                },
-                {
-                  internalType: "string",
-                  name: "version",
-                  type: "string",
-                },
-                {
-                  internalType: "string",
-                  name: "id",
-                  type: "string",
-                },
-                {
-                  internalType: "bytes32",
-                  name: "tokenId",
-                  type: "bytes32",
-                },
-                {
-                  internalType: "bool",
-                  name: "isFulfilled",
-                  type: "bool",
-                },
-                {
-                  internalType: "bool",
-                  name: "isOK",
-                  type: "bool",
-                },
-                {
-                  internalType: "bool",
-                  name: "isClaimed",
-                  type: "bool",
-                },
-                {
-                  internalType: "bytes",
-                  name: "data",
-                  type: "bytes",
-                },
-              ],
-              internalType: "struct upDevAccountNFT.Request[]",
-              name: "",
-              type: "tuple[]",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "getSources",
-          outputs: [
-            {
-              internalType: "string[]",
-              name: "",
-              type: "string[]",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
               internalType: "bytes32",
               name: "requestId",
               type: "bytes32",
@@ -1210,19 +1071,6 @@ const deployedContracts = {
           type: "function",
         },
         {
-          inputs: [],
-          name: "owner",
-          outputs: [
-            {
-              internalType: "address",
-              name: "",
-              type: "address",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
           inputs: [
             {
               internalType: "address",
@@ -1230,12 +1078,25 @@ const deployedContracts = {
               type: "address",
             },
           ],
-          name: "pendingNum",
+          name: "isStringUPSet",
           outputs: [
             {
-              internalType: "uint256",
-              name: "num",
-              type: "uint256",
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "owner",
+          outputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
             },
           ],
           stateMutability: "view",
@@ -1252,11 +1113,30 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "bytes32",
-              name: "id",
+              name: "tokenId",
               type: "bytes32",
             },
           ],
-          name: "request",
+          name: "requestIds",
+          outputs: [
+            {
+              internalType: "bytes32",
+              name: "requestId",
+              type: "bytes32",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "requestId",
+              type: "bytes32",
+            },
+          ],
+          name: "requests",
           outputs: [
             {
               internalType: "address",
@@ -1310,49 +1190,6 @@ const deployedContracts = {
         {
           inputs: [
             {
-              internalType: "bytes32",
-              name: "tokenId",
-              type: "bytes32",
-            },
-          ],
-          name: "requestId",
-          outputs: [
-            {
-              internalType: "bytes32",
-              name: "requestId",
-              type: "bytes32",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "up",
-              type: "address",
-            },
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          name: "requests",
-          outputs: [
-            {
-              internalType: "bytes32",
-              name: "ids",
-              type: "bytes32",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
               internalType: "address",
               name: "operator",
               type: "address",
@@ -1386,9 +1223,9 @@ const deployedContracts = {
               type: "address",
             },
             {
-              internalType: "uint64",
-              name: "donHostedSecretsVersion",
-              type: "uint64",
+              internalType: "bytes",
+              name: "encryptedSecretsUrls",
+              type: "bytes",
             },
             {
               internalType: "string",
@@ -1410,7 +1247,7 @@ const deployedContracts = {
           outputs: [
             {
               internalType: "bytes32",
-              name: "_requestId",
+              name: "reqId",
               type: "bytes32",
             },
           ],
@@ -1457,17 +1294,17 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "bytes32[]",
-              name: "tokenIds",
+              name: "",
               type: "bytes32[]",
             },
             {
               internalType: "bytes32[]",
-              name: "dataKeys",
+              name: "",
               type: "bytes32[]",
             },
             {
               internalType: "bytes[]",
-              name: "dataValues",
+              name: "",
               type: "bytes[]",
             },
           ],
@@ -1480,17 +1317,17 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "bytes32",
-              name: "tokenId",
+              name: "",
               type: "bytes32",
             },
             {
               internalType: "bytes32",
-              name: "dataKey",
+              name: "",
               type: "bytes32",
             },
             {
               internalType: "bytes",
-              name: "dataValue",
+              name: "",
               type: "bytes",
             },
           ],
@@ -1503,11 +1340,11 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "uint64",
-              name: "_subscriptionId",
+              name: "_subId",
               type: "uint64",
             },
           ],
-          name: "setSubscriptionId",
+          name: "setSubId",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",
@@ -1519,31 +1356,17 @@ const deployedContracts = {
               name: "name",
               type: "string",
             },
-          ],
-          name: "source",
-          outputs: [
             {
               internalType: "string",
-              name: "code",
+              name: "version",
               type: "string",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
             },
           ],
           name: "sources",
           outputs: [
             {
               internalType: "string",
-              name: "",
+              name: "code",
               type: "string",
             },
           ],
@@ -1558,7 +1381,7 @@ const deployedContracts = {
               type: "address",
             },
           ],
-          name: "stringUP",
+          name: "stringUPs",
           outputs: [
             {
               internalType: "string",

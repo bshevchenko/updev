@@ -30,6 +30,13 @@ export default [
     url: "https://discord.com",
   },
   {
+    name: "telegram",
+    title: "Telegram",
+    logo: "/link.svg",
+    comingSoon: false,
+    url: "https://telegram.org",
+  },
+  {
     name: "buidlguidl",
     title: "BuidlGuidl",
     logo: "/link.svg",
