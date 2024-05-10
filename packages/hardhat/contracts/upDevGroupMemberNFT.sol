@@ -54,17 +54,18 @@ contract upDevGroupMemberNFT is LSP8Soulbound {
 	function mintBatch(bytes32[] calldata groupTokenIds) public {
 		bytes32[] memory tmp;
 		for (uint i = 0; i < groupTokenIds.length; i++) {
-			if (!group.isWhitelisted(groupTokenIds[i], msg.sender, tmp)) {
+			bytes32 groupTokenId = groupTokenIds[i];
+			if (!group.isWhitelisted(groupTokenId, msg.sender, tmp)) {
 				revert NotAllowed();
 			}
 			bytes32 tokenId = keccak256(
-				abi.encodePacked(groupTokenIds[i], msg.sender)
+				abi.encodePacked(groupTokenId, msg.sender)
 			);
 			_mint(msg.sender, tokenId, force, "0x");
 			_setDataForTokenId(
 				tokenId,
 				_LSP4_GROUP_TOKEN_ID_KEY,
-				abi.encodePacked(groupTokenIds[i])
+				abi.encodePacked(groupTokenId)
 			);
 		}
 	}

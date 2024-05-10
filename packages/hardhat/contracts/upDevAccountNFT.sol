@@ -7,12 +7,12 @@ import { _LSP8_TOKENID_FORMAT_HASH, _LSP8_TOKEN_METADATA_BASE_URI } from "@lukso
 
 import { LSP8Soulbound } from "./LSP8Soulbound.sol";
 
-bytes32 constant _LSP4_ABI_DATA_KEY = 0x4142495f44415441000000000000000000000000000000000000000000000000;
+bytes32 constant _LSP4_DATA_KEY = 0x4441544100000000000000000000000000000000000000000000000000000000;
 bytes32 constant _LSP4_TIMESTAMP_KEY = 0x54494d455354414d500000000000000000000000000000000000000000000000;
 bytes32 constant _LSP4_PROVIDER_KEY = 0x50524f5649444552000000000000000000000000000000000000000000000000;
 bytes32 constant _LSP4_VERSION_KEY = 0x56455253494f4e00000000000000000000000000000000000000000000000000;
 bytes32 constant _LSP4_ID_KEY = 0x4944000000000000000000000000000000000000000000000000000000000000;
-// TODO redeploy
+
 contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 	using FunctionsRequest for FunctionsRequest.Request;
 
@@ -21,7 +21,6 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		string provider;
 		string version;
 		string id;
-		string ipfs;
 		bytes32 tokenId;
 		bool isFulfilled;
 		bool isOK;
@@ -29,15 +28,14 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		bytes data; // = isOK ? ABI data : err
 	}
 
-	event NewSource(string indexed name);
+	event NewSource(string name, string version);
 	event Requested(
 		bytes32 indexed requestId,
 		address indexed up,
 		bytes32 indexed tokenId,
 		string provider,
 		string version,
-		string id,
-		string ipfs
+		string id
 	);
 	event Fulfilled(
 		bytes32 indexed requestId,
@@ -48,26 +46,24 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 	event Claimed(
 		bytes32 indexed requestId,
 		address indexed up,
-		bytes32 indexed tokenId
+		bytes32 indexed tokenId,
+		bytes data
 	);
 
-	mapping(string name => string code) public source;
-	mapping(bytes32 id => Request) public request;
-	mapping(bytes32 tokenId => bytes32 requestId) public requestId;
+	mapping(string name => mapping(string version => string code)) public sources;
+	mapping(bytes32 requestId => Request) public requests;
+	mapping(bytes32 tokenId => bytes32 requestId) public requestIds;
 
-	mapping(address up => bytes32[] ids) public requests;
-	mapping(address up => uint256 num) public pendingNum;
-
-	mapping(address up => string stringUP) public stringUP;
-
-	string[] public sources;
+	mapping(address up => string stringUP) public stringUPs;
+	mapping(address up => bool) public isStringUPSet;
 
 	address router;
 	bytes32 donID;
 	bool force;
 	uint32 gasLimit;
-	uint64 subscriptionId;
+	uint64 subId;
 
+	error NotAllowed();
 	error SourceNameBusy();
 	error AlreadyClaimed();
 
@@ -83,7 +79,7 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		bytes32 _donID,
 		bool _force,
 		uint32 _gasLimit,
-		uint64 _subscriptionId
+		uint64 _subId
 	)
 		FunctionsClient(_router)
 		LSP8Soulbound(
@@ -98,201 +94,134 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		donID = _donID;
 		force = _force;
 		gasLimit = _gasLimit;
-		subscriptionId = _subscriptionId;
+		subId = _subId;
 	}
 
-	function setSubscriptionId(uint64 _subscriptionId) public onlyOwner {
-		subscriptionId = _subscriptionId;
+	function setSubId(uint64 _subId) public onlyOwner {
+		subId = _subId;
 	}
 
 	function addSource(
-		string memory name, // f.e. github@1.0
+		string memory name,
+		string memory version,
 		string memory code
 	) public onlyOwner {
-		if (bytes(source[name]).length != 0) {
+		if (bytes(sources[name][version]).length != 0) {
 			revert SourceNameBusy();
 		}
-		source[name] = code;
-		sources.push(name);
-		emit NewSource(name);
-	}
-
-	function getSources() external view returns (string[] memory) {
-		string[] memory names = new string[](sources.length);
-		for (uint32 i = 0; i < sources.length; i++) {
-			names[i] = sources[i];
-		}
-		return names;
-	}
-
-	function getRequests(
-		uint256 offset,
-		uint256 limit,
-		address up
-	) external view returns (Request[] memory) {
-		uint256 total = requests[up].length;
-		if (offset >= total) {
-			return new Request[](0);
-		}
-		uint256 num = total - offset;
-		if (num > limit) {
-			num = limit;
-		}
-		Request[] memory result = new Request[](num);
-		for (uint256 i = 0; i < num; i++) {
-			result[i] = request[requests[up][offset + i]];
-		}
-		return result;
-	}
-
-	function getPendingRequests(
-		address up
-	) external view returns (Request[] memory) {
-		uint256 _pendingNum = pendingNum[up];
-		Request[] memory result = new Request[](pendingNum[up]);
-		uint256 j = 0;
-		for (uint256 i = requests[up].length - 1; i >= 0; i--) {
-			if (
-				request[requests[up][i]].isFulfilled &&
-				!request[requests[up][i]].isOK
-			) {
-				continue;
-			}
-			if (request[requests[up][i]].isClaimed) {
-				continue;
-			}
-			result[i] = request[requests[up][i]];
-			j++;
-			if (j == _pendingNum) {
-				break;
-			}
-		}
-		return result;
+		sources[name][version] = code;
+		emit NewSource(name, version);
 	}
 
 	function sendRequest(
 		address up,
-		uint64 donHostedSecretsVersion,
+		bytes memory encryptedSecretsUrls,
 		string calldata provider,
 		string calldata version,
-		string calldata id,
-		string calldata ipfs // hash, optional
-	) external returns (bytes32 _requestId) {
+		string calldata id
+	) external returns (bytes32 reqId) {
 		FunctionsRequest.Request memory req;
 		req.initializeRequestForInlineJavaScript(
-			source[string.concat(provider, "@", version)]
+			sources[provider][version]
 		);
-		if (donHostedSecretsVersion > 0) {
-			req.addDONHostedSecrets(
-				0,
-				donHostedSecretsVersion
-			);
+		if (encryptedSecretsUrls.length > 0) {
+			req.addSecretsReference(encryptedSecretsUrls);
 		}
-		string[] memory args = new string[](3);
+		string[] memory args = new string[](2);
 		args[0] = id;
-		args[1] = ipfs;
-		args[2] = getStringUP(up);
+		args[1] = getStringUP(up);
 		req.setArgs(args);
 
 		bytes32 tokenId = keccak256(abi.encodePacked(provider, id));
 
-		_requestId = _sendRequest(
+		reqId = _sendRequest(
 			req.encodeCBOR(),
-			subscriptionId,
+			subId,
 			gasLimit,
 			donID
 		);
-		request[_requestId] = Request({
+		requests[reqId] = Request({
 			up: up,
 			provider: provider,
 			version: version,
 			id: id,
 			tokenId: tokenId,
-			ipfs: ipfs,
 			data: "0x",
 			isFulfilled: false,
 			isOK: false,
 			isClaimed: false
 		});
-		requests[up].push(_requestId);
-		pendingNum[up]++;
 
 		emit Requested(
-			_requestId,
+			reqId,
 			up,
 			tokenId,
 			provider,
 			version,
-			id,
-			ipfs
+			id
 		);
 	}
 
 	/**
 	 * @notice Callback function for fulfilling a request
-	 * @param id The ID of the request to fulfill
+	 * @param reqId The ID of the request to fulfill
 	 * @param response The HTTP response data
 	 * @param err Any errors from the Functions request
 	 */
 	function fulfillRequest(
-		bytes32 id,
+		bytes32 reqId,
 		bytes memory response,
 		bytes memory err
 	) internal override {
-		request[id].isFulfilled = true;
+		Request storage req = requests[reqId];
+		req.isFulfilled = true;
 		if (err.length == 0) {
-			request[id].isOK = true;
-			request[id].data = response;
-			requestId[request[id].tokenId] = id;
+			req.isOK = true;
+			req.data = response;
+			requestIds[req.tokenId] = reqId;
 		} else {
-			request[id].data = err;
+			req.data = err;
 		}
 		emit Fulfilled(
-			id,
-			request[id].up,
-			request[id].tokenId,
-			request[id].isOK
+			reqId,
+			req.up,
+			req.tokenId,
+			req.isOK
 		);
 	}
 
 	function claim(bytes32 tokenId) public {
-		bytes32 id = requestId[tokenId];
+		bytes32 reqId = requestIds[tokenId];
+		Request storage req = requests[reqId];
 
-		pendingNum[request[id].up]--;
-
-		if (request[id].isClaimed) {
+		if (req.isClaimed) {
 			revert AlreadyClaimed();
 		}
-
-		request[id].isClaimed = true;
-
-		emit Claimed(id, request[id].up, tokenId);
+		req.isClaimed = true;
 
 		_setDataForTokenId(
 			tokenId,
 			_LSP4_VERSION_KEY,
-			bytes(request[id].version)
+			bytes(req.version)
 		);
-		_setDataForTokenId(
-			tokenId,
-			_LSP8_TOKEN_METADATA_BASE_URI,
-			bytes(string.concat("ipfs://", request[id].ipfs))
-		);
-		_setDataForTokenId(tokenId, _LSP4_ABI_DATA_KEY, request[id].data);
+		_setDataForTokenId(tokenId, _LSP4_DATA_KEY, req.data);
 		_setDataForTokenId(
 			tokenId,
 			_LSP4_TIMESTAMP_KEY,
 			abi.encode(block.timestamp)
 		);
 
+		emit Claimed(reqId, req.up, tokenId, req.data);
+
 		if (_exists(tokenId)) {
-			if (_tokenOwners[tokenId] != request[id].up) {
+			address owner = _tokenOwners[tokenId];
+			if (owner != req.up) {
 				_transfer(
-					_tokenOwners[tokenId],
-					request[id].up,
+					owner,
+					req.up,
 					tokenId,
 					force,
-					request[id].data
+					req.data
 				);
 			}
 			return;
@@ -301,19 +230,20 @@ contract upDevAccountNFT is LSP8Soulbound, FunctionsClient {
 		_setDataForTokenId(
 			tokenId,
 			_LSP4_PROVIDER_KEY,
-			bytes(request[id].provider)
+			bytes(req.provider)
 		);
-		_setDataForTokenId(tokenId, _LSP4_ID_KEY, bytes(request[id].id));
+		_setDataForTokenId(tokenId, _LSP4_ID_KEY, bytes(req.id));
 
-		_mint(request[id].up, tokenId, force, request[id].data);
+		_mint(req.up, tokenId, force, req.data);
 	}
 
 	function getStringUP(address up) internal returns (string memory) {
-		if (bytes(stringUP[up]).length > 0) {
-			return stringUP[up];
+		if (isStringUPSet[up]) {
+			return stringUPs[up];
 		}
-		stringUP[up] = toAsciiString(up);
-		return stringUP[up];
+		stringUPs[up] = toAsciiString(up);
+		isStringUPSet[up] = true;
+		return stringUPs[up];
 	}
 
 	function toAsciiString(address x) internal pure returns (string memory) {

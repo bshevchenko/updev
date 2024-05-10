@@ -50,6 +50,7 @@ const config: HardhatUserConfig = {
     sepolia: {
       url: `https://eth-sepolia.g.alchemy.com/v2/${providerApiKey}`,
       accounts,
+      chainId: 11155111
     },
     polygonMumbai: {
       url: `https://polygon-mumbai.g.alchemy.com/v2/${providerApiKey}`,

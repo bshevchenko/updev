@@ -72,9 +72,10 @@ contract upDevGroupNFT is LSP8IdentifiableDigitalAsset {
 		bytes32[] calldata parentTokenIds
 	) public {
 		for (uint i = 0; i < metadata.length; i++) {
+			bytes32 parentTokenId = parentTokenIds[i];
 			if (
-				parentTokenIds[i] != bytes32(0) &&
-				!isAdmin(msg.sender, parentTokenIds[i])
+				parentTokenId != bytes32(0) &&
+				!isAdmin(msg.sender, parentTokenId)
 			) {
 				revert NotAllowed();
 			}
@@ -86,7 +87,7 @@ contract upDevGroupNFT is LSP8IdentifiableDigitalAsset {
 			_setDataForTokenId(
 				tokenId,
 				_LSP4_PARENT_KEY,
-				abi.encodePacked(parentTokenIds[i])
+				abi.encodePacked(parentTokenId)
 			);
 		}
 	}

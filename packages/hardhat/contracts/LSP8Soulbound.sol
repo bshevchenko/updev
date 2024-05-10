@@ -54,4 +54,20 @@ abstract contract LSP8Soulbound is LSP8IdentifiableDigitalAsset {
 	{
 		revert Soulbound();
 	}
+
+	function setDataForTokenId(
+        bytes32,
+        bytes32,
+        bytes memory
+    ) public virtual override {
+        revert Soulbound();
+    }
+
+	function setDataBatchForTokenIds(
+        bytes32[] memory,
+        bytes32[] memory,
+        bytes[] memory
+    ) public virtual override onlyOwner {
+        revert Soulbound();
+    }
 }

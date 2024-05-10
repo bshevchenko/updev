@@ -109,8 +109,7 @@ export default async function SignUp(
         request.secret,
         provider,
         request.version,
-        id,
-        request.pin ? request.pin.IpfsHash : ""
+        id
     );
     await accountTx.wait();
 

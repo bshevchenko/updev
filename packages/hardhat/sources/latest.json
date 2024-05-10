@@ -1,8 +1,8 @@
 {
     "buidlguidl": "1.0",
-    "discord": "1.1",
-    "github": "1.2",
-    "google": "1.1",
+    "discord": "1.0",
+    "github": "1.0",
+    "google": "1.0",
     "https": "1.1",
-    "twitter": "1.1"
+    "twitter": "1.0"
 }

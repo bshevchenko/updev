@@ -5,7 +5,7 @@ const response = await Functions.makeHttpRequest({
 if (response.error) {
     throw Error("HTTPs")
 }
-if (response.data.up.toLowerCase().slice(2) != args[2]) {
+if (response.data.up.toLowerCase().slice(2) != args[1]) {
     throw Error("UP")
 }
 return Functions.encodeUint256(1)

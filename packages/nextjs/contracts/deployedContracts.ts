@@ -162,7 +162,7 @@ const deployedContracts = {
   },
   11155111: {
     upDevAccountNFT: {
-      address: "0x7D90a69A8A47f09b406a49F27071E228bA7eAA0D",
+      address: "0x7a1FC9aDA12170735d29F196c9dB45306a74820b",
       abi: [
         {
           inputs: [
@@ -734,12 +734,6 @@ const deployedContracts = {
               name: "id",
               type: "string",
             },
-            {
-              indexed: false,
-              internalType: "string",
-              name: "ipfs",
-              type: "string",
-            },
           ],
           name: "Requested",
           type: "event",
@@ -1046,11 +1040,6 @@ const deployedContracts = {
                   type: "string",
                 },
                 {
-                  internalType: "string",
-                  name: "ipfs",
-                  type: "string",
-                },
-                {
                   internalType: "bytes32",
                   name: "tokenId",
                   type: "bytes32",
@@ -1124,11 +1113,6 @@ const deployedContracts = {
                 {
                   internalType: "string",
                   name: "id",
-                  type: "string",
-                },
-                {
-                  internalType: "string",
-                  name: "ipfs",
                   type: "string",
                 },
                 {
@@ -1295,11 +1279,6 @@ const deployedContracts = {
               type: "string",
             },
             {
-              internalType: "string",
-              name: "ipfs",
-              type: "string",
-            },
-            {
               internalType: "bytes32",
               name: "tokenId",
               type: "bytes32",
@@ -1424,11 +1403,6 @@ const deployedContracts = {
             {
               internalType: "string",
               name: "id",
-              type: "string",
-            },
-            {
-              internalType: "string",
-              name: "ipfs",
               type: "string",
             },
           ],

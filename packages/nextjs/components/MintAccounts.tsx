@@ -83,7 +83,11 @@ export const MintAccounts = ({ up }: { up: string }) => {
     };
   }, []);
 
-  const closeModal = () => { setActiveModal(null); setCopied(false) };
+  const closeModal = () => {
+    setActiveModal(null);
+    setCopied(false);
+    setId("");
+  };
 
   const renderModalContent = (item: any) => {
     const account = accounts.find(account => account.title === item.title);

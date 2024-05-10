@@ -11,17 +11,18 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const addSource = async (provider: string, version: string) => {
     const source = getSource(provider, version);
     try {
-      await nft.addSource(source.name, source.code);
+      await nft.addSource(provider, version, source.code);
       console.log(`Source ${source.name} added`);
     } catch (e) {
       console.log(`Source ${source.name} already added`);
     }
   }
 
-  const latest = await getLatestVersions();
-  for (let key in latest) {
-    await addSource(key, latest[key]);
-  }
+  await addSource("https", "1.84");
+  // const latest = await getLatestVersions();
+  // for (let key in latest) {
+  //   await addSource(key, latest[key]);
+  // }
 };
 
 export default deployYourContract;
