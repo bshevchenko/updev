@@ -125,63 +125,63 @@ const ProfileContents = ({ up }: { up: string }) => {
   }
 
   return (
-    <div className="flex flex-col items-center py-10">
-      <div className="max-w-3xl flex flex-col">
+      <div className="flex flex-col items-center py-10">
+        <div className="max-w-3xl flex flex-col">
 
-        <ProfileDetails
-          metadata={metadata}
-          upDevUsername={upDevUsername}
-          refetchUpDevUsername={() => {}}
-          up={isMyProfile ? myUP : up}
-          isMyProfile={isMyProfile}
-          accounts={accounts}
-        />
+          <ProfileDetails
+            metadata={metadata}
+            upDevUsername={upDevUsername}
+            refetchUpDevUsername={() => { }}
+            up={isMyProfile ? myUP : up}
+            isMyProfile={isMyProfile}
+            accounts={accounts}
+          />
 
-        <div className="mb-10">
-          <h3 className="text-2xl font-bold mb-3">Achievements</h3>
-          <div className="flex gap-3">
-            <div className="tooltip tooltip-primary w-32 h-32" data-tip="Universal Profile Owner">
-              <Image fill alt="achievement icon" src="/achievements/up.svg" priority />
-            </div>
-            <div className="tooltip tooltip-primary  w-32 h-32" data-tip="upDev Early Adopter">
-              <Image fill alt="achievement icon" src="/achievements/og-updev.svg" priority />
-            </div>
-            {accounts[GITHUB] && (
-              <div
-                className="tooltip tooltip-primary w-32 h-32"
-                data-tip={`
+          <div className="mb-10">
+            <h3 className="text-2xl font-bold mb-3">Achievements</h3>
+            <div className="flex gap-3">
+              <div className="tooltip tooltip-primary w-32 h-32" data-tip="Universal Profile Owner">
+                <Image fill alt="achievement icon" src="/achievements/up.svg" priority />
+              </div>
+              <div className="tooltip tooltip-primary  w-32 h-32" data-tip="upDev Early Adopter">
+                <Image fill alt="achievement icon" src="/achievements/og-updev.svg" priority />
+              </div>
+              {accounts[GITHUB] && (
+                <div
+                  className="tooltip tooltip-primary w-32 h-32"
+                  data-tip={`
                   Verified GitHub account on ${formatDate(new Date(Number(accounts[GITHUB].timestamp) * 1000))}.
                   Created ${accounts[GITHUB].stats.days} days ago, 
                   ${accounts[GITHUB].stats.followers} followers,
                   ${accounts[GITHUB].stats.contributions} contributions in the last year
                 `}
-              >
-                <Image fill alt="achievement icon" src="/achievements/github.svg" priority />
-              </div>
-            )}
-            {accounts[BUIDLGUIDL] && (
-              <div
-                className="tooltip tooltip-primary w-32 h-32"
-                data-tip={`
+                >
+                  <Image fill alt="achievement icon" src="/achievements/github.svg" priority />
+                </div>
+              )}
+              {accounts[BUIDLGUIDL] && (
+                <div
+                  className="tooltip tooltip-primary w-32 h-32"
+                  data-tip={`
                   Verified BuidlGuidl account on ${formatDate(new Date(Number(accounts[BUIDLGUIDL].timestamp) * 1000))}.
                   Created ${accounts[BUIDLGUIDL].stats.days} days ago, 
                   ${accounts[BUIDLGUIDL].stats.role},
                   ${accounts[BUIDLGUIDL].stats.function},
                   ${accounts[BUIDLGUIDL].stats.builds} build(s) submitted
                 `}
-              >
-                <Image fill alt="achievement icon" src="/achievements/buidlguidl.svg" priority />
-              </div>
-            )}
+                >
+                  <Image fill alt="achievement icon" src="/achievements/buidlguidl.svg" priority />
+                </div>
+              )}
+            </div>
           </div>
+          {isMyProfile && (
+            <div>
+              <h3 className="text-2xl font-bold mb-3">Mint Account NFTs</h3>
+              <MintAccounts up={up} />
+            </div>
+          )}
         </div>
-        {isMyProfile && (
-          <div>
-            <h3 className="text-2xl font-bold mb-3">Mint Account NFTs</h3>
-            <MintAccounts up={up} />
-          </div>
-        )}
       </div>
-    </div>
   );
 };

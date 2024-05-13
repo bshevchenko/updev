@@ -7,47 +7,63 @@ import popupCenter from "./popupCenter";
 import { useEffect, useState } from "react";
 import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import { signMessage } from "@wagmi/core";
-import { useAccount } from "wagmi";
 import { utils } from "ethers";
 import { LoginButton } from "@telegram-auth/react";
 import { signIn, useSession } from "next-auth/react";
 // import { useScaffoldContract, useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
 // TODO deal with commented code
+// useScaffoldEventSubscriber({
+//   contractName: "upDevFunctionsConsumer",
+//   eventName: "Response", // TODO Claimed
+//   listener: logs => {
+//     logs.map(log => {
+//       const { source, up, isOwned } = log.args;
+//       if (!profile) {
+//         return;
+//       }
+//       if (up != profile.up) {
+//         return; // TODO how to subscribe only to up's events?
+//       }
+//       if (isOwned) {
+//         alert(`Your ${source} account has been successfully verified. You can now claim your NFT.`); // TODO push nice toast message
+//       } else {
+//         alert(`Your ${source} account verification failed. Please try again.`);
+//       }
+//     });
+//   },
+// });
+
+// const isNotClaimed = (source: string) => {
+//   return requests && requests.some(r => r.source === source && r.isFinished && !r.isClaimed);
+
 
 export const MintAccounts = ({ up }: { up: string }) => {
   const [activeModal, setActiveModal] = useState<{} | null>(null);
   const [copied, setCopied] = useState(false);
   const [id, setId] = useState("");
+  const [isMintStarted, setIsMintStarted] = useState<string | null>(null);
+  const [isMinting, setIsMinting] = useState<object>({});
 
-  // useScaffoldEventSubscriber({
-  //   contractName: "upDevFunctionsConsumer",
-  //   eventName: "Response",
-  //   listener: logs => {
-  //     logs.map(log => {
-  //       const { source, up, isOwned } = log.args;
-  //       if (!profile) {
-  //         return;
-  //       }
-  //       if (up != profile.up) {
-  //         return; // TODO how to subscribe only to up's events?
-  //       }
-  //       if (isOwned) {
-  //         alert(`Your ${source} account has been successfully verified. You can now claim your NFT.`); // TODO push nice toast message
-  //       } else {
-  //         alert(`Your ${source} account verification failed. Please try again.`);
-  //       }
-  //     });
-  //   },
-  // });
-
-  // const isNotClaimed = (source: string) => {
-  //   return requests && requests.some(r => r.source === source && r.isFinished && !r.isClaimed);
-  // };
+  const updateIsMinting = (key: string, newValue: string | number | boolean) => {
+    setIsMinting((prevState: any) => ({
+      ...prevState,
+      [key]: newValue,
+    }));
+  };
 
   async function handleMint(provider: string, token: string, id: string) {
+    updateIsMinting(provider, true);
     const message = utils.keccak256(utils.toUtf8Bytes(token + id));
-    const signature = await signMessage({ message });
+    let signature;
+    try {
+      signature = await signMessage({ message });
+    } catch (e) {
+      setIsMintStarted(null);
+      updateIsMinting(provider, false);
+      return;
+    }
+    setIsMintStarted(null);
     closeModal();
     const data = {
       up,
@@ -64,31 +80,25 @@ export const MintAccounts = ({ up }: { up: string }) => {
       alert("Oops! Minting Failed :( Please try again later or contact us."); // TODO f.e. too many requests
       console.error("Minting Error", e);
     }
+    updateIsMinting(provider, false);
   }
 
   function handleStartMint(provider: string) {
+    setIsMintStarted(provider);
     popupCenter("/oauth/" + provider, provider)
   }
 
-  const { data: session } = useSession();
+  const session = useSession();
   useEffect(() => {
-    console.log("SESSION", session);
-  }, [session]);
-
-  useEffect(() => {
-    function handleReceiveMessage(event: any) {
-      if (event.data.message === "OAuth-OK") {
-        console.log("Received message from child:", event.data.data);
-        const { account } = event.data.data;
-        handleMint(account.provider, account.access_token, account.providerAccountId);
-      }
+    if (!session || session.status != "authenticated") {
+      return;
     }
-    console.log("listen ChildWindowClosed");
-    window.addEventListener("message", handleReceiveMessage);
-    return () => {
-      window.removeEventListener("message", handleReceiveMessage);
-    };
-  }, []);
+    const { account } = session.data;
+    if (account.provider == isMintStarted && !isMinting[account.provider]) {
+      handleMint(account.provider, account.access_token, account.providerAccountId);
+    }
+    console.log("SESSION...", session);
+  }, [session, isMintStarted, isMinting]);
 
   const closeModal = () => {
     setActiveModal(null);
@@ -151,7 +161,7 @@ export const MintAccounts = ({ up }: { up: string }) => {
         <LoginButton
           botUsername={process.env.TELEGRAM_BOT_USERNAME || "upDev_auth_bot"}
           onAuthCallback={(data) => {
-            signIn("telegram", { }, data as any);
+            signIn("telegram", {}, data as any);
           }}
         />
         {accounts.map(item => (
@@ -173,9 +183,8 @@ export const MintAccounts = ({ up }: { up: string }) => {
             <button
               onClick={() => item.isModal ? setActiveModal(item) : handleStartMint(item.name)}
               className="btn bg-primary text-primary-content hover:bg-primary w-[117px]"
-              disabled={item.comingSoon}
-            >
-              Mint
+              disabled={item.comingSoon || isMintStarted != null || isMinting[item.name]}>
+              {isMintStarted == item.name || isMinting[item.name] ? "Minting..." : "Mint"}
             </button>
           </div>
         ))}
