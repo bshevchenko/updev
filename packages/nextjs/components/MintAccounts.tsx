@@ -4,53 +4,146 @@ import Modal from "./Modal";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import accounts from "./accounts";
 import popupCenter from "./popupCenter";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import { signMessage } from "@wagmi/core";
 import { utils } from "ethers";
 import { LoginButton } from "@telegram-auth/react";
 import { signIn, useSession } from "next-auth/react";
-// import { useScaffoldContract, useScaffoldContractRead } from "~~/hooks/scaffold-eth";
-
-// TODO deal with commented code
-// useScaffoldEventSubscriber({
-//   contractName: "upDevFunctionsConsumer",
-//   eventName: "Response", // TODO Claimed
-//   listener: logs => {
-//     logs.map(log => {
-//       const { source, up, isOwned } = log.args;
-//       if (!profile) {
-//         return;
-//       }
-//       if (up != profile.up) {
-//         return; // TODO how to subscribe only to up's events?
-//       }
-//       if (isOwned) {
-//         alert(`Your ${source} account has been successfully verified. You can now claim your NFT.`); // TODO push nice toast message
-//       } else {
-//         alert(`Your ${source} account verification failed. Please try again.`);
-//       }
-//     });
-//   },
-// });
-
-// const isNotClaimed = (source: string) => {
-//   return requests && requests.some(r => r.source === source && r.isFinished && !r.isClaimed);
-
+import { useScaffoldEventSubscriber } from "~~/hooks/scaffold-eth";
+import toast from "react-hot-toast";
 
 export const MintAccounts = ({ up }: { up: string }) => {
   const [activeModal, setActiveModal] = useState<{} | null>(null);
   const [copied, setCopied] = useState(false);
   const [id, setId] = useState("");
   const [isMintStarted, setIsMintStarted] = useState<string | null>(null);
-  const [isMinting, setIsMinting] = useState<object>({});
 
+  const [isMinting, setIsMinting] = useState<object>({});
   const updateIsMinting = (key: string, newValue: string | number | boolean) => {
     setIsMinting((prevState: any) => ({
       ...prevState,
       [key]: newValue,
     }));
   };
+
+  const requestsRef = useRef({});
+  const [requests, setRequests] = useState<object>({});
+  const updateRequests = (key: string, newValue: object) => {
+    requestsRef.current = {
+      ...requestsRef.current,
+      [key]: {
+        ...(requestsRef.current[key] ? requestsRef.current[key] : {}),
+        ...newValue,
+      },
+    };
+    setRequests(requestsRef.current);
+  };
+
+  const [tokens, setTokens] = useState<object>({});
+  const fetchTokens = () => {
+    console.log("Fetching tokens...");
+    axios.get("/api/tokens?up=" + up).then(result => {
+      const tokens = {}
+      for (let token of result.data) {
+        tokens[token.provider + "-" + token.id] = token;
+      }
+      setTokens(tokens);
+    })
+  }
+  const updateTokens = (key: string, newValue: object) => {
+    setTokens((prevState: any) => ({
+      ...prevState,
+      [key]: newValue,
+    }));
+  };
+
+  useEffect(() => {
+    console.log("TOKENS", tokens);
+  }, [tokens]);
+
+  useEffect(() => {
+    console.log("REQUESTS", requests);
+  }, [requests]);
+
+  useEffect(() => {
+    console.log("Fetching requests...");
+    axios.get("/api/requests?up=" + up).then(result => {
+      for (let request of result.data) {
+        console.log("UPDATING REQUESTS WITH", request);
+        updateRequests(request.requestId, request);
+      }
+    })
+    fetchTokens();
+  }, []);
+
+  useScaffoldEventSubscriber({
+    contractName: "upDevAccountNFT",
+    eventName: "Requested",
+    listener: logs => {
+      logs.map(log => {
+        const { requestId, up: _up, tokenId, provider, version, id } = log.args;
+        if (up != _up || !requestId) {
+          return; // TODO how to subscribe only to up's events?
+        }
+        updateRequests(requestId, { tokenId, provider, version, id });
+        toast(`"${provider}" minting successfully requested! Verifying account...`);
+      });
+    },
+  })
+
+  useScaffoldEventSubscriber({
+    contractName: "upDevAccountNFT",
+    eventName: "Fulfilled",
+    listener: logs => {
+      logs.map(log => {
+        const { requestId, up: _up, isOK } = log.args;
+        if (up != _up || !requestId) {
+          return; // TODO how to subscribe only to up's events?
+        }
+        try {
+          updateRequests(requestId, { isFulfilled: true, isOK });
+          const { provider, id } = requestsRef.current[requestId];
+          toast(isOK ? `"${provider}" account successfully verified! Claiming NFT...` : "Account NFT minting failed...");
+        } catch (e) {
+          console.error(e);
+        }
+      });
+    },
+  })
+
+  useScaffoldEventSubscriber({
+    contractName: "upDevAccountNFT",
+    eventName: "Claimed",
+    listener: logs => {
+      logs.map(async (log) => {
+        let { requestId, up: _up, data: _data, tokenId } = log.args;
+        if (up != _up || !requestId || !_data) {
+          return; // TODO how to subscribe only to up's events?
+        }
+        updateRequests(requestId, { isClaimed: true });
+        const { provider, id, version } = requestsRef.current[requestId];
+        const name = provider + "-" + id;
+        let data = utils.toUtf8String(_data);
+        const isIPFS = data.slice(0, 2) == "Qm";
+        if (isIPFS) {
+          const { data: ipfs } = await axios.get("https://gateway.pinata.cloud/ipfs/" + data);
+          data = ipfs;
+        }
+        updateTokens(name, {
+          tokenId,
+          requestId,
+          up,
+          provider,
+          version,
+          id,
+          isIPFS,
+          data
+        })
+        toast(`"${provider}" account NFT successfully claimed!`);
+      });
+    },
+  })
 
   async function handleMint(provider: string, token: string, id: string) {
     updateIsMinting(provider, true);
@@ -75,9 +168,9 @@ export const MintAccounts = ({ up }: { up: string }) => {
     console.log("Minting...", data);
     try {
       await axios.post("/api/account", data);
-      console.log("Minting OK", provider);
+      console.log("Minting request OK", provider);
     } catch (e) {
-      alert("Oops! Minting Failed :( Please try again later or contact us."); // TODO f.e. too many requests
+      toast("Oops! Minting failed :( Please try again later or contact us."); // TODO f.e. too many requests
       console.error("Minting Error", e);
     }
     updateIsMinting(provider, false);
@@ -87,6 +180,10 @@ export const MintAccounts = ({ up }: { up: string }) => {
     setIsMintStarted(provider);
     popupCenter("/oauth/" + provider, provider)
   }
+
+  useEffect(() => {
+    console.log("REQUESTS", requests);
+  }, [requests]);
 
   const session = useSession();
   useEffect(() => {
@@ -144,8 +241,9 @@ export const MintAccounts = ({ up }: { up: string }) => {
                 />
               </div>
               <div className="flex justify-end">
-                <button className="btn btn-primary" onClick={() => handleMint(item.name, "", id)}>
-                  Mint
+                <button className="btn btn-primary" onClick={() => handleMint(item.name, "", id)}
+                  disabled={isMinting && isMinting[item.name]}>
+                  {isMinting && isMinting[item.name] ? "Minting..." : "Mint"}
                 </button>
               </div>
             </li>
@@ -158,12 +256,21 @@ export const MintAccounts = ({ up }: { up: string }) => {
   return (
     <div className="w-full">
       <div className="flex flex-col gap-4 w-full gap-5">
-        <LoginButton
+        {/* <LoginButton
           botUsername={process.env.TELEGRAM_BOT_USERNAME || "upDev_auth_bot"}
           onAuthCallback={(data) => {
             signIn("telegram", {}, data as any);
           }}
-        />
+        /> */}
+        {Object.entries(requests).map(([key, value]) => {
+          if (!value.isClaimed) {
+            return (
+              <div key={key}>
+                {value.provider}@{value.version} - {value.id} - {value.isFulfilled ? (value.isOK ? "Claiming..." : "Failed") : "Verifying..."}
+              </div>
+            )
+          }
+        })}
         {accounts.map(item => (
           <div
             key={item.title}

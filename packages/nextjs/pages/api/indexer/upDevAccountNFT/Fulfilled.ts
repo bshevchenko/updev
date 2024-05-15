@@ -22,6 +22,7 @@ export default async function Fulfilled(req: NextApiRequest, res: NextApiRespons
         await requests.updateOne({ requestId: event.requestId }, {
             $set: {
                 isFulfilled: true,
+                isClaimed: false,
                 isOK: event.isOK
             },
         });

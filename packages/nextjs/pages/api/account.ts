@@ -24,7 +24,7 @@ export default async function Account(req: NextApiRequest, res: NextApiResponse<
         throw new Error("invalid signature");
     }
 
-    console.log("Preraing request...");
+    console.log("Preparing request...");
     const request = await prepareRequest(
         up,
         provider,
