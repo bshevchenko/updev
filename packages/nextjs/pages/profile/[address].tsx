@@ -175,12 +175,7 @@ const ProfileContents = ({ up }: { up: string }) => {
               )}
             </div>
           </div>
-          {isMyProfile && (
-            <div>
-              <h3 className="text-2xl font-bold mb-3">Mint Account NFTs</h3>
-              <MintAccounts up={up} />
-            </div>
-          )}
+          {isMyProfile && <MintAccounts up={up} />}
         </div>
       </div>
   );

@@ -262,15 +262,27 @@ export const MintAccounts = ({ up }: { up: string }) => {
             signIn("telegram", {}, data as any);
           }}
         /> */}
-        {Object.entries(requests).map(([key, value]) => {
-          if (!value.isClaimed) {
+        <h3 className="text-2xl font-bold">Account NFTs</h3>
+        {Object.entries(tokens).map(([key, token]) => (
+          <div key={key}>
+            <b>{token.provider}</b>@{token.version} – {token.id}
+            {token.isIPFS && (
+              <button className="btn btn-secondary ml-5" onClick={() => {
+                alert(JSON.stringify(token.data))
+              }}>Show</button>
+            )}
+          </div>
+        ))}
+        {Object.entries(requests).map(([key, req]) => {
+          if (!req.isClaimed) {
             return (
               <div key={key}>
-                {value.provider}@{value.version} - {value.id} - {value.isFulfilled ? (value.isOK ? "Claiming..." : "Failed") : "Verifying..."}
+                {req.provider}@{req.version} - {req.id} - {req.isFulfilled ? (req.isOK ? "Claiming..." : "Failed") : "Verifying..."}
               </div>
             )
           }
         })}
+        <h3 className="text-2xl font-bold mb-3 mt-10">Mint Account NFTs</h3>
         {accounts.map(item => (
           <div
             key={item.title}
