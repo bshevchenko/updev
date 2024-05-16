@@ -99,7 +99,7 @@ export const MintAccounts = ({ up }: { up: string }) => {
       logs.map(log => {
         const { requestId, up: _up, isOK } = log.args;
         if (up != _up || !requestId) {
-          return; // TODO how to subscribe only to up's events?
+          return;
         }
         try {
           updateRequests(requestId, { isFulfilled: true, isOK });
@@ -119,7 +119,7 @@ export const MintAccounts = ({ up }: { up: string }) => {
       logs.map(async (log) => {
         let { requestId, up: _up, data: _data, tokenId } = log.args;
         if (up != _up || !requestId || !_data) {
-          return; // TODO how to subscribe only to up's events?
+          return;
         }
         updateRequests(requestId, { isClaimed: true });
         const { provider, id, version } = requestsRef.current[requestId];
@@ -169,8 +169,8 @@ export const MintAccounts = ({ up }: { up: string }) => {
     try {
       await axios.post("/api/account", data);
       console.log("Minting request OK", provider);
-    } catch (e) {
-      toast("Oops! Minting failed :( Please try again later or contact us."); // TODO f.e. too many requests
+    } catch (e: any) {
+      toast("Oops! Minting failed :( " + e.message);
       console.error("Minting Error", e);
     }
     updateIsMinting(provider, false);

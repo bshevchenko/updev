@@ -113,12 +113,6 @@ export default async function SignUp(
     );
     await accountTx.wait();
 
-    // TODO claim here or via relayer? we need to wait for Fulfilled event first. so prob via relayer
-    // const tokenId = ethers.utils.solidityKeccak256(["string", "string"], [account.provider, account.providerAccountId]);
-    // console.log("Claiming Account NFT", tokenId);
-    // const claimTx = await upDevAccountNFT.claim(tokenId);
-    // await claimTx.wait();
-
     // TODO mintBatch Group Member NFTs on Lukso here? // TODO won't be possible without UP permissions rn
 
     console.log("Done! UP:", up);

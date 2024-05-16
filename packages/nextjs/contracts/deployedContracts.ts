@@ -584,9 +584,15 @@ const deployedContracts = {
           anonymous: false,
           inputs: [
             {
-              indexed: true,
+              indexed: false,
               internalType: "string",
               name: "name",
+              type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "version",
               type: "string",
             },
           ],
@@ -1575,7 +1581,7 @@ const deployedContracts = {
       },
     },
     upRegistry: {
-      address: "0x86C685520288EF50c07A3bE7d389A7E43676C830",
+      address: "0x73Ac542e5AF65bfA0234161d92C090307827D9F6",
       abi: [
         {
           inputs: [],

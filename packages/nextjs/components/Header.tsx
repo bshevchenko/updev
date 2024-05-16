@@ -18,10 +18,10 @@ export const menuLinks: HeaderMenuLink[] = [
     label: "Home",
     href: "/",
   },
-  {
-    label: "Discover Profiles",
-    href: "/profiles",
-  },
+  // {
+  //   label: "Discover Profiles",
+  //   href: "/profiles",
+  // },
   // {
   //   label: "Debug Contracts",
   //   href: "/debug",
@@ -94,21 +94,19 @@ export const Header = () => {
             </ul>
           )}
         </div>
-        <Link href="/" passHref className="hidden lg:flex items-center gap-2 ml-4 mr-6 shrink-0">
+        <Link href="/" passHref className="lg:flex items-center gap-2 lg:ml-4 lg:mr-6 shrink-0">
           <div className="flex relative w-36 h-12">
-            <Image alt="SE2 logo" className="cursor-pointer" fill src="/logo.svg" priority />
+            <Image alt="logo" className="cursor-pointer" fill src="/logo.svg" priority />
           </div>
-          <div>
-            <div className="badge badge-outline badge-accent rounded-sm px-0.5 border-[2px] text-[12px] font-bold">
-              BETA V2.0
-            </div>
+          <div className="hidden sm:block badge-outline badge-accent rounded-sm px-1 py-0 border-[2px] text-[12px] font-bold">
+            BETA V2.0
           </div>
         </Link>
-        <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">
+        {/* <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">
           <Link href="/profiles" className="items-center text-lg">
             Discover Profiles
           </Link>
-        </ul>
+        </ul> */}
       </div>
       <div className="navbar-end flex-grow mr-4">
         <RainbowKitCustomConnectButton />

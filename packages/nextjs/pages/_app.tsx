@@ -5,14 +5,9 @@ import { NextPage } from "next/types";
 import { ReactElement, ReactNode } from "react";
 import { WagmiConfig } from "wagmi";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
-// import NextNProgress from "nextjs-progressbar";
-// import { useNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
-// import { useGlobalState } from "~~/services/store/store";
 import { appChains } from "~~/services/web3/wagmiConnectors";
 import "~~/styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
-
-// TODO deal with commented code
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode
@@ -23,15 +18,6 @@ type AppPropsWithLayout = AppProps & {
 }
 
 const ScaffoldEthApp = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLayout) => {
-  // const price = useNativeCurrencyPrice();
-  // const setNativeCurrencyPrice = useGlobalState(state => state.setNativeCurrencyPrice);
-
-  // useEffect(() => {
-  //   if (price > 0) {
-  //     setNativeCurrencyPrice(price);
-  //   }
-  // }, [setNativeCurrencyPrice, price]);
-
   const getLayout = Component.getLayout ?? ((page) => page)
 
   return (

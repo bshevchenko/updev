@@ -1,10 +1,9 @@
 import NextAuth from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
-import TwitterProvider from "next-auth/providers/twitter";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { objectToAuthDataMap, AuthDataValidator } from "@telegram-auth/server";
+import TwitterProvider from "~~/providers/twitter";
+import TelegramProvider from "~~/providers/telegram";
+import DiscordProvider from "~~/providers/discord";
 // import { MongoDBAdapter } from "@auth/mongodb-adapter";
 // import clientPromise from "~~/lib/db/clientPromise";
 
@@ -29,44 +28,7 @@ export default NextAuth({
       clientId: process.env.DISCORD_CLIENT_ID || "",
       clientSecret: process.env.DISCORD_CLIENT_SECRET || "",
     }),
-    CredentialsProvider({
-      id: "telegram",
-      name: "Telegram",
-      credentials: {}, // @ts-ignore
-      async authorize(credentials, req) {
-        const validator = new AuthDataValidator({
-          botToken: `${process.env.TELEGRAM_BOT_TOKEN}`,
-        });
-
-        const data = objectToAuthDataMap(req.query || {});
-        const user = await validator.validate(data);
-
-        const authData = new Map(data);
-        const hash = authData.get('hash') || '';
-        authData.delete('hash');
-
-        const dataToCheck: Array<string> = [];
-        for (const [key, value] of authData.entries()) {
-          dataToCheck.push(`${key}=${value}`);
-        }
-        dataToCheck.sort();
-        const dataStr = dataToCheck.join(`\n`);
-
-        if (user.id && user.first_name) {
-          const returned = {
-            id: user.id.toString(),
-            email: {
-              hash,
-              dataStr
-            },
-            name: [user.first_name, user.last_name || ""].join(" "),
-            image: user.photo_url
-          }
-          return returned;
-        }
-        return null;
-      },
-    }),
+    TelegramProvider(),
   ],
   session: {
     strategy: "jwt",
@@ -90,4 +52,11 @@ export default NextAuth({
       return url;
     },
   },
+  pages: {
+    signIn: "/oauth/signIn",
+    signOut: undefined,
+    error: undefined, // Error code passed in query string as ?error=
+    verifyRequest: undefined, // (used for check email message)
+    newUser: undefined // New users will be directed here on first sign in (leave the property out if not of interest)
+  }
 });

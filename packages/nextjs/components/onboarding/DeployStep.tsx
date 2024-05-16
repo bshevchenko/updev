@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useSession, signOut } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import axios from "axios";
 import { OnboardProgressIndicator } from "./OnboardProgressIndicator";
@@ -7,11 +7,16 @@ import { signMessage } from "@wagmi/core";
 import { useAccount } from "wagmi";
 import { utils } from "ethers";
 
-export function DeployStep({ setCurrentStep }: { setCurrentStep: any }) {
+// TODO replace type with Profile object?
+export function DeployStep({ setCurrentStep, profile }: { setCurrentStep: any, profile: any }) {
   const [isDeploying, setIsDeploying] = useState(false);
 
   const { data: session } = useSession();
   const account = useAccount();
+
+  useEffect(() => {
+    console.log("PROFILE", profile);
+  }, [profile]);
 
   async function handleDeploy() {
     if (!session || !session.user) {
@@ -22,14 +27,14 @@ export function DeployStep({ setCurrentStep }: { setCurrentStep: any }) {
       const token = session.account.access_token;
       const id = session.account.providerAccountId;
       const message = utils.keccak256(utils.toUtf8Bytes(token + id));
-      const signature = await signMessage({ message });
+      const signature = await signMessage({ message }); // TODO setIsSigning(true)
       const result = await axios.post("/api/sign-up", {
         controller: account.address,
         signature,
-        name: session.user.name, // TODO
-        description: "Boris has more than 15 years of full-stack software architecture and development experience at high-tech startups and DeFi, DAO dApps/projects.",
-        location: "Koh Phangan, Thailand",
-        isCompany: false,
+        name: profile.name,
+        description: profile.description,
+        location: profile.location,
+        isCompany: profile.isCompany,
         provider: session.account.provider,
         token,
         id,
@@ -37,6 +42,7 @@ export function DeployStep({ setCurrentStep }: { setCurrentStep: any }) {
       });
       console.log("API Result", result.data);
       setIsDeploying(false);
+      // TODO mint batch interests tokens
       // setCurrentStep(3); TODO
     } catch (e) {
       console.error("Deploying error", e);
@@ -44,11 +50,11 @@ export function DeployStep({ setCurrentStep }: { setCurrentStep: any }) {
     }
   }
   if (!session || !session.user) {
-    return;
+    return (<></>);
   }
   return (
     <>
-      <OnboardProgressIndicator completedSteps={1} />
+      <OnboardProgressIndicator progress="75%" />
       <div className="bg-base-100 border border-base-200 p-8 rounded-lg w-96">
         <div className="flex justify-center items-center gap-4">
             <div className="rounded-full overflow-hidden">
@@ -60,7 +66,8 @@ export function DeployStep({ setCurrentStep }: { setCurrentStep: any }) {
               />
             </div>
             <div className="text-xl">
-              Hey, <b>{session.user.name}</b>
+              Hey, <b>{session.user.name}</b><br />
+              {profile.type}
             </div>
           </div>
         <div className="mt-5 text-center">
@@ -73,16 +80,6 @@ export function DeployStep({ setCurrentStep }: { setCurrentStep: any }) {
           </button>
         </div>
       </div>
-      <button
-        className="btn border-white hover:border-accent fixed bottom-10 right-9 w-[128px]"
-        onClick={() => {
-          signOut();
-        }}
-        disabled={isDeploying}
-      >
-        <Image alt="arrow" width={12} height={10} src="/left-arrow.svg" />
-        Back
-      </button>
     </>
   );
 }

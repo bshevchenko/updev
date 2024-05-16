@@ -4,18 +4,41 @@ import { useAccount } from "wagmi";
 import { useRouter } from "next/router";
 import { MetaHeader } from "~~/components/MetaHeader";
 import {
-  DeployStep,
   OAuthStep,
+  TypeStep,
+  DeployStep,
 } from "~~/components/onboarding";
 import Layout from "~~/components/layout";
 import { NextPageWithLayout } from "./_app";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
+import { DetailsStep } from "~~/components/onboarding/DetailsStep";
 
 const Onboarding: NextPageWithLayout = () => {
-  const [currentStep, setCurrentStep] = useState(1);
   const { data: session } = useSession();
   const account = useAccount();
   const router = useRouter();
+
+  const defaultProfile ={
+    name: undefined,
+    description: undefined,
+    location: undefined,
+  };
+
+  const [currentStep, setCurrentStep] = useState(1);
+  const [type, setType] = useState("personal");
+  const [profile, setProfile] = useState(defaultProfile);
+
+  const updateProfile = (key: string, newValue: any) => {
+    setProfile((prevState: any) => ({
+      ...prevState,
+      [key]: newValue,
+    }));
+  };
+
+  const updateType = (type: string) => {
+    setType(type)
+    updateProfile("isCompany", type != "personal")
+  }
 
   const { data: up } = useScaffoldContractRead({
     contractName: "upRegistry",
@@ -30,26 +53,22 @@ const Onboarding: NextPageWithLayout = () => {
   }, [account.isConnected, router, up]);
 
   useEffect(() => {
-    console.log("SESSION", session);
-    if (session && new Date(session.expires) > new Date()) {
-      setCurrentStep(2);
+    if (currentStep === 1) {
+      setProfile(defaultProfile);
     }
-  }, [session]);
+  }, [currentStep])
 
   return (
     <>
       <MetaHeader />
 
       <div className="flex items-center flex-col flex-grow py-14">
-        <div className="text-center mb-8">
-          <h3 className="text-4xl font-bold mb-4">Set up your upDev account</h3>
-          <p className="my-0 text-lg">Complete 3 steps to onboard to the dApp</p>
-        </div>
-
         {session !== undefined ? (
           <>
-            {currentStep === 1 && <OAuthStep />}
-            {currentStep === 2 && <DeployStep setCurrentStep={setCurrentStep} />}
+            {currentStep === 1 && <OAuthStep setCurrentStep={setCurrentStep} />}
+            {currentStep === 2 && <TypeStep setCurrentStep={setCurrentStep} type={type} setType={updateType} />}
+            {currentStep === 3 && <DetailsStep setCurrentStep={setCurrentStep} profile={profile} updateProfile={updateProfile} />}
+            {currentStep === 4 && <DeployStep setCurrentStep={setCurrentStep} profile={profile} />}
           </>
         ) : (
           <>

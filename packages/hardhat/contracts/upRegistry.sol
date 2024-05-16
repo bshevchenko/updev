@@ -4,7 +4,7 @@ pragma solidity ^0.8.20;
 import { ERC725Y } from "@erc725/smart-contracts/contracts/ERC725Y.sol";
 import { LSP6Utils } from "@lukso/lsp-smart-contracts/contracts/LSP6KeyManager/LSP6Utils.sol";
 import { _PERMISSION_SIGN } from "@lukso/lsp-smart-contracts/contracts/LSP6KeyManager/LSP6Constants.sol";
-
+//
 contract upRegistry {
 	using LSP6Utils for *;
 
