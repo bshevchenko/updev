@@ -1,39 +1,28 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import UniversalProfileContract from "@lukso/lsp-smart-contracts/artifacts/UniversalProfile.json";
-import { hexToString, toHex } from "viem";
+import { toHex } from "viem";
 import { useContractWrite } from "wagmi";
-import { CheckCircleIcon, PencilSquareIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { Accounts } from "~~/types/Profile";
+import { CheckCircleIcon, PencilSquareIcon, XCircleIcon, MapPinIcon } from "@heroicons/react/24/outline";
 import { convertIpfsUrl } from "~~/utils/helpers";
 
 export function ProfileDetails({
   up,
   metadata,
-  upDevUsername,
   isMyProfile,
-  accounts,
-  refetchUpDevUsername,
 }: {
   up: string;
   metadata: any;
-  upDevUsername: any;
   isMyProfile: boolean | undefined;
-  accounts: Accounts;
-  refetchUpDevUsername: any;
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [usernameInput, setUsernameInput] = useState("");
-  const [displayedUsername, setDisplayedUsername] = useState(hexToString(upDevUsername));
+  const [displayedUsername, setDisplayedUsername] = useState(metadata.LSP3Profile.name);
 
   // enables user to start from current username when editing
   useEffect(() => {
-    if (upDevUsername && upDevUsername !== "0x") {
-      setUsernameInput(hexToString(upDevUsername as `0x${string}`));
-    } else {
-      setUsernameInput(metadata.LSP3Profile.name);
-    }
-  }, [upDevUsername, metadata.LSP3Profile.name]);
+    setUsernameInput(metadata.LSP3Profile.name);
+  }, [metadata.LSP3Profile.name]);
 
   const { writeAsync: updateUpDevUsername, isLoading } = useContractWrite({
     address: up,
@@ -45,7 +34,6 @@ export function ProfileDetails({
   const handleSubmit = async () => {
     await updateUpDevUsername();
     setDisplayedUsername(usernameInput);
-    await refetchUpDevUsername();
     setIsEditing(false);
   };
 
@@ -61,7 +49,7 @@ export function ProfileDetails({
             priority
           />
         </div>
-        <div className="absolute -bottom-16 left-5 w-32">
+        <div className="absolute -bottom-5 sm:-bottom-16 left-5 w-32">
           <div className="rounded-full overflow-hidden w-full h-full border-[4px] border-base-300">
             <Image
               alt="profile picture"
@@ -73,7 +61,7 @@ export function ProfileDetails({
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-4 mb-10 w-full pl-40">
+      <div className="flex flex-col gap-4 mb-10 w-full sm:pl-40 sm:pt-0 pl-5 pt-5">
         <div className="flex items-center gap-3">
           {isEditing ? (
             <input
@@ -85,7 +73,7 @@ export function ProfileDetails({
             <div>Updating username...</div>
           ) : (
             <h3 className="text-2xl mb-0 font-bold">
-              {upDevUsername !== "0x" ? displayedUsername : metadata.LSP3Profile.name}
+              {displayedUsername}
             </h3>
           )}
 
@@ -106,92 +94,26 @@ export function ProfileDetails({
           ) : isMyProfile ? (
             <PencilSquareIcon className="w-6 h-6 text-secondary cursor-pointer" onClick={() => setIsEditing(true)} />
           ) : null}
-        </div>
-        <div className="flex gap-3 items-center justify-between">
-          <div className="flex items-center gap-3 flex-wrap">
-            {/* <div className="flex gap-1">
-              <div className="text-[#FFFFFFA3]">
-                {up ? (
-                  <a
-                    href={`https://wallet.universalprofile.cloud/` + up}
-                    className="underline"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    @{metadata.LSP3Profile.name}
-                  </a>
-                ) : (
-                  <>@{metadata.LSP3Profile.name}</>
-                )}
-              </div>
-              <div className="text-[#FFFFFF5C]">#{up.slice(2, 6)}</div>
-            </div> */}
-            {/* <div className="text-[#FFFFFFA3]">{"\u2022"}</div> */}
-            <div className="bg-base-100 border border-base-200 rounded-sm">
-              🆙 <span className="text-[#FFFFFFA3]">{up.slice(0, 6) + "..." + up.slice(-4)}</span>
-            </div>
-            {accounts["github"] && (
-              <>
-                <div className="text-[#FFFFFFA3]">{"\u2022"}</div>
-                <a
-                  href={"https://github.com/" + accounts["github"].name.id}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1"
-                >
-                  <div>
-                    <Image width={14} height={14} alt="achievement icon" src="/link.svg" />
-                  </div>
-                  <div className="text-[#FFFFFFA3] underline mr-2">GitHub</div>
-                </a>
-              </>
-            )}
-            {accounts["buidlguidl"] && (
-              <>
-                <div className="text-[#FFFFFFA3]">{"\u2022"}</div>
-                <a
-                  href={"https://app.buidlguidl.com/builders/" + accounts["buidlguidl"].name.id}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1"
-                >
-                  <div>
-                    <Image width={14} height={14} alt="achievement icon" src="/link.svg" />
-                  </div>
-                  <div className="text-[#FFFFFFA3] underline mr-2">BuidlGuidl</div>
-                </a>
-              </>
-            )}
-            {/* {metadata.LSP3Profile.links.map((link: { title: string; url: string }, index: number) => (
-                  <a
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    key={link.title}
-                    className="flex items-center gap-1"
-                  >
-                    <div>
-                      <Image width={14} height={14} alt="achievement icon" src="/link.svg" />
-                    </div>
-                    <div className="text-[#FFFFFFA3] underline mr-2">{link.title}</div>
-                    {index < metadata.LSP3Profile.links.length - 1 && <div className="text-[#FFFFFFA3]">{"\u2022"}</div>}
-                  </a>
-                ))} */}
+          <div className="bg-base-100 border border-base-200 rounded-sm">
+            🆙 <span className="text-[#FFFFFFA3]">{up.slice(0, 6) + "..." + up.slice(-4)}</span>
           </div>
         </div>
         <div>
-          <div className="text-[#FFFFFFA3]">Bio</div>
+          {/* <div className="text-[#FFFFFFA3]">Bio</div> */}
           <div>{metadata.LSP3Profile.description}</div>
         </div>
+        <div className="text-gray-300">
+          <div><MapPinIcon className="w-6 h-6 inline" /> {metadata.LSP3Profile.location}</div>
+        </div>
         <div className="flex gap-2 flex-wrap">
-          {["hello", "my", "friend"].map((tag: string) => (
+          {/* {["hello", "my", "friend"].map((tag: string) => (
             <div
               key={tag}
               className="text-accent font-semibold bg-base-100 px-2 py-0.5 rounded-md border border-base-200"
             >
               {tag}
             </div>
-          ))}
+          ))} */}
         </div>
       </div>
     </section>

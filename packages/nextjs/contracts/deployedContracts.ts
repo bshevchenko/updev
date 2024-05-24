@@ -1581,7 +1581,7 @@ const deployedContracts = {
       },
     },
     upRegistry: {
-      address: "0x73Ac542e5AF65bfA0234161d92C090307827D9F6",
+      address: "0x1a6F0dFA870F92202DE4c7028289E54521fBCBd0",
       abi: [
         {
           inputs: [],

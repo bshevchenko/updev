@@ -44,9 +44,14 @@ const Onboarding: NextPageWithLayout = () => {
     contractName: "upRegistry",
     functionName: "up",
     args: [account.address],
-  });
+  })
 
   useEffect(() => {
+    if (!account.address) {
+      router.push("/");
+      return;
+    }
+    console.log("WTF", up);
     if (up && up != "0x0000000000000000000000000000000000000000") {
       router.push("/profile/" + up);
     }

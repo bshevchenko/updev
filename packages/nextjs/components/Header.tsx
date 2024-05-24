@@ -98,7 +98,7 @@ export const Header = () => {
           <div className="flex relative w-36 h-12">
             <Image alt="logo" className="cursor-pointer" fill src="/logo.svg" priority />
           </div>
-          <div className="hidden sm:block badge-outline badge-accent rounded-sm px-1 py-0 border-[2px] text-[12px] font-bold">
+          <div className="hidden lg:block badge-outline badge-accent rounded-sm px-1 py-0 border-[2px] text-[12px] font-bold">
             BETA V2.0
           </div>
         </Link>

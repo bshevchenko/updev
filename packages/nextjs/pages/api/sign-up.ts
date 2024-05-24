@@ -19,9 +19,11 @@ export default async function SignUp(
     req: NextApiRequest,
     res: NextApiResponse<ResponseData>
 ) {
-    // TODO get & verify interests tags (tokenIds)
-    // TODO userpic, cover
-    const { controller, signature, name, description, location, isCompany, provider, token, id, image } = req.body;
+    let { controller, signature, name, description, location, isCompany, provider, token, id, image } = req.body;
+
+    name = name.trim();
+    description = description.trim();
+    location = location.trim();
 
     const message = utils.keccak256(utils.toUtf8Bytes(token + id));
     if (ethers.utils.recoverAddress(hashMessage(message), signature) !== controller) {
@@ -30,7 +32,7 @@ export default async function SignUp(
     if (!isEmptyAddress(await upRegistry.up(controller))) {
         throw new Error("already signed up");
     }
-    if (name.length < 3 || name.length > 40) { // TODO increase max name.length?
+    if (name.length < 3 || name.length > 40) {
         throw new Error("invalid name");
     }
     if (description.length < 12 || description.length > 160) {
@@ -48,16 +50,16 @@ export default async function SignUp(
             isCompany: !!isCompany,
             profileImage: [
                 {
+                    url: image,
                     // width: 1024, // TODO
                     // height: 1024,
-                    url: image,
                     // verification: {
                     //     method: "keccak256(bytes)",
                     //     data: ethers.utils.keccak256(`0x${profileImg}`),
                     // },
                 },
             ],
-            // backgroundImage: [],
+            // backgroundImage: [], // TODO
         },
     };
     const pin = await pinata.pinJSONToIPFS(json);
@@ -94,7 +96,6 @@ export default async function SignUp(
 
     console.log("Registering UP...");
     const upRegistryTx = await upRegistry.setUP(up, controller);
-    await upRegistryTx.wait();
 
     // mint Account NFT for the created UP
     console.log("Preparing request for Account NFT...");
@@ -111,9 +112,11 @@ export default async function SignUp(
         request.version,
         id
     );
-    await accountTx.wait();
 
-    // TODO mintBatch Group Member NFTs on Lukso here? // TODO won't be possible without UP permissions rn
+    await Promise.all([
+        upRegistryTx.wait(),
+        accountTx.wait()
+    ])
 
     console.log("Done! UP:", up);
     res.status(200).json({

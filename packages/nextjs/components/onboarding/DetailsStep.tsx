@@ -4,6 +4,7 @@ import { OnboardProgressIndicator } from "./OnboardProgressIndicator";
 import { useEffect } from "react";
 import useBio from "~~/hooks/useBio";
 import useLocation from "~~/hooks/useLocation";
+import toast from "react-hot-toast";
 
 export function DetailsStep({ setCurrentStep, profile, updateProfile }: { setCurrentStep: any, profile: any, updateProfile: any }) {
   const { data: session } = useSession();
@@ -23,38 +24,64 @@ export function DetailsStep({ setCurrentStep, profile, updateProfile }: { setCur
       updateProfile("location", location)
     }
   }, [profile])
-  useEffect(() => { // TODO remove
-    console.log("SESSION", session);
-  }, [session])
+
+  const handleChange = (event: any) => {
+    updateProfile(event.target.name, event.target.value);
+  }
+
+  const handleNextStep = () => {
+    let { name, description, location } = profile;
+    name = name;
+    description = description;
+    location = location;
+    if (name.length < 3 || name.length > 40) {
+      toast.error("Invalid name. Please enter between 3 and 40 characters.");
+      return;
+    }
+    if (description.length < 12 || description.length > 160) {
+      toast.error("Invalid description. Please enter between 12 and 160 characters.");
+      return;
+    }
+    if (location.length > 30) {
+      toast.error("Invalid location. Please enter maximum 30 characters.");
+      return;
+    }
+    setCurrentStep(4);
+  }
+
   return (
     <>
-      <OnboardProgressIndicator progress="50%" />
+      <OnboardProgressIndicator progress="75%" />
       <div className="w-96">
         <div className="text-xl font-semibold mt-10">
-          Edit your profile details
+          Edit your {profile.isCompany ? "company" : "personal"} profile details
         </div>
-        <div className="text-l text-gray-400 mb-5 mt-2">
-          {profile.isCompany ? "Company" : "Personal"}. Lorem ipsum dolor sit amet consectetur. Euismod tempor non metus tortor pulvinar nibh.
-        </div>
-        <div className="flex-shrink-0 h-24 w-24 rounded-full overflow-hidden mb-10">
-          <Image
-            alt="userpic"
-            width={128}
-            height={128}
-            src={session.user.image || ""}
-          />
+        <div className="flex items-center text-l text-gray-400 mb-5 mt-2">
+          <div className="flex-shrink-0 rounded-full overflow-hidden mr-5">
+            <Image
+              alt="userpic"
+              width={96}
+              height={96}
+              src={session.user.image || ""}
+            />
+          </div>
+          {profile.isCompany ? "Let others know more about your company! Share its story, values, and what makes it unique." :
+            "Let others know more about you! Personalize your profile with information that represents you best."}
         </div>
         <div>
           Name
-          <input className="bg-black text-white p-2 border border-white rounded-md w-full" type="text" name="name" value={profile.name} />
+          <input className="bg-black text-white p-2 border border-white rounded-md w-full" required
+            type="text" name="name" value={profile.name} onChange={handleChange}
+            minLength={3} maxLength={40} />
         </div>
         <div className="mt-4">
-          Bio
-          <textarea className="bg-black text-white p-2 border border-white rounded-md w-full h-24" name="description" value={profile.description} />
+          Description
+          <textarea className="bg-black text-white p-2 border border-white rounded-md w-full h-24" required minLength={12} maxLength={160}
+            name="description" value={profile.description} onChange={handleChange} />
         </div>
         <div className="mt-4">
           Location
-          <input className="bg-black text-white p-2 border border-white rounded-md w-full" type="text" name="location" value={profile.location} />
+          <input className="bg-black text-white p-2 border border-white rounded-md w-full" type="text" name="location" maxLength={30} value={profile.location} onChange={handleChange} />
         </div>
       </div>
       <div className="flex justify-between mt-10">
@@ -64,17 +91,16 @@ export function DetailsStep({ setCurrentStep, profile, updateProfile }: { setCur
             setCurrentStep(2)
           }}
         >
-          <Image alt="arrow" width={12} height={10} src="/left-arrow.svg" />
+          <Image alt="arrow" width={12} height={10} src="/left-arrow-green.svg" />
           Back
         </button>
         <button
           className="btn bg-green-400 text-black hover:bg-green-500"
           onClick={() => {
-            setCurrentStep(4)
+            handleNextStep()
           }}
         >
-          Next
-          <Image alt="arrow" width={12} height={10} src="/right-arrow.svg" />
+          Submit
         </button>
       </div>
     </>

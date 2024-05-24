@@ -108,8 +108,7 @@ export const RainbowKitCustomConnectButton = () => {
                     </label>
                     <ul
                       tabIndex={0}
-                      style={{ backdropFilter: "blur(3px)" }}
-                      className="dropdown-content menu z-[2] p-2 mt-2 shadow-center bg-base-200 opacity-0 rounded-box gap-1"
+                      className="dropdown-content menu z-[2] p-2 mt-2 shadow-center bg-black bg-opacity-25 rounded-box gap-1 backdrop-blur-sm"
                     >
                       <li>
                         {addressCopied ? (
@@ -175,14 +174,14 @@ export const RainbowKitCustomConnectButton = () => {
                     <label htmlFor="qrcode-modal" className="modal cursor-pointer">
                       <label className="modal-box relative">
                         {/* dummy input to capture event onclick on modal box */}
-                        <input className="h-0 w-0 absolute top-0 left-0" />
+                        <input className="h-0 w-0 absolute top-0 left-0 invisible" />
                         <label
                           htmlFor="qrcode-modal"
-                          className="btn btn-ghost btn-sm btn-circle absolute right-3 top-3"
+                          className="btn btn-ghost btn-sm btn-circle absolute right-10 top-10"
                         >
                           ✕
                         </label>
-                        <div className="space-y-3 py-6">
+                        <div className="space-y-3 border-[8px] py-6 bg-black">
                           <div className="flex space-x-4 flex-col items-center gap-6">
                             <QRCodeSVG value={account.address} size={256} />
                             <Address address={account.address} format="long" disableAddressLink />

@@ -18,7 +18,11 @@ export default async function Requests(req: NextApiRequest, res: NextApiResponse
             }
         ]
     };
+    let result = {};
+    try {
+        result = await requests.find(filter).toArray()
+    } catch (e) {}
     res.status(200).json(
-        await requests.find(filter).toArray()
+        result
     );
 }

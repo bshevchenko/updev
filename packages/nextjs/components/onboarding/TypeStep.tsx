@@ -28,7 +28,7 @@ export function TypeStep({ setCurrentStep, setType, type }: { setCurrentStep: an
 
   return (
     <>
-      <OnboardProgressIndicator progress={"25%"} />
+      <OnboardProgressIndicator progress={"50%"} />
       <div className="p-8 w-96">
         <div className="text-xl font-bold mb-2">Hey,</div>
         <div className="flex items-center gap-4">
@@ -42,31 +42,25 @@ export function TypeStep({ setCurrentStep, setType, type }: { setCurrentStep: an
           </div>
           <div className="text-xl">
             <b>{session.user.name}</b><br />
-            {username && (<b className="text-green-500 font-normal">{username}</b>)}
+            {username && (<b className="text-green-400 font-normal">{username}</b>)}
           </div>
         </div>
         <div className="text-xl font-semibold mt-10 mb-5">What type of profile are you going to register?</div>
-        <div className="p-5">
-          <input
-            type="radio"
-            id="personal"
-            value="personal"
-            checked={type === "personal"}
-            onChange={handleOptionChange}
-            className="mr-1"
-          />
-          <label htmlFor="personal">Personal</label>
+        <div className="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
+          <input id="personal" type="radio" value="personal" name="bordered-radio"
+            onChange={handleOptionChange} checked={type === "personal"}
+            className="w-5 h-5 form-radio text-green-400 border-green-400 checked:bg-green-400" />
+          <label htmlFor="personal" className="w-full py-4 ms-2 font-medium text-gray-900 dark:text-gray-300 text-lg">
+            Personal
+          </label>
         </div>
-        <div className="p-5">
-          <input
-            type="radio"
-            id="company"
-            value="company"
-            checked={type === "company"}
-            onChange={handleOptionChange}
-            className="mr-1"
-          />
-          <label htmlFor="company">Company</label>
+        <div className="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700 mt-5">
+          <input id="company" type="radio" value="company" name="bordered-radio"
+            onChange={handleOptionChange} checked={type === "company"}
+            className="w-5 h-5 form-radio text-green-400 border-green-400 checked:bg-green-400" />
+          <label htmlFor="company" className="w-full py-4 ms-2 font-medium text-gray-900 dark:text-gray-300 text-lg">
+            Company
+          </label>
         </div>
       </div>
       <button
@@ -79,11 +73,11 @@ export function TypeStep({ setCurrentStep, setType, type }: { setCurrentStep: an
           })
         }}
       >
-        <Image alt="arrow" width={12} height={10} src="/left-arrow.svg" />
+        <Image alt="arrow" width={12} height={10} src="/left-arrow-green.svg" />
         Back
       </button>
       <button
-        className="btn bg-green-400 text-black hover:bg-green-500 fixed bottom-10 right-9 right-[31.5%]"
+        className="btn bg-green-400 text-black hover:bg-green-400 fixed bottom-10 right-9 right-[31.5%]"
         onClick={() => {
           setCurrentStep(3)
         }}

@@ -13,7 +13,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
     <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
       {/* <div className="absolute rounded-lg max-w-5xl w-full h-full bg-black"></div> */}
 
-      <div className="relative max-w-5xl w-full p-7">
+      <div className="relative max-w-5xl p-7">
         <div className="absolute inset-0 bg-black rounded-lg"></div>
 
         <div className="relative bg-base-200 border border-base-200 rounded-lg p-7 max-w-5xl w-full">

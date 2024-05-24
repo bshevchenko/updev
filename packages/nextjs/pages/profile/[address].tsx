@@ -1,23 +1,15 @@
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { ERC725, ERC725JSONSchema } from "@erc725/erc725.js";
-import { toHex } from "viem";
 import { useAccount } from "wagmi";
 import lspSchemas from "~~/LSP3ProfileMetadata.json";
 import { LoadingSkeleton, ProfileDetails } from "~~/components/profile";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
-import {
-  Accounts,
-  BUIDLGUIDL,
-  GITHUB,
-  // Token,
-  // functions,
-  // roles,
-} from "~~/types/Profile";
 import { NextPageWithLayout } from "~~/pages/_app";
 import Layout from "../../components/layout";
 import { MintAccounts } from "~~/components/MintAccounts";
+import { MetaHeader } from "~~/components/MetaHeader";
 
 const Profile: NextPageWithLayout = () => {
   const router = useRouter();
@@ -43,7 +35,6 @@ export default Profile;
 
 const ProfileContents = ({ up }: { up: string }) => {
   const account = useAccount();
-  const [accounts, setAccounts] = useState<Accounts>({});
   const [metadata, setMetadata] = useState<any>(null);
 
   const { data: myUP } = useScaffoldContractRead({
@@ -54,17 +45,9 @@ const ProfileContents = ({ up }: { up: string }) => {
 
   const isMyProfile = !!(myUP && up == myUP);
 
-  const upDevUsername = toHex("Boris Shevchenko"); // TODO tmp
-  // const { data: upDevUsername, refetch: refetchUpDevUsername } = useContractRead({
-  //   address: up,
-  //   abi: UniversalProfileContract.abi,
-  //   functionName: "getData",
-  //   args: [toHex("username", { size: 32 })],
-  // });
-
+  const initialized = useRef(false)
   useEffect(() => {
     async function fetchData() {
-      console.log("Fetching...");
       try {
         const erc725js = new ERC725(
           lspSchemas as ERC725JSONSchema[],
@@ -78,35 +61,11 @@ const ProfileContents = ({ up }: { up: string }) => {
         console.error("Error fetching ERC725 data:", error);
       }
     }
-    if (up) { // TODO only one fetch
+    if (!initialized.current) {
+      initialized.current = true;
       fetchData();
     }
-  }, [up]);
-
-  // useEffect(() => { // TODO
-  //   if (!tokens) {
-  //     return;
-  //   } // @ts-ignore
-  //   tokens.forEach((t: Token) => {
-  //     const unixTimestampInDays = Math.floor(Date.now() / 1000 / 86400);
-  //     switch (t.name.source) {
-  //       case GITHUB:
-  //         const [created, followers, contributions] = coder.decode(["uint32", "uint32", "uint32"], t.data);
-  //         const days = unixTimestampInDays - created;
-  //         // @ts-ignore
-  //         t.stats = { created, days, followers, contributions };
-  //         break;
-
-  //       case BUIDLGUIDL: // @ts-ignore
-  //         const [created2, builds, role, func] = coder.decode(["uint32", "uint32", "uint32", "uint32"], t.data);
-  //         const days2 = unixTimestampInDays - created2;
-  //         // @ts-ignore
-  //         t.stats = { created: created2, days: days2, builds: builds, role: roles[role], function: functions[func] };
-  //     }
-  //     accounts[t.name.source] = t;
-  //     setAccounts(accounts);
-  //   });
-  // }, [tokens, accounts]);
+  })
 
   if (!metadata || !up) {
     return <LoadingSkeleton />;
@@ -125,58 +84,19 @@ const ProfileContents = ({ up }: { up: string }) => {
   }
 
   return (
+    <>
+      <MetaHeader title={`upDev – ${metadata.LSP3Profile.name}`} />
       <div className="flex flex-col items-center py-10">
         <div className="max-w-3xl flex flex-col">
 
           <ProfileDetails
             metadata={metadata}
-            upDevUsername={upDevUsername}
-            refetchUpDevUsername={() => { }}
             up={isMyProfile ? myUP : up}
             isMyProfile={isMyProfile}
-            accounts={accounts}
           />
-
-          <div className="mb-10">
-            <h3 className="text-2xl font-bold mb-3">Achievements</h3>
-            <div className="flex gap-3">
-              <div className="tooltip tooltip-primary w-32 h-32" data-tip="Universal Profile Owner">
-                <Image fill alt="achievement icon" src="/achievements/up.svg" priority />
-              </div>
-              <div className="tooltip tooltip-primary  w-32 h-32" data-tip="upDev Early Adopter">
-                <Image fill alt="achievement icon" src="/achievements/og-updev.svg" priority />
-              </div>
-              {accounts[GITHUB] && (
-                <div
-                  className="tooltip tooltip-primary w-32 h-32"
-                  data-tip={`
-                  Verified GitHub account on ${formatDate(new Date(Number(accounts[GITHUB].timestamp) * 1000))}.
-                  Created ${accounts[GITHUB].stats.days} days ago, 
-                  ${accounts[GITHUB].stats.followers} followers,
-                  ${accounts[GITHUB].stats.contributions} contributions in the last year
-                `}
-                >
-                  <Image fill alt="achievement icon" src="/achievements/github.svg" priority />
-                </div>
-              )}
-              {accounts[BUIDLGUIDL] && (
-                <div
-                  className="tooltip tooltip-primary w-32 h-32"
-                  data-tip={`
-                  Verified BuidlGuidl account on ${formatDate(new Date(Number(accounts[BUIDLGUIDL].timestamp) * 1000))}.
-                  Created ${accounts[BUIDLGUIDL].stats.days} days ago, 
-                  ${accounts[BUIDLGUIDL].stats.role},
-                  ${accounts[BUIDLGUIDL].stats.function},
-                  ${accounts[BUIDLGUIDL].stats.builds} build(s) submitted
-                `}
-                >
-                  <Image fill alt="achievement icon" src="/achievements/buidlguidl.svg" priority />
-                </div>
-              )}
-            </div>
-          </div>
-          {isMyProfile && <MintAccounts up={up} />}
+          <MintAccounts up={up} isMyProfile={isMyProfile} />
         </div>
       </div>
+    </>
   );
 };

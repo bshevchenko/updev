@@ -47,11 +47,11 @@ export const appChains = configureChains(
 
 const walletsOptions = { chains: appChains.chains, projectId: scaffoldConfig.walletConnectProjectId };
 const wallets = [
-  metaMaskWallet({ ...walletsOptions, shimDisconnect: true }),
+  coinbaseWallet({ ...walletsOptions, appName: "upDev" }),
   walletConnectWallet(walletsOptions),
+  metaMaskWallet({ ...walletsOptions, shimDisconnect: true }),
   ledgerWallet(walletsOptions),
   braveWallet(walletsOptions),
-  coinbaseWallet({ ...walletsOptions, appName: "scaffold-eth-2" }),
   rainbowWallet(walletsOptions),
   ...(configuredNetwork.id === chains.hardhat.id || !onlyLocalBurnerWallet
     ? [burnerWalletConfig({ chains: [appChains.chains[0]] })]
