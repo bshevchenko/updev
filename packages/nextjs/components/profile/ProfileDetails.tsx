@@ -44,7 +44,7 @@ export function ProfileDetails({
           <Image
             alt="cover picture"
             fill
-            src={convertIpfsUrl("ipfs://bafybeid2tcmtlzmpmrlg4h4eomajvt2vpzpq7bo76ymwcyw5f5oedhyvc4/")}
+            src={up == "0x2ee97Dd93b77796bb79d9F33E3AD64B1FcF88b03" ? "https://api.universalprofile.cloud/image/QmW6KQr6uZZaLQfVBUGULDoU1jv88zNvcQ2grKyDbRjAEY?width=1760&dpr=2" : convertIpfsUrl("ipfs://bafybeid2tcmtlzmpmrlg4h4eomajvt2vpzpq7bo76ymwcyw5f5oedhyvc4/")}
             className="object-cover object-center"
             priority
           />

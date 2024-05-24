@@ -4320,7 +4320,6 @@ __metadata:
     react-copy-to-clipboard: ^5.1.0
     react-dom: ^18.2.0
     react-hot-toast: ^2.4.0
-    react-typed: ^1.2.0
     tailwindcss: ^3.3.3
     type-fest: ^4.6.0
     typescript: ^5.1.6
@@ -14776,7 +14775,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.6.0, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -15121,19 +15120,6 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 7ee8ef3aab74c7ae1d70ff34a27643d11ba1a8d62d072c767827d9ff9a520905223e567002e0bf6c772929d8ea1c781a3ba0cc4a563e92b1e3dc2eaa817ecbe8
-  languageName: node
-  linkType: hard
-
-"react-typed@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "react-typed@npm:1.2.0"
-  dependencies:
-    prop-types: ^15.6.0
-    typed.js: ^2.0.6
-  peerDependencies:
-    react: ^16.3.0
-    react-dom: ^16.3.0
-  checksum: c750d68710f918904b9bf07ea253e51d3447f9533c8277bd0afcdd20725b9e42e52ddcccd63ce93b4d0eb40db14573ccc82fce27b568b72a250d2167fc375b6f
   languageName: node
   linkType: hard
 
@@ -17446,13 +17432,6 @@ __metadata:
   bin:
     typechain: dist/cli/cli.js
   checksum: d8e05c4437d5ba54fd5dea28c20884c2aa259e911c6ffc9d1768a229633c661f378439e4b0a1a21f33372e8ed82adc324583381cde16f199af9440792a95da88
-  languageName: node
-  linkType: hard
-
-"typed.js@npm:^2.0.6":
-  version: 2.1.0
-  resolution: "typed.js@npm:2.1.0"
-  checksum: 688f8a13a2a93317c87bb499f9d4159a0df5e5f67960cddd96a11ae53362b78ab5597d32eb3b300d97ddbe71c1dd5dd817625687ccc8be810643f3922d92b64d
   languageName: node
   linkType: hard
 

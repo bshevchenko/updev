@@ -265,10 +265,10 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string, isMyProfile: boo
           <div className="tooltip tooltip-primary w-16 h-16" data-tip="upDev Early Adopter">
             <Image fill alt="achievement icon" src="/achievements/og-updev.svg" priority />
           </div>
-          {Object.entries(tokens).some(([key, value]) => value.provider == "github") && <div className="tooltip tooltip-primary w-16 h-16" data-tip="GitHub">
+          {Object.entries(tokens).some(([key, value]) => value.provider == "github") && <div className="tooltip tooltip-primary w-16 h-16" data-tip="GitHub Member">
             <Image fill alt="achievement icon" src="/achievements/github.svg" priority />
           </div>}
-          {Object.entries(tokens).some(([key, value]) => value.provider == "buidlguidl") && <div className="tooltip tooltip-primary w-16 h-16" data-tip="BuidlGuidl">
+          {Object.entries(tokens).some(([key, value]) => value.provider == "buidlguidl") && <div className="tooltip tooltip-primary w-16 h-16" data-tip="BuidlGuidl Member">
             <Image fill alt="achievement icon" src="/achievements/buidlguidl.svg" priority />
           </div>}
         </div>
@@ -384,7 +384,7 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string, isMyProfile: boo
               {token.provider == "buidlguidl" && (
                 <>
                   <div className="flex items-center mb-3">
-                    <Image alt="buidlguidl" width={46} height={46} src="/link.svg" priority />
+                    <Image alt="buidlguidl" width={46} height={46} src="/buidlguidl.svg" priority />
                     <b className="ml-3">BuidlGuidl</b>
                   </div>
                   <div>

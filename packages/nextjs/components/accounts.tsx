@@ -32,7 +32,7 @@ export default [
   {
     name: "buidlguidl",
     title: "BuidlGuidl",
-    logo: "/link.svg",
+    logo: "/buidlguidl.svg",
     comingSoon: false,
     isModal: true,
     step1: (
