@@ -30,6 +30,13 @@ export default [
     url: "https://discord.com",
   },
   {
+    name: "linkedin",
+    title: "LinkedIn",
+    logo: "/linkedin.svg",
+    comingSoon: false,
+    url: "https://linkedin.com",
+  },
+  {
     name: "buidlguidl",
     title: "BuidlGuidl",
     logo: "/buidlguidl.svg",

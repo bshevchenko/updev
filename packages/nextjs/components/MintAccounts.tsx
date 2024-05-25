@@ -184,6 +184,7 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string, isMyProfile: boo
 
   const session = useSession();
   useEffect(() => {
+    console.log("SESSION", session);
     if (!session || session.status != "authenticated") {
       return;
     }
@@ -475,8 +476,8 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string, isMyProfile: boo
                 {!item.comingSoon && <button
                   onClick={() => item.isModal ? setActiveModal(item) : handleStartMint(item.name)}
                   className="btn bg-primary text-primary-content hover:bg-primary w-42"
-                  disabled={isMintStarted != null || isMinting[item.name]}>
-                  {isMintStarted == item.name || isMinting[item.name] ? "Minting..." : "Mint"}
+                  disabled={isMinting[item.name]}>
+                  {isMinting[item.name] ? "Minting..." : "Mint"}
                 </button>}
               </div>
             ))

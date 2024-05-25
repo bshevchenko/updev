@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
+import LinkedinProvider from "next-auth/providers/linkedin";
 import TwitterProvider from "~~/providers/twitter";
 import TelegramProvider from "~~/providers/telegram";
 import DiscordProvider from "~~/providers/discord";
@@ -27,6 +28,29 @@ export default NextAuth({
     DiscordProvider({
       clientId: process.env.DISCORD_CLIENT_ID || "",
       clientSecret: process.env.DISCORD_CLIENT_SECRET || "",
+    }),
+    DiscordProvider({
+      clientId: process.env.DISCORD_CLIENT_ID || "",
+      clientSecret: process.env.DISCORD_CLIENT_SECRET || "",
+    }),
+    LinkedinProvider({
+      clientId: process.env.LINKEDIN_CLIENT_ID || "",
+      clientSecret: process.env.LINKEDIN_CLIENT_SECRET || "",
+      client: { token_endpoint_auth_method: "client_secret_post" },
+      issuer: "https://www.linkedin.com",
+      profile: (profile: any) => ({
+        id: profile.sub,
+        name: profile.name,
+        email: profile.email,
+        image: profile.picture,
+      }),
+      wellKnown:
+        "https://www.linkedin.com/oauth/.well-known/openid-configuration",
+      authorization: {
+        params: {
+          scope: "openid profile email",
+        },
+      },
     }),
     TelegramProvider(),
   ],
