@@ -3,7 +3,7 @@ import Image from "next/image";
 import UniversalProfileContract from "@lukso/lsp-smart-contracts/artifacts/UniversalProfile.json";
 import { toHex } from "viem";
 import { useContractWrite } from "wagmi";
-import { CheckCircleIcon, PencilSquareIcon, XCircleIcon, MapPinIcon } from "@heroicons/react/24/outline";
+import { CheckCircleIcon, MapPinIcon, PencilSquareIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { convertIpfsUrl } from "~~/utils/helpers";
 
 export function ProfileDetails({
@@ -44,7 +44,11 @@ export function ProfileDetails({
           <Image
             alt="cover picture"
             fill
-            src={up == "0x2ee97Dd93b77796bb79d9F33E3AD64B1FcF88b03" ? "https://api.universalprofile.cloud/image/QmW6KQr6uZZaLQfVBUGULDoU1jv88zNvcQ2grKyDbRjAEY?width=1760&dpr=2" : convertIpfsUrl("ipfs://bafybeid2tcmtlzmpmrlg4h4eomajvt2vpzpq7bo76ymwcyw5f5oedhyvc4/")}
+            src={
+              up == "0x2ee97Dd93b77796bb79d9F33E3AD64B1FcF88b03"
+                ? "https://api.universalprofile.cloud/image/QmW6KQr6uZZaLQfVBUGULDoU1jv88zNvcQ2grKyDbRjAEY?width=1760&dpr=2"
+                : convertIpfsUrl("ipfs://bafybeid2tcmtlzmpmrlg4h4eomajvt2vpzpq7bo76ymwcyw5f5oedhyvc4/")
+            }
             className="object-cover object-center"
             priority
           />
@@ -72,9 +76,7 @@ export function ProfileDetails({
           ) : isLoading ? (
             <div>Updating username...</div>
           ) : (
-            <h3 className="text-2xl mb-0 font-bold">
-              {displayedUsername}
-            </h3>
+            <h3 className="text-2xl mb-0 font-bold">{displayedUsername}</h3>
           )}
 
           {isEditing ? (
@@ -103,7 +105,9 @@ export function ProfileDetails({
           <div>{metadata.LSP3Profile.description}</div>
         </div>
         <div className="text-gray-300">
-          <div><MapPinIcon className="w-6 h-6 inline" /> {metadata.LSP3Profile.location}</div>
+          <div>
+            <MapPinIcon className="w-6 h-6 inline" /> {metadata.LSP3Profile.location}
+          </div>
         </div>
         <div className="flex gap-2 flex-wrap">
           {/* {["hello", "my", "friend"].map((tag: string) => (

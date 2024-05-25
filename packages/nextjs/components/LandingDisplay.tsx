@@ -17,9 +17,7 @@ export function LandingDisplay() {
           <div className="badge badge-outline badge-accent rounded-sm px-0.5 border-2 font-bold">BETA V2.0</div>
         </div>
         <div className="text-center">
-          <h3 className="text-white text-5xl">
-            Your pass to new opportunities.
-          </h3>
+          <h3 className="text-white text-5xl">Your pass to new opportunities.</h3>
         </div>
         <div className="z-1 absolute right-10 -bottom-60">
           <Image alt="pattern right" width={700} height={700} src="/pattern-right.svg" />

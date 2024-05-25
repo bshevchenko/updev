@@ -1,24 +1,23 @@
 import { useEffect, useRef, useState } from "react";
-import { useSession } from "next-auth/react";
-import Image from "next/image";
-import axios from "axios";
+import { useRouter } from "next/router";
 import { OnboardProgressIndicator } from "./OnboardProgressIndicator";
 import { signMessage } from "@wagmi/core";
-import { useAccount } from "wagmi";
+import axios from "axios";
 import { utils } from "ethers";
+import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
-import { useRouter } from "next/router";
+import { useAccount } from "wagmi";
 
 // TODO replace type with Profile object?
-export function DeployStep({ setCurrentStep, profile }: { setCurrentStep: any, profile: any }) {
-  const [isDeploying, setIsDeploying] = useState(false);
+export function DeployStep({ setCurrentStep, profile }: { setCurrentStep: any; profile: any }) {
+  const [, setIsDeploying] = useState(false);
   const [isSigning, setIsSigning] = useState(false);
 
   const { data: session } = useSession();
   const account = useAccount();
   const router = useRouter();
 
-  const initialized = useRef(false)
+  const initialized = useRef(false);
 
   useEffect(() => {
     if (!initialized.current) {
@@ -26,7 +25,7 @@ export function DeployStep({ setCurrentStep, profile }: { setCurrentStep: any, p
       console.log("PROFILE", profile);
       handleDeploy();
     }
-  }, []);
+  }, [profile]);
 
   async function handleDeploy() {
     console.log("Signing...");
@@ -35,10 +34,11 @@ export function DeployStep({ setCurrentStep, profile }: { setCurrentStep: any, p
     }
     setIsSigning(true);
     try {
-      const token = session.account.access_token;
+      // @ts-ignore
+      const token = session.account.access_token; // @ts-ignore
       const id = session.account.providerAccountId;
       const message = utils.keccak256(utils.toUtf8Bytes(token + id));
-      const signature = await signMessage({ message }); 
+      const signature = await signMessage({ message });
       setIsSigning(false);
       setIsDeploying(true);
       const result = await axios.post("/api/sign-up", {
@@ -47,11 +47,11 @@ export function DeployStep({ setCurrentStep, profile }: { setCurrentStep: any, p
         name: profile.name,
         description: profile.description,
         location: profile.location,
-        isCompany: profile.isCompany,
+        isCompany: profile.isCompany, // @ts-ignore
         provider: session.account.provider,
         token,
         id,
-        image: session.user.image
+        image: session.user.image,
       });
       console.log("API Result", result.data);
       setIsDeploying(false);
@@ -70,7 +70,7 @@ export function DeployStep({ setCurrentStep, profile }: { setCurrentStep: any, p
     }
   }
   if (!session || !session.user) {
-    return (<></>);
+    return <></>;
   }
   return (
     <>
@@ -80,7 +80,9 @@ export function DeployStep({ setCurrentStep, profile }: { setCurrentStep: any, p
           {isSigning ? "Requesting your signature..." : "Creating your profile..."}
         </div>
         <div className="flex items-center text-l text-gray-400 mb-5 mt-2">
-          {isSigning ? "Please sign a verification message in your wallet.": "Please wait a bit while we are creating your profile and minting your very first account."}
+          {isSigning
+            ? "Please sign a verification message in your wallet."
+            : "Please wait a bit while we are creating your profile and minting your very first account."}
         </div>
         <div className="grow flex flex-col justify-center items-center mt-20">
           <span className="loading loading-spinner loading-lg"></span>

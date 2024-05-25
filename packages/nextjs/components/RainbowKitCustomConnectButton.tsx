@@ -1,29 +1,28 @@
 import { useState } from "react";
 import Image from "next/image";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useSession } from "next-auth/react";
 import { QRCodeSVG } from "qrcode.react";
 import CopyToClipboard from "react-copy-to-clipboard";
-import { useDisconnect, useSwitchNetwork } from "wagmi";
+import { useDisconnect } from "wagmi";
 import {
   ArrowLeftOnRectangleIcon,
   ArrowTopRightOnSquareIcon,
-  ArrowsRightLeftIcon,
   CheckCircleIcon,
   ChevronDownIcon,
   DocumentDuplicateIcon,
   QrCodeIcon,
 } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth/Address";
-import { useAutoConnect, useNetworkColor } from "~~/hooks/scaffold-eth";
+import { useAutoConnect } from "~~/hooks/scaffold-eth";
 import { getBlockExplorerAddressLink, getTargetNetwork } from "~~/utils/scaffold-eth";
-import { useSession } from "next-auth/react";
 
 export const RainbowKitCustomConnectButton = () => {
   useAutoConnect();
-  const networkColor = useNetworkColor();
-  const configuredNetwork = getTargetNetwork();
+  // const networkColor = useNetworkColor();
+  // const configuredNetwork = getTargetNetwork();
   const { disconnect } = useDisconnect();
-  const { switchNetwork } = useSwitchNetwork();
+  // const { switchNetwork } = useSwitchNetwork();
   const [addressCopied, setAddressCopied] = useState(false);
 
   const { data: session } = useSession();
@@ -89,14 +88,11 @@ export const RainbowKitCustomConnectButton = () => {
               // }
               return (
                 <div className="px-2 flex justify-end items-center">
-                  {session && session.user && session.user.image && <div className="rounded-full overflow-hidden mr-2">
-                    <Image
-                      alt="userpic"
-                      width={36}
-                      height={36}
-                      src={session.user.image}
-                    />
-                  </div>}
+                  {session && session.user && session.user.image && (
+                    <div className="rounded-full overflow-hidden mr-2">
+                      <Image alt="userpic" width={36} height={36} src={session.user.image} />
+                    </div>
+                  )}
                   <div className="dropdown dropdown-end leading-3">
                     <label
                       tabIndex={0}

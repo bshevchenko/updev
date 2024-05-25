@@ -2,9 +2,10 @@ import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import LinkedinProvider from "next-auth/providers/linkedin";
-import TwitterProvider from "~~/providers/twitter";
-import TelegramProvider from "~~/providers/telegram";
 import DiscordProvider from "~~/providers/discord";
+import TelegramProvider from "~~/providers/telegram";
+import TwitterProvider from "~~/providers/twitter";
+
 // import { MongoDBAdapter } from "@auth/mongodb-adapter";
 // import clientPromise from "~~/lib/db/clientPromise";
 
@@ -44,8 +45,7 @@ export default NextAuth({
         email: profile.email,
         image: profile.picture,
       }),
-      wellKnown:
-        "https://www.linkedin.com/oauth/.well-known/openid-configuration",
+      wellKnown: "https://www.linkedin.com/oauth/.well-known/openid-configuration",
       authorization: {
         params: {
           scope: "openid profile email",
@@ -58,19 +58,20 @@ export default NextAuth({
     strategy: "jwt",
   },
   callbacks: {
-    async session({ session, token, user }) {
-      session.account = token.account // @ts-ignore
-      session.profile = token.profile
-      return session
+    async session({ session, token }) {
+      // @ts-ignore
+      session.account = token.account; // @ts-ignore
+      session.profile = token.profile;
+      return session;
     },
     async jwt({ token, account, profile }) {
       if (account) {
-        token.account = account
+        token.account = account;
       }
       if (profile) {
-        token.profile = profile
+        token.profile = profile;
       }
-      return token
+      return token;
     },
     async redirect({ url }) {
       return url;
@@ -81,6 +82,6 @@ export default NextAuth({
     signOut: undefined,
     error: undefined, // Error code passed in query string as ?error=
     verifyRequest: undefined, // (used for check email message)
-    newUser: undefined // New users will be directed here on first sign in (leave the property out if not of interest)
-  }
+    newUser: undefined, // New users will be directed here on first sign in (leave the property out if not of interest)
+  },
 });

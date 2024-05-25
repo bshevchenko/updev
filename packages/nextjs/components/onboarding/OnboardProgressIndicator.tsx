@@ -1,9 +1,8 @@
 import React from "react";
-import Image from "next/image";
 
 type StepsProps = {
   progress: string;
-}
+};
 
 export const OnboardProgressIndicator: React.FC<StepsProps> = ({ progress }) => {
   return (

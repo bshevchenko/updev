@@ -1,7 +1,8 @@
+import { AuthDataValidator, objectToAuthDataMap } from "@telegram-auth/server";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { objectToAuthDataMap, AuthDataValidator } from "@telegram-auth/server";
 
-export default () => CredentialsProvider({
+const telegram = () =>
+  CredentialsProvider({
     id: "telegram",
     name: "Telegram",
     credentials: {}, // @ts-ignore
@@ -14,8 +15,8 @@ export default () => CredentialsProvider({
       const user = await validator.validate(data);
 
       const authData = new Map(data);
-      const hash = authData.get('hash') || '';
-      authData.delete('hash');
+      const hash = authData.get("hash") || "";
+      authData.delete("hash");
 
       const dataToCheck: Array<string> = [];
       for (const [key, value] of authData.entries()) {
@@ -29,13 +30,15 @@ export default () => CredentialsProvider({
           id: user.id.toString(),
           email: {
             hash,
-            dataStr
+            dataStr,
           },
           name: [user.first_name, user.last_name || ""].join(" "),
-          image: user.photo_url
-        }
+          image: user.photo_url,
+        };
         return returned;
       }
       return null;
     },
-  })
+  });
+
+export default telegram;

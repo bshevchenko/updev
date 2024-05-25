@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { useAccount } from "wagmi";
-import { MetaHeader } from "~~/components/MetaHeader";
-import { LandingDisplay } from "~~/components";
-import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 import type { NextPage } from "next";
+import { useAccount } from "wagmi";
+import { LandingDisplay } from "~~/components";
+import { MetaHeader } from "~~/components/MetaHeader";
+import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
 const Home: NextPage = () => {
   const account = useAccount();
