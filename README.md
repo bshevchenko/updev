@@ -1,66 +1,81 @@
 <div align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="logo.svg">
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo.svg">
     <source media="(prefers-color-scheme: light)" srcset="logo-black.svg">
     <img alt="upDev" src="logo.svg">
   </picture>
-  <h3>Your universal dev profile – mint your web2/web3 accounts & merits on-chain.</h3>
+  <h2>Your pass to new opportunities!</h2>
   <h4>🏅 Winner of BuildUP #2 Lukso Hackathon</h4>
 </div>
 
+<!-- <div align="center">
+  <a href="https://www.youtube.com/watch?v=whP8iiYZW6Y">TODO YouTube Video</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://updev-v1.vercel.app/">TODO Live Site</a><br/><br/>
+</div> -->
+
 <div align="center">
-  <a href="https://www.youtube.com/watch?v=whP8iiYZW6Y">YouTube Video</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://updev-v1.vercel.app/">Live Site</a><br/><br/>
+<span class="c9 c2">Powered by: </span><span class="c1"><a class="c0" href="https://www.google.com/url?q=https://docs.lukso.tech/learn/introduction&amp;sa=D&amp;source=editors&amp;ust=1716746487836060&amp;usg=AOvVaw3iNvQetManCGe-I0TIzk2e">Lukso Network</a></span><span class="c9 c2">, </span><span class="c1"><a class="c0" href="https://www.google.com/url?q=https://docs.lukso.tech/standards/universal-profile/introduction&amp;sa=D&amp;source=editors&amp;ust=1716746487836291&amp;usg=AOvVaw3c8UbYKA5gZPE_dNysGsbE">Universal Profiles</a></span><span class="c9 c2">&nbsp;(on </span><span class="c1"><a class="c0" href="https://www.google.com/url?q=https://erc725alliance.org/&amp;sa=D&amp;source=editors&amp;ust=1716746487836404&amp;usg=AOvVaw3JSe_L4UXRyM_rTUWrwRgb">ERC725</a></span><span class="c9 c2">), </span><span class="c1"><a class="c0" href="https://www.google.com/url?q=https://ethereum.org/ru/&amp;sa=D&amp;source=editors&amp;ust=1716746487836510&amp;usg=AOvVaw3YrUtgMsS0hKqRVnEpE7JG">Ethereum</a></span><span class="c9 c2">, </span><span class="c1"><a class="c0" href="https://www.google.com/url?q=https://docs.chain.link/chainlink-functions&amp;sa=D&amp;source=editors&amp;ust=1716746487836640&amp;usg=AOvVaw25gYghvPUykAruUn47-Cia">Chainlink Functions</a></span><span class="c9 c2">, </span><span class="c1"><a class="c0" href="https://www.google.com/url?q=https://www.pinata.cloud/&amp;sa=D&amp;source=editors&amp;ust=1716746487836815&amp;usg=AOvVaw26FbwThGU1SOkt-nSDMmzv">Pinata IPFS</a></span><span class="c9 c2">, </span><span class="c1"><a class="c0" href="https://www.google.com/url?q=https://github.com/scaffold-eth/scaffold-eth-2&amp;sa=D&amp;source=editors&amp;ust=1716746487836942&amp;usg=AOvVaw0r6rbL5VkfaeyyJkjUP9U9">Scaffold-ETH 2</a></span><span class="c9 c2">, </span><span class="c1"><a class="c0" href="https://www.google.com/url?q=https://next-auth.js.org/&amp;sa=D&amp;source=editors&amp;ust=1716746487837047&amp;usg=AOvVaw1ptdLyROpBg5RM4ZTAcn76">next-auth</a></span><span class="c9 c2">, </span><span class="c1"><a class="c0" href="https://www.google.com/url?q=https://moralis.io/&amp;sa=D&amp;source=editors&amp;ust=1716746487837142&amp;usg=AOvVaw3s8r0IoCVDKtNY-scc7Qv9">Moralis</a></span><span class="c2 c9">, </span><span class="c1"><a class="c0" href="https://www.google.com/url?q=https://www.mongodb.com/&amp;sa=D&amp;source=editors&amp;ust=1716746487837253&amp;usg=AOvVaw1qjlsEkJCXJUZNSyxThKSY">MongoDB</a></span><span class="c9 c2">, </span><span class="c1"><a class="c0" href="https://www.google.com/url?q=https://vercel.com/&amp;sa=D&amp;source=editors&amp;ust=1716746487837364&amp;usg=AOvVaw0TXXMuDep1G8YdG7up1TFZ">Vercel</a></span></p><p class="c3 c4"><span class="c10 c2"></span></p><p class="c3"><span class="c9 c2">Inspired by: </span><span class="c1"><a class="c0" href="https://www.google.com/url?q=http://linktr.ee&amp;sa=D&amp;source=editors&amp;ust=1716746487837604&amp;usg=AOvVaw0AWMVh-z2RnMGIIifRQgfH">linktr.ee</a></span><span class="c9 c2">, </span><span class="c11 c2"><a class="c0" href="https://www.google.com/url?q=https://linkedin.com/&amp;sa=D&amp;source=editors&amp;ust=1716746487837731&amp;usg=AOvVaw1EZQNpFPrt5X3I1fbpAucD">LinkedIn</a></span><span>, </span><span class="c1"><a class="c0" href="https://www.google.com/url?q=https://passport.gitcoin.co/&amp;sa=D&amp;source=editors&amp;ust=1716746487837856&amp;usg=AOvVaw0TzcqH9FVrSaBNRJS14v4_">Gitcoin Passport</a></span><span class="c9 c2">, </span><span class="c1"><a class="c0" href="https://www.google.com/url?q=https://github.com/&amp;sa=D&amp;source=editors&amp;ust=1716746487837959&amp;usg=AOvVaw3TstldSAwE2SVw73bBoH0x">GitHub</a></span><span class="c16">, </span><span class="c11 c16"><a class="c0" href="https://www.google.com/url?q=https://tea.xyz/&amp;sa=D&amp;source=editors&amp;ust=1716746487838056&amp;usg=AOvVaw2fBTDv2tngpjgAkjuhrV-I">tea.xyz</a></span><span class="c16">, </span><span class="c11 c2"><a class="c0" href="https://www.google.com/url?q=https://poap.xyz/&amp;sa=D&amp;source=editors&amp;ust=1716746487838168&amp;usg=AOvVaw3C7Ot_XYnVARpZdJKlivLI">poap.xyz</a></span></p>
 </div>
 
-###### This repo contains the code for a project submission for BuildUP #2 Lukso Hackathon on [buidlbox.io](https://app.buidlbox.io/lukso/build-up-2) which ended November 27th 2023 and [Chainlink Constellations Hackathon](https://devpost.com/software/updev) which ended December 10th 2023.
+<h3 class="c3"><span class="c10 c16">Introducing upDev &ndash; the revolutionary creative decentralized social network, driven by the innovative Holistic Identity Protocol (sybil-resistant self-owned Web2.5 identities).</span></p><p class="c3 c4"><span class="c10 c15"></span></p><p class="c3"></h3>
 
-Imagine having a universal decentralized identity/profile that will connect all your web2/web3 accounts and keep any valuable data from these accounts forever.
+<div><img src="assets/updev-2.0.png" width="100%" /></div>
 
-upDev is a multi-chain dApp that allows you to mint your web2/web3 accounts like GitHub, Twitter or Buidlbox (thanks to Chainlink Functions) as soulbound NFT 2.0 ([Lukso's LSP8](https://docs.lukso.tech/standards/tokens/LSP8-Identifiable-Digital-Asset/)) to create Universal Dev Profile, that will contain all your merits on-chain – somewhere where they can never be lost.
+<h3 class="c5 c2">Creative</h3>
 
-It leverages [Lukso Network](https://lukso.network/), [Univeral Profiles browser extension](https://chromewebstore.google.com/detail/universal-profiles/abpickdkkbnbcoepogfhkhennhfhehfn), [Polygon Mumbai](https://mumbai.polygonscan.com/) and [Chainlink Functions](https://docs.chain.link/chainlink-functions)
-<br />
+<p class="c3"><span class="c2">At its core, upDev is designed to champion creativity. Its primary mission is to empower creators, builders, and visionaries, fostering an environment where they can recognize and celebrate each other&#39;s contributions to cultivate fruitful collaborations.</span></p><p class="c3 c4"><span class="c10 c2"></span></p>
 
-<div><img src="https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/002/700/276/datas/original.png" width="100%" /></div>
-<div><img src="providers.png" width="40%" /><img src="https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/002/700/351/datas/original.png" width="60%" /></div>
-<br />
+<h3 class="c5 c2">Decentralized</h3>
 
-## Features
-✅ Users can connect various web2/web3 accounts related to their developer activities to generate ownership-proofs which exist on-chain to verify they own their accounts using Chainlink Functions and earn achievements related to their activity.
+<p class="c3"><span class="c2">Decentralization frees transactions from the need to rely on central authorities like banks or corporations. This approach ensures transparency, self-ownership, and </span><span class="c11 c2"><a class="c0" href="https://www.google.com/url?q=https://balajis.com/p/the-billion-user-table&amp;sa=D&amp;source=editors&amp;ust=1716746487838690&amp;usg=AOvVaw08lhiz33MtejP7PvHghZGk">maximized network effects</a></span><span class="c10 c2">.</span></p><p class="c3 c4"><span class="c10 c2"></span></p>
 
-✅ Chainlink Functions are currently not supported on [Lukso Network](https://lukso.network), so users can connect with both their Polygon Mumbai wallet and their Universal Profile browser extension to deploy their [Universal Profile](https://https://universalprofile.cloud/) onto Polygon Mumbai where Chainlink Functions are available now!
+<h3 class="c3"><span class="c2 c5">Sybil-resistant</span></h3>
 
-✅ [LSP24](https://github.com/lukso-network/LIPs/issues/212) (experimental) verification of user's Universal Profiles.
+<p class="c3"><span class="c10 c2">A Sybil attack occurs when a malicious actor creates numerous fake identities to manipulate a network. upDev combats this by introducing the innovative Holistic Identity Protocol.</span></p><p class="c3 c4"><span class="c10 c2"></span></p>
 
-✅ Profile page where users can connect their web2/web3 accounts and see all information associated with them, as well as users original Lukso Mainnet Universal Profiles metadata.
+<h3 class="c3"><span class="c5 c2">Holistic</span></h3>
 
-✅ Discover Profiles page that lists a directory of all upDev developers.
+<p class="c3"><span class="c2">Non-Fungible Tokens (NFTs), serving as identities of ownership over various properties, including intellectual ones, are central to upDev. Through cryptography, OAuth protocol and a decentralized oracle network, upDev (unlike linktr.ee &amp; Gitcoin Passport) trustlessly links &amp; unifies your existing Web2 and Web3 identities (such as emails, websites, social accounts like Twitter or GitHub, AI agencies, crypto-wallets, etc.) and their data by minting them as soulbound NFTs owned by a single super-identity (</span><span class="c11 c2"><a class="c0" href="https://www.google.com/url?q=https://docs.lukso.tech/standards/universal-profile/introduction&amp;sa=D&amp;source=editors&amp;ust=1716746487839247&amp;usg=AOvVaw0u8iDJm8pruox5l-1LTZFj">Universal Profile</a></span><span class="c2">)</span><span class="c10 c2">. This super-identity acts as a comprehensive &amp; trustless resume for individuals or companies.</span></p><p class="c3 c4"><span class="c10 c2"></span></p>
 
-## TODOs
-🌀 Deploy UP on Polygon Mumbai AT THE SAME ADDRESS using [LSP23](https://docs.lukso.tech/standards/generic-standards/lsp23-linked-contracts-factory)
+<h3 class="c3"><span class="c5 c2">Self-owned</span></h3>
 
-🌀 [DONE] Retrieve on-chain and display on the dApp following GitHub account stats: date created, number of followers, contributions in the last year and following BuidlGuidl account stats: date created, role, functions, number of builds
+<p class="c3"><span class="c2 c10">Leveraging blockchain technology, upDev ensures that individuals or companies have exclusive ownership of their super-identity, inherently protecting their content and achievements from deletion, restrictions, censorship, and other risks associated with centralized Web2 platforms.</span></p><p class="c3 c4"><span class="c10 c2"></span></p>
 
-🌀 Allow to mint a Repo NFT (with number of stars & other stats) shared by repository contributors proportionally to a number of their contributions
+<h3 class="c3"><span class="c5 c2">Web2.5</span></h3>
 
-🌀 Allow bounty hunters to share their API tokens in exchange for a fee in order to give access to paid APIs like Twitter/X API
+<p class="c3"><span class="c10 c2">upDev embodies the synthesis of Web2 and Web3 technologies, combining the convenience of centralized systems with the empowerment of decentralized ones. It seamlessly integrates the best of both worlds, offering users a unified digital experience where autonomy, data ownership, and collaboration thrive without limits.</span></p><p class="c3 c4"><span class="c10 c2"></span></p>
 
-🌀 Support GitCoin Passport, Buidlbox, Twitter/X & other providers
+<h3 class="c3"><span class="c5 c2">Identities</span></h3>
 
-## Verified Smart Contracts
+<p class="c3"><span class="c2">upDev allows anyone to automatically mint, share, and integrate new identities &ndash; Pass NFTs, which qualitatively represent public relations (PR) between individuals or legal entities within the upDev ecosystem. </span><span class="c5 c2">Just as a letter from an influential individual attesting that you&#39;re an exceptional talent can guarantee your application for a US visa, a Pass NFT can unlock new opportunities for you beyond imagination!</span></p><p class="c3 c4"><span class="c10 c14"></span></p>
 
-upDevAccountNFT (LSP8 – NFT 2.0 Soulbound Collection)
-https://mumbai.polygonscan.com/address/0xe015eB341264Ac609761f31Beb1C55BE8b6C69b0
+<h2 class="c3"><span class="c5 c14">Use Cases</span></h2>
 
-upDevFunctionsConsumer (Chainlink Functions Consumer & Minter)
-https://mumbai.polygonscan.com/address/0x64B78FCB73500EB7Ce387b06bBa814BeaA7e2F9b
+<p class="c3 c4"><span class="c10 c15"></span></p>
 
-upRegistry (upDev Profiles Registry)<br />
-https://mumbai.polygonscan.com/address/0xB665840C5929d140494708A619dA834d944d8CBC
+<h3 class="c3"><span class="c5 c2">Proof of Attendance</span></h3>
 
-## Figma Designs
+<p class="c3"><span class="c2">Pass NFT commemorates participation in events, such as conferences, workshops, or courses, with a digital token signifying the attendee&#39;s engagement and contribution. Unlike the existing Proof of Attendance Protocol (</span><span class="c11 c2"><a class="c0" href="https://www.google.com/url?q=https://poap.xyz/&amp;sa=D&amp;source=editors&amp;ust=1716746487839963&amp;usg=AOvVaw3tFymvkIlfdDeOoOSS5KEt">poap.xyz</a></span><span class="c10 c2">), upDev does not require any curatorship due to its sybil-resistance.</span></p><p class="c3 c4"><span class="c12 c2 c26"></span></p><p class="c3"><span class="c2 c23">For most companies, their main online identity is their website domain name. Once a company mints (proves ownership of) its website on upDev, it can immediately proceed to mint Pass NFTs for everyone. And by minting social accounts like X (Twitter), Discord, GitHub, etc., a company can further enhance its profile&rsquo;s Sybil resistance and resume.</span></p><p class="c3 c4"><span class="c10 c15"></span></p>
 
-https://www.figma.com/file/LVYEWZriiuiIdxoSq9mJ5g/upDev-v1.0?type=design&node-id=2102-385&mode=design&t=GnSTXkxvO6Wid6e1-0
+<h3 class="c3"><span class="c5 c2">Proof of Relationship</span></h3>
+
+<p class="c3"><span class="c10 c2">Pass NFT certifies significant memberships, friendships, professional relationships, mentorships, partnerships, or endorsements, enhancing trust within the network and differentiating the quality of each relationship, unlike LinkedIn where nobody knows what contact between two people means or where endorsements from people with different qualifications are considered equal.</span></p><p class="c3 c4"><span class="c10 c15"></span></p>
+
+<h3 class="c3"><span class="c2 c12">Proof of Competence</span><span class="c10 c2"></span></h3>
+
+<p class="c3"><span class="c2">Pass NFT acts as digital diplomas or certificates, representing trust in an individual&rsquo;s skills and knowledge, and weighted to reflect the level of achievement or endorsement.<br></span></p><p class="c3 c4"><span class="c5 c14"></span></p><p class="c3 c4"><span class="c5 c14"></span></p>
+
+<h2 class="c3"><span class="c12 c14">Why is upDev powered by</span><span class="c6"> <a class="c0" href="https://www.google.com/url?q=http://lukso.network&amp;sa=D&amp;source=editors&amp;ust=1716746487840538&amp;usg=AOvVaw0RC-gIkn26nBZUKBMTVQj2">LUKSO</a></span><span class="c12 c14">&nbsp;&amp; </span><span class="c6"><a class="c0" href="https://www.google.com/url?q=https://docs.lukso.tech/standards/universal-profile/introduction/&amp;sa=D&amp;source=editors&amp;ust=1716746487840679&amp;usg=AOvVaw3pBarFd5gxU0avucWp5wZc">Universal Profiles</a></span><span class="c5 c14">?</span></h2>
+
+<img src="assets/updev-diagram.svg" />
+
+<p class="c7"><span class="c10 c2">Building an identity on top of keys is almost impossible because keys are likely to be leaked or lost forever. Holding assets and building a reputation on these keys makes it worse. A better representation of identity would be with blockchain-based accounts.</span></p><p class="c7"><span class="c10 c2">The story of LUKSO started with ERC725, a standard proposed by Fabian Vogelsteller for blockchain-based identity. ERC725 allows for self-sovereign identity. Over the years we saw the negative effects of having a centralized identity with damaging leaks and unfair selling of user data and identity. An open, portable standard for identities enables decentralized reputation, governance, and more. Users can take their identity across different dApps and platforms that support this standard.</span></p><p class="c7"><span class="c10 c2">LUKSO is intended for creative economies, where identities play a key role. LUKSO allows brands, creatives, and developers to dictate the distribution of wealth and influence from lifestyle activities. They can do so by having Universal Profiles (UPs), creating Digital Identities and Certificates, and by building Tokenized Communities.</span></p><p class="c7"><span class="c10 c2">LSPs (LUKSO Standard Proposals) are the building blocks of LUKSO. They are used to build blockchain-based applications that offer an enhanced user experience, and allow for more flexibility and interaction.</span></p><p class="c7"><span class="c10 c2">LSPs introduce new concepts like Universal Profiles, Digital Assets &amp; NFT 2.0, and Vaults.</span></p><p class="c7"><span class="c10 c2">By integrating different LSPs in unique ways, LUKSO solves fundamental blockchain problems:</span></p><ol class="c18 lst-kix_u4237hmzc949-0 start" start="1"><li class="c7 c13 li-bullet-0"><span class="c10 c2">&#128275; Upgradeable security: UPs can be owned by an EOA or a custom contract such as a multisig. Therefore, users can have multiple devices and applications controlling their account, each of them with different permissions. Users can even have social recovery, such that you grant certain permissions to their account to their friends and family.</span></li><li class="c7 c13 li-bullet-0"><span class="c10 c2">&#128105;&zwj;&#127908; On-chain profile: users can build their profiles onchain, adding images, tags, descriptions and links to their accounts to shape their online persona.</span></li><li class="c7 c13 li-bullet-0"><span class="c10 c2">&#128221; Updatable and flexible metadata: metadata can be updated, enabling dynamic NFTs that can change certain properties over time, while other properties remain immutable.</span></li><li class="c7 c13 li-bullet-0"><span class="c10 c2">&#128171; Extend your account over time: users can extend their account over time seamlessly, with no need to redeploy the associated smart contract.</span></li><li class="c7 c13 li-bullet-0"><span class="c10 c2">&#9981;&#65039; Gasless experience: UPs support Transaction Relay Services that cover the gas for user&#39;s transactions. Users won&#39;t have the burden of getting coins in order to use your application.</span></li></ol>
+
+<h2 class="c19" id="h.193o3zog99y7"><span class="c5 c14">Why is upDev powered by Chainlink, Ethereum &amp; Moralis?</span></h2><p class="c7"><span class="c10 c2">Chainlink is the Web3 Industry-Standard to connect the world (web2) to blockchains.</span></p><p class="c7"><span class="c10 c2">For example, a GitHub pull request merged into an impactful project repository can be considered as a merit of a certain value. That value can be calculated out of an:</span></p><ol class="c18 lst-kix_jl10554wma7x-0 start" start="1"><li class="c7 c13 li-bullet-0"><span class="c10 c2">Impact of a project. For instance, that can simply be a number of project package downloads.</span></li><li class="c7 c13 li-bullet-0"><span class="c10 c2">Impact of a pull request on that project, that can for instance be represented as a standard pull-request label like &quot;Critical Bug&quot;, &quot;High Bug&quot;, &quot;Medium Bug&quot;, etc.</span></li></ol><p class="c7"><span class="c10 c2">Thanks to Chainlink, upDev smart contracts can access all that data from GitHub GraphQL API to mint &amp; update dynamic merits NFTs 2.0. Though data itself is stored on IPFS (due to cost efficiency, scalability and flexibility) and replicated into MongoDB (via Moralis) for easy access.</span></p><p class="c7"><span class="c10 c2">As of now, Chainlink Functions and Moralis don&#39;t have support for Lukso Network. That&rsquo;s a primary reason why upDev is deployed on two chains at the same time, but that doesn&rsquo;t affect User Experience at all, since upDev dApp has its own gas relayer besides just Lukso&rsquo;s one. With these gas relayers users don&rsquo;t have to worry about any gas fees or even about the network that they are currently connected to.</span></p><p class="c7"><span class="c2">The secondary reason for this is to demonstrate that Lukso&rsquo;s Universal Profiles are actually blockchain-agnostic and can be deployed to any EVM-compatible network at the same address (thanks to </span><span class="c2 c11"><a class="c0" href="https://www.google.com/url?q=https://docs.lukso.tech/standards/generic-standards/lsp23-linked-contracts-factory/&amp;sa=D&amp;source=editors&amp;ust=1716746487841812&amp;usg=AOvVaw0lo8D6UbhheRfC93Gu38t2">LSP23</a></span><span class="c2">) just like classic EOAs work. Though browser </span><span class="c11 c2"><a class="c0" href="https://www.google.com/url?q=https://chromewebstore.google.com/detail/universal-profiles/abpickdkkbnbcoepogfhkhennhfhehfn?hl%3Den&amp;sa=D&amp;source=editors&amp;ust=1716746487841965&amp;usg=AOvVaw2gspqUqLIeRjFzslE_6mB6">Universal Profiles Extension</a></span><span class="c10 c2">&nbsp;is yet to support different chains, that&rsquo;s why upDev currently doesn&rsquo;t implement it.</span></p><h2 class="c19" id="h.lggqz7kljxa3"><span class="c5 c14">Supported Providers</span></h2><ul class="c18 lst-kix_ahjrpwmlk0ki-0 start"><li class="c3 c13 li-bullet-0"><span class="c10 c2">X (Twitter)</span></li><li class="c3 c13 li-bullet-0"><span class="c10 c2">GitHub</span></li><li class="c3 c13 li-bullet-0"><span class="c10 c2">Google</span></li><li class="c3 c13 li-bullet-0"><span class="c10 c2">Discord</span></li>
+
+<li class="c3 c13 li-bullet-0"><span class="c10 c2">LinkedIn</span></li>
+
+<li class="c3 c13 li-bullet-0"><span class="c11 c2"><a class="c0" href="https://www.google.com/url?q=https://buidlguidl.com/&amp;sa=D&amp;source=editors&amp;ust=1716746487842431&amp;usg=AOvVaw0A22KcUbjjR8cHt5b7SuAg">BuidlGuidl</a></span></li><li class="c3 c13 li-bullet-0"><span class="c10 c2">Website (HTTPs)</span></li><li class="c3 c13 li-bullet-0"><span class="c10 c2">Telegram (coming soon)</span></li></ul><p class="c3 c4"><span class="c10 c2"></span></p><p class="c3"><span class="c2">upDev implements </span><span class="c11 c2"><a class="c0" href="https://www.google.com/url?q=https://next-auth.js.org/&amp;sa=D&amp;source=editors&amp;ust=1716746487842737&amp;usg=AOvVaw0m6Uxih8WOvrjeYs8frMjo">next-auth</a></span><span class="c2">&nbsp;that supports ~65 different providers, including ones like Apple, Coinbase, Strava, Medium and much more, which can easily be activated in upDev. But actually any API (including AI) can be implemented. For instance, you could mint your website Google Analytics to showcase your hosts &amp; hits in a trustless manner!</span></p><div>
+
 
 ## Run Frontend
 
@@ -75,10 +90,3 @@ install dependencies:
 run the app
 
 `yarn start`
-
-### Technologies Used
-
-- [scaffold-eth-2](https://scaffoldeth.io/)
-- [nextjs](https://nextjs.org/)
-- [vercel](vercel.com)
-- [Lukso LSPs](https://github.com/lukso-network/lsp-smart-contracts)

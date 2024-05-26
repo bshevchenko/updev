@@ -304,7 +304,7 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
         <div className="flex flex-wrap">
           {Object.entries(tokens).map(([key, token]) => (
             <div
-              className="w-275 bg-gray-900 p-5 mr-3 mb-5 rounded-xl lg:w-[244px] break-all w-full ml-3 lg:ml-0"
+              className="w-275 bg-base-100 p-5 mr-3 mb-5 rounded-xl lg:w-[244px] break-all w-full ml-3 lg:ml-0"
               key={key}
             >
               {token.provider == "github" && (
@@ -326,6 +326,18 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
                   <div className="flex items-center mt-3 mb-3">
                     <CalendarDaysIcon className="w-6 mr-1" />
                     {moment(token.data.created_at).format("DD.MM.YYYY")}
+                  </div>
+                  <div className="flex items-center mt-3 mb-3">
+                    <UsersIcon className="w-6 mr-1" />
+                    <a
+                      href={`https://github.com/${token.data.login}?tab=followers`}
+                      className="text-green-400 hover:underline"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {token.data.followers}
+                    </a>
+                    &nbsp;followers
                   </div>
                   {/* ({(() => { const a = moment().diff(token.data.created_at, "years", true); return a >= 1 ? `${moment().diff(token.data.created_at, "years")}y ${moment().diff(token.data.created_at, "months") % 12}m` : `${moment().diff(token.data.created_at, "months")} months` })()}) */}
                   <div className="flex items-center mt-3 mb-3">
@@ -351,18 +363,6 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
                       {token.data.public_gists}
                     </a>
                     &nbsp;gists
-                  </div>
-                  <div className="flex items-center mt-3 mb-3">
-                    <UsersIcon className="w-6 mr-1" />
-                    <a
-                      href={`https://github.com/${token.data.login}?tab=followers`}
-                      className="text-green-400 hover:underline"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {token.data.followers}
-                    </a>
-                    &nbsp;followers
                   </div>
                 </>
               )}
