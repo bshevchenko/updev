@@ -2,11 +2,12 @@
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/logo.svg">
     <source media="(prefers-color-scheme: light)" srcset="logo-black.svg">
-    <img alt="upDev" src="logo.svg">
+    <img alt="upDev" src="assets/logo.svg">
   </picture>
   <h2>Your pass to new opportunities!</h2>
-  <h4>🏅 Winner of BuildUP #2 Lukso Hackathon</h4>
 </div>
+
+#### 🏅 Winner of BuildUP #2 Lukso Hackathon
 
 <!-- <div align="center">
   <a href="https://www.youtube.com/watch?v=whP8iiYZW6Y">TODO YouTube Video</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://updev-v1.vercel.app/">TODO Live Site</a><br/><br/>
