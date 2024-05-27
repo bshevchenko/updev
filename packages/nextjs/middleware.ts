@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import web3 from "web3";
+import { ethers } from "ethers";
 
 export async function middleware(req: NextRequest) {
   if (req.nextUrl.pathname.startsWith("/api/indexer")) {
@@ -8,7 +8,7 @@ export async function middleware(req: NextRequest) {
       throw new Error("Signature not provided");
     }
     const body = await req.json();
-    const generatedSignature = web3.utils.sha3(JSON.stringify(body) + process.env.MORALIS_STREAMS_SECRET);
+    const generatedSignature = ethers.utils.keccak256(JSON.stringify(body) + process.env.MORALIS_STREAMS_SECRET);
     if (generatedSignature != providedSignature) {
       console.log("Unauthorized", generatedSignature, providedSignature, body);
       return new Response("Unauthorized", { status: 401 });
