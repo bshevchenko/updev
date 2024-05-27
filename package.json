@@ -40,8 +40,6 @@
   },
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "latest",
-    "@typescript-eslint/parser": "latest",
-    "next-auth": "^4.24.5",
-    "node-gyp": "^10.1.0"
+    "@typescript-eslint/parser": "latest"
   }
 }

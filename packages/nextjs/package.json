@@ -35,9 +35,10 @@
     "moment": "^2.30.1",
     "mongodb": "^6.5.0",
     "moralis": "^2.26.1",
-    "next": "latest",
+    "next": "^14.0.4",
     "next-auth": "^4.24.5",
     "nextjs-progressbar": "^0.0.16",
+    "node-gyp": "^10.1.0",
     "qrcode.react": "^3.1.0",
     "react": "^18.2.0",
     "react-copy-to-clipboard": "^5.1.0",
@@ -65,7 +66,6 @@
     "prettier": "^2.8.4",
     "tailwindcss": "^3.3.3",
     "type-fest": "^4.6.0",
-    "typescript": "^5.1.6",
-    "vercel": "^28.15.1"
+    "typescript": "^5.1.6"
   }
 }
