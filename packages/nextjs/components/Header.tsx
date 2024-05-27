@@ -3,8 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
-import { Bars3Icon, BugAntIcon } from "@heroicons/react/24/outline";
-import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
+import { Bars3Icon } from "@heroicons/react/24/outline";
+import { RainbowKitCustomConnectButton } from "~~/components";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 
 interface HeaderMenuLink {
@@ -15,10 +15,17 @@ interface HeaderMenuLink {
 
 export const menuLinks: HeaderMenuLink[] = [
   {
-    label: "Debug Contracts",
-    href: "/debug",
-    icon: <BugAntIcon className="h-4 w-4" />,
+    label: "Home",
+    href: "/",
   },
+  // {
+  //   label: "Discover Profiles",
+  //   href: "/profiles",
+  // },
+  // {
+  //   label: "Debug Contracts",
+  //   href: "/debug",
+  // },
 ];
 
 export const HeaderMenuLinks = () => {
@@ -47,11 +54,10 @@ export const HeaderMenuLinks = () => {
   );
 };
 
-/**
- * Site header
- */
 export const Header = () => {
   const account = useAccount();
+  const { pathname } = useRouter();
+
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const burgerMenuRef = useRef<HTMLDivElement>(null);
   useOutsideClick(
@@ -60,12 +66,12 @@ export const Header = () => {
   );
 
   // Only render the header if the wallet is connected
-  if (!account.isConnected) {
+  if (!account.isConnected && pathname === "/") {
     return null;
   }
 
   return (
-    <div className="sticky lg:static top-0 navbar min-h-0 flex-shrink-0 justify-between z-20 px-0 sm:px-2 border-b border-[#2D3748]">
+    <div className="sticky lg:static top-0 navbar min-h-0 flex-shrink-0 justify-between z-20 px-0 sm:px-2 bg-base-300 border-b border-[#2D3748]">
       <div className="navbar-start w-auto lg:w-1/2">
         <div className="lg:hidden dropdown" ref={burgerMenuRef}>
           <label
@@ -80,7 +86,7 @@ export const Header = () => {
           {isDrawerOpen && (
             <ul
               tabIndex={0}
-              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-300 rounded-box w-52"
               onClick={() => {
                 setIsDrawerOpen(false);
               }}
@@ -89,23 +95,22 @@ export const Header = () => {
             </ul>
           )}
         </div>
-        <Link href="/" passHref className="hidden lg:flex items-center gap-2 ml-4 mr-6 shrink-0">
+        <Link href="/" passHref className="lg:flex items-center gap-2 lg:ml-4 lg:mr-6 shrink-0">
           <div className="flex relative w-36 h-12">
-            <Image alt="SE2 logo" className="cursor-pointer" fill src="/logo.svg" />
+            <Image alt="logo" className="cursor-pointer" fill src="/logo.svg" priority />
           </div>
-          <div>
-            <div className="badge badge-outline badge-accent rounded-sm px-0.5 border-[2px] text-[12px] font-bold">
-              BETA V1.0
-            </div>
+          <div className="hidden lg:block badge-outline badge-accent rounded-sm px-1 py-0 border-[2px] text-[12px] font-bold">
+            BETA V2.0
           </div>
         </Link>
         {/* <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">
-          <HeaderMenuLinks />
+          <Link href="/profiles" className="items-center text-lg">
+            Discover Profiles
+          </Link>
         </ul> */}
       </div>
       <div className="navbar-end flex-grow mr-4">
         <RainbowKitCustomConnectButton />
-        <FaucetButton />
       </div>
     </div>
   );

@@ -1,63 +1,46 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
+import { LandingDisplay } from "~~/components";
 import { MetaHeader } from "~~/components/MetaHeader";
-import ConnectUniversalProfileDisplay from "~~/components/steps/ConnectUniversalProfileDisplay";
-import ConnectWalletDisplay from "~~/components/steps/ConnectWalletDisplay";
-// import ConnectAccountsDisplay from "~~/components/steps/ConnectAccountsDisplay"; TODO
-import DeployUPDisplay from "~~/components/steps/DeployUPDisplay";
+import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
 const Home: NextPage = () => {
   const account = useAccount();
+  const router = useRouter();
 
-  const [upExtensionAvailable, setUpExtensionAvailable] = useState(false);
-  const [upConnected, setUpConnected] = useState(false);
-
-  console.log("upConnected", upConnected);
-
-  // const [builders, setBuilders] = useState(null);
-  // const [isLoading, setLoading] = useState(true);
-
-  // useEffect(() => {
-  //   fetch("https://buidlguidl-v3.ew.r.appspot.com/builders")
-  //     .then(res => res.json())
-  //     .then(data => {
-  //       setBuilders(data);
-  //       setLoading(false);
-  //     });
-  // }, []);
-
-  // if (isLoading) return <p>Loading...</p>;
-  // if (!builders) return <p>No profile data</p>;
+  const { data: up } = useScaffoldContractRead({
+    contractName: "upRegistry",
+    functionName: "up",
+    args: [account.address],
+  });
 
   useEffect(() => {
-    setUpExtensionAvailable(!!window.lukso);
-  }, []);
+    const hasDeployedUP = up && up != "0x0000000000000000000000000000000000000000";
+    if (account.isConnected) {
+      if (!hasDeployedUP) {
+        router.push("/onboarding");
+      } else {
+        router.push("/profile/" + up);
+      }
+    }
+  }, [account.isConnected, router, up]);
 
   return (
     <>
       <MetaHeader />
-
-      {!account.isConnected ? (
-        <ConnectWalletDisplay />
-      ) : (
-        <div className="flex items-center flex-col flex-grow py-14">
-          <div className="text-center mb-8">
-            <h3 className="text-4xl font-bold mb-4">Set up your upDev account</h3>
-            <p className="my-0 text-lg">Complete 3 steps to onboard to the dApp</p>
-          </div>
-
-          {!upConnected ? (
-            <ConnectUniversalProfileDisplay
-              upExtensionAvailable={upExtensionAvailable}
-              setUpConnected={setUpConnected}
-            />
-          ) : (
-            // TODO <ConnectAccountsDisplay />
-            <DeployUPDisplay />
-          )}
-        </div>
-      )}
+      <div className="flex flex-col min-h-screen">
+        {!account.isConnected ? (
+          <LandingDisplay />
+        ) : (
+          <>
+            <div className="grow flex flex-col justify-center items-center">
+              <span className="loading loading-spinner loading-lg"></span>
+            </div>
+          </>
+        )}
+      </div>
     </>
   );
 };

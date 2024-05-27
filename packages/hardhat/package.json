@@ -1,5 +1,5 @@
 {
-  "name": "@se-2/hardhat",
+  "name": "@updev/hardhat",
   "version": "0.0.1",
   "scripts": {
     "account": "hardhat run scripts/listAccount.ts",
@@ -10,7 +10,7 @@
     "generate": "hardhat run scripts/generateAccount.ts",
     "lint": "eslint --config ./.eslintrc.json --ignore-path ./.eslintignore ./*.ts ./deploy/**/*.ts ./scripts/**/*.ts ./test/**/*.ts",
     "lint-staged": "eslint --config ./.eslintrc.json --ignore-path ./.eslintignore",
-    "test": "REPORT_GAS=true hardhat test --network hardhat",
+    "test": "hardhat test",
     "verify": "hardhat etherscan-verify"
   },
   "devDependencies": {
@@ -46,10 +46,12 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
-    "@lukso/lsp-smart-contracts": "^0.12.1",
+    "@chainlink/contracts": "^0.8.0",
+    "@lukso/lsp-smart-contracts": "^0.15.0",
     "@openzeppelin/contracts": "^4.8.1",
     "dotenv": "^16.0.3",
     "envfile": "^6.18.0",
+    "moralis": "^2.26.1",
     "qrcode": "^1.5.1"
   }
 }

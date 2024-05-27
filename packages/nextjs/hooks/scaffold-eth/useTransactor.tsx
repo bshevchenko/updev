@@ -1,7 +1,7 @@
 import { WriteContractResult, getPublicClient } from "@wagmi/core";
 import { Hash, SendTransactionParameters, TransactionReceipt, WalletClient } from "viem";
 import { useWalletClient } from "wagmi";
-import { getParsedError } from "~~/components/scaffold-eth";
+// import { getParsedError } from "~~/components/scaffold-eth";
 import { getBlockExplorerTxLink, notification } from "~~/utils/scaffold-eth";
 
 type TransactionFunc = (
@@ -90,8 +90,8 @@ export const useTransactor = (_walletClient?: WalletClient): TransactionFunc => 
         notification.remove(notificationId);
       }
       console.error("⚡️ ~ file: useTransactor.ts ~ error", error);
-      const message = getParsedError(error);
-      notification.error(message);
+      // const message = getParsedError(error);
+      notification.error(error.message);
     }
 
     return transactionHash;
