@@ -30,13 +30,6 @@ const accounts = [
     url: "https://discord.com",
   },
   {
-    name: "linkedin",
-    title: "LinkedIn",
-    logo: "/linkedin.svg",
-    comingSoon: false,
-    url: "https://linkedin.com",
-  },
-  {
     name: "buidlguidl",
     title: "BuidlGuidl",
     logo: "/buidlguidl.svg",
@@ -78,6 +71,13 @@ const accounts = [
     comingSoon: true,
     url: "https://telegram.org",
   },
+  {
+    name: "linkedin",
+    title: "LinkedIn",
+    logo: "/linkedin.svg",
+    comingSoon: true,
+    url: "https://linkedin.com",
+  },
   // {
   //   name: "buidlbox",
   //   title: "buidlbox",
@@ -91,15 +91,6 @@ const accounts = [
   //   name: "gitcoin",
   //   title: "GitCoin Passport",
   //   logo: "/passport.svg",
-  //   comingSoon: true,
-  //   step1: "",
-  //   modalImage: "",
-  //   url: "",
-  // },
-  // {
-  //   name: "linkedin",
-  //   title: "LinkedIn",
-  //   logo: "/linkedin.svg",
   //   comingSoon: true,
   //   step1: "",
   //   modalImage: "",
