@@ -19,7 +19,7 @@ const nextConfig = {
     ignoreDuringBuilds: process.env.NEXT_PUBLIC_IGNORE_BUILD_ERROR === "true",
   },
   webpack: config => {
-    config.resolve.fallback = { fs: true, net: false, tls: false };
+    config.resolve.fallback = { net: false, tls: false };
     return config;
   },
 };
