@@ -1,7 +1,7 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import getSource from "../sources/get";
-import getLatestVersions from "../sources/latest.js";
+import getLatestVersions from "../sources/latest.ts";
 
 const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await hre.getNamedAccounts();
@@ -16,13 +16,12 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     } catch (e) {
       console.log(`Source ${source.name} already added`);
     }
-  }
+  };
 
-  await addSource("github", "1.0");
-  // const latest = await getLatestVersions();
-  // for (let key in latest) {
-  //   await addSource(key, latest[key]);
-  // }
+  const latest = await getLatestVersions();
+  for (const key in latest) {
+    await addSource(key, latest[key]);
+  }
 };
 
 export default deployYourContract;

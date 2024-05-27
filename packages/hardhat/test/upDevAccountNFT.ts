@@ -89,14 +89,7 @@ describe("upDevAccountNFT", () => {
         resolve(requests[0]);
       });
       console.log("Sending request...");
-      let tx = await nft.sendRequest(
-        owner.address,
-        0,
-        source.provider,
-        source.version,
-        accountId,
-        ipfsHash,
-      );
+      let tx = await nft.sendRequest(owner.address, 0, source.provider, source.version, accountId, ipfsHash);
       await tx.wait();
       console.log("Request sent and now being fulfilled by DON...");
 
@@ -244,14 +237,7 @@ describe("upDevAccountNFT", () => {
       };
       nft.on("Fulfilled", eventHandler);
       console.log("Sending request...");
-      let tx = await nft.sendRequest(
-        owner.address,
-        0,
-        errorSource.provider,
-        errorSource.version,
-        accountId,
-        ipfsHash,
-      );
+      let tx = await nft.sendRequest(owner.address, 0, errorSource.provider, errorSource.version, accountId, ipfsHash);
       await tx.wait();
       console.log("Request sent and now being fulfilled by DON...");
 

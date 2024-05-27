@@ -14,7 +14,13 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 
   await deploy("upDevAccountNFT", {
     from: deployer,
-    args: [process.env.DON_ROUTER, process.env.DON_ID, process.env.LSP8_FORCE, process.env.DON_GAS_LIMIT, process.env.DON_SUB_ID],
+    args: [
+      process.env.DON_ROUTER,
+      process.env.DON_ID,
+      process.env.LSP8_FORCE,
+      process.env.DON_GAS_LIMIT,
+      process.env.DON_SUB_ID,
+    ],
     log: true,
     autoMine: true,
   });
