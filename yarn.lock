@@ -1866,6 +1866,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@netlify/plugin-nextjs@npm:^5.3.0":
+  version: 5.3.1
+  resolution: "@netlify/plugin-nextjs@npm:5.3.1"
+  checksum: be3c3b0b23e79ffb2cd20bc314ecea2b3d757c15a968d91525fc11ceb99cd3cdbb5ce896639b50f73114bc51d99bf22167d056158a142a1f87afe54ec13773ab
+  languageName: node
+  linkType: hard
+
 "@next/env@npm:14.2.3":
   version: 14.2.3
   resolution: "@next/env@npm:14.2.3"
@@ -4205,6 +4212,7 @@ __metadata:
     "@ethersproject/providers": ^5.7.2
     "@heroicons/react": ^2.0.11
     "@lukso/lsp-smart-contracts": ^0.15.0
+    "@netlify/plugin-nextjs": ^5.3.0
     "@openzeppelin/defender-relay-client": ^1.54.1
     "@openzeppelin/defender-sdk": ^1.12.0
     "@pinata/sdk": ^2.1.0
