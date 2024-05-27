@@ -585,7 +585,7 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
           ))}
         </div>
         {Object.entries(requests).length > 0 && (
-          <div className="mt-3">
+          <div className="mt-3 mb-5 ml-3 mr-3">
             {Object.entries(requests).map(([key, req]) => {
               if (!req.isClaimed) {
                 return (

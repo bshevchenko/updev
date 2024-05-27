@@ -8,7 +8,9 @@ export async function middleware(req: NextRequest) {
       throw new Error("Signature not provided");
     }
     const body = await req.json();
-    const generatedSignature = ethers.utils.keccak256(JSON.stringify(body) + process.env.MORALIS_STREAMS_SECRET);
+    const generatedSignature = ethers.utils.keccak256(
+      ethers.utils.toUtf8Bytes(JSON.stringify(body) + process.env.MORALIS_STREAMS_SECRET),
+    );
     if (generatedSignature != providedSignature) {
       console.log("Unauthorized", generatedSignature, providedSignature, body);
       return new Response("Unauthorized", { status: 401 });
