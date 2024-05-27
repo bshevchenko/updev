@@ -4,6 +4,8 @@ import { ethers, utils } from "ethers";
 import { isEmptyAddress, upDevAccountNFT, upRegistry } from "~~/lib/contracts";
 import { prepareRequest } from "~~/lib/don";
 
+export const runtime = "nodejs";
+
 type ResponseData = object;
 
 export default async function Account(req: NextApiRequest, res: NextApiResponse<ResponseData>) {
