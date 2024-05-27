@@ -56,7 +56,7 @@ const accounts = [
         , update your status to include:
       </>
     ),
-    step1Contents: `https://updev.me/profile/{up}`, // TODO env?
+    step1Contents: `https://updev.vercel.app/profile/{up}`, // TODO env?
     step2: "Provide address of EOA for your BuidlGuidl profile:",
     modalImage: "/connect-bg.png",
   },
