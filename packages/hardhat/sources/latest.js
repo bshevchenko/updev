@@ -20,7 +20,7 @@ function latestVersions() {
                     }
                 }
             });
-            fs.writeFile(__dirname + "/latest.json", JSON.stringify(providers, null, 4), (err) => {
+            fs.writeFile(__dirname + "/../../nextjs/latest.json", JSON.stringify(providers, null, 4), (err) => {
                 if (err) {
                     console.error("An error occurred:", err);
                 }
@@ -29,5 +29,7 @@ function latestVersions() {
         });
     });
 }
+
+latestVersions();
 
 module.exports = latestVersions;

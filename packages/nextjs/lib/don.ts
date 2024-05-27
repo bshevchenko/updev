@@ -1,6 +1,6 @@
-import latestVersions from "../../hardhat/sources/latest.json";
 import { signer } from "./signer";
 import { SecretsManager, createGist } from "@chainlink/functions-toolkit";
+import latestVersions from "~~/latest.json";
 
 export type PreparedRequest = {
   secret: string;
