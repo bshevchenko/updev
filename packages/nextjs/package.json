@@ -11,7 +11,8 @@
     "format": "prettier --write . '!(node_modules|.next|contracts)/**/*'",
     "check-types": "tsc --noEmit --incremental",
     "vercel": "vercel",
-    "vercel:yolo": "vercel --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true"
+    "vercel:yolo": "vercel --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true",
+    "postinstall": "npm rebuild bcrypto"
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^3.0.0",
@@ -29,7 +30,6 @@
     "@telegram-auth/server": "^1.0.3",
     "@uniswap/sdk-core": "^4.0.1",
     "@uniswap/v2-sdk": "^3.0.1",
-    "bcrypto": "^5.4.0",
     "blo": "^1.0.1",
     "daisyui": "^3.5.1",
     "ethers": "^5.7.1",
