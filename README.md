@@ -1,7 +1,7 @@
 <div align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/logo.svg">
-    <source media="(prefers-color-scheme: light)" srcset="logo-black.svg">
+    <source media="(prefers-color-scheme: light)" srcset="assets/logo-black.svg">
     <img alt="upDev" src="assets/logo.svg">
   </picture>
   <h2>Your pass to new opportunities!</h2>
