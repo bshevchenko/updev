@@ -6,6 +6,9 @@ const Provider = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
 
+  // @ts-ignore
+  const provider = (session && session.account && session.account.provider) || "null";
+
   useEffect(() => {
     if (!router.query.provider) {
       return;
@@ -21,7 +24,7 @@ const Provider = () => {
     <div className="flex flex-col min-h-screen">
       <div className="grow flex flex-col justify-center items-center">
         <span className="loading loading-spinner loading-lg"></span>
-        {status} – {(session && session.account.provider) || "null"}
+        {status} – {provider}
       </div>
     </div>
   );
