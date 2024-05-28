@@ -104,11 +104,13 @@ export function ProfileDetails({
           {/* <div className="text-[#FFFFFFA3]">Bio</div> */}
           <div>{metadata.LSP3Profile.description}</div>
         </div>
-        <div className="text-gray-300">
-          <div>
-            <MapPinIcon className="w-6 h-6 inline" /> {metadata.LSP3Profile.location}
+        {metadata.LSP3Profile.location && (
+          <div className="text-gray-300">
+            <div>
+              <MapPinIcon className="w-6 h-6 inline" /> {metadata.LSP3Profile.location}
+            </div>
           </div>
-        </div>
+        )}
         <div className="flex gap-2 flex-wrap">
           {/* {["hello", "my", "friend"].map((tag: string) => (
             <div
