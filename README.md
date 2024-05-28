@@ -21,6 +21,8 @@
 
 <div><img src="assets/updev-2.0.png" width="100%" /></div>
 
+<a href="https://updev.vercel.app/profile/0x2ee97Dd93b77796bb79d9F33E3AD64B1FcF88b03">See demo profile</a>
+
 <h3 class="c5 c2">Creative</h3>
 
 <p class="c3"><span class="c2">At its core, upDev is designed to champion creativity. Its primary mission is to empower creators, builders, and visionaries, fostering an environment where they can recognize and celebrate each other&#39;s contributions to cultivate fruitful collaborations.</span></p><p class="c3 c4"><span class="c10 c2"></span></p>
