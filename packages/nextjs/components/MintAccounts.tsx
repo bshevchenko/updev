@@ -33,6 +33,7 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
   const [copied, setCopied] = useState(false);
   const [id, setId] = useState("");
   const [isMintStarted, setIsMintStarted] = useState<string | null>(null);
+  const [isFetchingTokens, setIsFetchingTokens] = useState<boolean>(false);
 
   const [isMinting, setIsMinting] = useState<object>({});
   const updateIsMinting = (key: string, newValue: string | number | boolean) => {
@@ -59,6 +60,7 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
   const [tokens, setTokens] = useState<object>({});
   const fetchTokens = () => {
     console.log("Fetching tokens...");
+    setIsFetchingTokens(true);
     axios.get("/api/tokens?up=" + up).then(result => {
       const tokens = {};
       for (const token of result.data) {
@@ -66,6 +68,7 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
         tokens[token.provider + "-" + token.id] = token;
       }
       setTokens(tokens);
+      setIsFetchingTokens(false);
     });
   };
   const updateTokens = (key: string, newValue: object) => {
@@ -305,6 +308,9 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
             </div>
           )}
         </div>
+        {isFetchingTokens && <div className="ml-3 mr-3 mb-5">
+          Loading...
+        </div>}
         {/* <h3 className="text-2xl font-bold">Account NFTs</h3> */}
         {Object.entries(tokens).length > 0 && (
           <div className="flex flex-wrap">
