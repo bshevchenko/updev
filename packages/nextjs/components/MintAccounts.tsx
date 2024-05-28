@@ -43,6 +43,14 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
     }));
   };
 
+  const [isSigning, setIsSigning] = useState<object>({});
+  const updateIsSigning = (key: string, newValue: string | number | boolean) => {
+    setIsSigning((prevState: any) => ({
+      ...prevState,
+      [key]: newValue,
+    }));
+  };
+
   const requestsRef = useRef({});
   const [requests, setRequests] = useState<object>({});
   const updateRequests = (key: string, newValue: object) => {
@@ -165,16 +173,19 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
 
   async function handleMint(provider: string, token: string, id: string) {
     updateIsMinting(provider, true);
+    updateIsSigning(provider, true);
     const message = utils.keccak256(utils.toUtf8Bytes(token + id));
     let signature;
     try {
-      toast("Please sign this request in your wallet.");
+      toast("Please sign mint request in your wallet.");
       signature = await signMessage({ message });
     } catch (e) {
       setIsMintStarted(null);
       updateIsMinting(provider, false);
+      updateIsSigning(provider, false);
       return;
     }
+    updateIsSigning(provider, false);
     setIsMintStarted(null);
     closeModal();
     const data = {
@@ -261,14 +272,10 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
                 <button
                   className="btn btn-primary"
                   onClick={() => handleMint(item.name, "", id)}
-                  /* 
-// @ts-ignore */
-                  disabled={isMinting && isMinting[item.name]}
+                  disabled={isMinting && isMinting[item.name as keyof typeof isMinting]}
                 >
-                  {/* 
-// @ts-ignore */}
-                  {isMinting && isMinting[item.name] ? (
-                    <>{isMintStarted == item.name ? "Signing..." : "Minting..."}</>
+                  {isMinting && isMinting[item.name as keyof typeof isMinting] ? (
+                    <>{isSigning[item.name as keyof typeof isSigning] ? "Signing..." : "Minting..."}</>
                   ) : (
                     "Mint"
                   )}
@@ -308,9 +315,7 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
             </div>
           )}
         </div>
-        {isFetchingTokens && <div className="ml-3 mr-3 mb-5">
-          Loading...
-        </div>}
+        {isFetchingTokens && <div className="ml-3 mr-3 mb-5">Loading...</div>}
         {/* <h3 className="text-2xl font-bold">Account NFTs</h3> */}
         {Object.entries(tokens).length > 0 && (
           <div className="flex flex-wrap">
