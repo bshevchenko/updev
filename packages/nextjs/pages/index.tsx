@@ -17,7 +17,10 @@ const Home: NextPage = () => {
   });
 
   useEffect(() => {
-    const hasDeployedUP = up && up != "0x0000000000000000000000000000000000000000";
+    if (up === undefined) {
+      return;
+    }
+    const hasDeployedUP = up != "0x0000000000000000000000000000000000000000";
     if (account.isConnected) {
       if (!hasDeployedUP) {
         router.push("/onboarding");

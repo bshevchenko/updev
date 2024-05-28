@@ -10,7 +10,7 @@ import { DetailsStep } from "~~/components/onboarding/DetailsStep";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
 const Onboarding: NextPageWithLayout = () => {
-  const { data: session } = useSession();
+  const { status } = useSession();
   const account = useAccount();
   const router = useRouter();
 
@@ -47,11 +47,10 @@ const Onboarding: NextPageWithLayout = () => {
       router.push("/");
       return;
     }
-    console.log("WTF", up);
     if (up && up != "0x0000000000000000000000000000000000000000") {
       router.push("/profile/" + up);
     }
-  }, [account.isConnected, router, up, account.address]);
+  }, [status, account.isConnected, router, up, account.address]);
 
   useEffect(() => {
     if (currentStep === 1) {
@@ -64,7 +63,7 @@ const Onboarding: NextPageWithLayout = () => {
       <MetaHeader />
 
       <div className="flex items-center flex-col flex-grow py-14">
-        {session !== undefined ? (
+        {status != "loading" ? (
           <>
             {currentStep === 1 && <OAuthStep setCurrentStep={setCurrentStep} />}
             {currentStep === 2 && <TypeStep setCurrentStep={setCurrentStep} type={type} setType={updateType} />}
