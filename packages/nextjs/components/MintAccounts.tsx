@@ -147,8 +147,8 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
         if (up != _up || !requestId || !_data) {
           return;
         }
-        updateRequests(requestId, { isClaimed: true }); // @ts-ignore
-        const { provider, id, version } = requestsRef.current[requestId];
+        updateRequests(requestId, { isClaimed: true });
+        const { provider, id, version } = requestsRef.current[requestId as keyof typeof requestsRef.current];
         const name = provider + "-" + id;
         let data = utils.toUtf8String(_data);
         const isIPFS = data.slice(0, 2) == "Qm";
@@ -217,8 +217,8 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
     if (!session || session.status != "authenticated") {
       return;
     } // @ts-ignore
-    const { account } = session.data; // @ts-ignore
-    if (account.provider == isMintStarted && !isMinting[account.provider]) {
+    const { account } = session.data;
+    if (account.provider == isMintStarted && !isMinting[account.provider as keyof typeof isMinting]) {
       handleMint(account.provider, account.access_token, account.providerAccountId);
     }
   }, [session, isMintStarted, isMinting]);
@@ -644,13 +644,13 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
                   <button
                     onClick={() => (item.isModal ? setActiveModal(item) : handleStartMint(item.name))}
                     className="btn bg-primary text-primary-content hover:bg-primary w-42"
-                    /* 
-// @ts-ignore */
-                    disabled={isMinting[item.name]}
+                    disabled={isMinting[item.name as keyof typeof isMinting]}
                   >
-                    {/* 
-// @ts-ignore */}
-                    {isMinting[item.name] ? "Minting..." : "Mint"}
+                    {isMinting && isMinting[item.name as keyof typeof isMinting] ? (
+                      <>{isSigning[item.name as keyof typeof isSigning] ? "Signing..." : "Minting..."}</>
+                    ) : (
+                      "Mint"
+                    )}
                   </button>
                 )}
               </div>
