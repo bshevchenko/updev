@@ -12,19 +12,19 @@ const Provider = () => {
   useEffect(() => {
     if (!router.query.provider) {
       return;
-    } // @ts-ignore
-    if (!session || session.account.provider != router.query.provider || new Date(session.expires) <= new Date()) {
-      void signIn(String(router.query.provider));
-    } else {
-      window.close();
     }
+    if (status == "authenticated" && provider == router.query.provider) {
+      window.close();
+      return;
+    }
+    void signIn(String(router.query.provider));
   }, [session, status, router]);
 
   return (
     <div className="flex flex-col min-h-screen">
       <div className="grow flex flex-col justify-center items-center">
         <span className="loading loading-spinner loading-lg"></span>
-        {status} – {provider}
+        {status} – {provider} – {router.query.provider}
       </div>
     </div>
   );
