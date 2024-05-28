@@ -26,7 +26,7 @@ export function LandingDisplay() {
               className="text-green-400 hover:underline"
               rel="noreferrer"
             >
-              GitHub repository
+              GitHub repo
             </a>
             &nbsp;to learn more about upDev.
           </p>
