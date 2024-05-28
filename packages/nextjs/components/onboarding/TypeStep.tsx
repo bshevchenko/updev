@@ -53,7 +53,7 @@ export function TypeStep({ setCurrentStep, setType, type }: { setCurrentStep: an
             checked={type === "personal"}
             className="w-5 h-5 form-radio text-green-400 border-green-400 checked:bg-green-400"
           />
-          <label htmlFor="personal" className="w-full py-4 ms-2 font-medium text-gray-900 dark:text-gray-300 text-lg">
+          <label htmlFor="personal" className="w-full py-4 ms-2 font-medium text-white text-lg">
             Personal
           </label>
         </div>
@@ -67,33 +67,35 @@ export function TypeStep({ setCurrentStep, setType, type }: { setCurrentStep: an
             checked={type === "company"}
             className="w-5 h-5 form-radio text-green-400 border-green-400 checked:bg-green-400"
           />
-          <label htmlFor="company" className="w-full py-4 ms-2 font-medium text-gray-900 dark:text-gray-300 text-lg">
+          <label htmlFor="company" className="w-full py-4 ms-2 font-medium text-white text-lg">
             Company
           </label>
         </div>
       </div>
-      <button
-        className="btn text-green-400 hover:border-accent fixed bottom-10 left-[31.5%]"
-        onClick={() => {
-          setIsLoading(true);
-          signOut({ redirect: false }).then(() => {
-            setIsLoading(false);
-            setCurrentStep(1);
-          });
-        }}
-      >
-        <Image alt="arrow" width={12} height={10} src="/left-arrow-green.svg" />
-        Back
-      </button>
-      <button
-        className="btn bg-green-400 text-black hover:bg-green-400 fixed bottom-10 right-9 right-[31.5%]"
-        onClick={() => {
-          setCurrentStep(3);
-        }}
-      >
-        Next
-        <Image alt="arrow" width={12} height={10} src="/right-arrow.svg" />
-      </button>
+      <div className="flex justify-between mt-10">
+        <button
+          className="btn text-green-400 hover:border-accent mr-52"
+          onClick={() => {
+            setIsLoading(true);
+            signOut({ redirect: false }).then(() => {
+              setIsLoading(false);
+              setCurrentStep(1);
+            });
+          }}
+        >
+          <Image alt="arrow" width={12} height={10} src="/left-arrow-green.svg" />
+          Back
+        </button>
+        <button
+          className="btn bg-green-400 text-black hover:bg-green-400"
+          onClick={() => {
+            setCurrentStep(3);
+          }}
+        >
+          Next
+          <Image alt="arrow" width={12} height={10} src="/right-arrow.svg" />
+        </button>
+      </div>
     </>
   );
 }
