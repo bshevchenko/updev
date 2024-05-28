@@ -3,7 +3,7 @@ import Image from "next/image";
 import UniversalProfileContract from "@lukso/lsp-smart-contracts/artifacts/UniversalProfile.json";
 import { toHex } from "viem";
 import { useContractWrite } from "wagmi";
-import { CheckCircleIcon, MapPinIcon, PencilSquareIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import { CheckCircleIcon, MapPinIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { convertIpfsUrl } from "~~/utils/helpers";
 
 export function ProfileDetails({
@@ -94,7 +94,8 @@ export function ProfileDetails({
               </button>
             </div>
           ) : isMyProfile ? (
-            <PencilSquareIcon className="w-6 h-6 text-secondary cursor-pointer" onClick={() => setIsEditing(true)} />
+            // <PencilSquareIcon className="w-6 h-6 text-secondary cursor-pointer" onClick={() => setIsEditing(true)} />
+            ""
           ) : null}
           <div className="bg-base-100 border border-base-200 rounded-sm">
             🆙 <span className="text-[#FFFFFFA3]">{up.slice(0, 6) + "..." + up.slice(-4)}</span>
