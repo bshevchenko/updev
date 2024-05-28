@@ -18,6 +18,18 @@ export function LandingDisplay() {
         </div>
         <div className="text-center">
           <h3 className="text-white text-5xl">Your pass to new opportunities.</h3>
+          <p className="p-5">
+            Check our&nbsp;
+            <a
+              href="https://github.com/bshevchenko/updev"
+              target="_blank"
+              className="text-green-400 hover:underline"
+              rel="noreferrer"
+            >
+              GitHub repository
+            </a>
+            &nbsp;to learn more about upDev.
+          </p>
         </div>
         <div className="z-1 absolute right-10 -bottom-60">
           <Image alt="pattern right" width={700} height={700} src="/pattern-right.svg" />
