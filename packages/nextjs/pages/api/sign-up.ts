@@ -9,6 +9,10 @@ import { prepareRequest } from "~~/lib/don";
 import pinata from "~~/lib/pinata";
 import { getDeploymentData } from "~~/lib/up";
 
+export const config = {
+  maxDuration: 60,
+};
+
 const erc725 = new ERC725(LSP3Schema);
 
 type ResponseData = {
@@ -94,18 +98,14 @@ export default async function SignUp(req: NextApiRequest, res: NextApiResponse<R
     parameters[2].value,
     parameters[3].value,
   );
-  await lsp23Tx.wait();
+  console.log("Preparing request for Account NFT...");
+  const [request] = await Promise.all([prepareRequest(up, provider, token), lsp23Tx.wait()]);
 
   console.log("Registering UP...");
-  const upRegistryTx = await upRegistry.setUP(up, controller);
+  upRegistry.setUP(up, controller);
 
-  // mint Account NFT for the created UP
-  console.log("Preparing request for Account NFT...");
-  const request = await prepareRequest(up, provider, token);
   console.log("Sending request for Account NFT...");
-  const accountTx = await upDevAccountNFT.sendRequest(up, request.secret, provider, request.version, id);
-
-  await Promise.all([upRegistryTx.wait(), accountTx.wait()]);
+  upDevAccountNFT.sendRequest(up, request.secret, provider, request.version, id);
 
   console.log("Done! UP:", up);
   res.status(200).json({
