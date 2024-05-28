@@ -7,7 +7,7 @@ const Provider = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (!router.query.provider || status == "loading") {
+    if (!router.query.provider) {
       return;
     } // @ts-ignore
     if (!session || session.account.provider != router.query.provider || new Date(session.expires) <= new Date()) {

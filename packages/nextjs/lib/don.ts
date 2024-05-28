@@ -1,7 +1,7 @@
 // import { signer } from "./signer";
 // import { SecretsManager, createGist } from "@chainlink/functions-toolkit";
-import latestVersions from "~~/latest.json";
 import axios from "axios";
+import latestVersions from "~~/latest.json";
 
 export type PreparedRequest = {
   secret: string;
@@ -31,8 +31,8 @@ export async function prepareRequest(up: string, source: string, token: string):
   // TODO @chainlink/functions-toolkit as of now doesn't work with serverless architecture
   const workaround = await axios.post(process.env.WORKAROUND_API + "/api/chainlink", {
     up,
-    token
-  })
+    token,
+  });
 
   // const uploadResult = await secretsManager.uploadEncryptedSecretsToDON({
   //     encryptedSecretsHexstring: encryptedSecretsObj.encryptedSecrets,
