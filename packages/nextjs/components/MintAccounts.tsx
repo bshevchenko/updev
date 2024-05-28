@@ -86,20 +86,24 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
     }));
   };
 
-  const initialized = useRef(false);
-  useEffect(() => {
-    if (initialized.current) {
-      return;
-    }
-    initialized.current = true;
+  const fetchRequests = () => {
     console.log("Fetching requests...");
     axios.get("/api/requests?up=" + up).then(result => {
       for (const request of result.data) {
         updateRequests(request.requestId, request);
       }
     });
+  };
+
+  // const initialized = useRef(false);
+  useEffect(() => {
+    // if (initialized.current) {
+    //   return;
+    // }
+    // initialized.current = true;
+    fetchRequests();
     fetchTokens();
-  });
+  }, []);
 
   useScaffoldEventSubscriber({
     contractName: "upDevAccountNFT",
