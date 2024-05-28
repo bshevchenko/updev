@@ -22,6 +22,9 @@ const nextConfig = {
     config.resolve.fallback = { net: false, tls: false };
     return config;
   },
+  experimental: {
+    serverComponentsExternalPackages: ["@chainlink/functions-toolkit"],
+  },
 };
 
 module.exports = nextConfig;
