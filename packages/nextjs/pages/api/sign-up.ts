@@ -102,12 +102,15 @@ export default async function SignUp(req: NextApiRequest, res: NextApiResponse<R
   const [request] = await Promise.all([prepareRequest(up, provider, token), lsp23Tx.wait()]);
 
   console.log("Registering UP...");
-  upRegistry.setUP(up, controller);
-
   console.log("Sending request for Account NFT...");
-  upDevAccountNFT.sendRequest(up, request.secret, provider, request.version, id);
+
+  await Promise.all([
+    upRegistry.setUP(up, controller),
+    upDevAccountNFT.sendRequest(up, request.secret, provider, request.version, id),
+  ]);
 
   console.log("Done! UP:", up);
+
   res.status(200).json({
     up,
   });
