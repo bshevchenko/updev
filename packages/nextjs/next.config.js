@@ -23,7 +23,11 @@ const nextConfig = {
     return config;
   },
   experimental: {
-    serverComponentsExternalPackages: ["@chainlink/functions-toolkit"],
+    serverComponentsExternalPackages: [
+      "@chainlink/functions-toolkit",
+      "bcrypto",
+      "bcrypto.node"
+    ],
   },
 };
 
