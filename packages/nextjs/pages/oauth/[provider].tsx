@@ -15,6 +15,7 @@ const Provider = () => {
     }
     if (status == "authenticated" && provider == router.query.provider) {
       window.close();
+      router.push("/onboarding");
       return;
     }
     void signIn(String(router.query.provider));
