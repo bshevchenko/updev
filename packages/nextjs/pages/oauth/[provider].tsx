@@ -21,7 +21,7 @@ const Provider = () => {
     <div className="flex flex-col min-h-screen">
       <div className="grow flex flex-col justify-center items-center">
         <span className="loading loading-spinner loading-lg"></span>
-        {status} –{JSON.stringify(session)}
+        {status} – {(session && session.account.provider) || "null"}
       </div>
     </div>
   );
