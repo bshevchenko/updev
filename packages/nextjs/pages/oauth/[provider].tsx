@@ -10,7 +10,7 @@ const Provider = () => {
   const provider = (session && session.account && session.account.provider) || "null";
 
   useEffect(() => {
-    if (!router.query.provider) {
+    if (!router.query.provider || status == "loading") {
       return;
     }
     if (status == "authenticated" && provider == router.query.provider) {
@@ -24,7 +24,6 @@ const Provider = () => {
     <div className="flex flex-col min-h-screen">
       <div className="grow flex flex-col justify-center items-center">
         <span className="loading loading-spinner loading-lg"></span>
-        {status} – {provider} – {router.query.provider}
       </div>
     </div>
   );
