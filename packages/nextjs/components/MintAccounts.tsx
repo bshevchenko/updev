@@ -306,7 +306,7 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
           )}
         </div>
         {/* <h3 className="text-2xl font-bold">Account NFTs</h3> */}
-        {Object.entries(tokens).length && (
+        {Object.entries(tokens).length > 0 && (
           <div className="flex flex-wrap">
             {Object.entries(tokens).map(([key, token]) => (
               <div
