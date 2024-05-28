@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/router";
 import { OnboardProgressIndicator } from "./OnboardProgressIndicator";
 import { signMessage } from "@wagmi/core";
 import axios from "axios";
@@ -15,7 +14,6 @@ export function DeployStep({ setCurrentStep, profile }: { setCurrentStep: any; p
 
   const { data: session } = useSession();
   const account = useAccount();
-  const router = useRouter();
 
   const initialized = useRef(false);
 
@@ -56,7 +54,7 @@ export function DeployStep({ setCurrentStep, profile }: { setCurrentStep: any; p
       console.log("API Result", result.data);
       setIsDeploying(false);
       toast.success("Your profile has been successfully created! Verifying your very first account...");
-      router.push("/profile/" + result.data.up);
+      // router.push("/profile/" + result.data.up);
     } catch (e: any) {
       if (!e.message.includes("User rejected")) {
         toast.error(e.message);

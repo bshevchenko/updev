@@ -21,9 +21,10 @@ type ResponseData = {
 };
 
 export default async function SignUp(req: NextApiRequest, res: NextApiResponse<ResponseData>) {
-  const { controller, signature, isCompany, provider, token, id, image } = req.body;
-  let { name, description, location } = req.body;
+  const { controller, signature, provider, token, id, image } = req.body;
+  let { isCompany, name, description, location } = req.body;
 
+  isCompany = !!isCompany;
   name = name.trim();
   description = description.trim();
   location = location.trim();
@@ -50,7 +51,7 @@ export default async function SignUp(req: NextApiRequest, res: NextApiResponse<R
       name,
       description,
       location,
-      isCompany: !!isCompany,
+      isCompany,
       profileImage: [
         {
           url: image,
