@@ -5,6 +5,7 @@ import axios from "axios";
 import { ethers, utils } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { isEmptyAddress, lsp23Factory, upDevAccountNFT, upRegistry } from "~~/lib/contracts";
+import { ups } from "~~/lib/db";
 import { prepareRequest } from "~~/lib/don";
 import pinata from "~~/lib/pinata";
 import { getDeploymentData } from "~~/lib/up";
@@ -107,6 +108,17 @@ export default async function SignUp(req: NextApiRequest, res: NextApiResponse<R
   await Promise.all([
     upRegistry.setUP(up, controller),
     upDevAccountNFT.sendRequest(up, request.secret, provider, request.version, id),
+    ups.insertOne({
+      up,
+      controller,
+      isCompany,
+      provider,
+      id,
+      image,
+      name,
+      description,
+      location,
+    }),
   ]);
 
   console.log("Done! UP:", up);
