@@ -4,6 +4,10 @@ import { ethers } from "ethers";
 import Moralis from "moralis";
 import { requests, tokens } from "~~/lib/db";
 
+export const config = {
+  maxDuration: 60,
+};
+
 type ResponseData = object;
 
 interface Claimed {

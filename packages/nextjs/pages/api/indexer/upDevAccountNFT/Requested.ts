@@ -2,6 +2,10 @@ import { NextApiRequest, NextApiResponse } from "next/types";
 import Moralis from "moralis";
 import { requests } from "~~/lib/db";
 
+export const config = {
+  maxDuration: 60,
+};
+
 type ResponseData = object;
 
 interface Requested {

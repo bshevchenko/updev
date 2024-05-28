@@ -3,6 +3,10 @@ import Moralis from "moralis";
 import { upDevAccountNFT } from "~~/lib/contracts";
 import { requests } from "~~/lib/db";
 
+export const config = {
+  maxDuration: 60,
+};
+
 type ResponseData = object;
 
 interface Fulfilled {
