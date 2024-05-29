@@ -104,6 +104,9 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
     // initialized.current = true;
     fetchRequests();
     fetchTokens();
+    setTimeout(() => {
+      fetchRequests();
+    }, 5000);
   }, []);
 
   useScaffoldEventSubscriber({
