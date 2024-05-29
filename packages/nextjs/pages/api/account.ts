@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next/types";
-import { hashMessage } from "@ethersproject/hash";
-import { ethers, utils } from "ethers";
+import crypto from "crypto";
+import { utils } from "ethers";
 import { isEmptyAddress, upDevAccountNFT, upRegistry } from "~~/lib/contracts";
 import { prepareRequest } from "~~/lib/don";
 
@@ -21,8 +21,12 @@ export default async function Account(req: NextApiRequest, res: NextApiResponse<
   if (isEmptyAddress(controller)) {
     throw new Error("not allowed");
   }
-  const message = utils.keccak256(utils.toUtf8Bytes(token + id));
-  if (ethers.utils.recoverAddress(hashMessage(message), signature) !== controller) {
+  const message = crypto
+    .createHash("md5")
+    .update(token + id)
+    .digest("hex");
+  const address = utils.verifyMessage(message, signature);
+  if (address !== controller) {
     throw new Error("invalid signature");
   }
 

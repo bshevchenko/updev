@@ -7,6 +7,7 @@ import {
   rainbowWallet,
   safeWallet,
   walletConnectWallet,
+  zerionWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 import * as chains from "viem/chains";
 import { configureChains } from "wagmi";
@@ -49,6 +50,7 @@ const walletsOptions = { chains: appChains.chains, projectId: scaffoldConfig.wal
 const wallets = [
   coinbaseWallet({ ...walletsOptions, appName: "upDev" }),
   walletConnectWallet(walletsOptions),
+  zerionWallet(walletsOptions),
   metaMaskWallet({ ...walletsOptions, shimDisconnect: true }),
   ledgerWallet(walletsOptions),
   braveWallet(walletsOptions),

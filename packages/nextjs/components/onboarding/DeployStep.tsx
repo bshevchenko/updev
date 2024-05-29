@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { OnboardProgressIndicator } from "./OnboardProgressIndicator";
 import { signMessage } from "@wagmi/core";
 import axios from "axios";
-import { utils } from "ethers";
+import crypto from "crypto";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useAccount } from "wagmi";
@@ -35,8 +35,8 @@ export function DeployStep({ setCurrentStep, profile }: { setCurrentStep: any; p
       // @ts-ignore
       const token = session.account.access_token; // @ts-ignore
       const id = session.account.providerAccountId;
-      const message = utils.keccak256(utils.toUtf8Bytes(token + id));
-      const signature = await signMessage({ message });
+      const message = token + id;
+      const signature = await signMessage({ message: crypto.createHash("md5").update(message).digest("hex") });
       setIsSigning(false);
       setIsDeploying(true);
       const result = await axios.post("/api/sign-up", {

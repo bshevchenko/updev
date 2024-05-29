@@ -1,8 +1,8 @@
 import ERC725 from "@erc725/erc725.js";
 import LSP3Schema from "@erc725/erc725.js/schemas/LSP3ProfileMetadata.json";
-import { hashMessage } from "@ethersproject/hash";
 import axios from "axios";
-import { ethers, utils } from "ethers";
+import crypto from "crypto";
+import { utils } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { isEmptyAddress, lsp23Factory, upDevAccountNFT, upRegistry } from "~~/lib/contracts";
 import { ups } from "~~/lib/db";
@@ -29,21 +29,27 @@ export default async function SignUp(req: NextApiRequest, res: NextApiResponse<R
   description = description.trim();
   location = location.trim();
 
-  const message = utils.keccak256(utils.toUtf8Bytes(token + id));
-  if (ethers.utils.recoverAddress(hashMessage(message), signature) !== controller) {
-    throw new Error("invalid signature");
+  const message = crypto
+    .createHash("md5")
+    .update(token + id)
+    .digest("hex");
+  const address = utils.verifyMessage(message, signature);
+
+  if (address !== controller) {
+    // TODO other instance
+    throw Error("invalid signature");
   }
   if (!isEmptyAddress(await upRegistry.up(controller))) {
-    throw new Error("already signed up");
+    throw Error("already signed up");
   }
   if (name.length < 3 || name.length > 40) {
-    throw new Error("invalid name");
+    throw Error("invalid name");
   }
   if (description.length < 12 || description.length > 160) {
-    throw new Error("invalid description");
+    throw Error("invalid description");
   }
   if (location.length > 30) {
-    throw new Error("invalid location");
+    throw Error("invalid location");
   }
 
   const json = {

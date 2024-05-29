@@ -6,6 +6,7 @@ import popupCenter from "./popupCenter";
 // import { LoginButton } from "@telegram-auth/react";
 import { signMessage } from "@wagmi/core";
 import axios from "axios";
+import crypto from "crypto";
 import { utils } from "ethers";
 import moment from "moment";
 import { useSession } from "next-auth/react";
@@ -178,7 +179,10 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
   async function handleMint(provider: string, token: string, id: string) {
     updateIsMinting(provider, true);
     updateIsSigning(provider, true);
-    const message = utils.keccak256(utils.toUtf8Bytes(token + id));
+    const message = crypto
+      .createHash("md5")
+      .update(token + id)
+      .digest("hex");
     let signature;
     try {
       toast("Please sign mint request in your wallet.");
