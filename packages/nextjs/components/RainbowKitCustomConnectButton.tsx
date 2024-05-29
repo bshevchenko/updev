@@ -8,8 +8,7 @@ import { useDisconnect } from "wagmi";
 import {
   ArrowLeftOnRectangleIcon,
   ArrowTopRightOnSquareIcon,
-  CheckCircleIcon,
-  ChevronDownIcon,
+  CheckCircleIcon, // ChevronDownIcon,
   DocumentDuplicateIcon,
   QrCodeIcon,
 } from "@heroicons/react/24/outline";
@@ -96,11 +95,11 @@ export const RainbowKitCustomConnectButton = () => {
                   <div className="dropdown dropdown-end leading-3">
                     <label
                       tabIndex={0}
-                      className="btn btn-secondary border-base-200 bg-base-100 btn-sm pl-0 pr-2 dropdown-toggle gap-0 !h-auto"
+                      className="btn btn-secondary border-base-200 bg-base-100 btn-sm pl-0 pr-0 dropdown-toggle gap-0 !h-auto"
                     >
                       {/* <BlockieAvatar address={account.address} size={30} ensImage={account.ensAvatar} /> */}
                       <span className="ml-2 mr-1">{account.displayName}</span>
-                      <ChevronDownIcon className="h-6 w-4 ml-2 sm:ml-0" />
+                      {/* <ChevronDownIcon className="h-6 w-4 ml-2 sm:ml-0" /> */}
                     </label>
                     <ul
                       tabIndex={0}

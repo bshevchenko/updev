@@ -41,7 +41,7 @@ export default async function Claimed(req: NextApiRequest, res: NextApiResponse<
       data = ipfs;
     }
     await tokens.insertOne({
-      tokenId: event.tokenId,
+      tokenId: event.tokenId, // TODO tokenId should be unique here
       requestId: event.requestId,
       up: event.up,
       provider: request.provider,

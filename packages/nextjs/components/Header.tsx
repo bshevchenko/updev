@@ -109,7 +109,7 @@ export const Header = () => {
           </Link>
         </ul> */}
       </div>
-      <div className="navbar-end flex-grow mr-4">
+      <div className="navbar-end flex-grow md:mr-4">
         <RainbowKitCustomConnectButton />
       </div>
     </div>

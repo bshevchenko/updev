@@ -39,7 +39,7 @@ export function ProfileDetails({
 
   return (
     <section>
-      <div className="relative mb-3 md:min-w-[48rem]">
+      <div className="relative mb-3 md:min-w-[48rem] min-w-[24rem]">
         <div className="w-full h-[200px] bg-base-200 rounded-xl overflow-hidden relative">
           <Image
             alt="cover picture"
@@ -103,7 +103,7 @@ export function ProfileDetails({
         </div>
         <div>
           {/* <div className="text-[#FFFFFFA3]">Bio</div> */}
-          <div>{metadata.LSP3Profile.description}</div>
+          {metadata.LSP3Profile.description}
         </div>
         {metadata.LSP3Profile.location && (
           <div className="text-gray-300">
