@@ -116,3 +116,12 @@ export function getTargetNetwork(): chains.Chain & Partial<TChainAttributes> {
     ...NETWORKS_EXTRA_DATA[configuredNetwork.id],
   };
 }
+
+export function getChainlinkNetwork(): chains.Chain & Partial<TChainAttributes> {
+  const configuredNetwork = scaffoldConfig.chainlinkNetwork;
+
+  return {
+    ...configuredNetwork,
+    ...NETWORKS_EXTRA_DATA[configuredNetwork.id],
+  };
+}

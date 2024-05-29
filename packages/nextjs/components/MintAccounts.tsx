@@ -118,7 +118,7 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
         if (up != _up || !requestId) {
           return; // TODO how to subscribe only to up"s events?
         }
-        updateRequests(requestId, { tokenId, provider, version, id });
+        updateRequests(String(requestId), { tokenId, provider, version, id });
         toast.loading(`"${provider}" minting successfully requested! Verifying account...`);
       });
     },
@@ -134,7 +134,7 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
           return;
         }
         try {
-          updateRequests(requestId, { isFulfilled: true, isOK }); // @ts-ignore
+          updateRequests(String(requestId), { isFulfilled: true, isOK }); // @ts-ignore
           const { provider } = requestsRef.current[requestId];
           toast.loading(
             isOK ? `"${provider}" account successfully verified! Claiming NFT...` : "Account NFT minting failed...",
@@ -155,10 +155,10 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
         if (up != _up || !requestId || !_data) {
           return;
         }
-        updateRequests(requestId, { isClaimed: true });
+        updateRequests(String(requestId), { isClaimed: true });
         const { provider, id, version } = requestsRef.current[requestId as keyof typeof requestsRef.current];
         const name = provider + "-" + id;
-        let data = utils.toUtf8String(_data);
+        let data = utils.toUtf8String(String(_data));
         const isIPFS = data.slice(0, 2) == "Qm";
         if (isIPFS) {
           const { data: ipfs } = await axios.get("https://gateway.pinata.cloud/ipfs/" + data);

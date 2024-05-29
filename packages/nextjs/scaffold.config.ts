@@ -2,6 +2,7 @@ import * as chains from "viem/chains";
 
 export type ScaffoldConfig = {
   targetNetwork: chains.Chain;
+  chainlinkNetwork: chains.Chain;
   pollingInterval: number;
   alchemyApiKey: string;
   walletConnectProjectId: string;
@@ -11,7 +12,8 @@ export type ScaffoldConfig = {
 
 const scaffoldConfig = {
   // The network where your DApp lives in
-  targetNetwork: chains.sepolia,
+  targetNetwork: chains.mainnet,
+  chainlinkNetwork: chains.sepolia,
 
   // The interval at which your front-end polls the RPC servers for new data
   // it has no effect on the local network
