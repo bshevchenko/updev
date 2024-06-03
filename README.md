@@ -49,7 +49,7 @@
 
 <h3 class="c3"><span class="c5 c2">Identities</span></h3>
 
-<p class="c3"><span class="c2">upDev allows anyone to automatically mint, share, and integrate new identities &ndash; Pass NFTs, which qualitatively represent public relations (PR) between individuals or legal entities within the upDev ecosystem. </span><span class="c5 c2">Just as a letter from an influential individual attesting that you&#39;re an exceptional talent can guarantee your application for a US visa, a Pass NFT can unlock new opportunities for you beyond imagination!</span></p><p class="c3 c4"><span class="c10 c14"></span></p>
+<p class="c3"><span class="c2">upDev allows anyone to automatically mint, share, and integrate new identities &ndash; <b>Pass NFT</b>s, which qualitatively represent public relations (PR) between individuals or legal entities within the upDev ecosystem. </span><span class="c5 c2">Just as a letter from an influential individual attesting that you&#39;re an exceptional talent can guarantee your application for a US visa, a <b>Pass NFT</b> can unlock new opportunities for you beyond imagination!</span></p><p class="c3 c4"><span class="c10 c14"></span></p>
 
 <h2 class="c3"><span class="c5 c14">Use Cases</span></h2>
 
