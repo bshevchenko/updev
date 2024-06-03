@@ -55,17 +55,19 @@
 
 <p class="c3 c4"><span class="c10 c15"></span></p>
 
-<h3 class="c3"><span class="c5 c2">Proof of Attendance</span></h3>
+<h3 class="c3"><span class="c5 c2">Event Ticket & Proof of Attendance</span></h3>
 
-<p class="c3"><span class="c2">Pass NFT commemorates participation in events, such as conferences, workshops, or courses, with a digital token signifying the attendee&#39;s engagement and contribution. Unlike the existing Proof of Attendance Protocol (</span><span class="c11 c2"><a class="c0" href="https://poap.xyz/">poap.xyz</a></span><span class="c10 c2">), upDev does not require any curatorship due to its sybil-resistance.</span></p><p class="c3 c4"><span class="c12 c2 c26"></span></p><p class="c3"><span class="c2 c23">For most companies, their main online identity is their website domain name. Once a company mints (proves ownership of) its website on upDev, it can immediately proceed to mint Pass NFTs for everyone. And by minting social accounts like X (Twitter), Discord, GitHub, etc., a company can further enhance its profile&rsquo;s Sybil resistance and resume.</span></p><p class="c3 c4"><span class="c10 c15"></span></p>
+<p class="c3"><span class="c2"><b>Pass NFT</b> authorizes & commemorates participation in events, such as conferences, workshops, or courses, with a digital token signifying the attendee&#39;s engagement and contribution. Unlike the existing Proof of Attendance Protocol (</span><span class="c11 c2"><a class="c0" href="https://poap.xyz/">poap.xyz</a></span><span class="c10 c2">), upDev does not require any curatorship due to its sybil-resistance.</span></p>
+
+<p class="c3"><span class="c2 c23">For most companies, their main online identity is their website domain name. Once a company mints (proves ownership of) its website on upDev, it can immediately proceed to mint <b>Pass NFT</b>s for everyone. And by minting social accounts like X (Twitter), Discord, GitHub, etc., a company can further enhance its profile&rsquo;s Sybil resistance and resume.</span></p>
 
 <h3 class="c3"><span class="c5 c2">Proof of Relationship</span></h3>
 
-<p class="c3"><span class="c10 c2">Pass NFT certifies significant memberships, friendships, professional relationships, mentorships, partnerships, or endorsements, enhancing trust within the network and differentiating the quality of each relationship, unlike LinkedIn where nobody knows what contact between two people means or where endorsements from people with different qualifications are considered equal.</span></p><p class="c3 c4"><span class="c10 c15"></span></p>
+<p class="c3"><span class="c10 c2"><b>Pass NFT</b> certifies significant memberships, friendships, professional relationships, mentorships, partnerships, or endorsements, enhancing trust within the network and differentiating the quality of each relationship, unlike LinkedIn where nobody knows what contact between two people means or where endorsements from people with different qualifications are considered equal.</span></p>
 
 <h3 class="c3"><span class="c2 c12">Proof of Competence</span><span class="c10 c2"></span></h3>
 
-<p class="c3"><span class="c2">Pass NFT acts as digital diplomas or certificates, representing trust in an individual&rsquo;s skills and knowledge, and weighted to reflect the level of achievement or endorsement.<br></span></p><p class="c3 c4"><span class="c5 c14"></span></p><p class="c3 c4"><span class="c5 c14"></span></p>
+<p class="c3"><span class="c2"><b>Pass NFT</b> acts as digital diplomas or certificates, representing trust in an individual&rsquo;s skills and knowledge, and weighted to reflect the level of achievement or endorsement.<br></span></p>
 
 <h2 class="c3"><span class="c12 c14">Why is upDev powered by</span><span class="c6"> <a class="c0" href="http://lukso.network">LUKSO</a></span><span class="c12 c14">&nbsp;& </span><span class="c6"><a class="c0" href="https://docs.lukso.tech/standards/universal-profile/introduction">Universal Profiles</a></span><span class="c5 c14">?</span></h2>
 
