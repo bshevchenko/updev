@@ -57,7 +57,7 @@
 
 <h3 class="c3"><span class="c5 c2">Event Ticket & Proof of Attendance</span></h3>
 
-<p class="c3"><span class="c2"><b>Pass NFT</b> authorizes & commemorates participation in events, such as conferences, workshops, or courses, with a digital token signifying the attendee&#39;s engagement and contribution. Unlike the existing Proof of Attendance Protocol (</span><span class="c11 c2"><a class="c0" href="https://poap.xyz/">poap.xyz</a></span><span class="c10 c2">), upDev does not require any curatorship due to its sybil-resistance.</span></p>
+<p class="c3"><span class="c2"><b>Pass NFT</b> both authorizes & commemorates participation in events, such as conferences, workshops, or courses, with a digital token signifying the attendee&#39;s engagement and contribution. Unlike the existing Proof of Attendance Protocol (</span><span class="c11 c2"><a class="c0" href="https://poap.xyz/">poap.xyz</a></span><span class="c10 c2">) that only commemorates participation in events, upDev does not require any curatorship due to its sybil-resistance.</span></p>
 
 <p class="c3"><span class="c2 c23">For most companies, their main online identity is their website domain name. Once a company mints (proves ownership of) its website on upDev, it can immediately proceed to mint <b>Pass NFT</b>s for everyone. And by minting social accounts like X (Twitter), Discord, GitHub, etc., a company can further enhance its profile&rsquo;s Sybil resistance and resume.</span></p>
 
