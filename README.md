@@ -14,7 +14,26 @@
 </div> -->
 
 <div>
-<span class="c9 c2">Powered by: </span><span class="c1"><a class="c0" href="https://docs.lukso.tech/learn/introduction">Lukso Network</a></span><span class="c9 c2">, </span><span class="c1"><a class="c0" href="https://docs.lukso.tech/standards/universal-profile/introduction">Universal Profiles</a></span><span class="c9 c2">&nbsp;(on </span><span class="c1"><a class="c0" href="https://erc725alliance.org/">ERC725</a></span><span class="c9 c2">), </span><span class="c1"><a class="c0" href="https://ethereum.org/">Ethereum</a></span><span class="c9 c2">, </span><span class="c1"><a class="c0" href="https://docs.chain.link/chainlink-functions">Chainlink Functions</a></span><span class="c9 c2">, </span><span class="c1"><a class="c0" href="https://www.pinata.cloud">Pinata IPFS</a></span><span class="c9 c2">, </span><span class="c1"><a class="c0" href="https://github.com/scaffold-eth/scaffold-eth-2">Scaffold-ETH 2</a></span><span class="c9 c2">, </span><span class="c1"><a class="c0" href="https://next-auth.js.org/">next-auth</a></span><span class="c9 c2">, </span><span class="c1"><a class="c0" href="https://moralis.io/">Moralis</a></span><span class="c2 c9">, </span><span class="c1"><a class="c0" href="https://www.mongodb.com/">MongoDB</a></span><span class="c9 c2">, </span><span class="c1"><a class="c0" href="https://vercel.com/">Vercel</a></span></p><p class="c3 c4"><span class="c10 c2"></span></p><p class="c3"><span class="c9 c2">Inspired by: </span><span class="c1"><a class="c0" href="http://linktr.ee">linktr.ee</a></span><span class="c9 c2">, </span><span class="c11 c2"><a class="c0" href="https://linkedin.com/">LinkedIn</a></span><span>, </span><span class="c1"><a class="c0" href="https://passport.gitcoin.co/">Gitcoin Passport</a></span><span class="c9 c2">, </span><span class="c1"><a class="c0" href="https://github.com/">GitHub</a></span><span class="c16">, </span><span class="c11 c16"><a class="c0" href="https://tea.xyz/">tea.xyz</a></span><span class="c16">, </span><span class="c11 c2"><a class="c0" href="https://poap.xyz/">poap.xyz</a></span></p>
+  <p><span class="c9 c2">Powered by: </span>
+  <span class="c1"><a class="c0" href="https://docs.lukso.tech/learn/introduction">Lukso Network</a></span><span class="c9 c2">, </span>
+  <span class="c1"><a class="c0" href="https://docs.lukso.tech/standards/universal-profile/introduction">Universal Profiles</a></span>
+  <span class="c9 c2">&nbsp;(on </span><span class="c1"><a class="c0" href="https://erc725alliance.org/">ERC725</a></span><span class="c9 c2">), </span>
+  <span class="c1"><a class="c0" href="https://ethereum.org/">Ethereum</a></span><span class="c9 c2">, </span>
+  <span class="c1"><a class="c0" href="https://docs.chain.link/chainlink-functions">Chainlink Functions</a></span><span class="c9 c2">, </span>
+  <span class="c1"><a class="c0" href="https://www.pinata.cloud">Pinata IPFS</a></span><span class="c9 c2">, </span>
+  <span class="c1"><a class="c0" href="https://github.com/scaffold-eth/scaffold-eth-2">Scaffold-ETH 2</a></span><span class="c9 c2">, </span>
+  <span class="c1"><a class="c0" href="https://next-auth.js.org/">next-auth</a></span><span class="c9 c2">, </span>
+  <span class="c1"><a class="c0" href="https://moralis.io/">Moralis</a></span><span class="c2 c9">, </span>
+  <span class="c1"><a class="c0" href="https://www.mongodb.com/">MongoDB</a></span><span class="c9 c2">, </span>
+  <span class="c1"><a class="c0" href="https://vercel.com/">Vercel</a></span></p>
+  
+  <p class="c3"><span class="c9 c2">Inspired by: </span>
+    <span class="c1"><a class="c0" href="http://linktr.ee">linktr.ee</a></span><span class="c9 c2">, </span>
+    <span class="c11 c2"><a class="c0" href="https://linkedin.com/">LinkedIn</a></span><span>, </span>
+    <span class="c1"><a class="c0" href="https://passport.gitcoin.co/">Gitcoin Passport</a></span><span class="c9 c2">, </span>
+    <span class="c1"><a class="c0" href="https://github.com/">GitHub</a></span><span class="c16">, </span>
+    <span class="c11 c16"><a class="c0" href="https://tea.xyz/">tea.xyz</a></span><span class="c16">, </span>
+    <span class="c11 c2"><a class="c0" href="https://poap.xyz/">poap.xyz</a></span></p>
 </div>
 
 <h3 class="c3"><span class="c10 c16">Introducing upDev &ndash; the revolutionary creative decentralized social network, driven by the innovative Holistic Identity Protocol (sybil-resistant self-owned Web2.5 identities).</span></p><p class="c3 c4"><span class="c10 c15"></span></p><p class="c3"></h3>
@@ -37,7 +56,7 @@
 
 <h3 class="c3"><span class="c5 c2">Holistic</span></h3>
 
-<p class="c3"><span class="c2">Non-Fungible Tokens (NFTs), serving as identities of ownership over various properties, including intellectual ones, are central to upDev. Through cryptography, OAuth protocol and a decentralized oracle network, upDev (unlike linktr.ee & Gitcoin Passport) trustlessly links & unifies your existing Web2 and Web3 identities (such as emails, websites, social accounts like Twitter or GitHub, AI agencies, crypto-wallets, etc.) and their data by minting them as soulbound NFTs owned by a single super-identity (</span><span class="c11 c2"><a class="c0" href="https://docs.lukso.tech/standards/universal-profile/introduction">Universal Profile</a></span><span class="c2">)</span><span class="c10 c2">. This super-identity acts as a comprehensive & trustless resume for individuals or companies.</span></p><p class="c3 c4"><span class="c10 c2"></span></p>
+<p class="c3"><span class="c2">Non-Fungible Tokens (NFTs), serving as identities of ownership over various properties, including intellectual ones, are central to upDev. Through cryptography, OAuth protocol and a decentralized oracle network, upDev (unlike linktr.ee & Gitcoin Passport) trustlessly links & merges your existing Web2 and Web3 identities (such as emails, websites, social accounts like Twitter (including verifications) or GitHub, AI agencies, crypto-wallets, etc.) and their data by minting them as soulbound NFTs owned by a single super-identity (</span><span class="c11 c2"><a class="c0" href="https://docs.lukso.tech/standards/universal-profile/introduction">Universal Profile</a></span><span class="c2">)</span><span class="c10 c2">. This super-identity acts as a comprehensive & trustless resume for individuals or companies.</span></p><p class="c3 c4"><span class="c10 c2"></span></p>
 
 <h3 class="c3"><span class="c5 c2">Self-owned</span></h3>
 
