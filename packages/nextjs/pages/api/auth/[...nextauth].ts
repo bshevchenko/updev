@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
+import InstagramProvider from "next-auth/providers/instagram";
 import LinkedinProvider from "next-auth/providers/linkedin";
 import DiscordProvider from "~~/providers/discord";
 // import TelegramProvider from "~~/providers/telegram";
@@ -27,12 +28,12 @@ export default NextAuth({
       version: "2.0",
     }),
     DiscordProvider({
-      clientId: process.env.DISCORD_CLIENT_ID || "",
-      clientSecret: process.env.DISCORD_CLIENT_SECRET || "",
+      clientId: process.env.INSTAGRAM_CLIENT_ID || "",
+      clientSecret: process.env.INSTAGRAM_CLIENT_SECRET || "",
     }),
     DiscordProvider({
-      clientId: process.env.DISCORD_CLIENT_ID || "",
-      clientSecret: process.env.DISCORD_CLIENT_SECRET || "",
+      clientId: process.env.INSTAGRAM_CLIENT_ID || "",
+      clientSecret: process.env.INSTAGRAM_CLIENT_SECRET || "",
     }),
     LinkedinProvider({
       clientId: process.env.LINKEDIN_CLIENT_ID || "",
@@ -53,6 +54,10 @@ export default NextAuth({
           scope: "openid profile email",
         },
       },
+    }),
+    InstagramProvider({
+      clientId: process.env.INSTAGRAM_CLIENT_ID || "",
+      clientSecret: process.env.INSTAGRAM_CLIENT_SECRET || "",
     }),
     // TelegramProvider(),
   ],

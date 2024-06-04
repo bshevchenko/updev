@@ -25,6 +25,7 @@ import {
   DocumentMagnifyingGlassIcon,
   HandThumbUpIcon,
   LockClosedIcon,
+  TagIcon,
   UserCircleIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline";
@@ -659,6 +660,33 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
                     )}
                   </>
                 )}
+                {token.provider == "instagram" && (
+                  <>
+                    <div className="flex items-center mb-3">
+                      <Image alt="Instagram" width={46} height={46} src="/instagram.svg" priority />
+                      <b className="ml-3">Instagram</b>
+                      <DocumentMagnifyingGlassIcon
+                        onClick={() => alert(JSON.stringify(token.data, null, 2))}
+                        className="w-6 ml-3 text-gray-600 hover:text-green-400 cursor-pointer"
+                      />
+                    </div>
+                    <div>
+                      <a
+                        href={`https://instagram.com/${token.data.username}`}
+                        className="text-green-400 hover:underline"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        @{token.data.username}
+                      </a>
+                    </div>
+                    <div className="flex items-center mt-3 mb-3">
+                      <TagIcon className="w-6 mr-1" />
+                      &nbsp;
+                      {token.data.account_type.toLowerCase()}
+                    </div>
+                  </>
+                )}
                 {/* {token.isIPFS && (
                 <div className="text-right">
                   <button className="btn btn-secondary" onClick={() => {
@@ -705,6 +733,9 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
                       <div className="text-accent font-semibold border-2 border-accent rounded-md px-1">
                         Coming soon
                       </div>
+                    )}
+                    {item.test && (
+                      <div className="text-accent font-semibold border-2 border-accent rounded-md px-1">Test</div>
                     )}
                   </div>
                 </div>

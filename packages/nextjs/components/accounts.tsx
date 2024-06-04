@@ -72,6 +72,14 @@ const accounts = [
     step2Placeholder: "google.com",
   },
   {
+    name: "instagram",
+    title: "Instagram",
+    logo: "/instagram.svg",
+    comingSoon: false,
+    test: true,
+    url: "https://instagram.com",
+  },
+  {
     name: "telegram",
     title: "Telegram",
     logo: "/link.svg",
