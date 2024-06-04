@@ -44,7 +44,7 @@ export function DeployStep({ setCurrentStep, profile }: { setCurrentStep: any; p
         signature,
         name: profile.name,
         description: profile.description,
-        location: profile.location,
+        location: profile.location || "",
         isCompany: profile.isCompany, // @ts-ignore
         provider: session.account.provider,
         token,
