@@ -22,6 +22,7 @@ import {
   CheckCircleIcon,
   DocumentDuplicateIcon,
   DocumentIcon,
+  DocumentMagnifyingGlassIcon,
   HandThumbUpIcon,
   LockClosedIcon,
   UserCircleIcon,
@@ -341,6 +342,10 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
                     <div className="flex items-center mb-3">
                       <Image alt="github" width={46} height={46} src="/github.svg" priority />
                       <b className="ml-3">GitHub</b>
+                      <DocumentMagnifyingGlassIcon
+                        onClick={() => alert(JSON.stringify(token.data, null, 2))}
+                        className="w-6 ml-3 text-gray-600 hover:text-green-400 cursor-pointer"
+                      />
                     </div>
                     <div className="mb-3">
                       <a
@@ -400,6 +405,10 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
                     <div className="flex items-center mb-3">
                       <Image alt="google" width={46} height={46} src="/google.svg" priority />
                       <b className="ml-3">Google</b>
+                      <DocumentMagnifyingGlassIcon
+                        onClick={() => alert(JSON.stringify(token.data, null, 2))}
+                        className="w-6 ml-3 text-gray-600 hover:text-green-400 cursor-pointer"
+                      />
                     </div>
                     <div>
                       <a
@@ -424,6 +433,10 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
                     <div className="flex items-center mb-3">
                       <Image alt="google" width={46} height={46} src="/x.svg" priority />
                       <b className="ml-3">Twitter</b>
+                      <DocumentMagnifyingGlassIcon
+                        onClick={() => alert(JSON.stringify(token.data, null, 2))}
+                        className="w-6 ml-3 text-gray-600 hover:text-green-400 cursor-pointer"
+                      />
                     </div>
                     <div className="mb-3">
                       <a
@@ -488,6 +501,10 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
                     <div className="flex items-center mb-3">
                       <Image alt="discord" width={46} height={46} src="/discord.svg" priority />
                       <b className="ml-3">Discord</b>
+                      <DocumentMagnifyingGlassIcon
+                        onClick={() => alert(JSON.stringify(token.data, null, 2))}
+                        className="w-6 ml-3 text-gray-600 hover:text-green-400 cursor-pointer"
+                      />
                     </div>
                     <div>
                       <a
@@ -533,6 +550,10 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
                     <div className="flex items-center mb-3">
                       <Image alt="buidlguidl" width={46} height={46} src="/buidlguidl.svg" priority />
                       <b className="ml-3">BuidlGuidl</b>
+                      <DocumentMagnifyingGlassIcon
+                        onClick={() => alert(JSON.stringify(token.data, null, 2))}
+                        className="w-6 ml-3 text-gray-600 hover:text-green-400 cursor-pointer"
+                      />
                     </div>
                     <div>
                       <a
@@ -608,6 +629,10 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
                     <div className="flex items-center mb-3">
                       <Image alt="LinkedIn" width={46} height={46} src="/linkedin.svg" priority />
                       <b className="ml-3">LinkedIn</b>
+                      <DocumentMagnifyingGlassIcon
+                        onClick={() => alert(JSON.stringify(token.data, null, 2))}
+                        className="w-6 ml-3 text-gray-600 hover:text-green-400 cursor-pointer"
+                      />
                     </div>
                     <div>
                       <a
