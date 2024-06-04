@@ -104,8 +104,10 @@
 <li class="c3 c13 li-bullet-0"><span class="c10 c2">Google</span></li>
 <li class="c3 c13 li-bullet-0"><span class="c10 c2">Discord</span></li>
 <li class="c3 c13 li-bullet-0"><span class="c10 c2">LinkedIn</span></li>
+<li class="c3 c13 li-bullet-0"><span class="c10 c2">Instagram (for testers)</span></li>
 <li class="c3 c13 li-bullet-0"><span class="c11 c2"><a class="c0" href="https://buidlguidl.com/">BuidlGuidl</a></span></li>
-<li class="c3 c13 li-bullet-0"><span class="c10 c2">Website (HTTPs)</span></li><li class="c3 c13 li-bullet-0"><span class="c10 c2">Telegram (coming soon)</span></li>
+<li class="c3 c13 li-bullet-0"><span class="c10 c2">Website (HTTPs)</span></li>
+<li class="c3 c13 li-bullet-0"><span class="c10 c2">Telegram (coming soon)</span></li>
 </ul>
 
 <p class="c3 c4"><span class="c10 c2"></span></p><p class="c3"><span class="c2">upDev implements </span><span class="c11 c2"><a class="c0" href="https://next-auth.js.org/">next-auth</a></span><span class="c2">&nbsp;that supports ~65 different providers, including ones like Apple, Coinbase, Strava, Medium and much more, which can easily be activated in upDev. But actually any API (including AI) can be implemented. For instance, you could mint your website Google Analytics to showcase your hosts & hits in a trustless manner!</span></p><div>
