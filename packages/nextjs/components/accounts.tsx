@@ -65,6 +65,13 @@ const accounts = [
     step2Placeholder: "google.com",
   },
   {
+    name: "linkedin",
+    title: "LinkedIn",
+    logo: "/linkedin.svg",
+    comingSoon: true,
+    url: "https://linkedin.com",
+  },
+  {
     name: "telegram",
     title: "Telegram",
     logo: "/link.svg",
@@ -72,11 +79,25 @@ const accounts = [
     url: "https://telegram.org",
   },
   {
-    name: "linkedin",
-    title: "LinkedIn",
-    logo: "/linkedin.svg",
+    name: "eoa",
+    title: "Crypto Wallet (EOA)",
+    logo: "/link.svg",
     comingSoon: true,
-    url: "https://linkedin.com",
+  },
+  {
+    name: "pass",
+    title: (
+      <a
+        className="text-green-400 hover:underline"
+        target="_blank"
+        href="https://github.com/bshevchenko/updev?tab=readme-ov-file#identities"
+        rel="noreferrer"
+      >
+        Pass NFT
+      </a>
+    ),
+    logo: "/link.svg",
+    comingSoon: true,
   },
   // {
   //   name: "buidlbox",

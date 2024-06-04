@@ -632,10 +632,10 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
         )}
         {isMyProfile && (
           <div className="md:ml-0 ml-3 mr-3 md:mr-0">
-            <h3 className="text-2xl font-bold mb-3">Mint Account NFTs</h3>
+            <h3 className="text-2xl font-bold mb-3">Mint NFTs</h3>
             {accounts.map(item => (
               <div
-                key={item.title}
+                key={item.name}
                 className="flex bg-base-100 w-full p-5 mb-5 justify-between items-center rounded-xl border border-base-200 gap-24"
               >
                 <div>
