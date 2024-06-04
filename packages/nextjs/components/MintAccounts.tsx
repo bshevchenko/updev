@@ -683,7 +683,7 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
                     <div className="flex items-center mt-3 mb-3">
                       <TagIcon className="w-6 mr-1" />
                       &nbsp;
-                      {token.data.account_type.toLowerCase()}
+                      {token.data.account_type.charAt(0).toUpperCase() + token.data.account_type.slice(1).toLowerCase()}
                     </div>
                   </>
                 )}
