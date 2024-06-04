@@ -30,6 +30,13 @@ const accounts = [
     url: "https://discord.com",
   },
   {
+    name: "linkedin",
+    title: "LinkedIn",
+    logo: "/linkedin.svg",
+    comingSoon: false,
+    url: "https://linkedin.com",
+  },
+  {
     name: "buidlguidl",
     title: "BuidlGuidl",
     logo: "/buidlguidl.svg",
@@ -63,13 +70,6 @@ const accounts = [
     step1Contents: `{ "up": "{up}" }`,
     step2: "Provide domain name of your website:",
     step2Placeholder: "google.com",
-  },
-  {
-    name: "linkedin",
-    title: "LinkedIn",
-    logo: "/linkedin.svg",
-    comingSoon: true,
-    url: "https://linkedin.com",
   },
   {
     name: "telegram",

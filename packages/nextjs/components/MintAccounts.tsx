@@ -76,6 +76,7 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
         // @ts-ignore
         tokens[token.provider + "-" + token.id] = token;
       }
+      console.log("Tokens", tokens);
       setTokens(tokens);
       setIsFetchingTokens(false);
     });
@@ -600,6 +601,37 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
                         {token.id}
                       </a>
                     </div>
+                  </>
+                )}
+                {token.provider == "linkedin" && (
+                  <>
+                    <div className="flex items-center mb-3">
+                      <Image alt="LinkedIn" width={46} height={46} src="/linkedin.svg" priority />
+                      <b className="ml-3">LinkedIn</b>
+                    </div>
+                    <div>
+                      <a
+                        href={`https://www.linkedin.com/search/results/all/?keywords=${token.data.name}`}
+                        className="text-green-400 hover:underline"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {token.data.name}
+                      </a>
+                    </div>
+                    {token.data.email_verified && (
+                      <div className="flex items-center mt-3 mb-3">
+                        <AtSymbolIcon className="w-6 mr-1" />
+                        <a
+                          href={`mailto:${token.data.email}`}
+                          className="text-green-400 hover:underline"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Verified Email
+                        </a>
+                      </div>
+                    )}
                   </>
                 )}
                 {/* {token.isIPFS && (

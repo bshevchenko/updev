@@ -9,11 +9,9 @@ export type PreparedRequest = {
 };
 
 export async function prepareRequest(up: string, source: string, token: string): Promise<PreparedRequest> {
-  // @ts-ignore
-  const version = latestVersions[source];
+  const version = latestVersions[source as keyof typeof latestVersions];
 
   // encrypt secrets and upload to DON
-
   // const secretsManager = new SecretsManager({
   //   signer,
   //   functionsRouterAddress: process.env.DON_ROUTER || "",
@@ -28,7 +26,7 @@ export async function prepareRequest(up: string, source: string, token: string):
   // const gistURL = await createGist(process.env.GITHUB_API_TOKEN || "", JSON.stringify(encryptedSecretsObj));
   // const encryptedSecretsUrls = await secretsManager.encryptSecretsUrls([gistURL]);
 
-  // TODO @chainlink/functions-toolkit as of now doesn't work with serverless architecture
+  // TODO @chainlink/functions-toolkit rn doesn't work on serverless architecture, so commented code is temporarily on a VPS
   const workaround = await axios.post(process.env.WORKAROUND_API + "/api/chainlink", {
     up,
     token,

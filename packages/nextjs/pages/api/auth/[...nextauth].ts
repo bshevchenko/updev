@@ -3,7 +3,7 @@ import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import LinkedinProvider from "next-auth/providers/linkedin";
 import DiscordProvider from "~~/providers/discord";
-import TelegramProvider from "~~/providers/telegram";
+// import TelegramProvider from "~~/providers/telegram";
 import TwitterProvider from "~~/providers/twitter";
 
 // import { MongoDBAdapter } from "@auth/mongodb-adapter";
@@ -39,12 +39,14 @@ export default NextAuth({
       clientSecret: process.env.LINKEDIN_CLIENT_SECRET || "",
       client: { token_endpoint_auth_method: "client_secret_post" },
       issuer: "https://www.linkedin.com",
-      profile: (profile: any) => ({
-        id: profile.sub,
-        name: profile.name,
-        email: profile.email,
-        image: profile.picture,
-      }),
+      profile: (profile: any) => {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+        };
+      },
       wellKnown: "https://www.linkedin.com/oauth/.well-known/openid-configuration",
       authorization: {
         params: {
@@ -52,7 +54,7 @@ export default NextAuth({
         },
       },
     }),
-    TelegramProvider(),
+    // TelegramProvider(),
   ],
   session: {
     strategy: "jwt",

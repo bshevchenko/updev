@@ -38,9 +38,9 @@ export function DetailsStep({
 
   const handleNextStep = () => {
     let { name, description, location } = profile;
-    name = name;
-    description = description;
-    location = location;
+    name = name || "";
+    description = description || "";
+    location = location || "";
     if (name.length < 3 || name.length > 40) {
       toast.error("Invalid name. Please enter between 3 and 40 characters.");
       return;
