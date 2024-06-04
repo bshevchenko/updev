@@ -329,7 +329,15 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
             </div>
           )}
         </div>
-        {isFetchingTokens && <div className="ml-3 mr-3 mb-5">Loading...</div>}
+        {isFetchingTokens && (
+          <div className="ml-3 mr-3 mb-5">
+            <div className="flex flex-row gap-5 w-full">
+              <div className="skeleton w-1/3 h-[200px] bg-base-100 rounded-xl animate-pulse"></div>
+              <div className="skeleton w-1/3 h-[200px] bg-base-100 rounded-xl animate-pulse"></div>
+              <div className="skeleton w-1/3 h-[200px] bg-base-100 rounded-xl animate-pulse"></div>
+            </div>
+          </div>
+        )}
         {/* <h3 className="text-2xl font-bold">Account NFTs</h3> */}
         {Object.entries(tokens).length > 0 && (
           <div className="flex flex-wrap">
