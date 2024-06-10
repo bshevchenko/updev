@@ -97,7 +97,7 @@ export function ProfileDetails({
             // <PencilSquareIcon className="w-6 h-6 text-secondary cursor-pointer" onClick={() => setIsEditing(true)} />
             ""
           ) : null}
-          <div className="bg-base-100 border border-base-200 rounded-sm">
+          <div className="bg-base-100 rounded-sm">
             <div className="dropdown dropdown-end leading-3">
               <label
                 tabIndex={0}
