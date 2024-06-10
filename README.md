@@ -38,7 +38,7 @@
 
 <h3 class="c3"><span class="c10 c16">Introducing upDev &ndash; the revolutionary creative decentralized social network, driven by the innovative Holistic Identity Protocol (sybil-resistant self-owned Web2.5 identities).</span></p><p class="c3 c4"><span class="c10 c15"></span></p><p class="c3"></h3>
 
-<div><a href="https://updev.vercel.app/profile/0x2ee97Dd93b77796bb79d9F33E3AD64B1FcF88b03"><img src="assets/updev-2.0.png" width="100%" /></a></div>
+<div><a href="https://updev.vercel.app/profile/0x2ee97Dd93b77796bb79d9F33E3AD64B1FcF88b03"><img src="assets/upDev-2.0.png" width="100%" /></a></div>
 
 <a href="https://updev.vercel.app/profile/0x2ee97Dd93b77796bb79d9F33E3AD64B1FcF88b03">See demo profile</a>
 
