@@ -141,7 +141,7 @@ const Accounts = ({ isFetchingTokens, tokens }: { isFetchingTokens: boolean; tok
                       Verified
                     </div>
                   )}
-                  {token.data.youtube.items.length && (
+                  {token.data.youtube && token.data.youtube.items && token.data.youtube.items.length && (
                     <>
                       <div className="flex items-center mt-3 mb-3">
                         <svg
