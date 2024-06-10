@@ -407,3 +407,5 @@ export const Accounts = ({ isFetchingTokens, tokens }: { isFetchingTokens: boole
     </div>
   );
 };
+
+export default Accounts;

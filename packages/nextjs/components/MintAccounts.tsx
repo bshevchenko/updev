@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Accounts } from "./Accounts";
+import Accounts from "./Accounts";
 import Modal from "./Modal";
 import popupCenter from "./popupCenter";
 import providers from "./providers";
