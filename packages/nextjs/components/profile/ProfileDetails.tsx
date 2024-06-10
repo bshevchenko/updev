@@ -98,7 +98,81 @@ export function ProfileDetails({
             ""
           ) : null}
           <div className="bg-base-100 border border-base-200 rounded-sm">
-            🆙 <span className="text-[#FFFFFFA3]">{up.slice(0, 6) + "..." + up.slice(-4)}</span>
+            <div className="dropdown dropdown-end leading-3">
+              <label
+                tabIndex={0}
+                className="btn btn-secondary border-base-200 bg-base-100 btn-sm pl-0 pr-0 dropdown-toggle gap-0 !h-auto"
+              >
+                <span className="p-1 text-green-400 font-normal flex items-center">
+                  <Image
+                    alt="Universal Profile"
+                    className="h-5 w-5"
+                    width={50}
+                    height={50}
+                    priority
+                    src="https://universalprofile.cloud/assets/images/up-logo.png"
+                  />
+                  &nbsp;
+                  {up.slice(0, 4) + "..." + up.slice(-4)}
+                </span>
+              </label>
+              <ul
+                tabIndex={0}
+                className="dropdown-content menu z-[2] p-2 mt-2 shadow-center border border-gray-500 bg-black rounded-box gap-1"
+              >
+                <li>
+                  <div className="btn-sm !rounded-xl flex gap-3 py-3">
+                    <Image
+                      alt="Lukso"
+                      className="h-6 w-4"
+                      width={50}
+                      height={50}
+                      src="https://www.lukso.network/assets/images/logos/LUKSO_icon.svg"
+                      priority
+                    />
+                    <span className="whitespace-nowrap">
+                      <a
+                        target="_blank"
+                        href={"https://explorer.execution.testnet.lukso.network/address/" + up}
+                        rel="noopener noreferrer"
+                        className="whitespace-nowrap"
+                      >
+                        Explore on Lukso
+                      </a>
+                    </span>
+                  </div>
+                </li>
+                <li>
+                  <div className="btn-sm !rounded-xl flex gap-3 py-3">
+                    <svg
+                      className="h-6 w-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      x="0px"
+                      y="0px"
+                      width="100"
+                      height="100"
+                      viewBox="0 0 48 48"
+                    >
+                      <path fill="#9fa8da" d="M11 24L25 2 39 24 25 32z"></path>
+                      <path fill="#7986cb" d="M25 2L39 24 25 32z"></path>
+                      <path fill="#9fa8da" d="M11 27L25 35 39 27 25 46z"></path>
+                      <path fill="#7986cb" d="M25 35L39 27 25 46zM11 24L25 18 39 24 25 32z"></path>
+                      <path fill="#5c6bc0" d="M25 18L39 24 25 32z"></path>
+                    </svg>
+                    <span className="whitespace-nowrap">
+                      <a
+                        target="_blank"
+                        href={"https://sepolia.etherscan.io/address/" + up}
+                        rel="noopener noreferrer"
+                        className="whitespace-nowrap"
+                      >
+                        Explore on Ethereum
+                      </a>
+                    </span>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
         <div>
