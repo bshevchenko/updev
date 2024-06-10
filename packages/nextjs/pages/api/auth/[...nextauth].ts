@@ -1,9 +1,9 @@
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
-import GoogleProvider from "next-auth/providers/google";
 import InstagramProvider from "next-auth/providers/instagram";
 import LinkedinProvider from "next-auth/providers/linkedin";
 import DiscordProvider from "~~/providers/discord";
+import GoogleProvider from "~~/providers/google";
 // import TelegramProvider from "~~/providers/telegram";
 import TwitterProvider from "~~/providers/twitter";
 

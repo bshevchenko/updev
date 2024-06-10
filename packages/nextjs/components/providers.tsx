@@ -66,7 +66,11 @@ const accounts = [
     logo: "/link.svg",
     comingSoon: false,
     isModal: true,
-    step1: <>Expose updev.json at root of your website with the following contents:</>,
+    step1: (
+      <>
+        Expose <i>updev.json</i> at root of your website with the following contents:
+      </>
+    ),
     step1Contents: `{ "up": "{up}" }`,
     step2: "Provide domain name of your website:",
     step2Placeholder: "google.com",
@@ -88,7 +92,7 @@ const accounts = [
   },
   {
     name: "eoa",
-    title: "Crypto Wallet (EOA)",
+    title: "Crypto Wallet",
     logo: "/link.svg",
     comingSoon: true,
   },
