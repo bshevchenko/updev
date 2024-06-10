@@ -324,6 +324,10 @@ export const Accounts = ({ isFetchingTokens, tokens }: { isFetchingTokens: boole
                   <div className="flex items-center mb-3">
                     <Image alt="website" width={46} height={46} src="/link.svg" priority />
                     <b className="ml-3">Website</b>
+                    <DocumentMagnifyingGlassIcon
+                      onClick={() => setActiveModal(token)}
+                      className="w-6 ml-3 text-gray-600 hover:text-green-400 cursor-pointer"
+                    />
                   </div>
                   <div>
                     <a
