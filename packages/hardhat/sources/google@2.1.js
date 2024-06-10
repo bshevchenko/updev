@@ -3,7 +3,7 @@ const url = "https://www.googleapis.com/oauth2/v1/userinfo?alt=json"
 {snippets/api}
 
 const api2 = await Functions.makeHttpRequest({
-    url: "https://www.googleapis.com/youtube/v3/channels?part=snippet&mine=true",
+    url: "https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&mine=true",
     method: "GET",
     headers: {
         "Authorization": `Bearer ${secrets.token}`
