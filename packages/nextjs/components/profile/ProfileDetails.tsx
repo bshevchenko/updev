@@ -175,7 +175,7 @@ export function ProfileDetails({
             </div>
           </div>
         </div>
-        <div>
+        <div className="break-all">
           {/* <div className="text-[#FFFFFFA3]">Bio</div> */}
           {metadata.LSP3Profile.description}
         </div>
