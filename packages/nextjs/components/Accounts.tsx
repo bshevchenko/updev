@@ -446,6 +446,57 @@ const Accounts = ({ isFetchingTokens, tokens }: { isFetchingTokens: boolean; tok
                   </div>
                 </>
               )}
+              {token.provider == "telegram" && (
+                <>
+                  <div className="flex items-center mb-3">
+                    <Image alt="Telegram" width={46} height={46} src="/telegram.svg" priority />
+                    <b className="ml-3">Telegram</b>
+                    <DocumentMagnifyingGlassIcon
+                      onClick={() => setActiveModal(token)}
+                      className="w-6 ml-3 text-gray-600 hover:text-green-400 cursor-pointer"
+                    />
+                  </div>
+                  <div>
+                    <a
+                      href={`https://t.me/${token.data.username}`}
+                      className="text-green-400 hover:underline"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      @{token.data.username}
+                    </a>
+                  </div>
+                  {token.data.tgstat && (
+                    <>
+                      <div className="flex items-center mt-3 mb-3">
+                        <AtSymbolIcon className="w-6 mr-1" />
+                        <a
+                          href={`https://t.me/${token.data.tgstat.username}`}
+                          className="text-green-400 hover:underline"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {token.data.tgstat.username.slice(1)}
+                        </a>
+                      </div>
+                      <div className="flex items-center mt-3 mb-3">
+                        <UsersIcon className="w-6 mr-1" />
+                        {token.data.tgstat.participants_count} followers
+                      </div>
+                      <div className="flex items-center mt-3 mb-3">
+                        <ChatBubbleLeftRightIcon className="w-6 mr-1" />
+                        {token.data.tgstat.posts_count} posts
+                      </div>
+                      {!!token.data.tgstat.avg_post_reach && (
+                        <div className="flex items-center mt-3 mb-3">
+                          <EyeIcon className="w-6 mr-1" />
+                          {token.data.tgstat.avg_post_reach} avg. reach
+                        </div>
+                      )}
+                    </>
+                  )}
+                </>
+              )}
             </div>
           ))}
         </div>

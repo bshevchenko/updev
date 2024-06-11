@@ -4,7 +4,7 @@ import InstagramProvider from "next-auth/providers/instagram";
 import LinkedinProvider from "next-auth/providers/linkedin";
 import DiscordProvider from "~~/providers/discord";
 import GoogleProvider from "~~/providers/google";
-// import TelegramProvider from "~~/providers/telegram";
+import TelegramProvider from "~~/providers/telegram";
 import TwitterProvider from "~~/providers/twitter";
 
 // import { MongoDBAdapter } from "@auth/mongodb-adapter";
@@ -28,12 +28,8 @@ export default NextAuth({
       version: "2.0",
     }),
     DiscordProvider({
-      clientId: process.env.INSTAGRAM_CLIENT_ID || "",
-      clientSecret: process.env.INSTAGRAM_CLIENT_SECRET || "",
-    }),
-    DiscordProvider({
-      clientId: process.env.INSTAGRAM_CLIENT_ID || "",
-      clientSecret: process.env.INSTAGRAM_CLIENT_SECRET || "",
+      clientId: process.env.DISCORD_CLIENT_ID || "",
+      clientSecret: process.env.DISCORD_CLIENT_SECRET || "",
     }),
     LinkedinProvider({
       clientId: process.env.LINKEDIN_CLIENT_ID || "",
@@ -59,7 +55,7 @@ export default NextAuth({
       clientId: process.env.INSTAGRAM_CLIENT_ID || "",
       clientSecret: process.env.INSTAGRAM_CLIENT_SECRET || "",
     }),
-    // TelegramProvider(),
+    TelegramProvider(),
   ],
   session: {
     strategy: "jwt",

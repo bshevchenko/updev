@@ -1,3 +1,5 @@
+import popupCenter from "./popupCenter";
+
 const accounts = [
   {
     name: "twitter",
@@ -35,6 +37,50 @@ const accounts = [
     logo: "/linkedin.svg",
     comingSoon: false,
     url: "https://linkedin.com",
+  },
+  {
+    name: "telegram",
+    title: "Telegram",
+    logo: "/telegram.svg",
+    url: "https://telegram.org",
+    comingSoon: false,
+    isModal: true,
+    isCustom: true,
+    step1: (
+      <>
+        Say hi to{" "}
+        <a
+          href="https://t.me/upDev_auth_bot"
+          target="_blank"
+          className="underline cursor-pointer text-accent"
+          rel="noreferrer"
+        >
+          @upDev_auth_bot
+        </a>
+        {/* <li className="mt-5">(optional) Add <a href="https://t.me/upDev_auth_bot" target="_blank" className="underline cursor-pointer text-accent">@upDev_auth_bot</a> to your chat admins with no permissions.</li> */}
+        <li className="mt-5">Optional: select your personal chat in your Telegram profile settings.</li>
+        <li className="mt-5">
+          Optional: add your personal chat on{" "}
+          <a
+            href="https://tgstat.com/"
+            target="_blank"
+            className="underline cursor-pointer text-accent"
+            rel="noreferrer"
+          >
+            tgstat.com
+          </a>{" "}
+          and make sure it is available there.
+        </li>
+      </>
+    ),
+    step1Contents: (
+      <li className="mt-5">
+        <button className="btn btn-secondary ml-2" onClick={() => popupCenter("/oauth/telegram", "telegram")}>
+          Sign In with Telegram
+        </button>
+      </li>
+    ),
+    // step2: "(optional) Provide your chat ID:",
   },
   {
     name: "buidlguidl",
@@ -82,13 +128,6 @@ const accounts = [
     comingSoon: false,
     test: true,
     url: "https://instagram.com",
-  },
-  {
-    name: "telegram",
-    title: "Telegram",
-    logo: "/link.svg",
-    comingSoon: true,
-    url: "https://telegram.org",
   },
   {
     name: "eoa",

@@ -4,7 +4,6 @@ import Accounts from "./Accounts";
 import Modal from "./Modal";
 import popupCenter from "./popupCenter";
 import providers from "./providers";
-// import { LoginButton } from "@telegram-auth/react";
 import { signMessage } from "@wagmi/core";
 import axios from "axios";
 import crypto from "crypto";
@@ -123,9 +122,11 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
         try {
           updateRequests(String(requestId), { isFulfilled: true, isOK }); // @ts-ignore
           const { provider } = requestsRef.current[requestId];
-          toast.loading(
-            isOK ? `"${provider}" account successfully verified! Claiming NFT...` : "Account NFT minting failed...",
-          );
+          if (isOK) {
+            toast.loading(`"${provider}" account successfully verified! Claiming NFT...`);
+          } else {
+            toast.error("Account NFT minting failed...");
+          }
         } catch (e) {
           console.error(e);
         }
@@ -166,9 +167,18 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
     },
   });
 
-  async function handleMint(provider: string, token: string, id: string) {
+  async function handleMint(provider: string, token: string | object, id: string) {
     updateIsMinting(provider, true);
     updateIsSigning(provider, true);
+
+    if (provider == "telegram") {
+      token = {
+        chatId: id, // @ts-ignore
+        data: session.data.user.email,
+      }; // @ts-ignore
+      id = session.data.account.providerAccountId;
+    }
+
     const message = crypto
       .createHash("md5")
       .update(token + id)
@@ -229,7 +239,12 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
 
   const renderModalContent = (item: any) => {
     const account = providers.find(account => account.title === item.title);
-    const step1Contents = item.step1Contents.replace("{up}", up);
+    let step1Contents;
+    if (!item.isCustom) {
+      step1Contents = item.step1Contents.replace("{up}", up);
+    } // @ts-ignore
+    const isAuthenticatedTelegram = session.status == "authenticated" && session.data.account.provider == "telegram"; // @ts-ignore
+    const telegramName = isAuthenticatedTelegram ? session.data.user.name : "";
     return (
       <div className="flex gap-5 items-center">
         {account?.modalImage && (
@@ -242,44 +257,64 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
           <ol className="list-decimal list-inside">
             <li className="text-xl">{account?.step1}</li>
             <div className="flex items-center gap-5 mt-2 mb-5">
-              <div className="bg-base-200 border-base-100 border p-3 rounded-xl my-3 overflow-x-auto whitespace-nowrap hide-scrollbar">
-                {step1Contents}
-              </div>
-              <CopyToClipboard text={step1Contents} onCopy={() => setCopied(true)}>
-                <button className="">
-                  {copied ? (
-                    <CheckCircleIcon className="w-6 cursor-pointer" />
-                  ) : (
-                    <DocumentDuplicateIcon className="w-6 cursor-pointer" />
-                  )}
-                </button>
-              </CopyToClipboard>
+              {!item.isCustom && (
+                <>
+                  <div className="bg-base-200 border-base-100 border p-3 rounded-xl my-3 overflow-x-auto whitespace-nowrap hide-scrollbar">
+                    {step1Contents}
+                  </div>
+                  <CopyToClipboard text={step1Contents} onCopy={() => setCopied(true)}>
+                    <button className="">
+                      {copied ? (
+                        <CheckCircleIcon className="w-6 cursor-pointer" />
+                      ) : (
+                        <DocumentDuplicateIcon className="w-6 cursor-pointer" />
+                      )}
+                    </button>
+                  </CopyToClipboard>
+                </>
+              )}
+              {item.isCustom && <>{item.step1Contents}</>}
             </div>
-            <li className="text-xl mt-8">
-              {account?.step2}
-              <div className="flex items-center my-2 gap-3 w-full">
-                <input
-                  type="text"
-                  value={id}
-                  placeholder={item.step2Placeholder || ""}
-                  className="border border-base-200 p-2 rounded-xl my-3 bg-base-200 grow"
-                  onChange={e => setId(e.target.value)}
-                />
-              </div>
-              <div className="flex justify-end">
-                <button
-                  className="btn btn-primary"
-                  onClick={() => handleMint(item.name, "", id)}
-                  disabled={isMinting && isMinting[item.name as keyof typeof isMinting]}
-                >
-                  {isMinting && isMinting[item.name as keyof typeof isMinting] ? (
-                    <>{isSigning[item.name as keyof typeof isSigning] ? "Signing..." : "Minting..."}</>
-                  ) : (
-                    "Mint"
-                  )}
-                </button>
-              </div>
-            </li>
+            {item.isCustom && (
+              <>
+                {isAuthenticatedTelegram && (
+                  <>
+                    <p className="flex-row mt-3 text-xl">
+                      You have signed in as <b className="text-green-400">{telegramName}</b>
+                    </p>
+                  </>
+                )}
+              </>
+            )}
+            {!item.isCustom && (
+              <>
+                <li className="text-xl mt-8">
+                  {account?.step2}
+                  <div className="flex items-center my-2 gap-3 w-full">
+                    <input
+                      type="text"
+                      value={id}
+                      placeholder={item.step2Placeholder || ""}
+                      className="border border-base-200 p-2 rounded-xl my-3 bg-base-200 grow"
+                      onChange={e => setId(e.target.value)}
+                    />
+                  </div>
+                </li>
+              </>
+            )}
+            <div className="flex justify-end">
+              <button
+                className="btn btn-primary"
+                onClick={() => handleMint(item.name, "", id)}
+                disabled={isMinting && isMinting[item.name as keyof typeof isMinting]}
+              >
+                {isMinting && isMinting[item.name as keyof typeof isMinting] ? (
+                  <>{isSigning[item.name as keyof typeof isSigning] ? "Signing..." : "Minting..."}</>
+                ) : (
+                  "Mint"
+                )}
+              </button>
+            </div>
           </ol>
         </div>
       </div>
@@ -289,12 +324,6 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
   return (
     <div className="w-full">
       <div className="flex flex-col gap-4 w-full gap-5">
-        {/* <LoginButton
-          botUsername={process.env.TELEGRAM_BOT_USERNAME || "upDev_auth_bot"}
-          onAuthCallback={(data) => {
-            signIn("telegram", {}, data as any);
-          }}
-        /> */}
         <div className="flex gap-3 sm:ml-[160px] ml-5 mt-[-40px] mb-5">
           <div className="tooltip tooltip-primary w-16 h-16" data-tip="Universal Profile Owner">
             <Image fill alt="achievement icon" src="/achievements/up.svg" priority />

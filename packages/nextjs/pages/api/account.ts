@@ -11,7 +11,8 @@ export const config = {
 type ResponseData = object;
 
 export default async function Account(req: NextApiRequest, res: NextApiResponse<ResponseData>) {
-  const { up, provider, token, id, signature } = req.body;
+  const { up, provider, id, signature } = req.body;
+  let { token } = req.body;
 
   if (!up) {
     throw new Error("Invalid UP");
@@ -21,6 +22,7 @@ export default async function Account(req: NextApiRequest, res: NextApiResponse<
   if (isEmptyAddress(controller)) {
     throw new Error("not allowed");
   }
+
   const message = crypto
     .createHash("md5")
     .update(token + id)
@@ -28,6 +30,12 @@ export default async function Account(req: NextApiRequest, res: NextApiResponse<
   const address = utils.verifyMessage(message, signature);
   if (address !== controller) {
     throw new Error("invalid signature");
+  }
+
+  if (provider == "telegram") {
+    token.bot = process.env.TELEGRAM_BOT_TOKEN;
+    token.tgstat = process.env.TGSTAT_API_TOKEN;
+    token = JSON.stringify(token);
   }
 
   console.log("Preparing request...");
