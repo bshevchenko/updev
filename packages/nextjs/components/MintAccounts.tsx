@@ -238,7 +238,7 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
   };
 
   const renderModalContent = (item: any) => {
-    const account = providers.find(account => account.title === item.title);
+    const account = providers.find(account => account.name === item.name);
     let step1Contents;
     if (!item.isCustom) {
       step1Contents = item.step1Contents.replace("{up}", up);
@@ -306,7 +306,10 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
               <button
                 className="btn btn-primary"
                 onClick={() => handleMint(item.name, "", id)}
-                disabled={isMinting && isMinting[item.name as keyof typeof isMinting]}
+                disabled={
+                  (isMinting && isMinting[item.name as keyof typeof isMinting]) ||
+                  (!isAuthenticatedTelegram && account?.name == "telegram")
+                }
               >
                 {isMinting && isMinting[item.name as keyof typeof isMinting] ? (
                   <>{isSigning[item.name as keyof typeof isSigning] ? "Signing..." : "Minting..."}</>
