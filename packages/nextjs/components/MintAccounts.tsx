@@ -172,11 +172,12 @@ export const MintAccounts = ({ up, isMyProfile }: { up: string; isMyProfile: boo
     updateIsSigning(provider, true);
 
     if (provider == "telegram") {
+      // @ts-ignore
+      id = session.data.account.providerAccountId;
       token = {
         chatId: id, // @ts-ignore
         data: session.data.user.email,
-      }; // @ts-ignore
-      id = session.data.account.providerAccountId;
+      };
     }
 
     const message = crypto
