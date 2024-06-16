@@ -18,10 +18,10 @@ export const menuLinks: HeaderMenuLink[] = [
     label: "Home",
     href: "/",
   },
-  // {
-  //   label: "Discover Profiles",
-  //   href: "/profiles",
-  // },
+  {
+    label: "Discover Profiles",
+    href: "/profiles",
+  },
   // {
   //   label: "Debug Contracts",
   //   href: "/debug",
@@ -103,11 +103,11 @@ export const Header = () => {
             BETA V2.0
           </div>
         </Link>
-        {/* <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">
+        <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">
           <Link href="/profiles" className="items-center text-lg">
             Discover Profiles
           </Link>
-        </ul> */}
+        </ul>
       </div>
       <div className="navbar-end flex-grow md:mr-4">
         <RainbowKitCustomConnectButton />

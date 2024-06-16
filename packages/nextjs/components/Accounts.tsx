@@ -49,7 +49,7 @@ const Accounts = ({ isFetchingTokens, tokens }: { isFetchingTokens: boolean; tok
         <div className="flex flex-wrap">
           {Object.entries(tokens).map(([key, token]) => (
             <div
-              className="w-275 bg-base-100 p-5 mr-3 mb-5 rounded-xl lg:w-[244px] break-all w-full ml-3 lg:ml-0"
+              className="w-275 bg-base-100 p-5 mr-3 mb-5 rounded-xl lg:w-[244px] break-all whitespace-pre-wrap w-full ml-3 lg:ml-0"
               key={key}
             >
               {token.provider == "github" && (
@@ -217,7 +217,7 @@ const Accounts = ({ isFetchingTokens, tokens }: { isFetchingTokens: boolean; tok
                   <div className="flex items-center mt-3 mb-3">
                     <UsersIcon className="w-6 mr-1" />
                     <a
-                      href={`https://x.com/${token.data.login}/followers`}
+                      href={`https://x.com/${token.data.username}/followers`}
                       className="text-green-400 hover:underline"
                       target="_blank"
                       rel="noreferrer"
@@ -229,7 +229,7 @@ const Accounts = ({ isFetchingTokens, tokens }: { isFetchingTokens: boolean; tok
                   <div className="flex items-center mt-3 mb-3">
                     <ChatBubbleLeftRightIcon className="w-6 mr-1" />
                     <a
-                      href={`https://x.com/${token.data.login}`}
+                      href={`https://x.com/${token.data.username}`}
                       className="text-green-400 hover:underline"
                       target="_blank"
                       rel="noreferrer"
@@ -241,7 +241,7 @@ const Accounts = ({ isFetchingTokens, tokens }: { isFetchingTokens: boolean; tok
                   <div className="flex items-center mt-3 mb-3">
                     <HandThumbUpIcon className="w-6 mr-1" />
                     <a
-                      href={`https://x.com/${token.data.login}`}
+                      href={`https://x.com/${token.data.username}`}
                       className="text-green-400 hover:underline"
                       target="_blank"
                       rel="noreferrer"
